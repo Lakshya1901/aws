@@ -1,0 +1,26 @@
+{
+ "dataset": "normal_week",
+ "request": {
+  "method": "POST",
+  "path": "/recommend",
+  "query": null,
+  "body": {
+   "crop": "tomato",
+   "quantity_kg": 2000,
+   "origin": {
+    "lat": null,
+    "lon": null,
+    "place": "Holur"
+   },
+   "harvest": "today",
+   "language": "en"
+  }
+ },
+ "response": {
+  "status": 422,
+  "body": {
+   "error": "origin_unknown",
+   "message": "Origin needs lat and lon; place names are not geocoded. Send the device location."
+  }
+ }
+}

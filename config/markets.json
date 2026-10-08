@@ -1,0 +1,19 @@
+{
+  "_note": "Each market is an AGMARKNET district aggregate from CEDA (Ashoka University), labelled by its main tomato market town. Coordinates are the town, geocoded with OpenStreetMap Nominatim on 2026-10-08 (osm ids recorded); replace with Amazon Location via scripts/geocode_markets.py.",
+  "markets": [
+    {"market_id": "kolar", "name": "Kolar", "district": "Kolar", "state": "KA", "ceda": {"state_id": 29, "district_id": 581}, "lat": 13.1367, "lon": 78.1337, "coord_source": "nominatim node 245618507", "coord_confidence": "high"},
+    {"market_id": "chintamani", "name": "Chintamani", "district": "Chikkaballapura", "state": "KA", "ceda": {"state_id": 29, "district_id": 582}, "lat": 13.3987, "lon": 78.0533, "coord_source": "nominatim node 288863522", "coord_confidence": "high"},
+    {"market_id": "bengaluru", "name": "Bengaluru", "district": "Bangalore", "state": "KA", "ceda": {"state_id": 29, "district_id": 572}, "lat": 12.9768, "lon": 77.5901, "coord_source": "nominatim relation 7902476", "coord_confidence": "high"},
+    {"market_id": "doddaballapura", "name": "Doddaballapura", "district": "Bangalore Rural", "state": "KA", "ceda": {"state_id": 29, "district_id": 583}, "lat": 13.293, "lon": 77.5431, "coord_source": "nominatim node 571438212", "coord_confidence": "high"},
+    {"market_id": "mandya", "name": "Mandya", "district": "Mandya", "state": "KA", "ceda": {"state_id": 29, "district_id": 573}, "lat": 12.5239, "lon": 76.8962, "coord_source": "nominatim node 652721136", "coord_confidence": "high"},
+    {"market_id": "mysuru", "name": "Mysuru", "district": "Mysore", "state": "KA", "ceda": {"state_id": 29, "district_id": 577}, "lat": 12.3041, "lon": 76.653, "coord_source": "nominatim relation 19125269", "coord_confidence": "high"},
+    {"market_id": "madanapalle", "name": "Madanapalle", "district": "Chittoor", "state": "AP", "ceda": {"state_id": 28, "district_id": 554}, "lat": 13.5558, "lon": 78.5015, "coord_source": "nominatim node 3264135244", "coord_confidence": "high"}
+  ],
+  "_excluded": {
+    "ramanagara": "no CEDA tomato rows 2022-01-01 to 2025-06-30",
+    "hosur": "Tamil Nadu: modal prices ~100x lower than neighbours (looks like Rs/kg stored in the Rs/quintal field); history starts 2024-06-18, so no prior-year arrivals baseline. Units not guessed.",
+    "dharmapuri": "same as hosur (Tamil Nadu unit issue; history from 2024-06-18, no prior-year baseline)",
+    "vellore": "same as hosur (Tamil Nadu unit issue; history from 2024-06-18, no prior-year baseline)",
+    "salem": "only 375 sparse days; same Tamil Nadu unit issue suspected. Units not guessed."
+  }
+}

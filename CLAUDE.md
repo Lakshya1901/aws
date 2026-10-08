@@ -22,6 +22,7 @@ AnnaSetu stops edible fruit and vegetables from becoming waste before the truck 
 - There is no live demo. Judges score only what is submitted. A feature not shown in the video does not count.
 - Judging: idea and impact, AWS usage, design and usability.
 - AWS must be central to how the product works, not bolted on.
+- Prize eligibility (rules page, https://www.wemakedevs.org/aws/env/rules): the project must use at least one AWS open-source tool or be deployed on AWS. The event page's AWS stack names SAM CLI, LocalStack, Lambda, API Gateway and Step Functions. AnnaSetu meets both conditions: it is deployed on AWS (Section 15) and built, run locally and deployed with the AWS SAM CLI (open source). See Section 22.
 - Both team members need AWS Builder Center profiles with student verification.
 
 ---
@@ -139,8 +140,9 @@ One flag in `config/model.json`, settable per crop. All other components are ide
 | Source | Fields | Refresh | Access | Fallback |
 | --- | --- | --- | --- | --- |
 | AGMARKNET price and arrival reports | date, state, district, market, commodity, variety, arrivals, min/max/modal price | Daily, plus one-time 3-year history | Undocumented public backend (client: https://github.com/makrand999/agmarknet-api); may rate-limit or block cloud IPs | Snapshot CSV in S3; data.gov.in for prices |
+| CEDA Agri Market Data (Ashoka University), https://agmarknet.ceda.ashoka.edu.in | AGMARKNET daily min/max/modal price (Rs/quintal) and arrivals (tonnes), aggregated per Census 2011 district | Monthly refresh by CEDA | Public JSON API, no key (`backend/adapters/ceda.py`) | Snapshot CSV |
 | data.gov.in mandi prices, resource 9ef84268-d588-465a-a308-a864a43d0070 | state, district, market, commodity, variety, grade, arrival_date, min/max/modal price (no arrivals) | Daily | Free API key | Snapshot |
-| Open-Meteo | Hourly temperature, relative humidity; forecast and history | Per request, cached 6 h | Free, no key | Monthly averages per state in config |
+| Open-Meteo | Hourly temperature, relative humidity; forecast and history | Per request, cached 6 h | Free, no key | NASA POWER hourly T2M/RH2M (MERRA-2, free, no key; D16), then monthly averages per state in config |
 | Amazon Location Service | Market geocoding (once); route distance and drive time | Geocode once; routes cached per pair | AWS | Haversine distance x road factor 1.3, flagged as estimate |
 
 ### 8.2 Cleaning and units
@@ -148,6 +150,7 @@ One flag in `config/model.json`, settable per crop. All other components are ide
 - Prices are Rs per quintal; divide by 100 for Rs per kg.
 - Verify arrival units on first pull (tonnes vs quintals); store tonnes.
 - Aggregate varieties per market-day: arrivals summed, modal price weighted by arrivals.
+- Demo snapshot (D1): agmarknet.gov.in and api.data.gov.in refuse connections from cloud IPs, so the 2022-2025 history comes from CEDA, which is district level. Each "market" in `config/markets.json` is one district aggregate, named after its main tomato market town (Kolar district = Kolar, Chittoor = Madanapalle, Chikkaballapura = Chintamani). CEDA's district price is its own aggregate, not arrival-weighted by us. Market-level AGMARKNET data replaces it when available; the engine is unchanged. Districts with a unit problem or no prior-year baseline are excluded and listed in `config/markets.json`.
 - Market names map to internal IDs through `config/markets.json`; never fuzzy-match at runtime.
 - Missing days stay missing, never zero. Compute risk only when at least 5 of the last 7 days exist.
 
@@ -213,7 +216,7 @@ Predictive mode also projects R forward `lead_days` from the 3-day trend and nei
 ```
 P_hat(j) = P(j) * ((A(j) + dA(j)) / A(j)) ^ b(j)
 ```
-b fitted per market by regressing ln(price) on ln(arrivals), clipped to [-1.5, -0.1]; if R^2 < 0.2 use -0.5. Range = +/- one residual standard deviation. dA = quantity AnnaSetu has already allocated there.
+b fitted per market by regressing ln(price) on ln(arrivals), clipped to [-1.5, -0.1]; if R^2 < 0.2 use -0.5. Range = P_hat x exp(+/- sd), where sd is the standard deviation of day-to-day changes in ln(modal price) between reported days at most 3 days apart (D15). dA = quantity AnnaSetu has already allocated there.
 
 ### Step 3. Spoilage on the trip (no sensors)
 
@@ -230,7 +233,7 @@ T = mean forecast temperature over the trip. t_wait default 6 h at mandis.
 net(j) = P_hat(j) * (1 - s(j))
          - freight_rs_per_tonne_km * distance_km(j) / 1000
          - P_hat(j) * (fee_pct(state) + commission_pct(state))
-         - handling_rs_per_kg
+         - P_hat(j) * handling_pct(state)
 ```
 Second-life outlets use offer price (processor) or 0 (food bank, feed, compost) for P_hat.
 
@@ -238,7 +241,7 @@ Second-life outlets use offer price (processor) or 0 (food bank, feed, compost) 
 
 1. Sort the day's loads by quantity, largest first.
 2. For each load, compute net(j) for all reachable outlets using current dA.
-3. Assign to the best outlet unless it pushes that market's projected R into glut; then the next best.
+3. Assign to the best outlet unless it pushes that market's projected R into glut; then the next best. A market whose projected R is unknown (fewer than 5 of the last 7 days, or no prior-year baseline) cannot be checked, so it is listed as an alternative but never chosen (D17). Projected R = A7 recomputed with today's arrivals plus dA(j), divided by B (same definition as Step 1).
 4. Add to that market's dA; repeat.
 5. If no fresh market has net > 0: processor, then food bank, then feed or compost.
 6. If best net < harvest cost per kg: advise delaying harvest (storable crops) or harvesting only what has a buyer (non-storable).
@@ -260,7 +263,11 @@ Default = nearest mandi. u = unsold or dumped share, a placeholder heuristic unt
 | 2.0-3.0 | 20% |
 | > 3.0 | 40% |
 
+Price-below-cost dump (D12): if the default market's mid net value per kg is below the crop's harvest cost, the load counts as likely dumped or left unharvested there (documented Kolar 2025, Section 3.2). Then u_default = max(u(R), 0.40), with low 0.20 and high 0.40 (values reused from the u(R) table; placeholder). Applies only to the default side.
+
 Always show both W (waste avoided, range) and Q (redirected). Never merge them.
+
+Range for W: mid uses u(R) of the band R falls in; low and high use u of the band below and above for the default market, combined with the low and high spoilage estimate. Labelled "(estimate)".
 
 ### Resource accounting
 
@@ -280,14 +287,15 @@ All in `config/assumptions.json`, each with `value`, `unit`, `status` (sourced |
 | Input | Default | Status | Source / how to fill |
 | --- | --- | --- | --- |
 | Tomato harvest + local transport | Rs 70 per 15 kg box (~Rs 4.7/kg) | sourced (Kolar 2025) | Outlook Business |
-| Freight, small truck | Rs per tonne-km | placeholder | FPO interviews per region |
-| Market fee | % of sale, per state | placeholder | State APMC rules |
-| Commission | % of sale, per state | placeholder | FPO interviews |
-| Handling and packing | Rs per kg | placeholder | FPO interviews |
-| Diesel use | litres per km | placeholder | Vehicle type |
+| Freight, small truck | Rs 11 per tonne-km | placeholder | 14 ft LCV quoted at Rs 20-35 per km (Indian truck-rate guides, 2025-26) divided by an assumed 2.5 t payload; FPO interviews per region |
+| Market fee | Karnataka 0% on fruit and vegetables (sourced: Karnataka APMC Act 1966 s.65, https://indiankanoon.org/doc/117259766/; user charges not found). Andhra Pradesh 1% (sourced: AP Agricultural Marketing Dept, levied on purchases, https://spsnellore.ap.gov.in/agricultural-marketing-department/; deducting it from the seller is an assumption). Default 1% (assumption) | per state | State APMC rules |
+| Commission | Karnataka 5% (https://citizenmatters.in/how-bengaluru-apmc-system-works-farm-laws-yeshwanthpur-yard-commission-agents-farmers-cartelisation/); Andhra Pradesh 4%, reported range 4-10% (https://www.thenewsminute.com/article/how-social-capital-enabled-tomato-farmers-andhra-sell-produce-during-lockdown-123892); default 5% | placeholder | FPO interviews |
+| Handling (hamali) | 1% of sale (`handling_pct`; Deccan Herald: "5% commission and 1% hamali", https://www.deccanherald.com/india/karnataka/state-not-denotify-fruits-veggies-1993495) | placeholder | FPO interviews |
+| Diesel use | 0.14 litres per km (Tata 407-class, published 7-10 km/l, lower end for loaded running; https://trucksbuses.com/trucks/cargo-truck/tata-sfc-407-bsiv/mileage) | placeholder | Vehicle type |
 | Wait at mandi | 6 h | assumption | FPO interviews |
 | Dump share table u(R) | Section 9 | placeholder | FPO interviews |
 | Reachable radius | 300 km | assumption | Config |
+| Stale-data range widening | 1.5x the residual standard deviation | assumption | Config |
 
 ### Languages
 
@@ -309,10 +317,11 @@ One JSON file per crop in `config/crops/`. A profile with a null required field 
 | --- | --- | --- | --- | --- |
 | Recommended storage | ~10 C ripe, ~13 C mature green | ~0 C, 70-75% RH | to source | 12-15 C |
 | Good-condition storage life | days to ~2 weeks | ~6-8 months | months (cold store) | weeks, ripening-dependent |
-| SL_ref at T_ref (25 C) | placeholder | placeholder | placeholder | placeholder |
-| Q10 | placeholder (often 2-3) | placeholder | placeholder | placeholder |
-| alpha | placeholder | placeholder | placeholder | placeholder |
+| SL_ref at T_ref (25 C) | 132 h, range 96-168 h (4-7 days holding at ambient for ripening stages; https://www.researchgate.net/publication/294485852) | placeholder | placeholder | placeholder |
+| Q10 | 2.0, derived from UC Davis respiration rates for mature-green tomato: 8-14 mL CO2/kg.h at 15 C, 18-26 at 25 C (https://postharvest.ucdavis.edu/produce-facts-sheets/tomato; page read through a search excerpt, verify) | placeholder | placeholder | placeholder |
+| alpha | 0.31, placeholder: calibrated so a 14 h trip (6 h since harvest + 2 h drive + 6 h wait) at 25 C gives 3.25% loss, the market-stage tomato loss in Section 3.2 | placeholder | placeholder | placeholder |
 | Storable (hold option) | no | yes | yes | limited |
+| Water footprint | 184 L/kg world average, tropical production 200-900 L/kg (Hoekstra, cited in Nederhoff and Stanghellini 2010, https://edepot.wur.nl/156932) | placeholder | placeholder | placeholder |
 | Harvest cost per kg | ~Rs 4.7 (Kolar) | placeholder | placeholder | placeholder |
 | Second life | puree/paste, food bank, compost | dehydration, food bank | processing, food bank | ripening/retail, chips, food bank, feed |
 
@@ -559,7 +568,7 @@ annasetu/
 │   ├── core/                 pure Python, no AWS imports
 │   │   ├── risk.py  pricing.py  spoilage.py  netvalue.py  allocate.py  impact.py
 │   ├── adapters/             all external calls
-│   │   ├── agmarknet.py  datagov.py  weather.py  location.py  bedrock.py  speech.py
+│   │   ├── ceda.py  agmarknet.py  datagov.py  weather.py  location.py  bedrock.py  speech.py
 │   ├── handlers/             thin Lambda wrappers
 │   │   ├── ingest.py  advisor.py  voice.py
 │   └── tests/
@@ -570,8 +579,10 @@ annasetu/
 ├── data/
 │   ├── snapshot/             or a script that rebuilds it
 │   └── distance_fallback.json
-├── analysis/backtest.ipynb   lead-lag, thresholds, price gaps, video charts
-├── scripts/                  geocode_markets.py  seed.py
+├── analysis/
+│   ├── backtest.py           deterministic CLI: lead-lag, thresholds, price gaps; writes results JSON and charts
+│   └── backtest.ipynb        viewer only: loads backtest.py outputs, video charts
+├── scripts/                  build_snapshot.py  geocode_markets.py  seed.py
 ├── app/                      Expo app
 │   ├── app/                  screens (expo-router)
 │   ├── components/           RecommendationCard, RiskList, MicButton, CompareSheet
@@ -642,7 +653,7 @@ annasetu/
 | Glut events | Real, documented | Sources in README |
 | Weather, routes | Real | README |
 | Crop parameters | Published references; some placeholders | "Reference parameters"; placeholders marked |
-| Freight, fees, commission, handling, diesel | Placeholders until FPO interviews | "(estimate)" |
+| Freight, fees, commission, handling, diesel | Desk-research values; placeholders until FPO interviews | "(estimate)" |
 | Dump share u(R) | Placeholder heuristic | "(estimate)" |
 | Processors and food banks | Real organisations, not contacted | "Not yet partnered" |
 | Loads and villages | Simulated loads, real villages | "Demo loads" |
@@ -661,6 +672,32 @@ Seeded Second Life outlets (Kolar region, from desk research): SNR Foods (proces
 4. Voice accuracy test in Hindi and Kannada on real sentences; if poor, make text input primary.
 5. Bedrock model and quota confirmed in ap-south-1.
 6. National ingest volume fits in Lambda, or split by state.
+
+### 19.1 Decisions resolved (October 8, 2026)
+
+| # | Decision | Resolution |
+| --- | --- | --- |
+| D1 | Data access | Done. agmarknet.gov.in (403) and api.data.gov.in (TLS reset) refuse cloud IPs. Tomato daily prices and arrivals, Jan 2022 - Jun 2025, pulled from CEDA at district level (Section 8.2) with `scripts/build_snapshot.py`; manifest records hashes. Open-Meteo and Nominatim reachable. No data is invented. |
+| D2 | Placeholder costs | Filled from desk research (Section 10), each with its source and status; shown as "(estimate)". Handling became `handling_pct` (hamali is quoted as % of sale). Replace with FPO interview values. |
+| D3 | Tomato sl_ref_hours, q10, alpha, water_l_per_kg | Filled (Section 11): SL_ref 132 h (96-168), Q10 2.0 derived, alpha 0.31 calibrated placeholder, water 184 L/kg. ASHRAE and USDA HB66 were not reachable; sources used are listed. |
+| D4 | Projected R in allocation | Defined in Section 9, Step 5. |
+| D5 | Waste-avoided range | Defined in Section 9, Step 6. |
+| D6 | Backtest format | `analysis/backtest.py` deterministic CLI; notebook is a viewer (Section 16). |
+| D7 | Market coordinates | Team runs `scripts/geocode_markets.py` in its AWS account. Until then demo markets use manual coordinates with a source per market; distances are haversine x 1.3 and marked "approx.". |
+| D8 | Second demo region | Started only after Kolar works end to end. If it does not fit, the README says so. |
+| D9 | Demo loads | Tests use 10 loads (Section 17.3); the video uses the count that the chosen backtest day shows most clearly. |
+
+| D10 | Demo story | Both. Headline: Kolar Jan-Apr 2025 is a price crash with normal arrivals (backtest: median R 0.75, max 1.26; modal price down to Rs 4.60/kg, 7 days below harvest cost; alternatives Rs 9.6-13.5/kg). The card cites the price drop and net-value gap, never an arrival multiple. Candidate day 2025-02-07 (Kolar Rs 7.37 vs Madanapalle Rs 18.20/kg). Second replay: an arrival-driven glut, only if a news source documents it. |
+| D11 | Drive time | No speed default. Drive time comes from Amazon Location routes cached in `data/routes_cache.json`; a request without a cached or live route returns 422 `drive_time_unavailable`. |
+| D12 | Waste avoided when arrivals are normal | Price-below-cost dump rule added to Section 9 Step 6. |
+| D13 | Mode | Tomato `same_day`. Backtest run 78dc0a403b99 (after the ISO-week baseline fix): flags at least 2 days ahead on 46.3% of 123 scorable crash episodes (full rule) and 26.8% (arrival ratio only); arrival ratio does not lead price (strongest negative lag 1 day, correlation +0.003). No "days early" claims. |
+| D15 | Price range | The level-regression residual spanned seasons (Madanapalle net Rs 5-45/kg). The range now uses day-to-day ln price changes: about +/-13% (Madanapalle) to +/-40% (Mandya) on the 2025-02-07 history. Also: the ln(price) on ln(arrivals) fit has R^2 below 0.2 at every demo market, so all use the fallback b = -0.5; state this in the README. |
+| D16 | Weather snapshot | Open-Meteo returned 429 (daily limit on the shared IP), so the replay windows (2025-01-01..2025-05-31, 2023-09-01..2023-09-30) use NASA POWER hourly temperature and humidity at each market's coordinates: `data/snapshot/weather_power_*.json`. Trip temperature = mean of the day's hours at the nearest point. |
+| D17 | Markets with unknown risk | Never chosen as the destination, only listed. Found when Doddaballapura (about 1 t/day, latest price 15 days old on 2023-09-06) absorbed 16 t in a 10-load plan. |
+| D18 | Demo replay days | Headline 2023-09-06 (documented arrival glut, D14; `config/model.json` replay_date): ten loads spread over several markets. Second 2025-03-19 (Kolar's 2025 low, Rs 4.60/kg, below harvest cost; run with `REPLAY_DATE=2025-03-19`). 2025-02-07 dropped: Kolar still paid above harvest cost, so waste avoided was negative. Final figures wait for Amazon Location routes (D11); waste avoided on 2025-03-19 is driven by the placeholder dump share (D12) and must carry "(estimate)". |
+| D14 | Second replay (D10) | Kolar 2023-09-06, an arrival-driven glut: R 1.76 (glut), 3-day price change -28.7%, modal Rs 6.64/kg; Madanapalle Rs 10.60/kg, 61 km. Documented: Deccan Herald 2023-09-26 (https://www.deccanherald.com/india/karnataka/rs-200-to-rs-10-tomato-farmers-hopes-crash-2700660, officials attribute the crash to "the arrival of a large quantity of tomatoes"; 4.21 vs 2.31 lakh quintals year on year) and FreshPlaza/New Indian Express 2023-09-04. Baseline uses one prior year (2022). `analysis/second_replay.py`. |
+
+Known risk: one FPO's volume may barely move Kolar's ratio or price, so load spreading may come mostly from price impact at smaller markets. Report what the data shows; never tune the model to force a split.
 
 Risks: AGMARKNET blocks cloud IPs (use snapshot + data.gov.in); placeholders drive the headline number (ranges, labels, calibration); wrong regional strings (native review); slow batch transcription (short clips, progress state); geocoding errors (confidence filter, overrides).
 
@@ -685,3 +722,33 @@ Risks: AGMARKNET blocks cloud IPs (use snapshot + data.gov.in); placeholders dri
 ## 21. Out of scope
 
 Cold storage booking, photo quality grading, sensors, payments, real user accounts, App Store or TestFlight submission, retail and household waste, crops without a complete profile.
+
+---
+
+## 22. Build plan (October 8-11, 2026)
+
+Build from the decision engine outward. Each milestone ends with a check that must pass before the next starts. Deadline: October 11, 8:00 PM IST.
+
+### 22.1 AWS tooling (prize eligibility)
+
+| Requirement | How AnnaSetu meets it |
+| --- | --- |
+| Deployed on AWS | API Gateway, Lambda, S3, DynamoDB, EventBridge Scheduler, Transcribe, Polly, Bedrock, Location Service, SSM, CloudWatch in ap-south-1 (Section 15) |
+| At least one AWS open-source tool | AWS SAM CLI: `infra/template.yaml`, `sam build`, `sam deploy`, and `sam local start-api` for local runs of the handlers |
+
+Not added: Strands Agents (Bedrock only parses and explains; no agent), Step Functions (only if national ingest exceeds Lambda limits, Section 15.1), LocalStack (adapters are tested with stubbed clients; add only if a test needs it). Name SAM CLI and every AWS service in the README and the writeup.
+
+### 22.2 Milestones
+
+| # | Milestone | Day | Output | Check |
+| --- | --- | --- | --- | --- |
+| M0 | Data snapshot | Oct 8 | `backend/adapters/agmarknet.py`, `datagov.py`: fetch, Rs/quintal to Rs/kg, arrival units verified and stored in tonnes, varieties aggregated with arrival-weighted modal price, IDs from `config/markets.json`. `data/snapshot/agmarknet_tomato_<from>_<to>.csv` plus a manifest (source, pull date, row counts, sha256) | Coverage report per market; missing days stay missing |
+| M1 | Kolar backtest | Oct 8-9 | `analysis/backtest.py` runs Section 17.2 steps 1-8; `results_<run_id>.json` split into observed, model, assumptions, simulated; charts | The documented Jan-Apr 2025 crash appears in observed prices, or work stops and is reported. Mode per crop set in `config/model.json` from this evidence (default `same_day`). Demo day chosen |
+| M2 | Core engine | Oct 9 | `backend/core/` risk, pricing, spoilage, netvalue, allocate, impact; `config/` model, assumptions (status on every value), crops/tomato, outlets (Section 18 outlets, "Not yet partnered") | pytest covers Section 17.3 and: normal week, glut day, 10 loads, market overloaded, all fresh negative, hold, second-life fallback, harvest-cost threshold, stale data, null crop, unit conversion, transport cost, spoilage, interstate fees. Deterministic |
+| M3 | API and replay | Oct 9 | `backend/handlers/advisor.py`: /risk, /recommend, /plan, /impact per Section 13, including 422 and stale cases. `DATA_SOURCE=snapshot\|dynamodb`; `replay_date` drives "Replaying <date> data". Local runs via `sam local start-api` | Sample requests stored as fixtures and asserted in tests |
+| M4 | Bedrock and voice | Oct 10 | `adapters/bedrock.py` (parse, explain, number guard, per-language templates), `adapters/speech.py`, `handlers/voice.py`. Typed form input is the fallback | Stubbed-client tests: explanation with a foreign number uses the template; "two tonnes tomato" parses to tomato, 2,000 kg |
+| M5 | Mobile app | Oct 10 | Expo + TypeScript, 7 screens (Section 14.2), Recommendation card first (Section 14.3), i18n from `config/copy` (en, hi, kn; native review pending), typed API client | `tsc` passes; Android export builds; team tests on a real phone |
+| M6 | AWS | Oct 10 | `infra/template.yaml` (Section 15.1 resources, Section 15.2 roles), `scripts/seed.py`, `scripts/geocode_markets.py` | `sam validate` passes. Team sets the budget alert, deploys and runs the Section 15.4 smoke test (no credentials in this repo) |
+| M7 | Demo and README | Oct 11 | Replay of the backtest day: radar, loads, nearest-mandi default vs AnnaSetu allocation, impact; counterfactuals labelled as modelled. README: data provenance, Section 18 disclosure, model, architecture, AWS and SAM usage, limitations (no Kannada Polly voice, placeholders) | Every UI figure traces to `config/` or computed data with its status |
+
+Second demo region (D8) starts after M3 if time allows.

@@ -1,0 +1,347 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: AnnaSetu - dispatch advisor for fresh produce (CLAUDE.md Section 15). Deploy in ap-south-1.
+
+Parameters:
+  NameSuffix:
+    Type: String
+    AllowedPattern: "^[a-z0-9-]{3,20}$"
+    Description: Lowercase suffix for globally unique bucket names (annasetu-data-<suffix>, annasetu-audio-<suffix>).
+  BedrockModelId:
+    Type: String
+    Default: ""
+    Description: Model ID or inference profile ID passed to InvokeModel. Empty = Bedrock disabled (templates and fallback parser).
+  BedrockModelArns:
+    Type: CommaDelimitedList
+    Default: ""
+    Description: ARNs the functions may invoke (the foundation model, plus the inference profile if one is used). Empty = no Bedrock permission.
+  AppApiKeyParam:
+    Type: String
+    Default: /annasetu/app_api_key
+    Description: SSM SecureString holding the demo app's x-api-key.
+  DataGovKeyParam:
+    Type: String
+    Default: /annasetu/datagov_key
+    Description: SSM SecureString holding the data.gov.in API key.
+  AlarmEmail:
+    Type: String
+    Default: ""
+    Description: Optional email for the ingest failure alarm.
+
+Conditions:
+  HasBedrock: !Not [!Equals [!Join ["", !Ref BedrockModelArns], ""]]
+  HasAlarmEmail: !Not [!Equals [!Ref AlarmEmail, ""]]
+
+Globals:
+  Function:
+    Runtime: python3.13
+    Architectures: [arm64]
+    CodeUri: ..
+    Environment:
+      Variables:
+        DATA_SOURCE: dynamodb
+        MARKET_DAY_TABLE: !Ref MarketDayTable
+        MARKET_RISK_TABLE: !Ref MarketRiskTable
+        OUTLETS_TABLE: !Ref OutletsTable
+        PLANS_TABLE: !Ref PlansTable
+        DATA_BUCKET: !Ref DataBucket
+        AUDIO_BUCKET: !Ref AudioBucket
+        LOCATION_ROUTE_CALCULATOR: !Ref RouteCalculator
+        BEDROCK_ENABLED: !If [HasBedrock, "true", "false"]
+        BEDROCK_MODEL_ID: !Ref BedrockModelId
+
+Resources:
+  # ---------- API ----------
+  Api:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      DefaultRouteSettings:
+        ThrottlingRateLimit: 10
+        ThrottlingBurstLimit: 20
+      Auth:
+        DefaultAuthorizer: ApiKeyAuthorizer
+        Authorizers:
+          ApiKeyAuthorizer:
+            FunctionArn: !GetAtt AuthorizerFunction.Arn
+            AuthorizerPayloadFormatVersion: "2.0"
+            EnableSimpleResponses: true
+            EnableFunctionDefaultPermissions: true
+            Identity:
+              Headers: [x-api-key]
+              ReauthorizeEvery: 300
+
+  AuthorizerFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+      ContextPath: .   # infra/Makefile; it runs from the repo root (CodeUri)
+    Properties:
+      Handler: backend/handlers/authorizer.handler
+      MemorySize: 128
+      Timeout: 5
+      Environment:
+        Variables:
+          APP_API_KEY_PARAM: !Ref AppApiKeyParam
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action: ssm:GetParameter
+              Resource: !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${AppApiKeyParam}
+
+  AdvisorFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+      ContextPath: .   # infra/Makefile; it runs from the repo root (CodeUri)
+    Properties:
+      Handler: backend/handlers/advisor.handler
+      MemorySize: 512
+      Timeout: 15
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:BatchGetItem, dynamodb:Query, dynamodb:Scan]
+              Resource:
+                - !GetAtt MarketDayTable.Arn
+                - !GetAtt MarketRiskTable.Arn
+                - !GetAtt OutletsTable.Arn
+                - !GetAtt PlansTable.Arn
+            - Effect: Allow
+              Action: [dynamodb:PutItem, dynamodb:UpdateItem]
+              Resource: !GetAtt PlansTable.Arn
+            - Effect: Allow
+              Action: geo:CalculateRoute
+              Resource: !GetAtt RouteCalculator.Arn
+            - !If
+              - HasBedrock
+              - Effect: Allow
+                Action: bedrock:InvokeModel
+                Resource: !Ref BedrockModelArns
+              - !Ref AWS::NoValue
+      Events:
+        Risk:
+          Type: HttpApi
+          Properties: {ApiId: !Ref Api, Method: GET, Path: /risk}
+        Recommend:
+          Type: HttpApi
+          Properties: {ApiId: !Ref Api, Method: POST, Path: /recommend}
+        Plan:
+          Type: HttpApi
+          Properties: {ApiId: !Ref Api, Method: POST, Path: /plan}
+        Impact:
+          Type: HttpApi
+          Properties: {ApiId: !Ref Api, Method: GET, Path: /impact}
+
+  VoiceFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+      ContextPath: .   # infra/Makefile; it runs from the repo root (CodeUri)
+    Properties:
+      Handler: backend/handlers/voice.handler
+      MemorySize: 256
+      Timeout: 30
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action: [s3:PutObject, s3:GetObject]
+              Resource: !Sub ${AudioBucket.Arn}/*
+            - Effect: Allow
+              Action: [transcribe:StartTranscriptionJob, transcribe:GetTranscriptionJob]
+              Resource: !Sub arn:${AWS::Partition}:transcribe:${AWS::Region}:${AWS::AccountId}:transcription-job/annasetu-*
+            - Effect: Allow
+              Action: polly:SynthesizeSpeech
+              Resource: "*"
+            - !If
+              - HasBedrock
+              - Effect: Allow
+                Action: bedrock:InvokeModel
+                Resource: !Ref BedrockModelArns
+              - !Ref AWS::NoValue
+      Events:
+        Upload:
+          Type: HttpApi
+          Properties: {ApiId: !Ref Api, Method: POST, Path: /voice/upload}
+        Parse:
+          Type: HttpApi
+          Properties: {ApiId: !Ref Api, Method: POST, Path: /voice/parse}
+        Speak:
+          Type: HttpApi
+          Properties: {ApiId: !Ref Api, Method: POST, Path: /speak}
+
+  # ---------- Daily ingest ----------
+  IngestFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+      ContextPath: .   # infra/Makefile; it runs from the repo root (CodeUri)
+    Properties:
+      Handler: backend/handlers/ingest.handler
+      MemorySize: 1024
+      Timeout: 900
+      Environment:
+        Variables:
+          DATAGOV_KEY_PARAM: !Ref DataGovKeyParam
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action: [s3:PutObject, s3:GetObject]
+              Resource: !Sub ${DataBucket.Arn}/*
+            - Effect: Allow
+              Action: [dynamodb:PutItem, dynamodb:BatchWriteItem, dynamodb:Query]
+              Resource: !GetAtt MarketDayTable.Arn
+            - Effect: Allow
+              Action: [dynamodb:PutItem, dynamodb:BatchWriteItem]
+              Resource: !GetAtt MarketRiskTable.Arn
+            - Effect: Allow
+              Action: ssm:GetParameter
+              Resource: !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${DataGovKeyParam}
+      Events:
+        DailyIngest:
+          Type: ScheduleV2
+          Properties:
+            Name: !Sub ${AWS::StackName}-daily-ingest
+            ScheduleExpression: cron(0 21 * * ? *)
+            ScheduleExpressionTimezone: Asia/Kolkata
+            RetryPolicy:
+              MaximumRetryAttempts: 0
+
+  IngestAlarmTopic:
+    Type: AWS::SNS::Topic
+    Condition: HasAlarmEmail
+    Properties:
+      Subscription:
+        - Protocol: email
+          Endpoint: !Ref AlarmEmail
+
+  IngestErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: AnnaSetu daily ingest failed (any market fetch or write error).
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref IngestFunction
+      Statistic: Sum
+      Period: 86400
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: !If [HasAlarmEmail, [!Ref IngestAlarmTopic], !Ref AWS::NoValue]
+
+  # ---------- Storage ----------
+  DataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub annasetu-data-${NameSuffix}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      OwnershipControls:
+        Rules: [{ObjectOwnership: BucketOwnerEnforced}]
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault: {SSEAlgorithm: AES256}
+
+  AudioBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub annasetu-audio-${NameSuffix}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      OwnershipControls:
+        Rules: [{ObjectOwnership: BucketOwnerEnforced}]
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault: {SSEAlgorithm: AES256}
+      LifecycleConfiguration:
+        Rules:
+          - Id: delete-after-1-day
+            Status: Enabled
+            ExpirationInDays: 1
+
+  MarketDayTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: market_crop, AttributeType: S}
+        - {AttributeName: date, AttributeType: S}
+      KeySchema:
+        - {AttributeName: market_crop, KeyType: HASH}
+        - {AttributeName: date, KeyType: RANGE}
+
+  MarketRiskTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: crop, AttributeType: S}
+        - {AttributeName: market_id, AttributeType: S}
+      KeySchema:
+        - {AttributeName: crop, KeyType: HASH}
+        - {AttributeName: market_id, KeyType: RANGE}
+
+  OutletsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: outlet_id, AttributeType: S}
+      KeySchema:
+        - {AttributeName: outlet_id, KeyType: HASH}
+
+  PlansTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: plan_id, AttributeType: S}
+      KeySchema:
+        - {AttributeName: plan_id, KeyType: HASH}
+
+  # ---------- Amazon Location ----------
+  PlaceIndex:
+    Type: AWS::Location::PlaceIndex
+    Properties:
+      IndexName: !Sub ${AWS::StackName}-places
+      DataSource: Esri
+      DataSourceConfiguration:
+        IntendedUse: Storage   # geocodes are stored in config/markets.json
+      Description: Market geocoding, run once by scripts/geocode_markets.py
+
+  RouteCalculator:
+    Type: AWS::Location::RouteCalculator
+    Properties:
+      CalculatorName: !Sub ${AWS::StackName}-routes
+      DataSource: Esri
+      Description: Origin-to-market drive distance and time
+
+Outputs:
+  ApiUrl:
+    Value: !Sub https://${Api}.execute-api.${AWS::Region}.${AWS::URLSuffix}
+  DataBucket:
+    Value: !Ref DataBucket
+  AudioBucket:
+    Value: !Ref AudioBucket
+  MarketDayTable:
+    Value: !Ref MarketDayTable
+  MarketRiskTable:
+    Value: !Ref MarketRiskTable
+  OutletsTable:
+    Value: !Ref OutletsTable
+  PlansTable:
+    Value: !Ref PlansTable
+  PlaceIndexName:
+    Value: !Ref PlaceIndex
+  RouteCalculatorName:
+    Value: !Ref RouteCalculator
+  IngestFunctionName:
+    Value: !Ref IngestFunction

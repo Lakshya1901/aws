@@ -1,0 +1,1161 @@
+{
+ "dataset": "ten_loads",
+ "request": {
+  "method": "POST",
+  "path": "/plan",
+  "query": null,
+  "body": {
+   "language": "en",
+   "loads": [
+    {
+     "crop": "tomato",
+     "quantity_kg": 3000,
+     "origin": {
+      "lat": 13.1,
+      "lon": 78.1,
+      "place": "test village near Kolar"
+     },
+     "harvest": "today",
+     "language": "en",
+     "load_id": "L0"
+    },
+    {
+     "crop": "tomato",
+     "quantity_kg": 2500,
+     "origin": {
+      "lat": 13.1,
+      "lon": 78.1,
+      "place": "test village near Kolar"
+     },
+     "harvest": "today",
+     "language": "en",
+     "load_id": "L1"
+    },
+    {
+     "crop": "tomato",
+     "quantity_kg": 2000,
+     "origin": {
+      "lat": 13.1,
+      "lon": 78.1,
+      "place": "test village near Kolar"
+     },
+     "harvest": "today",
+     "language": "en",
+     "load_id": "L2"
+    },
+    {
+     "crop": "tomato",
+     "quantity_kg": 2000,
+     "origin": {
+      "lat": 13.1,
+      "lon": 78.1,
+      "place": "test village near Kolar"
+     },
+     "harvest": "today",
+     "language": "en",
+     "load_id": "L3"
+    },
+    {
+     "crop": "tomato",
+     "quantity_kg": 1500,
+     "origin": {
+      "lat": 13.1,
+      "lon": 78.1,
+      "place": "test village near Kolar"
+     },
+     "harvest": "today",
+     "language": "en",
+     "load_id": "L4"
+    },
+    {
+     "crop": "tomato",
+     "quantity_kg": 1500,
+     "origin": {
+      "lat": 13.1,
+      "lon": 78.1,
+      "place": "test village near Kolar"
+     },
+     "harvest": "today",
+     "language": "en",
+     "load_id": "L5"
+    },
+    {
+     "crop": "tomato",
+     "quantity_kg": 1200,
+     "origin": {
+      "lat": 13.1,
+      "lon": 78.1,
+      "place": "test village near Kolar"
+     },
+     "harvest": "today",
+     "language": "en",
+     "load_id": "L6"
+    },
+    {
+     "crop": "tomato",
+     "quantity_kg": 1000,
+     "origin": {
+      "lat": 13.1,
+      "lon": 78.1,
+      "place": "test village near Kolar"
+     },
+     "harvest": "today",
+     "language": "en",
+     "load_id": "L7"
+    },
+    {
+     "crop": "tomato",
+     "quantity_kg": 800,
+     "origin": {
+      "lat": 13.1,
+      "lon": 78.1,
+      "place": "test village near Kolar"
+     },
+     "harvest": "today",
+     "language": "en",
+     "load_id": "L8"
+    },
+    {
+     "crop": "tomato",
+     "quantity_kg": 500,
+     "origin": {
+      "lat": 13.1,
+      "lon": 78.1,
+      "place": "test village near Kolar"
+     },
+     "harvest": "today",
+     "language": "en",
+     "load_id": "L9"
+    }
+   ]
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "plan_id": "p_20250404_cd2fa2dec8",
+   "mode": "same_day",
+   "modes": {
+    "tomato": "same_day"
+   },
+   "replay_date": "2025-04-04",
+   "demo_loads": true,
+   "data": {
+    "as_of_date": "2025-04-04",
+    "stale": false
+   },
+   "allocations": [
+    {
+     "load_id": "L0",
+     "crop": "tomato",
+     "quantity_kg": 3000,
+     "outlet": {
+      "outlet_id": "chintamani",
+      "name": "Chintamani",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 18.6462,
+       "mid": 19.9355,
+       "high": 21.2207
+      },
+      "price_rs_per_kg": {
+       "low": 21.0736,
+       "mid": 22.2774,
+       "high": 23.55
+      },
+      "distance_km": 43.68,
+      "distance_approx": false,
+      "drive_hours": 1.092,
+      "spoilage_share": 0.0236,
+      "spoilage_range": {
+       "low": 0.0185,
+       "mid": 0.0236,
+       "high": 0.0324
+      },
+      "freight_rs_per_kg": 0.4805,
+      "freight_rs_load": 1441.44,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "safe",
+      "arrival_ratio": 0.9794,
+      "projected_arrival_ratio": 1.1178,
+      "projected_risk_level": "safe",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.5004,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "default": {
+      "outlet_id": "kolar",
+      "name": "Kolar",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
+      },
+      "price_rs_per_kg": {
+       "low": 13.2939,
+       "mid": 14.0895,
+       "high": 14.9327
+      },
+      "distance_km": 7.12,
+      "distance_approx": false,
+      "drive_hours": 0.178,
+      "spoilage_share": 0.0205,
+      "spoilage_range": {
+       "low": 0.0161,
+       "mid": 0.0205,
+       "high": 0.0282
+      },
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 234.96,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "glut",
+      "arrival_ratio": 2.4485,
+      "projected_arrival_ratio": 2.4526,
+      "projected_risk_level": "glut",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.4988,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "advice": null,
+     "impact": {
+      "redirected_kg": 3000,
+      "waste_avoided_kg": {
+       "low": 101.2038,
+       "mid": 590.8931,
+       "high": 1229.1188
+      },
+      "extra_km": 36.56,
+      "diesel_l": 5.1184,
+      "co2_kg": 13.7173,
+      "water_l": 108724.3318
+     }
+    },
+    {
+     "load_id": "L1",
+     "crop": "tomato",
+     "quantity_kg": 2500,
+     "outlet": {
+      "outlet_id": "bengaluru",
+      "name": "Bengaluru",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 18.2399,
+       "mid": 19.5462,
+       "high": 20.8408
+      },
+      "price_rs_per_kg": {
+       "low": 21.0736,
+       "mid": 22.2774,
+       "high": 23.55
+      },
+      "distance_km": 73.98,
+      "distance_approx": false,
+      "drive_hours": 1.85,
+      "spoilage_share": 0.0261,
+      "spoilage_range": {
+       "low": 0.0205,
+       "mid": 0.0261,
+       "high": 0.0358
+      },
+      "freight_rs_per_kg": 0.8138,
+      "freight_rs_load": 2034.45,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "safe",
+      "arrival_ratio": 0.9794,
+      "projected_arrival_ratio": 0.9805,
+      "projected_risk_level": "safe",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.5004,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "default": {
+      "outlet_id": "kolar",
+      "name": "Kolar",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
+      },
+      "price_rs_per_kg": {
+       "low": 13.2939,
+       "mid": 14.0895,
+       "high": 14.9327
+      },
+      "distance_km": 7.12,
+      "distance_approx": false,
+      "drive_hours": 0.178,
+      "spoilage_share": 0.0205,
+      "spoilage_range": {
+       "low": 0.0161,
+       "mid": 0.0205,
+       "high": 0.0282
+      },
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 195.8,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "glut",
+      "arrival_ratio": 2.4485,
+      "projected_arrival_ratio": 2.4519,
+      "projected_risk_level": "glut",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.4988,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "advice": null,
+     "impact": {
+      "redirected_kg": 2500,
+      "waste_avoided_kg": {
+       "low": 75.6826,
+       "mid": 486.1171,
+       "high": 1019.3205
+      },
+      "extra_km": 66.86,
+      "diesel_l": 9.3604,
+      "co2_kg": 25.0859,
+      "water_l": 89445.5532
+     }
+    },
+    {
+     "load_id": "L2",
+     "crop": "tomato",
+     "quantity_kg": 2000,
+     "outlet": {
+      "outlet_id": "bengaluru",
+      "name": "Bengaluru",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 18.1426,
+       "mid": 19.4422,
+       "high": 20.7302
+      },
+      "price_rs_per_kg": {
+       "low": 20.9659,
+       "mid": 22.1636,
+       "high": 23.4297
+      },
+      "distance_km": 73.98,
+      "distance_approx": false,
+      "drive_hours": 1.85,
+      "spoilage_share": 0.0261,
+      "spoilage_range": {
+       "low": 0.0205,
+       "mid": 0.0261,
+       "high": 0.0358
+      },
+      "freight_rs_per_kg": 0.8138,
+      "freight_rs_load": 1627.56,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "safe",
+      "arrival_ratio": 0.9794,
+      "projected_arrival_ratio": 0.9815,
+      "projected_risk_level": "safe",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.5004,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "default": {
+      "outlet_id": "kolar",
+      "name": "Kolar",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
+      },
+      "price_rs_per_kg": {
+       "low": 13.2939,
+       "mid": 14.0895,
+       "high": 14.9327
+      },
+      "distance_km": 7.12,
+      "distance_approx": false,
+      "drive_hours": 0.178,
+      "spoilage_share": 0.0205,
+      "spoilage_range": {
+       "low": 0.0161,
+       "mid": 0.0205,
+       "high": 0.0282
+      },
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 156.64,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "glut",
+      "arrival_ratio": 2.4485,
+      "projected_arrival_ratio": 2.4513,
+      "projected_risk_level": "glut",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.4988,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "advice": null,
+     "impact": {
+      "redirected_kg": 2000,
+      "waste_avoided_kg": {
+       "low": 60.5461,
+       "mid": 388.8937,
+       "high": 815.4564
+      },
+      "extra_km": 66.86,
+      "diesel_l": 9.3604,
+      "co2_kg": 25.0859,
+      "water_l": 71556.4425
+     }
+    },
+    {
+     "load_id": "L3",
+     "crop": "tomato",
+     "quantity_kg": 2000,
+     "outlet": {
+      "outlet_id": "madanapalle",
+      "name": "Madanapalle",
+      "type": "mandi",
+      "state": "AP",
+      "net_rs_per_kg": {
+       "low": 18.0684,
+       "mid": 19.3818,
+       "high": 20.6804
+      },
+      "price_rs_per_kg": {
+       "low": 21.0736,
+       "mid": 22.2774,
+       "high": 23.55
+      },
+      "distance_km": 86.78,
+      "distance_approx": false,
+      "drive_hours": 2.169,
+      "spoilage_share": 0.0271,
+      "spoilage_range": {
+       "low": 0.0213,
+       "mid": 0.0271,
+       "high": 0.0373
+      },
+      "freight_rs_per_kg": 0.9546,
+      "freight_rs_load": 1909.16,
+      "fee_pct": 0.01,
+      "commission_pct": 0.04,
+      "handling_pct": 0.01,
+      "risk_level": "safe",
+      "arrival_ratio": 0.9794,
+      "projected_arrival_ratio": 1.0486,
+      "projected_risk_level": "safe",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.5004,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "default": {
+      "outlet_id": "kolar",
+      "name": "Kolar",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
+      },
+      "price_rs_per_kg": {
+       "low": 13.2939,
+       "mid": 14.0895,
+       "high": 14.9327
+      },
+      "distance_km": 7.12,
+      "distance_approx": false,
+      "drive_hours": 0.178,
+      "spoilage_share": 0.0205,
+      "spoilage_range": {
+       "low": 0.0161,
+       "mid": 0.0205,
+       "high": 0.0282
+      },
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 156.64,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "glut",
+      "arrival_ratio": 2.4485,
+      "projected_arrival_ratio": 2.4513,
+      "projected_risk_level": "glut",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.4988,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "advice": null,
+     "impact": {
+      "redirected_kg": 2000,
+      "waste_avoided_kg": {
+       "low": 57.6325,
+       "mid": 386.7747,
+       "high": 813.7915
+      },
+      "extra_km": 79.66,
+      "diesel_l": 11.1524,
+      "co2_kg": 29.8884,
+      "water_l": 71166.5533
+     }
+    },
+    {
+     "load_id": "L4",
+     "crop": "tomato",
+     "quantity_kg": 1500,
+     "outlet": {
+      "outlet_id": "bengaluru",
+      "name": "Bengaluru",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 18.0658,
+       "mid": 19.3601,
+       "high": 20.6429
+      },
+      "price_rs_per_kg": {
+       "low": 20.881,
+       "mid": 22.0738,
+       "high": 23.3348
+      },
+      "distance_km": 73.98,
+      "distance_approx": false,
+      "drive_hours": 1.85,
+      "spoilage_share": 0.0261,
+      "spoilage_range": {
+       "low": 0.0205,
+       "mid": 0.0261,
+       "high": 0.0358
+      },
+      "freight_rs_per_kg": 0.8138,
+      "freight_rs_load": 1220.67,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "safe",
+      "arrival_ratio": 0.9794,
+      "projected_arrival_ratio": 0.9822,
+      "projected_risk_level": "safe",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.5004,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "default": {
+      "outlet_id": "kolar",
+      "name": "Kolar",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
+      },
+      "price_rs_per_kg": {
+       "low": 13.2939,
+       "mid": 14.0895,
+       "high": 14.9327
+      },
+      "distance_km": 7.12,
+      "distance_approx": false,
+      "drive_hours": 0.178,
+      "spoilage_share": 0.0205,
+      "spoilage_range": {
+       "low": 0.0161,
+       "mid": 0.0205,
+       "high": 0.0282
+      },
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 117.48,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "glut",
+      "arrival_ratio": 2.4485,
+      "projected_arrival_ratio": 2.4506,
+      "projected_risk_level": "glut",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.4988,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "advice": null,
+     "impact": {
+      "redirected_kg": 1500,
+      "waste_avoided_kg": {
+       "low": 45.4095,
+       "mid": 291.6703,
+       "high": 611.5923
+      },
+      "extra_km": 66.86,
+      "diesel_l": 9.3604,
+      "co2_kg": 25.0859,
+      "water_l": 53667.3319
+     }
+    },
+    {
+     "load_id": "L5",
+     "crop": "tomato",
+     "quantity_kg": 1500,
+     "outlet": {
+      "outlet_id": "bengaluru",
+      "name": "Bengaluru",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 18.0088,
+       "mid": 19.2992,
+       "high": 20.5781
+      },
+      "price_rs_per_kg": {
+       "low": 20.8179,
+       "mid": 22.0072,
+       "high": 23.2643
+      },
+      "distance_km": 73.98,
+      "distance_approx": false,
+      "drive_hours": 1.85,
+      "spoilage_share": 0.0261,
+      "spoilage_range": {
+       "low": 0.0205,
+       "mid": 0.0261,
+       "high": 0.0358
+      },
+      "freight_rs_per_kg": 0.8138,
+      "freight_rs_load": 1220.67,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "safe",
+      "arrival_ratio": 0.9794,
+      "projected_arrival_ratio": 0.9829,
+      "projected_risk_level": "safe",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.5004,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "default": {
+      "outlet_id": "kolar",
+      "name": "Kolar",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
+      },
+      "price_rs_per_kg": {
+       "low": 13.2939,
+       "mid": 14.0895,
+       "high": 14.9327
+      },
+      "distance_km": 7.12,
+      "distance_approx": false,
+      "drive_hours": 0.178,
+      "spoilage_share": 0.0205,
+      "spoilage_range": {
+       "low": 0.0161,
+       "mid": 0.0205,
+       "high": 0.0282
+      },
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 117.48,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "glut",
+      "arrival_ratio": 2.4485,
+      "projected_arrival_ratio": 2.4506,
+      "projected_risk_level": "glut",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.4988,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "advice": null,
+     "impact": {
+      "redirected_kg": 1500,
+      "waste_avoided_kg": {
+       "low": 45.4095,
+       "mid": 291.6703,
+       "high": 611.5923
+      },
+      "extra_km": 66.86,
+      "diesel_l": 9.3604,
+      "co2_kg": 25.0859,
+      "water_l": 53667.3319
+     }
+    },
+    {
+     "load_id": "L6",
+     "crop": "tomato",
+     "quantity_kg": 1200,
+     "outlet": {
+      "outlet_id": "bengaluru",
+      "name": "Bengaluru",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 17.9523,
+       "mid": 19.2388,
+       "high": 20.5139
+      },
+      "price_rs_per_kg": {
+       "low": 20.7555,
+       "mid": 21.9411,
+       "high": 23.1945
+      },
+      "distance_km": 73.98,
+      "distance_approx": false,
+      "drive_hours": 1.85,
+      "spoilage_share": 0.0261,
+      "spoilage_range": {
+       "low": 0.0205,
+       "mid": 0.0261,
+       "high": 0.0358
+      },
+      "freight_rs_per_kg": 0.8138,
+      "freight_rs_load": 976.536,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "safe",
+      "arrival_ratio": 0.9794,
+      "projected_arrival_ratio": 0.9834,
+      "projected_risk_level": "safe",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.5004,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "default": {
+      "outlet_id": "kolar",
+      "name": "Kolar",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
+      },
+      "price_rs_per_kg": {
+       "low": 13.2939,
+       "mid": 14.0895,
+       "high": 14.9327
+      },
+      "distance_km": 7.12,
+      "distance_approx": false,
+      "drive_hours": 0.178,
+      "spoilage_share": 0.0205,
+      "spoilage_range": {
+       "low": 0.0161,
+       "mid": 0.0205,
+       "high": 0.0282
+      },
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 93.984,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "glut",
+      "arrival_ratio": 2.4485,
+      "projected_arrival_ratio": 2.4502,
+      "projected_risk_level": "glut",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.4988,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "advice": null,
+     "impact": {
+      "redirected_kg": 1200,
+      "waste_avoided_kg": {
+       "low": 36.3276,
+       "mid": 233.3362,
+       "high": 489.2739
+      },
+      "extra_km": 66.86,
+      "diesel_l": 9.3604,
+      "co2_kg": 25.0859,
+      "water_l": 42933.8655
+     }
+    },
+    {
+     "load_id": "L7",
+     "crop": "tomato",
+     "quantity_kg": 1000,
+     "outlet": {
+      "outlet_id": "bengaluru",
+      "name": "Bengaluru",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 17.9075,
+       "mid": 19.1909,
+       "high": 20.463
+      },
+      "price_rs_per_kg": {
+       "low": 20.7059,
+       "mid": 21.8887,
+       "high": 23.1391
+      },
+      "distance_km": 73.98,
+      "distance_approx": false,
+      "drive_hours": 1.85,
+      "spoilage_share": 0.0261,
+      "spoilage_range": {
+       "low": 0.0205,
+       "mid": 0.0261,
+       "high": 0.0358
+      },
+      "freight_rs_per_kg": 0.8138,
+      "freight_rs_load": 813.78,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "safe",
+      "arrival_ratio": 0.9794,
+      "projected_arrival_ratio": 0.9839,
+      "projected_risk_level": "safe",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.5004,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "default": {
+      "outlet_id": "kolar",
+      "name": "Kolar",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
+      },
+      "price_rs_per_kg": {
+       "low": 13.2939,
+       "mid": 14.0895,
+       "high": 14.9327
+      },
+      "distance_km": 7.12,
+      "distance_approx": false,
+      "drive_hours": 0.178,
+      "spoilage_share": 0.0205,
+      "spoilage_range": {
+       "low": 0.0161,
+       "mid": 0.0205,
+       "high": 0.0282
+      },
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 78.32,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "glut",
+      "arrival_ratio": 2.4485,
+      "projected_arrival_ratio": 2.4499,
+      "projected_risk_level": "glut",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.4988,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "advice": null,
+     "impact": {
+      "redirected_kg": 1000,
+      "waste_avoided_kg": {
+       "low": 30.273,
+       "mid": 194.4469,
+       "high": 407.7282
+      },
+      "extra_km": 66.86,
+      "diesel_l": 9.3604,
+      "co2_kg": 25.0859,
+      "water_l": 35778.2213
+     }
+    },
+    {
+     "load_id": "L8",
+     "crop": "tomato",
+     "quantity_kg": 800,
+     "outlet": {
+      "outlet_id": "bengaluru",
+      "name": "Bengaluru",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 17.8704,
+       "mid": 19.1513,
+       "high": 20.4208
+      },
+      "price_rs_per_kg": {
+       "low": 20.6649,
+       "mid": 21.8453,
+       "high": 23.0933
+      },
+      "distance_km": 73.98,
+      "distance_approx": false,
+      "drive_hours": 1.85,
+      "spoilage_share": 0.0261,
+      "spoilage_range": {
+       "low": 0.0205,
+       "mid": 0.0261,
+       "high": 0.0358
+      },
+      "freight_rs_per_kg": 0.8138,
+      "freight_rs_load": 651.024,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "safe",
+      "arrival_ratio": 0.9794,
+      "projected_arrival_ratio": 0.9842,
+      "projected_risk_level": "safe",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.5004,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "default": {
+      "outlet_id": "kolar",
+      "name": "Kolar",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
+      },
+      "price_rs_per_kg": {
+       "low": 13.2939,
+       "mid": 14.0895,
+       "high": 14.9327
+      },
+      "distance_km": 7.12,
+      "distance_approx": false,
+      "drive_hours": 0.178,
+      "spoilage_share": 0.0205,
+      "spoilage_range": {
+       "low": 0.0161,
+       "mid": 0.0205,
+       "high": 0.0282
+      },
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 62.656,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "glut",
+      "arrival_ratio": 2.4485,
+      "projected_arrival_ratio": 2.4496,
+      "projected_risk_level": "glut",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.4988,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "advice": null,
+     "impact": {
+      "redirected_kg": 800,
+      "waste_avoided_kg": {
+       "low": 24.2184,
+       "mid": 155.5575,
+       "high": 326.1826
+      },
+      "extra_km": 66.86,
+      "diesel_l": 9.3604,
+      "co2_kg": 25.0859,
+      "water_l": 28622.577
+     }
+    },
+    {
+     "load_id": "L9",
+     "crop": "tomato",
+     "quantity_kg": 500,
+     "outlet": {
+      "outlet_id": "bengaluru",
+      "name": "Bengaluru",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 17.8409,
+       "mid": 19.1197,
+       "high": 20.3873
+      },
+      "price_rs_per_kg": {
+       "low": 20.6322,
+       "mid": 21.8108,
+       "high": 23.0568
+      },
+      "distance_km": 73.98,
+      "distance_approx": false,
+      "drive_hours": 1.85,
+      "spoilage_share": 0.0261,
+      "spoilage_range": {
+       "low": 0.0205,
+       "mid": 0.0261,
+       "high": 0.0358
+      },
+      "freight_rs_per_kg": 0.8138,
+      "freight_rs_load": 406.89,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "safe",
+      "arrival_ratio": 0.9794,
+      "projected_arrival_ratio": 0.9845,
+      "projected_risk_level": "safe",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.5004,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "default": {
+      "outlet_id": "kolar",
+      "name": "Kolar",
+      "type": "mandi",
+      "state": "KA",
+      "net_rs_per_kg": {
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
+      },
+      "price_rs_per_kg": {
+       "low": 13.2939,
+       "mid": 14.0895,
+       "high": 14.9327
+      },
+      "distance_km": 7.12,
+      "distance_approx": false,
+      "drive_hours": 0.178,
+      "spoilage_share": 0.0205,
+      "spoilage_range": {
+       "low": 0.0161,
+       "mid": 0.0205,
+       "high": 0.0282
+      },
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 39.16,
+      "fee_pct": 0.0,
+      "commission_pct": 0.05,
+      "handling_pct": 0.01,
+      "risk_level": "glut",
+      "arrival_ratio": 2.4485,
+      "projected_arrival_ratio": 2.4492,
+      "projected_risk_level": "glut",
+      "price_change_3d": 0.163,
+      "elasticity_b": -0.4988,
+      "stale": false,
+      "latest_date": "2025-04-04",
+      "data_complete": true
+     },
+     "advice": null,
+     "impact": {
+      "redirected_kg": 500,
+      "waste_avoided_kg": {
+       "low": 15.1365,
+       "mid": 97.2234,
+       "high": 203.8641
+      },
+      "extra_km": 66.86,
+      "diesel_l": 9.3604,
+      "co2_kg": 25.0859,
+      "water_l": 17889.1106
+     }
+    }
+   ],
+   "markets": [
+    {
+     "market_id": "chintamani",
+     "name": "Chintamani",
+     "crop": "tomato",
+     "added_kg": 3000,
+     "capped": false
+    },
+    {
+     "market_id": "bengaluru",
+     "name": "Bengaluru",
+     "crop": "tomato",
+     "added_kg": 11000,
+     "capped": false
+    },
+    {
+     "market_id": "madanapalle",
+     "name": "Madanapalle",
+     "crop": "tomato",
+     "added_kg": 2000,
+     "capped": false
+    }
+   ],
+   "impact": {
+    "redirected_kg": 16000,
+    "waste_avoided_kg": {
+     "low": 491.8396,
+     "mid": 3116.5833,
+     "high": 6527.9207
+    },
+    "extra_km": 651.1,
+    "diesel_l": 91.154,
+    "co2_kg": 244.2927,
+    "water_l": 573451.3191
+   },
+   "assumptions_used": [
+    "co2_kg_per_l_diesel",
+    "commission_pct",
+    "diesel_l_per_km",
+    "dump_share_table",
+    "freight_rs_per_tonne_km",
+    "handling_pct",
+    "max_radius_km",
+    "t_wait_h",
+    "tomato.alpha",
+    "tomato.q10",
+    "tomato.sl_ref_hours",
+    "tomato.sl_ref_hours_range",
+    "tomato.water_l_per_kg"
+   ]
+  }
+ }
+}

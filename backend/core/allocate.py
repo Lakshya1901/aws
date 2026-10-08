@@ -1,0 +1,75 @@
+"""Step 5: greedy allocation across outlets, anti-herding (CLAUDE.md Section 9)."""
+from .config import CoreError, assumption
+from .impact import impact
+from .netvalue import fresh_option, haversine_km, second_life_option
+
+SECOND_LIFE_ORDER = ("processor", "food_bank", "feed_compost")
+
+
+def _nearest(origin, items, radius_km, limit=None):
+    """Items with lat/lon within radius_km straight-line of origin, nearest first, at most limit."""
+    scored = sorted(((haversine_km(origin["lat"], origin["lon"], it["lat"], it["lon"]), i, it)
+                     for i, it in enumerate(items)), key=lambda t: (t[0], t[1]))
+    within = [it for d, _, it in scored if d <= radius_km]
+    return within[:limit] if limit else within
+
+
+def allocate_load(load, crop, market_ctx, outlets, added_kg, configs):
+    """Recommend one load given dA so far (added_kg: {market_id: kg}, updated in place).
+
+    market_ctx: [{"market", "risk", "fit"}] for reporting markets of this crop.
+    """
+    a = configs["assumptions"]
+    radius = assumption(a, "max_radius_km")
+    near = _nearest(load["origin"], [dict(m["market"], _ctx=m) for m in market_ctx], radius,
+                    configs["model"]["nearest_markets"])
+    if not near:
+        raise CoreError("no_markets_in_radius", "No reporting markets near you for this crop")
+    q = load["quantity_kg"]
+    fresh = [fresh_option(load, m["_ctx"], added_kg.get(m["market_id"], 0), crop, configs) for m in near]
+    fresh.sort(key=lambda o: -o["net_rs_per_kg"]["mid"])
+    default = min(fresh, key=lambda o: o["distance_km"])
+    # D17: only markets whose projected R is known can be checked for glut, so only they can be chosen.
+    paying = [o for o in fresh if o["net_rs_per_kg"]["mid"] > 0 and o["projected_risk_level"] is not None]
+    # Best paying market whose projected R stays out of glut; if every paying market would be in glut, the best one.
+    top = next((o for o in paying if o["projected_risk_level"] != "glut"), paying[0] if paying else None)
+
+    eligible = [o for o in outlets if crop["crop_id"] in o.get("crops", []) and o["type"] in crop["second_life"]]
+    second = [second_life_option(load, o, crop, configs) for o in _nearest(load["origin"], eligible, radius)]
+    second.sort(key=lambda o: SECOND_LIFE_ORDER.index(o["type"]))  # stable: nearest first within a type
+
+    if top is not None:
+        added_kg[top["outlet_id"]] = added_kg.get(top["outlet_id"], 0) + q
+    elif crop["storable"]:
+        top = {"outlet_id": None, "type": "hold", "net_rs_per_kg": None, "net_note": "not yet estimated"}
+    elif second:
+        top = second[0]
+    else:
+        top = {"outlet_id": None, "type": "feed_compost", "net_rs_per_kg": None,
+               "net_note": "not yet estimated", "note": "No seeded second-life outlet in radius"}
+
+    best_net = fresh[0]["net_rs_per_kg"]["mid"]
+    advice = None
+    if load.get("harvest") != "harvested" and best_net < crop["harvest_cost_rs_per_kg"]:
+        advice = {"code": "delay_harvest" if crop["storable"] else "harvest_to_order",
+                  "best_net_rs_per_kg": best_net, "harvest_cost_rs_per_kg": crop["harvest_cost_rs_per_kg"]}
+    return {
+        "load_id": load.get("load_id"), "crop": crop["crop_id"], "quantity_kg": q,
+        "top": top, "default": default,
+        "alternatives": [o for o in fresh + second if o is not top],
+        "impact": impact(q, default, top, crop, a),
+        "advice": advice,
+    }
+
+
+def allocate(loads, crops, market_ctx, outlets, configs):
+    """Allocate loads largest first. crops/market_ctx are keyed by crop_id.
+
+    Returns (results in input order, dA_kg {crop_id: {market_id: kg}}).
+    """
+    added = {c: {} for c in market_ctx}
+    results = [None] * len(loads)
+    for i in sorted(range(len(loads)), key=lambda i: -loads[i]["quantity_kg"]):
+        c = loads[i]["crop"]
+        results[i] = allocate_load(loads[i], crops[c], market_ctx[c], outlets, added[c], configs)
+    return results, added

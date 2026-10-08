@@ -1,0 +1,27 @@
+{
+  "crop_id": "banana",
+  "names": {"en": "Banana"},
+  "agmarknet_commodity": "Banana",
+  "t_ref_c": 25,
+  "sl_ref_hours": null,
+  "sl_ref_hours_range": null,
+  "q10": null,
+  "alpha": null,
+  "storable": null,
+  "harvest_cost_rs_per_kg": null,
+  "unit_box_kg": null,
+  "water_l_per_kg": null,
+  "second_life": ["processor", "food_bank", "feed_compost"],
+  "status": {
+    "t_ref_c": "sourced",
+    "sl_ref_hours": "placeholder",
+    "q10": "placeholder",
+    "alpha": "placeholder",
+    "storable": "placeholder",
+    "harvest_cost_rs_per_kg": "placeholder"
+  },
+  "sources": {
+    "storable": "CLAUDE.md Section 11 says 'limited' (12-15 C, weeks, ripening-dependent); no hold rule defined, so left null",
+    "second_life": "CLAUDE.md Section 11: ripening/retail, chips (processor), food bank, feed"
+  }
+}
