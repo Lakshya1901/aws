@@ -1,0 +1,3360 @@
+{
+ "assumptions": {
+  "demo_gap": "gross modal price difference only; no freight, fees or spoilage applied",
+  "false_alarm_definition": "flag day with no crash day in the same market within false_alarm_horizon_days",
+  "harvest_cost_source": "Rs 70 per 15 kg box, Kolar 2025, Outlook Business (CLAUDE.md Section 10); sourced",
+  "lead_definition": "days from the earliest flag within lead_window_days before an episode's first crash day; 0 = same day; null = no flag",
+  "params": {
+   "chart_window": [
+    "2024-12-01",
+    "2025-05-31"
+   ],
+   "crash_dp": -0.25,
+   "default_market": "kolar",
+   "dp_days": 3,
+   "episode_merge_gap_days": 7,
+   "false_alarm_horizon_days": 7,
+   "glut_window": [
+    "2025-01-01",
+    "2025-04-30"
+   ],
+   "harvest_cost_rs_per_kg": 4.7,
+   "lead_window_days": 7,
+   "min_days_of_last_7": 5,
+   "predictive_min_lead_days": 2,
+   "sweep_watch_r": [
+    1.1,
+    1.2,
+    1.3,
+    1.5,
+    1.7,
+    2.0,
+    2.5,
+    3.0
+   ],
+   "thresholds": {
+    "glut_dp": -0.25,
+    "glut_r": 2.0,
+    "glut_r_with_dp": 1.5,
+    "watch_dp": -0.15,
+    "watch_r": 1.3
+   },
+   "xcorr_lags": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ]
+  },
+  "thresholds_source": "CLAUDE.md Section 9 Step 1 defaults",
+  "week_adjacency": "ISO weeks w-1..w+1 with 52/53 adjacent to 1"
+ },
+ "crop": "tomato",
+ "demo_day": {
+  "candidates": [
+   {
+    "alt": {
+     "R": 1.84,
+     "arrivals_t": 6.0,
+     "level": "watch",
+     "modal_rs_kg": 19.73
+    },
+    "alternative": "mysuru",
+    "date": "2025-03-01",
+    "gross_gap_rs_kg": 14.27,
+    "kolar": {
+     "R": 0.69,
+     "arrivals_t": 694.0,
+     "level": "safe",
+     "modal_rs_kg": 5.47
+    },
+    "straight_line_km": 185.4
+   },
+   {
+    "alt": {
+     "R": 0.94,
+     "arrivals_t": 27.0,
+     "level": "safe",
+     "modal_rs_kg": 15.91
+    },
+    "alternative": "mysuru",
+    "date": "2025-04-24",
+    "gross_gap_rs_kg": 11.31,
+    "kolar": {
+     "R": 0.93,
+     "arrivals_t": 840.0,
+     "level": "watch",
+     "modal_rs_kg": 4.6
+    },
+    "straight_line_km": 185.4
+   },
+   {
+    "alt": {
+     "R": 1.55,
+     "arrivals_t": 189.1,
+     "level": "watch",
+     "modal_rs_kg": 18.2
+    },
+    "alternative": "madanapalle",
+    "date": "2025-02-07",
+    "gross_gap_rs_kg": 10.83,
+    "kolar": {
+     "R": 0.82,
+     "arrivals_t": 673.0,
+     "level": "safe",
+     "modal_rs_kg": 7.37
+    },
+    "straight_line_km": 61.3
+   }
+  ],
+  "candidates_kolar_flagged_watch_or_glut": [
+   {
+    "alt": {
+     "R": 0.94,
+     "arrivals_t": 27.0,
+     "level": "safe",
+     "modal_rs_kg": 15.91
+    },
+    "alternative": "mysuru",
+    "date": "2025-04-24",
+    "gross_gap_rs_kg": 11.31,
+    "kolar": {
+     "R": 0.93,
+     "arrivals_t": 840.0,
+     "level": "watch",
+     "modal_rs_kg": 4.6
+    },
+    "straight_line_km": 185.4
+   },
+   {
+    "alt": {
+     "R": 0.71,
+     "arrivals_t": 14.0,
+     "level": "safe",
+     "modal_rs_kg": 15.0
+    },
+    "alternative": "bengaluru",
+    "date": "2025-01-25",
+    "gross_gap_rs_kg": 9.35,
+    "kolar": {
+     "R": 0.98,
+     "arrivals_t": 722.0,
+     "level": "watch",
+     "modal_rs_kg": 5.65
+    },
+    "straight_line_km": 61.5
+   },
+   {
+    "alt": {
+     "R": 1.61,
+     "arrivals_t": 163.7,
+     "level": "watch",
+     "modal_rs_kg": 15.78
+    },
+    "alternative": "madanapalle",
+    "date": "2025-02-01",
+    "gross_gap_rs_kg": 9.3,
+    "kolar": {
+     "R": 1.02,
+     "arrivals_t": 672.0,
+     "level": "watch",
+     "modal_rs_kg": 6.48
+    },
+    "straight_line_km": 61.3
+   }
+  ],
+  "criteria": "Kolar Jan-Apr 2025; 7 of last 7 days with price and arrivals for Kolar and the alternative; largest gross modal gap"
+ },
+ "mode_recommendation": {
+  "alternative_pays_gross": true,
+  "mode": "same_day",
+  "rule": "predictive only if arrival-ratio flags lead crash episodes by >= 2 days on most (>50%) scorable episodes and an alternative pays; else same_day (CLAUDE.md Sections 7, 17.2)",
+  "share_episodes_any_flag_lead_ge_2": 0.496,
+  "share_episodes_arrival_lead_ge_2": 0.293,
+  "strongest_negative_corr": -0.001,
+  "strongest_negative_lag_days": 1
+ },
+ "model": {
+  "crash_episode_leads": [
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "bengaluru",
+    "price_kg_at_start": 28.88,
+    "start": "2022-01-04"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "bengaluru",
+    "price_kg_at_start": 15.5,
+    "start": "2022-01-17"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "bengaluru",
+    "price_kg_at_start": 9.88,
+    "start": "2022-02-01"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "bengaluru",
+    "price_kg_at_start": 6.0,
+    "start": "2022-02-12"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "bengaluru",
+    "price_kg_at_start": 4.5,
+    "start": "2022-03-12"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "bengaluru",
+    "price_kg_at_start": 67.75,
+    "start": "2022-05-24"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "bengaluru",
+    "price_kg_at_start": 37.5,
+    "start": "2022-06-11"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "bengaluru",
+    "price_kg_at_start": 33.75,
+    "start": "2022-06-22"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "bengaluru",
+    "price_kg_at_start": 6.0,
+    "start": "2022-07-17"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "bengaluru",
+    "price_kg_at_start": 7.25,
+    "start": "2022-08-08"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "bengaluru",
+    "price_kg_at_start": 29.17,
+    "start": "2022-10-19"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "bengaluru",
+    "price_kg_at_start": 8.38,
+    "start": "2022-11-25"
+   },
+   {
+    "R_at_start": 1.26,
+    "lead_any_flag_days": 5,
+    "lead_arrival_flag_days": 5,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 10.0,
+    "start": "2022-12-24"
+   },
+   {
+    "R_at_start": 0.58,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 19.33,
+    "start": "2023-01-23"
+   },
+   {
+    "R_at_start": 0.65,
+    "lead_any_flag_days": 1,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 13.0,
+    "start": "2023-02-05"
+   },
+   {
+    "R_at_start": 0.53,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 21.62,
+    "start": "2023-02-22"
+   },
+   {
+    "R_at_start": 0.51,
+    "lead_any_flag_days": 5,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 6.12,
+    "start": "2023-03-27"
+   },
+   {
+    "R_at_start": 0.67,
+    "lead_any_flag_days": 6,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 5.75,
+    "start": "2023-04-22"
+   },
+   {
+    "R_at_start": 0.86,
+    "lead_any_flag_days": 1,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 77.67,
+    "start": "2023-08-05"
+   },
+   {
+    "R_at_start": 0.96,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 6.67,
+    "start": "2023-10-02"
+   },
+   {
+    "R_at_start": 0.85,
+    "lead_any_flag_days": 5,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 8.0,
+    "start": "2023-10-24"
+   },
+   {
+    "R_at_start": 0.76,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 29.38,
+    "start": "2023-11-22"
+   },
+   {
+    "R_at_start": 0.75,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 15.0,
+    "start": "2023-12-23"
+   },
+   {
+    "R_at_start": 0.58,
+    "lead_any_flag_days": 6,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 13.0,
+    "start": "2024-01-15"
+   },
+   {
+    "R_at_start": 0.64,
+    "lead_any_flag_days": 6,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 14.33,
+    "start": "2024-02-14"
+   },
+   {
+    "R_at_start": 0.91,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 9.0,
+    "start": "2024-03-02"
+   },
+   {
+    "R_at_start": 0.7,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 27.0,
+    "start": "2024-05-30"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "bengaluru",
+    "price_kg_at_start": 24.0,
+    "start": "2024-07-27"
+   },
+   {
+    "R_at_start": 0.95,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 10.0,
+    "start": "2024-09-01"
+   },
+   {
+    "R_at_start": 0.57,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 43.33,
+    "start": "2024-10-08"
+   },
+   {
+    "R_at_start": 0.6,
+    "lead_any_flag_days": 1,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 35.0,
+    "start": "2024-10-21"
+   },
+   {
+    "R_at_start": 0.52,
+    "lead_any_flag_days": 5,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 21.0,
+    "start": "2024-11-06"
+   },
+   {
+    "R_at_start": 0.18,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 20.0,
+    "start": "2024-12-09"
+   },
+   {
+    "R_at_start": 0.17,
+    "lead_any_flag_days": 4,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 10.0,
+    "start": "2024-12-31"
+   },
+   {
+    "R_at_start": 0.79,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 11.0,
+    "start": "2025-02-21"
+   },
+   {
+    "R_at_start": 0.76,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 5.0,
+    "start": "2025-03-16"
+   },
+   {
+    "R_at_start": 0.8,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 6.0,
+    "start": "2025-03-31"
+   },
+   {
+    "R_at_start": 0.71,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "bengaluru",
+    "price_kg_at_start": 8.0,
+    "start": "2025-04-10"
+   },
+   {
+    "R_at_start": 1.05,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "chintamani",
+    "price_kg_at_start": 18.5,
+    "start": "2022-01-07"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "chintamani",
+    "price_kg_at_start": 11.0,
+    "start": "2022-01-29"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "chintamani",
+    "price_kg_at_start": 8.0,
+    "start": "2022-02-07"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "chintamani",
+    "price_kg_at_start": 5.5,
+    "start": "2022-02-22"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "chintamani",
+    "price_kg_at_start": 30.0,
+    "start": "2022-05-24"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "chintamani",
+    "price_kg_at_start": 20.8,
+    "start": "2022-06-18"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "chintamani",
+    "price_kg_at_start": 11.0,
+    "start": "2022-07-12"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "chintamani",
+    "price_kg_at_start": 15.0,
+    "start": "2022-10-19"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "chintamani",
+    "price_kg_at_start": 11.0,
+    "start": "2022-10-28"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "chintamani",
+    "price_kg_at_start": 5.5,
+    "start": "2022-11-26"
+   },
+   {
+    "R_at_start": 1.85,
+    "lead_any_flag_days": 4,
+    "lead_arrival_flag_days": 4,
+    "market_id": "chintamani",
+    "price_kg_at_start": 9.5,
+    "start": "2022-12-23"
+   },
+   {
+    "R_at_start": 1.2,
+    "lead_any_flag_days": 1,
+    "lead_arrival_flag_days": null,
+    "market_id": "chintamani",
+    "price_kg_at_start": 11.0,
+    "start": "2023-03-04"
+   },
+   {
+    "R_at_start": 1.13,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": null,
+    "market_id": "chintamani",
+    "price_kg_at_start": 8.9,
+    "start": "2023-05-01"
+   },
+   {
+    "R_at_start": 0.87,
+    "lead_any_flag_days": 6,
+    "lead_arrival_flag_days": null,
+    "market_id": "chintamani",
+    "price_kg_at_start": 8.0,
+    "start": "2023-05-30"
+   },
+   {
+    "R_at_start": 1.21,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "chintamani",
+    "price_kg_at_start": 60.7,
+    "start": "2023-08-05"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "chintamani",
+    "price_kg_at_start": 20.0,
+    "start": "2023-11-24"
+   },
+   {
+    "R_at_start": 1.02,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "chintamani",
+    "price_kg_at_start": 12.0,
+    "start": "2024-02-16"
+   },
+   {
+    "R_at_start": 1.24,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "chintamani",
+    "price_kg_at_start": 9.5,
+    "start": "2024-02-27"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "chintamani",
+    "price_kg_at_start": 12.0,
+    "start": "2024-04-23"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "chintamani",
+    "price_kg_at_start": 23.0,
+    "start": "2024-09-23"
+   },
+   {
+    "R_at_start": 1.06,
+    "lead_any_flag_days": 3,
+    "lead_arrival_flag_days": null,
+    "market_id": "chintamani",
+    "price_kg_at_start": 15.5,
+    "start": "2024-10-28"
+   },
+   {
+    "R_at_start": 0.97,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "chintamani",
+    "price_kg_at_start": 9.6,
+    "start": "2024-12-10"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 15.0,
+    "start": "2022-01-21"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 35.0,
+    "start": "2022-06-02"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 30.0,
+    "start": "2022-06-21"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 7.0,
+    "start": "2022-07-18"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 13.0,
+    "start": "2022-09-09"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 10.0,
+    "start": "2022-11-03"
+   },
+   {
+    "R_at_start": 1.0,
+    "lead_any_flag_days": 2,
+    "lead_arrival_flag_days": null,
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 17.0,
+    "start": "2023-02-04"
+   },
+   {
+    "R_at_start": 1.0,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 12.0,
+    "start": "2023-02-13"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": null,
+    "lead_arrival_flag_days": null,
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 25.0,
+    "start": "2023-06-30"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 25.0,
+    "start": "2023-08-21"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 25.0,
+    "start": "2024-07-11"
+   },
+   {
+    "R_at_start": 2.2,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": 0,
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 12.0,
+    "start": "2024-11-08"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 25.0,
+    "start": "2024-12-06"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "kolar",
+    "price_kg_at_start": 16.36,
+    "start": "2022-01-04"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": null,
+    "lead_arrival_flag_days": null,
+    "market_id": "kolar",
+    "price_kg_at_start": 9.85,
+    "start": "2022-01-13"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "kolar",
+    "price_kg_at_start": 7.18,
+    "start": "2022-01-29"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "kolar",
+    "price_kg_at_start": 33.59,
+    "start": "2022-05-24"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "kolar",
+    "price_kg_at_start": 17.16,
+    "start": "2022-06-25"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "kolar",
+    "price_kg_at_start": 7.83,
+    "start": "2022-07-20"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "kolar",
+    "price_kg_at_start": 13.06,
+    "start": "2022-10-27"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "kolar",
+    "price_kg_at_start": 7.08,
+    "start": "2022-11-05"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "kolar",
+    "price_kg_at_start": 7.18,
+    "start": "2022-12-14"
+   },
+   {
+    "R_at_start": 0.94,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "kolar",
+    "price_kg_at_start": 5.64,
+    "start": "2023-01-05"
+   },
+   {
+    "R_at_start": 0.8,
+    "lead_any_flag_days": 1,
+    "lead_arrival_flag_days": null,
+    "market_id": "kolar",
+    "price_kg_at_start": 9.25,
+    "start": "2023-01-23"
+   },
+   {
+    "R_at_start": 0.66,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "kolar",
+    "price_kg_at_start": 10.5,
+    "start": "2023-02-23"
+   },
+   {
+    "R_at_start": 0.54,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "kolar",
+    "price_kg_at_start": 11.31,
+    "start": "2023-03-07"
+   },
+   {
+    "R_at_start": 0.83,
+    "lead_any_flag_days": null,
+    "lead_arrival_flag_days": null,
+    "market_id": "kolar",
+    "price_kg_at_start": 4.44,
+    "start": "2023-04-05"
+   },
+   {
+    "R_at_start": 1.53,
+    "lead_any_flag_days": 5,
+    "lead_arrival_flag_days": 5,
+    "market_id": "kolar",
+    "price_kg_at_start": 5.13,
+    "start": "2023-05-19"
+   },
+   {
+    "R_at_start": 1.45,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "kolar",
+    "price_kg_at_start": 10.08,
+    "start": "2023-06-03"
+   },
+   {
+    "R_at_start": 1.36,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "kolar",
+    "price_kg_at_start": 62.42,
+    "start": "2023-08-03"
+   },
+   {
+    "R_at_start": 2.01,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "kolar",
+    "price_kg_at_start": 5.97,
+    "start": "2023-09-29"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "kolar",
+    "price_kg_at_start": 10.89,
+    "start": "2023-12-13"
+   },
+   {
+    "R_at_start": 1.32,
+    "lead_any_flag_days": 5,
+    "lead_arrival_flag_days": 0,
+    "market_id": "kolar",
+    "price_kg_at_start": 8.32,
+    "start": "2024-02-14"
+   },
+   {
+    "R_at_start": 1.99,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "kolar",
+    "price_kg_at_start": 9.41,
+    "start": "2024-05-12"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "kolar",
+    "price_kg_at_start": 26.1,
+    "start": "2024-07-24"
+   },
+   {
+    "R_at_start": 3.38,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "kolar",
+    "price_kg_at_start": 12.43,
+    "start": "2024-08-18"
+   },
+   {
+    "R_at_start": 1.22,
+    "lead_any_flag_days": 3,
+    "lead_arrival_flag_days": null,
+    "market_id": "kolar",
+    "price_kg_at_start": 20.0,
+    "start": "2024-10-11"
+   },
+   {
+    "R_at_start": 1.16,
+    "lead_any_flag_days": 2,
+    "lead_arrival_flag_days": null,
+    "market_id": "kolar",
+    "price_kg_at_start": 20.53,
+    "start": "2024-10-26"
+   },
+   {
+    "R_at_start": 1.44,
+    "lead_any_flag_days": 1,
+    "lead_arrival_flag_days": 1,
+    "market_id": "kolar",
+    "price_kg_at_start": 14.42,
+    "start": "2024-11-10"
+   },
+   {
+    "R_at_start": 0.62,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "kolar",
+    "price_kg_at_start": 10.3,
+    "start": "2024-12-08"
+   },
+   {
+    "R_at_start": 0.84,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "kolar",
+    "price_kg_at_start": 9.57,
+    "start": "2024-12-29"
+   },
+   {
+    "R_at_start": 1.0,
+    "lead_any_flag_days": 2,
+    "lead_arrival_flag_days": null,
+    "market_id": "kolar",
+    "price_kg_at_start": 4.65,
+    "start": "2025-01-15"
+   },
+   {
+    "R_at_start": 0.93,
+    "lead_any_flag_days": 1,
+    "lead_arrival_flag_days": null,
+    "market_id": "kolar",
+    "price_kg_at_start": 6.7,
+    "start": "2025-02-12"
+   },
+   {
+    "R_at_start": 0.74,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "kolar",
+    "price_kg_at_start": 7.5,
+    "start": "2025-02-23"
+   },
+   {
+    "R_at_start": 0.76,
+    "lead_any_flag_days": null,
+    "lead_arrival_flag_days": null,
+    "market_id": "kolar",
+    "price_kg_at_start": 4.6,
+    "start": "2025-03-19"
+   },
+   {
+    "R_at_start": 0.6,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "kolar",
+    "price_kg_at_start": 4.6,
+    "start": "2025-04-03"
+   },
+   {
+    "R_at_start": 0.93,
+    "lead_any_flag_days": 2,
+    "lead_arrival_flag_days": null,
+    "market_id": "kolar",
+    "price_kg_at_start": 4.6,
+    "start": "2025-04-24"
+   },
+   {
+    "R_at_start": 1.07,
+    "lead_any_flag_days": null,
+    "lead_arrival_flag_days": null,
+    "market_id": "kolar",
+    "price_kg_at_start": 4.42,
+    "start": "2025-05-07"
+   },
+   {
+    "R_at_start": 1.07,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "kolar",
+    "price_kg_at_start": 3.17,
+    "start": "2025-05-27"
+   },
+   {
+    "R_at_start": 3.64,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "kolar",
+    "price_kg_at_start": 10.32,
+    "start": "2025-06-13"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "madanapalle",
+    "price_kg_at_start": 21.4,
+    "start": "2022-01-04"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "madanapalle",
+    "price_kg_at_start": 7.85,
+    "start": "2022-01-30"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "madanapalle",
+    "price_kg_at_start": 30.0,
+    "start": "2022-06-16"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "madanapalle",
+    "price_kg_at_start": 15.15,
+    "start": "2022-06-28"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "madanapalle",
+    "price_kg_at_start": 9.78,
+    "start": "2022-08-07"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "madanapalle",
+    "price_kg_at_start": 9.55,
+    "start": "2022-08-24"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "madanapalle",
+    "price_kg_at_start": 22.33,
+    "start": "2022-09-20"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "madanapalle",
+    "price_kg_at_start": 18.57,
+    "start": "2022-10-20"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "madanapalle",
+    "price_kg_at_start": 8.73,
+    "start": "2022-11-16"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "madanapalle",
+    "price_kg_at_start": 8.7,
+    "start": "2022-11-27"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "madanapalle",
+    "price_kg_at_start": 11.27,
+    "start": "2022-12-15"
+   },
+   {
+    "R_at_start": 0.97,
+    "lead_any_flag_days": 1,
+    "lead_arrival_flag_days": null,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 15.7,
+    "start": "2023-01-22"
+   },
+   {
+    "R_at_start": 0.37,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 14.57,
+    "start": "2023-02-24"
+   },
+   {
+    "R_at_start": 0.2,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 11.7,
+    "start": "2023-03-14"
+   },
+   {
+    "R_at_start": 9.89,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 14.77,
+    "start": "2023-06-03"
+   },
+   {
+    "R_at_start": 7.17,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 19.6,
+    "start": "2023-06-17"
+   },
+   {
+    "R_at_start": 0.99,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 17.9,
+    "start": "2023-08-24"
+   },
+   {
+    "R_at_start": 0.92,
+    "lead_any_flag_days": 5,
+    "lead_arrival_flag_days": null,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 15.33,
+    "start": "2023-11-16"
+   },
+   {
+    "R_at_start": 1.72,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 16.4,
+    "start": "2023-12-01"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "madanapalle",
+    "price_kg_at_start": 12.06,
+    "start": "2023-12-13"
+   },
+   {
+    "R_at_start": 1.63,
+    "lead_any_flag_days": 4,
+    "lead_arrival_flag_days": 4,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 17.1,
+    "start": "2024-01-05"
+   },
+   {
+    "R_at_start": 0.79,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 12.0,
+    "start": "2024-01-20"
+   },
+   {
+    "R_at_start": 1.42,
+    "lead_any_flag_days": 6,
+    "lead_arrival_flag_days": 6,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 9.95,
+    "start": "2024-02-24"
+   },
+   {
+    "R_at_start": 0.88,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 13.0,
+    "start": "2024-04-12"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "madanapalle",
+    "price_kg_at_start": 45.4,
+    "start": "2024-06-25"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "madanapalle",
+    "price_kg_at_start": 37.92,
+    "start": "2024-07-24"
+   },
+   {
+    "R_at_start": 2.24,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 48.0,
+    "start": "2024-10-10"
+   },
+   {
+    "R_at_start": 2.37,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 18.85,
+    "start": "2024-11-09"
+   },
+   {
+    "R_at_start": 1.05,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 29.54,
+    "start": "2024-12-08"
+   },
+   {
+    "R_at_start": 2.83,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 9.88,
+    "start": "2024-12-30"
+   },
+   {
+    "R_at_start": 1.8,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 11.0,
+    "start": "2025-01-14"
+   },
+   {
+    "R_at_start": 1.6,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 12.33,
+    "start": "2025-02-13"
+   },
+   {
+    "R_at_start": 2.55,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "madanapalle",
+    "price_kg_at_start": 10.23,
+    "start": "2025-04-03"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2022-01-07"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2022-01-30"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 5.0,
+    "start": "2022-03-11"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 4.5,
+    "start": "2022-04-07"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2022-05-13"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 30.0,
+    "start": "2022-06-16"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 26.0,
+    "start": "2022-06-27"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2022-07-10"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2022-09-18"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2022-10-10"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2022-10-23"
+   },
+   {
+    "R_at_start": 1.25,
+    "lead_any_flag_days": 4,
+    "lead_arrival_flag_days": 4,
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2023-02-05"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 6,
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2023-02-19"
+   },
+   {
+    "R_at_start": 1.92,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "mandya",
+    "price_kg_at_start": 5.9,
+    "start": "2023-04-03"
+   },
+   {
+    "R_at_start": 1.71,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2023-06-11"
+   },
+   {
+    "R_at_start": 2.86,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "mandya",
+    "price_kg_at_start": 72.5,
+    "start": "2023-08-05"
+   },
+   {
+    "R_at_start": 1.56,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "mandya",
+    "price_kg_at_start": 16.0,
+    "start": "2023-08-30"
+   },
+   {
+    "R_at_start": 0.67,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "mandya",
+    "price_kg_at_start": 15.5,
+    "start": "2023-09-20"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": null,
+    "lead_arrival_flag_days": null,
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2024-02-03"
+   },
+   {
+    "R_at_start": 2.06,
+    "lead_any_flag_days": 3,
+    "lead_arrival_flag_days": 3,
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2024-02-11"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2024-04-04"
+   },
+   {
+    "R_at_start": 0.55,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2024-04-28"
+   },
+   {
+    "R_at_start": 0.42,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "mandya",
+    "price_kg_at_start": 20.0,
+    "start": "2024-05-21"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 20.0,
+    "start": "2024-06-09"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2024-07-08"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2024-07-19"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 15.0,
+    "start": "2024-07-28"
+   },
+   {
+    "R_at_start": 0.57,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "mandya",
+    "price_kg_at_start": 25.0,
+    "start": "2024-10-28"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2024-12-12"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "mandya",
+    "price_kg_at_start": 5.0,
+    "start": "2024-12-29"
+   },
+   {
+    "R_at_start": 1.92,
+    "lead_any_flag_days": 5,
+    "lead_arrival_flag_days": 5,
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2025-01-27"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mandya",
+    "price_kg_at_start": 7.0,
+    "start": "2025-05-09"
+   },
+   {
+    "R_at_start": 4.56,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2025-06-16"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mysuru",
+    "price_kg_at_start": 21.28,
+    "start": "2022-01-05"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
+    "market_id": "mysuru",
+    "price_kg_at_start": 18.61,
+    "start": "2022-01-14"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mysuru",
+    "price_kg_at_start": 9.75,
+    "start": "2022-01-30"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mysuru",
+    "price_kg_at_start": 6.75,
+    "start": "2022-02-11"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mysuru",
+    "price_kg_at_start": 53.33,
+    "start": "2022-05-25"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mysuru",
+    "price_kg_at_start": 31.0,
+    "start": "2022-06-13"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mysuru",
+    "price_kg_at_start": 20.0,
+    "start": "2022-06-25"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mysuru",
+    "price_kg_at_start": 22.0,
+    "start": "2022-09-13"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mysuru",
+    "price_kg_at_start": 22.5,
+    "start": "2022-09-21"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mysuru",
+    "price_kg_at_start": 14.5,
+    "start": "2022-10-28"
+   },
+   {
+    "R_at_start": 0.13,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 11.0,
+    "start": "2022-12-20"
+   },
+   {
+    "R_at_start": 0.12,
+    "lead_any_flag_days": 2,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 10.75,
+    "start": "2023-01-08"
+   },
+   {
+    "R_at_start": 0.07,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 22.25,
+    "start": "2023-01-23"
+   },
+   {
+    "R_at_start": 0.08,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 15.0,
+    "start": "2023-02-25"
+   },
+   {
+    "R_at_start": 0.09,
+    "lead_any_flag_days": 6,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 10.0,
+    "start": "2023-03-11"
+   },
+   {
+    "R_at_start": 0.07,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 8.5,
+    "start": "2023-03-19"
+   },
+   {
+    "R_at_start": 0.08,
+    "lead_any_flag_days": 2,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 10.5,
+    "start": "2023-05-16"
+   },
+   {
+    "R_at_start": 0.1,
+    "lead_any_flag_days": 1,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 14.0,
+    "start": "2023-06-05"
+   },
+   {
+    "R_at_start": 0.08,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 38.5,
+    "start": "2023-07-05"
+   },
+   {
+    "R_at_start": 0.07,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 9.0,
+    "start": "2023-07-31"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mysuru",
+    "price_kg_at_start": 5.0,
+    "start": "2023-09-08"
+   },
+   {
+    "R_at_start": 0.11,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 9.41,
+    "start": "2023-09-19"
+   },
+   {
+    "R_at_start": 0.1,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 17.91,
+    "start": "2023-11-24"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mysuru",
+    "price_kg_at_start": 20.0,
+    "start": "2023-12-08"
+   },
+   {
+    "R_at_start": 0.98,
+    "lead_any_flag_days": 1,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 13.83,
+    "start": "2024-01-06"
+   },
+   {
+    "R_at_start": 0.72,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 13.83,
+    "start": "2024-02-05"
+   },
+   {
+    "R_at_start": 0.64,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 11.0,
+    "start": "2024-02-19"
+   },
+   {
+    "R_at_start": 1.08,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 11.41,
+    "start": "2024-03-18"
+   },
+   {
+    "R_at_start": 1.36,
+    "lead_any_flag_days": 3,
+    "lead_arrival_flag_days": 3,
+    "market_id": "mysuru",
+    "price_kg_at_start": 23.8,
+    "start": "2024-05-29"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mysuru",
+    "price_kg_at_start": 39.0,
+    "start": "2024-06-27"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mysuru",
+    "price_kg_at_start": 34.0,
+    "start": "2024-07-22"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mysuru",
+    "price_kg_at_start": 9.0,
+    "start": "2024-08-07"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": 5,
+    "lead_arrival_flag_days": 5,
+    "market_id": "mysuru",
+    "price_kg_at_start": 13.83,
+    "start": "2024-10-03"
+   },
+   {
+    "R_at_start": 0.93,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 27.77,
+    "start": "2024-12-09"
+   },
+   {
+    "R_at_start": 0.84,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 9.0,
+    "start": "2025-02-20"
+   },
+   {
+    "R_at_start": 0.92,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 9.0,
+    "start": "2025-04-22"
+   },
+   {
+    "R_at_start": null,
+    "lead_any_flag_days": "unscorable",
+    "lead_arrival_flag_days": "unscorable",
+    "market_id": "mysuru",
+    "price_kg_at_start": 8.0,
+    "start": "2025-05-06"
+   },
+   {
+    "R_at_start": 0.71,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
+    "market_id": "mysuru",
+    "price_kg_at_start": 11.0,
+    "start": "2025-06-08"
+   }
+  ],
+  "kolar_2025_glut_window": {
+   "kolar_episode_leads": [
+    {
+     "R_at_start": 1.0,
+     "lead_any_flag_days": 2,
+     "lead_arrival_flag_days": null,
+     "market_id": "kolar",
+     "price_kg_at_start": 4.65,
+     "start": "2025-01-15"
+    },
+    {
+     "R_at_start": 0.93,
+     "lead_any_flag_days": 1,
+     "lead_arrival_flag_days": null,
+     "market_id": "kolar",
+     "price_kg_at_start": 6.7,
+     "start": "2025-02-12"
+    },
+    {
+     "R_at_start": 0.74,
+     "lead_any_flag_days": 0,
+     "lead_arrival_flag_days": null,
+     "market_id": "kolar",
+     "price_kg_at_start": 7.5,
+     "start": "2025-02-23"
+    },
+    {
+     "R_at_start": 0.76,
+     "lead_any_flag_days": null,
+     "lead_arrival_flag_days": null,
+     "market_id": "kolar",
+     "price_kg_at_start": 4.6,
+     "start": "2025-03-19"
+    },
+    {
+     "R_at_start": 0.6,
+     "lead_any_flag_days": 0,
+     "lead_arrival_flag_days": null,
+     "market_id": "kolar",
+     "price_kg_at_start": 4.6,
+     "start": "2025-04-03"
+    },
+    {
+     "R_at_start": 0.93,
+     "lead_any_flag_days": 2,
+     "lead_arrival_flag_days": null,
+     "market_id": "kolar",
+     "price_kg_at_start": 4.6,
+     "start": "2025-04-24"
+    }
+   ],
+   "kolar_level_days": {
+    "safe": 86,
+    "unknown": 10,
+    "watch": 24
+   },
+   "kolar_max_R": 1.26,
+   "kolar_median_R": 0.8
+  },
+  "lead_arrival_ratio_only": {
+   "episodes_scorable": 123,
+   "episodes_total": 214,
+   "false_alarm_days": 1028,
+   "false_alarm_share": 0.757,
+   "flag_days": 1358,
+   "flagged_in_window": 39,
+   "lead_ge_2_days": 36,
+   "share_lead_ge_2": 0.293
+  },
+  "lead_full_rule": {
+   "episodes_scorable": 123,
+   "episodes_total": 214,
+   "false_alarm_days": 1191,
+   "false_alarm_share": 0.663,
+   "flag_days": 1797,
+   "flagged_in_window": 117,
+   "lead_ge_2_days": 61,
+   "share_lead_ge_2": 0.496
+  },
+  "note": "R, risk levels, flags and leads are model output from the Section 9 Step 1 rule on observed data.",
+  "threshold_sweep_arrival_ratio": [
+   {
+    "episodes_scorable": 123,
+    "episodes_total": 214,
+    "false_alarm_days": 1337,
+    "false_alarm_share": 0.743,
+    "flag_days": 1799,
+    "flagged_in_window": 48,
+    "lead_ge_2_days": 45,
+    "share_lead_ge_2": 0.366,
+    "watch_r": 1.1
+   },
+   {
+    "episodes_scorable": 123,
+    "episodes_total": 214,
+    "false_alarm_days": 1165,
+    "false_alarm_share": 0.745,
+    "flag_days": 1564,
+    "flagged_in_window": 46,
+    "lead_ge_2_days": 43,
+    "share_lead_ge_2": 0.35,
+    "watch_r": 1.2
+   },
+   {
+    "episodes_scorable": 123,
+    "episodes_total": 214,
+    "false_alarm_days": 1028,
+    "false_alarm_share": 0.757,
+    "flag_days": 1358,
+    "flagged_in_window": 39,
+    "lead_ge_2_days": 36,
+    "share_lead_ge_2": 0.293,
+    "watch_r": 1.3
+   },
+   {
+    "episodes_scorable": 123,
+    "episodes_total": 214,
+    "false_alarm_days": 830,
+    "false_alarm_share": 0.771,
+    "flag_days": 1076,
+    "flagged_in_window": 31,
+    "lead_ge_2_days": 30,
+    "share_lead_ge_2": 0.244,
+    "watch_r": 1.5
+   },
+   {
+    "episodes_scorable": 123,
+    "episodes_total": 214,
+    "false_alarm_days": 727,
+    "false_alarm_share": 0.797,
+    "flag_days": 912,
+    "flagged_in_window": 24,
+    "lead_ge_2_days": 20,
+    "share_lead_ge_2": 0.163,
+    "watch_r": 1.7
+   },
+   {
+    "episodes_scorable": 123,
+    "episodes_total": 214,
+    "false_alarm_days": 573,
+    "false_alarm_share": 0.785,
+    "flag_days": 730,
+    "flagged_in_window": 19,
+    "lead_ge_2_days": 15,
+    "share_lead_ge_2": 0.122,
+    "watch_r": 2.0
+   },
+   {
+    "episodes_scorable": 123,
+    "episodes_total": 214,
+    "false_alarm_days": 434,
+    "false_alarm_share": 0.854,
+    "flag_days": 508,
+    "flagged_in_window": 12,
+    "lead_ge_2_days": 11,
+    "share_lead_ge_2": 0.089,
+    "watch_r": 2.5
+   },
+   {
+    "episodes_scorable": 123,
+    "episodes_total": 214,
+    "false_alarm_days": 343,
+    "false_alarm_share": 0.9,
+    "flag_days": 381,
+    "flagged_in_window": 5,
+    "lead_ge_2_days": 5,
+    "share_lead_ge_2": 0.041,
+    "watch_r": 3.0
+   }
+  ],
+  "xcorr_R_vs_forward_price_change": {
+   "by_lag_days": {
+    "1": {
+     "n": 3334,
+     "per_market": {
+      "bengaluru": 0.004,
+      "chintamani": 0.092,
+      "doddaballapura": -0.034,
+      "kolar": 0.016,
+      "madanapalle": 0.092,
+      "mandya": -0.1,
+      "mysuru": -0.029
+     },
+     "pooled_corr": -0.001
+    },
+    "2": {
+     "n": 3261,
+     "per_market": {
+      "bengaluru": 0.071,
+      "chintamani": 0.109,
+      "doddaballapura": -0.027,
+      "kolar": 0.038,
+      "madanapalle": 0.143,
+      "mandya": -0.077,
+      "mysuru": -0.025
+     },
+     "pooled_corr": 0.026
+    },
+    "3": {
+     "n": 3266,
+     "per_market": {
+      "bengaluru": 0.093,
+      "chintamani": 0.104,
+      "doddaballapura": -0.003,
+      "kolar": 0.065,
+      "madanapalle": 0.192,
+      "mandya": -0.036,
+      "mysuru": -0.017
+     },
+     "pooled_corr": 0.051
+    },
+    "4": {
+     "n": 3255,
+     "per_market": {
+      "bengaluru": 0.096,
+      "chintamani": 0.114,
+      "doddaballapura": 0.106,
+      "kolar": 0.085,
+      "madanapalle": 0.229,
+      "mandya": -0.065,
+      "mysuru": -0.008
+     },
+     "pooled_corr": 0.067
+    },
+    "5": {
+     "n": 3226,
+     "per_market": {
+      "bengaluru": 0.096,
+      "chintamani": 0.147,
+      "doddaballapura": 0.153,
+      "kolar": 0.102,
+      "madanapalle": 0.259,
+      "mandya": -0.034,
+      "mysuru": 0.033
+     },
+     "pooled_corr": 0.097
+    },
+    "6": {
+     "n": 3241,
+     "per_market": {
+      "bengaluru": 0.122,
+      "chintamani": 0.205,
+      "doddaballapura": -0.013,
+      "kolar": 0.116,
+      "madanapalle": 0.275,
+      "mandya": -0.019,
+      "mysuru": 0.012
+     },
+     "pooled_corr": 0.106
+    },
+    "7": {
+     "n": 3332,
+     "per_market": {
+      "bengaluru": 0.134,
+      "chintamani": 0.192,
+      "doddaballapura": 0.064,
+      "kolar": 0.121,
+      "madanapalle": 0.291,
+      "mandya": -0.033,
+      "mysuru": -0.014
+     },
+     "pooled_corr": 0.11
+    }
+   },
+   "note": "a glut signal that leads price would show clearly negative correlation; values near 0 or positive mean R does not lead price",
+   "strongest_negative_corr": -0.001,
+   "strongest_negative_lag_days": 1
+  }
+ },
+ "observed": {
+  "coverage_days": {
+   "bengaluru": {
+    "arrivals": 1115,
+    "price": 1183
+   },
+   "chintamani": {
+    "arrivals": 686,
+    "price": 700
+   },
+   "doddaballapura": {
+    "arrivals": 511,
+    "price": 523
+   },
+   "kolar": {
+    "arrivals": 1165,
+    "price": 1233
+   },
+   "madanapalle": {
+    "arrivals": 1187,
+    "price": 1200
+   },
+   "mandya": {
+    "arrivals": 746,
+    "price": 807
+   },
+   "mysuru": {
+    "arrivals": 986,
+    "price": 1043
+   }
+  },
+  "crash_days_per_market": {
+   "bengaluru": 95,
+   "chintamani": 37,
+   "doddaballapura": 17,
+   "kolar": 154,
+   "madanapalle": 68,
+   "mandya": 63,
+   "mysuru": 125
+  },
+  "crash_episodes": [
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 28.88,
+    "start": "2022-01-04"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 15.5,
+    "start": "2022-01-17"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 9.88,
+    "start": "2022-02-01"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 6.0,
+    "start": "2022-02-12"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 4.5,
+    "start": "2022-03-12"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 67.75,
+    "start": "2022-05-24"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 37.5,
+    "start": "2022-06-11"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 33.75,
+    "start": "2022-06-22"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 6.0,
+    "start": "2022-07-17"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 7.25,
+    "start": "2022-08-08"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 29.17,
+    "start": "2022-10-19"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 8.38,
+    "start": "2022-11-25"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 10.0,
+    "start": "2022-12-24"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 19.33,
+    "start": "2023-01-23"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 13.0,
+    "start": "2023-02-05"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 21.62,
+    "start": "2023-02-22"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 6.12,
+    "start": "2023-03-27"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 5.75,
+    "start": "2023-04-22"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 77.67,
+    "start": "2023-08-05"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 6.67,
+    "start": "2023-10-02"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 8.0,
+    "start": "2023-10-24"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 29.38,
+    "start": "2023-11-22"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 15.0,
+    "start": "2023-12-23"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 13.0,
+    "start": "2024-01-15"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 14.33,
+    "start": "2024-02-14"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 9.0,
+    "start": "2024-03-02"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 27.0,
+    "start": "2024-05-30"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 24.0,
+    "start": "2024-07-27"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 10.0,
+    "start": "2024-09-01"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 43.33,
+    "start": "2024-10-08"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 35.0,
+    "start": "2024-10-21"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 21.0,
+    "start": "2024-11-06"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 20.0,
+    "start": "2024-12-09"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 10.0,
+    "start": "2024-12-31"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 11.0,
+    "start": "2025-02-21"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 5.0,
+    "start": "2025-03-16"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 6.0,
+    "start": "2025-03-31"
+   },
+   {
+    "market_id": "bengaluru",
+    "price_kg_at_start": 8.0,
+    "start": "2025-04-10"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 18.5,
+    "start": "2022-01-07"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 11.0,
+    "start": "2022-01-29"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 8.0,
+    "start": "2022-02-07"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 5.5,
+    "start": "2022-02-22"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 30.0,
+    "start": "2022-05-24"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 20.8,
+    "start": "2022-06-18"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 11.0,
+    "start": "2022-07-12"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 15.0,
+    "start": "2022-10-19"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 11.0,
+    "start": "2022-10-28"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 5.5,
+    "start": "2022-11-26"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 9.5,
+    "start": "2022-12-23"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 11.0,
+    "start": "2023-03-04"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 8.9,
+    "start": "2023-05-01"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 8.0,
+    "start": "2023-05-30"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 60.7,
+    "start": "2023-08-05"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 20.0,
+    "start": "2023-11-24"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 12.0,
+    "start": "2024-02-16"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 9.5,
+    "start": "2024-02-27"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 12.0,
+    "start": "2024-04-23"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 23.0,
+    "start": "2024-09-23"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 15.5,
+    "start": "2024-10-28"
+   },
+   {
+    "market_id": "chintamani",
+    "price_kg_at_start": 9.6,
+    "start": "2024-12-10"
+   },
+   {
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 15.0,
+    "start": "2022-01-21"
+   },
+   {
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 35.0,
+    "start": "2022-06-02"
+   },
+   {
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 30.0,
+    "start": "2022-06-21"
+   },
+   {
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 7.0,
+    "start": "2022-07-18"
+   },
+   {
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 13.0,
+    "start": "2022-09-09"
+   },
+   {
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 10.0,
+    "start": "2022-11-03"
+   },
+   {
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 17.0,
+    "start": "2023-02-04"
+   },
+   {
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 12.0,
+    "start": "2023-02-13"
+   },
+   {
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 25.0,
+    "start": "2023-06-30"
+   },
+   {
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 25.0,
+    "start": "2023-08-21"
+   },
+   {
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 25.0,
+    "start": "2024-07-11"
+   },
+   {
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 12.0,
+    "start": "2024-11-08"
+   },
+   {
+    "market_id": "doddaballapura",
+    "price_kg_at_start": 25.0,
+    "start": "2024-12-06"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 16.36,
+    "start": "2022-01-04"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 9.85,
+    "start": "2022-01-13"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 7.18,
+    "start": "2022-01-29"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 33.59,
+    "start": "2022-05-24"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 17.16,
+    "start": "2022-06-25"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 7.83,
+    "start": "2022-07-20"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 13.06,
+    "start": "2022-10-27"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 7.08,
+    "start": "2022-11-05"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 7.18,
+    "start": "2022-12-14"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 5.64,
+    "start": "2023-01-05"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 9.25,
+    "start": "2023-01-23"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 10.5,
+    "start": "2023-02-23"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 11.31,
+    "start": "2023-03-07"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 4.44,
+    "start": "2023-04-05"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 5.13,
+    "start": "2023-05-19"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 10.08,
+    "start": "2023-06-03"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 62.42,
+    "start": "2023-08-03"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 5.97,
+    "start": "2023-09-29"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 10.89,
+    "start": "2023-12-13"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 8.32,
+    "start": "2024-02-14"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 9.41,
+    "start": "2024-05-12"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 26.1,
+    "start": "2024-07-24"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 12.43,
+    "start": "2024-08-18"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 20.0,
+    "start": "2024-10-11"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 20.53,
+    "start": "2024-10-26"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 14.42,
+    "start": "2024-11-10"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 10.3,
+    "start": "2024-12-08"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 9.57,
+    "start": "2024-12-29"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 4.65,
+    "start": "2025-01-15"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 6.7,
+    "start": "2025-02-12"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 7.5,
+    "start": "2025-02-23"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 4.6,
+    "start": "2025-03-19"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 4.6,
+    "start": "2025-04-03"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 4.6,
+    "start": "2025-04-24"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 4.42,
+    "start": "2025-05-07"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 3.17,
+    "start": "2025-05-27"
+   },
+   {
+    "market_id": "kolar",
+    "price_kg_at_start": 10.32,
+    "start": "2025-06-13"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 21.4,
+    "start": "2022-01-04"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 7.85,
+    "start": "2022-01-30"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 30.0,
+    "start": "2022-06-16"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 15.15,
+    "start": "2022-06-28"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 9.78,
+    "start": "2022-08-07"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 9.55,
+    "start": "2022-08-24"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 22.33,
+    "start": "2022-09-20"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 18.57,
+    "start": "2022-10-20"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 8.73,
+    "start": "2022-11-16"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 8.7,
+    "start": "2022-11-27"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 11.27,
+    "start": "2022-12-15"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 15.7,
+    "start": "2023-01-22"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 14.57,
+    "start": "2023-02-24"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 11.7,
+    "start": "2023-03-14"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 14.77,
+    "start": "2023-06-03"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 19.6,
+    "start": "2023-06-17"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 17.9,
+    "start": "2023-08-24"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 15.33,
+    "start": "2023-11-16"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 16.4,
+    "start": "2023-12-01"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 12.06,
+    "start": "2023-12-13"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 17.1,
+    "start": "2024-01-05"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 12.0,
+    "start": "2024-01-20"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 9.95,
+    "start": "2024-02-24"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 13.0,
+    "start": "2024-04-12"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 45.4,
+    "start": "2024-06-25"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 37.92,
+    "start": "2024-07-24"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 48.0,
+    "start": "2024-10-10"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 18.85,
+    "start": "2024-11-09"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 29.54,
+    "start": "2024-12-08"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 9.88,
+    "start": "2024-12-30"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 11.0,
+    "start": "2025-01-14"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 12.33,
+    "start": "2025-02-13"
+   },
+   {
+    "market_id": "madanapalle",
+    "price_kg_at_start": 10.23,
+    "start": "2025-04-03"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2022-01-07"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2022-01-30"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 5.0,
+    "start": "2022-03-11"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 4.5,
+    "start": "2022-04-07"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2022-05-13"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 30.0,
+    "start": "2022-06-16"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 26.0,
+    "start": "2022-06-27"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2022-07-10"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2022-09-18"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2022-10-10"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2022-10-23"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2023-02-05"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2023-02-19"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 5.9,
+    "start": "2023-04-03"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2023-06-11"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 72.5,
+    "start": "2023-08-05"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 16.0,
+    "start": "2023-08-30"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 15.5,
+    "start": "2023-09-20"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2024-02-03"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2024-02-11"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2024-04-04"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2024-04-28"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 20.0,
+    "start": "2024-05-21"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 20.0,
+    "start": "2024-06-09"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2024-07-08"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2024-07-19"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 15.0,
+    "start": "2024-07-28"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 25.0,
+    "start": "2024-10-28"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2024-12-12"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 5.0,
+    "start": "2024-12-29"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2025-01-27"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 7.0,
+    "start": "2025-05-09"
+   },
+   {
+    "market_id": "mandya",
+    "price_kg_at_start": 10.0,
+    "start": "2025-06-16"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 21.28,
+    "start": "2022-01-05"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 18.61,
+    "start": "2022-01-14"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 9.75,
+    "start": "2022-01-30"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 6.75,
+    "start": "2022-02-11"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 53.33,
+    "start": "2022-05-25"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 31.0,
+    "start": "2022-06-13"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 20.0,
+    "start": "2022-06-25"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 22.0,
+    "start": "2022-09-13"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 22.5,
+    "start": "2022-09-21"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 14.5,
+    "start": "2022-10-28"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 11.0,
+    "start": "2022-12-20"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 10.75,
+    "start": "2023-01-08"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 22.25,
+    "start": "2023-01-23"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 15.0,
+    "start": "2023-02-25"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 10.0,
+    "start": "2023-03-11"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 8.5,
+    "start": "2023-03-19"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 10.5,
+    "start": "2023-05-16"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 14.0,
+    "start": "2023-06-05"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 38.5,
+    "start": "2023-07-05"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 9.0,
+    "start": "2023-07-31"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 5.0,
+    "start": "2023-09-08"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 9.41,
+    "start": "2023-09-19"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 17.91,
+    "start": "2023-11-24"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 20.0,
+    "start": "2023-12-08"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 13.83,
+    "start": "2024-01-06"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 13.83,
+    "start": "2024-02-05"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 11.0,
+    "start": "2024-02-19"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 11.41,
+    "start": "2024-03-18"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 23.8,
+    "start": "2024-05-29"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 39.0,
+    "start": "2024-06-27"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 34.0,
+    "start": "2024-07-22"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 9.0,
+    "start": "2024-08-07"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 13.83,
+    "start": "2024-10-03"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 27.77,
+    "start": "2024-12-09"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 9.0,
+    "start": "2025-02-20"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 9.0,
+    "start": "2025-04-22"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 8.0,
+    "start": "2025-05-06"
+   },
+   {
+    "market_id": "mysuru",
+    "price_kg_at_start": 11.0,
+    "start": "2025-06-08"
+   }
+  ],
+  "kolar_2025_glut_check": {
+   "alt_median_modal_rs_kg": {
+    "bengaluru": 11.0,
+    "chintamani": 9.6,
+    "doddaballapura": 13.5,
+    "madanapalle": 11.0,
+    "mandya": 10.0,
+    "mysuru": 12.41
+   },
+   "kolar_crash_episode_starts": [
+    "2025-01-15",
+    "2025-02-12",
+    "2025-02-23",
+    "2025-03-19",
+    "2025-04-03",
+    "2025-04-24"
+   ],
+   "kolar_days_below_harvest_cost": 7,
+   "kolar_median_arrivals_t_jan_apr_by_year": {
+    "2022": 951.0,
+    "2023": 698.5,
+    "2024": 865.0,
+    "2025": 682.0
+   },
+   "kolar_median_modal_rs_kg_jan_apr_by_year": {
+    "2022": 6.88,
+    "2023": 8.84,
+    "2024": 10.5,
+    "2025": 6.33
+   },
+   "kolar_min_modal_date": "2025-03-19",
+   "kolar_min_modal_rs_kg": 4.6,
+   "kolar_price_days": 107,
+   "window": [
+    "2025-01-01",
+    "2025-04-30"
+   ]
+  },
+  "kolar_crash_day_gross_price_gap_vs_alternatives": {
+   "bengaluru": {
+    "crash_days_with_both_prices": 144,
+    "median_gap_rs_kg": 3.9,
+    "share_days_alt_higher": 0.972,
+    "straight_line_km_from_kolar": 61.5
+   },
+   "chintamani": {
+    "crash_days_with_both_prices": 96,
+    "median_gap_rs_kg": 3.19,
+    "share_days_alt_higher": 0.917,
+    "straight_line_km_from_kolar": 30.4
+   },
+   "doddaballapura": {
+    "crash_days_with_both_prices": 78,
+    "median_gap_rs_kg": 5.53,
+    "share_days_alt_higher": 0.987,
+    "straight_line_km_from_kolar": 66.3
+   },
+   "madanapalle": {
+    "crash_days_with_both_prices": 146,
+    "median_gap_rs_kg": 3.16,
+    "share_days_alt_higher": 1.0,
+    "straight_line_km_from_kolar": 61.3
+   },
+   "mandya": {
+    "crash_days_with_both_prices": 104,
+    "median_gap_rs_kg": 4.95,
+    "share_days_alt_higher": 0.885,
+    "straight_line_km_from_kolar": 150.5
+   },
+   "mysuru": {
+    "crash_days_with_both_prices": 138,
+    "median_gap_rs_kg": 4.47,
+    "share_days_alt_higher": 0.949,
+    "straight_line_km_from_kolar": 185.4
+   }
+  },
+  "snapshot": {
+   "path": "data/snapshot/ceda_tomato_2022-01-01_2025-06-30.csv",
+   "sha256": "11890d38f2ed32679aa2491a12f8a15a56724d0efef348c0b44af61f090ef415",
+   "source": "CEDA AGMARKNET, district aggregate"
+  }
+ },
+ "run_id": "78dc0a403b99",
+ "simulated": {}
+}
