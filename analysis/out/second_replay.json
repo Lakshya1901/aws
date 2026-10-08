@@ -1,5 +1,4 @@
 {
- "baseline_note": "R uses backtest.risk() with baseline_int_weeks() (backtest.baseline wraps UInt32 ISO-week differences, widening the baseline to prior years' weeks 1..w+1). R_backtest_as_is shows the unpatched value.",
  "candidates": [
   {
    "accepted": true,
@@ -28,7 +27,6 @@
    "top_days": [
     {
      "R": 1.76,
-     "R_backtest_as_is": 2.51,
      "arrivals_7day_mean_t": 2860.3,
      "arrivals_t": 3078.0,
      "baseline_B_t": 1627.0,
@@ -56,7 +54,6 @@
     },
     {
      "R": 1.33,
-     "R_backtest_as_is": 1.63,
      "arrivals_7day_mean_t": 1884.3,
      "arrivals_t": 1973.0,
      "baseline_B_t": 1414.0,
@@ -84,7 +81,6 @@
     },
     {
      "R": 1.88,
-     "R_backtest_as_is": 2.02,
      "arrivals_7day_mean_t": 2341.7,
      "arrivals_t": 2639.0,
      "baseline_B_t": 1244.0,
@@ -112,7 +108,6 @@
     },
     {
      "R": 1.87,
-     "R_backtest_as_is": 2.01,
      "arrivals_7day_mean_t": 2329.4,
      "arrivals_t": 2835.0,
      "baseline_B_t": 1244.0,
@@ -140,7 +135,6 @@
     },
     {
      "R": 1.52,
-     "R_backtest_as_is": 2.17,
      "arrivals_7day_mean_t": 2468.7,
      "arrivals_t": 2729.0,
      "baseline_B_t": 1627.0,
@@ -172,7 +166,6 @@
     "2023-09-30"
    ],
    "window_summary": {
-    "R_backtest_as_is_median": 2.02,
     "R_days_known": 30,
     "R_max": 1.88,
     "R_median": 1.52,
@@ -211,7 +204,6 @@
    "top_days": [
     {
      "R": 3.87,
-     "R_backtest_as_is": 1.25,
      "arrivals_7day_mean_t": 366.6,
      "arrivals_t": 477.0,
      "baseline_B_t": 94.8,
@@ -244,7 +236,6 @@
     "2024-12-26"
    ],
    "window_summary": {
-    "R_backtest_as_is_median": 1.23,
     "R_days_known": 26,
     "R_max": 4.71,
     "R_median": 3.87,
@@ -281,7 +272,6 @@
    "top_days": [
     {
      "R": 1.32,
-     "R_backtest_as_is": 3.38,
      "arrivals_7day_mean_t": 3594.3,
      "arrivals_t": 3933.0,
      "baseline_B_t": 2733.0,
@@ -310,7 +300,6 @@
     },
     {
      "R": 1.44,
-     "R_backtest_as_is": 4.13,
      "arrivals_7day_mean_t": 4244.6,
      "arrivals_t": 3931.0,
      "baseline_B_t": 2955.0,
@@ -339,7 +328,6 @@
     },
     {
      "R": 1.36,
-     "R_backtest_as_is": 3.39,
      "arrivals_7day_mean_t": 3688.4,
      "arrivals_t": 3576.0,
      "baseline_B_t": 2704.0,
@@ -368,7 +356,6 @@
     },
     {
      "R": 1.33,
-     "R_backtest_as_is": 3.29,
      "arrivals_7day_mean_t": 3584.9,
      "arrivals_t": 4179.0,
      "baseline_B_t": 2704.0,
@@ -401,7 +388,6 @@
     "2024-08-31"
    ],
    "window_summary": {
-    "R_backtest_as_is_median": 3.38,
     "R_days_known": 23,
     "R_max": 1.56,
     "R_median": 1.36,
@@ -433,7 +419,6 @@
    "top_days": [
     {
      "R": 2.51,
-     "R_backtest_as_is": 22.32,
      "arrivals_7day_mean_t": 3744.6,
      "arrivals_t": 1854.5,
      "baseline_B_t": 1492.8,
@@ -467,7 +452,6 @@
     "2025-06-30"
    ],
    "window_summary": {
-    "R_backtest_as_is_median": 16.13,
     "R_days_known": 61,
     "R_max": 2.88,
     "R_median": 1.86,
@@ -501,7 +485,6 @@
     "2022-07-31"
    ],
    "window_summary": {
-    "R_backtest_as_is_median": null,
     "R_days_known": 0,
     "R_max": null,
     "R_median": null,

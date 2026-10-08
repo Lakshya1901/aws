@@ -11,20 +11,12 @@ A day qualifies when, at market m:
   - an alternative within max_alt_km (straight line) pays >= min_gap_rs_kg and >= min_alt_ratio x m's modal price.
 News evidence cannot be fetched reproducibly, so it is recorded below (DOCUMENTED) from manual reading,
 with exact quotes. A candidate is accepted only if it qualifies in the data AND a dated article documents it.
-
-Note on the baseline: backtest.baseline() computes week distance on pandas UInt32 ISO weeks, so
-(obs.w - w) wraps for earlier weeks and every prior-year week before w-1 passes the `d >= 51` test.
-That makes B a median over prior years' weeks 1..w+1, not w-1..w+1. Until backtest.py is fixed,
-this script runs backtest.risk() with baseline_int_weeks() (same code, weeks cast to int64) and also
-reports R from the unpatched function as `R_backtest_as_is` so the difference is visible.
 """
 import argparse
 import hashlib
 import json
 import pathlib
-from unittest import mock
 
-import numpy as np
 import pandas as pd
 
 import backtest as bt
@@ -109,18 +101,6 @@ DOCUMENTED = [
 ]
 
 
-def baseline_int_weeks(arr_m):
-    """backtest.baseline with ISO year/week cast to int64 (UInt32 subtraction wraps in pandas)."""
-    iso = arr_m.index.isocalendar().astype("int64")
-    obs = pd.DataFrame({"y": iso.year.values, "w": iso.week.values, "a": arr_m.values}).dropna()
-    out = pd.Series(np.nan, index=arr_m.index)
-    for (y, w), days in pd.DataFrame({"y": iso.year.values, "w": iso.week.values}, index=arr_m.index).groupby(["y", "w"]):
-        d = (obs.w - w).abs()
-        prior = obs[(obs.y < y) & ((d <= 1) | (d >= 51))].a
-        if len(prior):
-            out[days.index] = prior.median()
-    return out
-
 
 def prior_years(arr_m, d):
     """ISO years that contribute arrivals to the baseline on date d (weeks w-1..w+1)."""
@@ -154,12 +134,12 @@ def qualifying_days(m, window, arr, price, R, dP, level, full7, markets):
     return rows
 
 
-def day_record(d, m, best, arr, price, R, R_as_is, dP, B, level):
+def day_record(d, m, best, arr, price, R, dP, B, level):
     gap, o, q, km = best
     a7 = arr[m].rolling(7, min_periods=bt.PARAMS["min_days_of_last_7"]).mean().at[d]
     return {
         "date": str(d.date()), "market_id": m,
-        "R": bt.rnd(R.at[d, m], 2), "R_backtest_as_is": bt.rnd(R_as_is.at[d, m], 2),
+        "R": bt.rnd(R.at[d, m], 2),
         "dP_3day": bt.rnd(dP.at[d, m], 3), "level": level.at[d, m],
         "modal_rs_kg": bt.rnd(price.at[d, m], 2), "modal_rs_kg_3_days_earlier": bt.rnd(price[m].shift(3).at[d], 2),
         "arrivals_t": bt.rnd(arr.at[d, m], 1), "arrivals_7day_mean_t": bt.rnd(a7, 1),
@@ -178,9 +158,7 @@ def main(snapshot):
     df = df[(df.crop == PARAMS["crop"]) & df.market_id.isin(markets)]
     arr, price = bt.daily_tables(df)
     th = bt.PARAMS["thresholds"]
-    R_as_is, _, _, _ = bt.risk(arr, price, th)
-    with mock.patch.object(bt, "baseline", baseline_int_weeks):
-        R, dP, B, level = bt.risk(arr, price, th)
+    R, dP, B, level = bt.risk(arr, price, th)
     full7 = (arr.notna() & price.notna()).rolling(7).sum() == 7
 
     # Data scan: every market-month with at least one qualifying day (not limited to documented windows).
@@ -200,12 +178,11 @@ def main(snapshot):
     for c in DOCUMENTED:
         m, w = c["market_id"], c["window"]
         days = qualifying_days(m, w, arr, price, R, dP, level, full7, markets)
-        recs = [day_record(d, m, b, arr, price, R, R_as_is, dP, B, level) for d, b in days]
+        recs = [day_record(d, m, b, arr, price, R, dP, B, level) for d, b in days]
         recs.sort(key=lambda r: (-r["best_alternative"]["gross_gap_rs_kg"], r["date"]))
         ws = slice(*w)
         summary = {
             "R_median": bt.rnd(R[m][ws].median(), 2), "R_max": bt.rnd(R[m][ws].max(), 2),
-            "R_backtest_as_is_median": bt.rnd(R_as_is[m][ws].median(), 2),
             "R_days_known": int(R[m][ws].notna().sum()),
             "modal_rs_kg_min": bt.rnd(price[m][ws].min(), 2), "modal_rs_kg_median": bt.rnd(price[m][ws].median(), 2),
             "arrivals_t_median": bt.rnd(arr[m][ws].median(), 1), "baseline_B_t_median": bt.rnd(B[m][ws].median(), 1),
@@ -246,7 +223,6 @@ def main(snapshot):
         "snapshot": {"path": str(snap.relative_to(ROOT)), "sha256": sha, "source": "CEDA AGMARKNET, district aggregate"},
         "params": PARAMS, "risk_thresholds": th,
         "criteria": "R >= watch_r (arrival-driven) and 3-day dP <= watch_dp (price falls) at the market; alternative within max_alt_km pays >= min_gap_rs_kg and >= min_alt_ratio x; 7 of last 7 days with price and arrivals at both markets; accepted only with a dated news source that ties the crash at least partly to arrivals",
-        "baseline_note": "R uses backtest.risk() with baseline_int_weeks() (backtest.baseline wraps UInt32 ISO-week differences, widening the baseline to prior years' weeks 1..w+1). R_backtest_as_is shows the unpatched value.",
         "gap_note": "gross modal price difference only; no freight, fees or spoilage",
         "observed_vs_model": "arrivals, prices, gaps and km are observed or computed from observed data; R and levels are model output",
         "candidates": cands,
