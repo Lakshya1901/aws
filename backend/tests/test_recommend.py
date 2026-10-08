@@ -213,3 +213,13 @@ def test_default_net_at_or_above_cost_keeps_u_of_r(configs):
     expected_mid = 2000 * (d["spoilage_range"]["mid"] - t["spoilage_range"]["mid"])  # u(R) = 0 on both sides
     assert r["impact"]["waste_avoided_kg"]["mid"] == pytest.approx(expected_mid, abs=0.5)  # inputs rounded to 4 dp
     assert "below_cost_dump_share" not in r["assumptions_used"]
+
+
+def test_market_with_unknown_risk_is_never_chosen_but_listed(configs):
+    # Chintamani pays far more but has no prior-year baseline, so its glut risk cannot be checked (D17).
+    days = (history("kolar", 100, 20) + history("chintamani", 50, 60, start="2025-03-29")
+            + history("bengaluru", 300, 20) + history("madanapalle", 80, 20))
+    r = recommend(load(), days, MARKETS, OUTLETS, configs, AS_OF)
+    alt = next(o for o in r["alternatives"] if o["outlet_id"] == "chintamani")
+    assert alt["risk_level"] is None and alt["net_rs_per_kg"]["mid"] > r["top"]["net_rs_per_kg"]["mid"]
+    assert r["top"]["outlet_id"] != "chintamani"

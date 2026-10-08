@@ -241,7 +241,7 @@ Second-life outlets use offer price (processor) or 0 (food bank, feed, compost) 
 
 1. Sort the day's loads by quantity, largest first.
 2. For each load, compute net(j) for all reachable outlets using current dA.
-3. Assign to the best outlet unless it pushes that market's projected R into glut; then the next best. Projected R = A7 recomputed with today's arrivals plus dA(j), divided by B (same definition as Step 1).
+3. Assign to the best outlet unless it pushes that market's projected R into glut; then the next best. A market whose projected R is unknown (fewer than 5 of the last 7 days, or no prior-year baseline) cannot be checked, so it is listed as an alternative but never chosen (D17). Projected R = A7 recomputed with today's arrivals plus dA(j), divided by B (same definition as Step 1).
 4. Add to that market's dA; repeat.
 5. If no fresh market has net > 0: processor, then food bank, then feed or compost.
 6. If best net < harvest cost per kg: advise delaying harvest (storable crops) or harvesting only what has a buyer (non-storable).
@@ -693,6 +693,7 @@ Seeded Second Life outlets (Kolar region, from desk research): SNR Foods (proces
 | D13 | Mode | Tomato `same_day`. Backtest run 78dc0a403b99 (after the ISO-week baseline fix): flags at least 2 days ahead on 46.3% of 123 scorable crash episodes (full rule) and 26.8% (arrival ratio only); arrival ratio does not lead price (strongest negative lag 1 day, correlation +0.003). No "days early" claims. |
 | D15 | Price range | The level-regression residual spanned seasons (Madanapalle net Rs 5-45/kg). The range now uses day-to-day ln price changes: about +/-13% (Madanapalle) to +/-40% (Mandya) on the 2025-02-07 history. Also: the ln(price) on ln(arrivals) fit has R^2 below 0.2 at every demo market, so all use the fallback b = -0.5; state this in the README. |
 | D16 | Weather snapshot | Open-Meteo returned 429 (daily limit on the shared IP), so the replay windows (2025-01-01..2025-05-31, 2023-09-01..2023-09-30) use NASA POWER hourly temperature and humidity at each market's coordinates: `data/snapshot/weather_power_*.json`. Trip temperature = mean of the day's hours at the nearest point. |
+| D17 | Markets with unknown risk | Never chosen as the destination, only listed. Found when Doddaballapura (about 1 t/day, latest price 15 days old on 2023-09-06) absorbed 16 t in a 10-load plan. |
 | D14 | Second replay (D10) | Kolar 2023-09-06, an arrival-driven glut: R 1.76 (glut), 3-day price change -28.7%, modal Rs 6.64/kg; Madanapalle Rs 10.60/kg, 61 km. Documented: Deccan Herald 2023-09-26 (https://www.deccanherald.com/india/karnataka/rs-200-to-rs-10-tomato-farmers-hopes-crash-2700660, officials attribute the crash to "the arrival of a large quantity of tomatoes"; 4.21 vs 2.31 lakh quintals year on year) and FreshPlaza/New Indian Express 2023-09-04. Baseline uses one prior year (2022). `analysis/second_replay.py`. |
 
 Known risk: one FPO's volume may barely move Kolar's ratio or price, so load spreading may come mostly from price impact at smaller markets. Report what the data shows; never tune the model to force a split.

@@ -29,7 +29,8 @@ def allocate_load(load, crop, market_ctx, outlets, added_kg, configs):
     fresh = [fresh_option(load, m["_ctx"], added_kg.get(m["market_id"], 0), crop, configs) for m in near]
     fresh.sort(key=lambda o: -o["net_rs_per_kg"]["mid"])
     default = min(fresh, key=lambda o: o["distance_km"])
-    paying = [o for o in fresh if o["net_rs_per_kg"]["mid"] > 0]
+    # D17: only markets whose projected R is known can be checked for glut, so only they can be chosen.
+    paying = [o for o in fresh if o["net_rs_per_kg"]["mid"] > 0 and o["projected_risk_level"] is not None]
     # Best paying market whose projected R stays out of glut; if every paying market would be in glut, the best one.
     top = next((o for o in paying if o["projected_risk_level"] != "glut"), paying[0] if paying else None)
 
