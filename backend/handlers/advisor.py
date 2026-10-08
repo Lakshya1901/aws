@@ -4,6 +4,7 @@ API Gateway HTTP API, payload v2. Thin: validation, data access, response shapin
 backend/core. CoreError -> 422 {"error", "message"}; crop_profile_incomplete is sent as crop_not_configured.
 """
 import hashlib
+import importlib
 import json
 import os
 import traceback
@@ -113,11 +114,11 @@ def template_text(f, lang):
 
 def explain(facts, lang):
     """Bedrock (adapters/bedrock.py, when present and BEDROCK_ENABLED=1) else the template."""
-    if os.environ.get("BEDROCK_ENABLED") == "1":
+    if os.environ.get("BEDROCK_ENABLED", "").lower() in ("1", "true"):
         try:
-            from backend.adapters import bedrock
+            bedrock = importlib.import_module("backend.adapters.bedrock")
             out = bedrock.explain(facts, lang)
-            if out and out.get("text"):
+            if out and out.get("text") and out.get("source") == "bedrock":
                 return {"language": lang, "text": out["text"], "source": out.get("source", "bedrock")}
         except Exception:  # missing module, timeout or guard failure: template (Section 12)
             traceback.print_exc()
