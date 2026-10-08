@@ -1,0 +1,38 @@
+{
+  "crop_id": "tomato",
+  "names": {"en": "Tomato", "hi": "टमाटर", "kn": "ಟೊಮೆಟೊ"},
+  "agmarknet_commodity": "Tomato",
+  "t_ref_c": 25,
+  "sl_ref_hours": 132,
+  "sl_ref_hours_range": [96, 168],
+  "q10": 2.0,
+  "alpha": 0.31,
+  "storable": false,
+  "harvest_cost_rs_per_kg": 4.7,
+  "unit_box_kg": 15,
+  "water_l_per_kg": 184,
+  "second_life": ["processor", "food_bank", "feed_compost"],
+  "status": {
+    "t_ref_c": "sourced",
+    "sl_ref_hours": "placeholder",
+    "sl_ref_hours_range": "placeholder",
+    "q10": "placeholder",
+    "alpha": "placeholder",
+    "storable": "sourced",
+    "harvest_cost_rs_per_kg": "sourced",
+    "unit_box_kg": "sourced",
+    "water_l_per_kg": "placeholder"
+  },
+  "sources": {
+    "t_ref_c": "CLAUDE.md Section 11 reference temperature",
+    "sl_ref_hours": "4-7 days holding at ambient for ripening stages, https://www.researchgate.net/publication/294485852",
+    "sl_ref_hours_range": "Same as sl_ref_hours (96-168 h)",
+    "q10": "Derived from UC Davis respiration rates for mature-green tomato, 8-14 mL CO2/kg.h at 15 C and 18-26 at 25 C, https://postharvest.ucdavis.edu/produce-facts-sheets/tomato (read through a search excerpt; verify)",
+    "alpha": "Calibrated so a 14 h trip (6 h since harvest + 2 h drive + 6 h wait) at 25 C gives 3.25% loss, the market-stage tomato loss in CLAUDE.md Section 3.2",
+    "storable": "CLAUDE.md Section 11 (no hold option)",
+    "harvest_cost_rs_per_kg": "Rs 70 per 15 kg box, Kolar 2025, Outlook Business, https://www.outlookbusiness.com/explainers/farmers-in-india-struggle-with-falling-tomato-prices-whats-behind-the-price-drop",
+    "unit_box_kg": "15 kg box, same Outlook Business article",
+    "water_l_per_kg": "184 L/kg world average, tropical production 200-900 L/kg (Hoekstra, cited in Nederhoff and Stanghellini 2010), https://edepot.wur.nl/156932",
+    "second_life": "CLAUDE.md Section 11: puree/paste, food bank, compost"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "_note": "India context inputs (CLAUDE.md Section 10). status: sourced | assumption | placeholder. per_state overrides use the 2-letter state codes of config/markets.json. Anything not sourced is shown as '(estimate)'.",
+  "freight_rs_per_tonne_km": {
+    "value": 11, "unit": "Rs per tonne-km", "status": "placeholder",
+    "source": "14 ft LCV quoted at Rs 20-35 per km (Indian truck-rate guides, 2025-26) divided by an assumed 2.5 t payload; replace with FPO interviews per region"
+  },
+  "fee_pct": {
+    "value": 0.01, "unit": "fraction of sale", "status": "assumption",
+    "source": "Default 1% (assumption); state APMC rules",
+    "per_state": {
+      "KA": {"value": 0.0, "status": "sourced", "source": "Karnataka APMC Act 1966 s.65, https://indiankanoon.org/doc/117259766/", "note": "0% on fruit and vegetables; user charges not found"},
+      "AP": {"value": 0.01, "status": "sourced", "source": "AP Agricultural Marketing Dept, levied on purchases, https://spsnellore.ap.gov.in/agricultural-marketing-department/", "note": "Levied on purchases; deducting it from the seller is an assumption"}
+    }
+  },
+  "commission_pct": {
+    "value": 0.05, "unit": "fraction of sale", "status": "placeholder",
+    "source": "Default 5%; FPO interviews",
+    "per_state": {
+      "KA": {"value": 0.05, "status": "placeholder", "source": "https://citizenmatters.in/how-bengaluru-apmc-system-works-farm-laws-yeshwanthpur-yard-commission-agents-farmers-cartelisation/"},
+      "AP": {"value": 0.04, "status": "placeholder", "source": "https://www.thenewsminute.com/article/how-social-capital-enabled-tomato-farmers-andhra-sell-produce-during-lockdown-123892", "note": "Reported range 4-10%"}
+    }
+  },
+  "handling_pct": {
+    "value": 0.01, "unit": "fraction of sale", "status": "placeholder",
+    "source": "Deccan Herald: '5% commission and 1% hamali', https://www.deccanherald.com/india/karnataka/state-not-denotify-fruits-veggies-1993495"
+  },
+  "diesel_l_per_km": {
+    "value": 0.14, "unit": "litres per km", "status": "placeholder",
+    "source": "Tata 407-class, published 7-10 km/l, lower end for loaded running; https://trucksbuses.com/trucks/cargo-truck/tata-sfc-407-bsiv/mileage"
+  },
+  "co2_kg_per_l_diesel": {
+    "value": 2.68, "unit": "kg CO2 per litre diesel", "status": "assumption",
+    "source": "CLAUDE.md Section 9, resource accounting",
+    "note": "Standard diesel combustion factor; primary source still to cite"
+  },
+  "t_wait_h": {
+    "value": 6, "unit": "hours at mandi", "status": "assumption",
+    "source": "CLAUDE.md Section 9 Step 3; FPO interviews"
+  },
+  "truck_speed_kmph": {
+    "value": null, "unit": "km per hour", "status": "placeholder",
+    "source": "Not yet sourced. Used only when no routed drive time is supplied (haversine fallback); while null, such requests fail with code drive_time_unavailable.",
+    "note": "Candidates found, not chosen: about 20 km/h (CSIR-CRRI citing a TCI-IIM study, includes check-post delays); 37-38 km/h on national highways (secondary press report)."
+  },
+  "max_radius_km": {
+    "value": 300, "unit": "km", "status": "assumption",
+    "source": "CLAUDE.md Sections 8.4 and 10"
+  },
+  "road_factor": {
+    "value": 1.3, "unit": "road km per straight-line km", "status": "assumption",
+    "source": "CLAUDE.md Section 8.1 (fallback when routing fails; distance marked approx.)"
+  },
+  "stale_days": {
+    "value": 2, "unit": "days", "status": "assumption",
+    "source": "CLAUDE.md Section 8.6"
+  },
+  "stale_range_multiplier": {
+    "value": 1.5, "unit": "x residual standard deviation", "status": "assumption",
+    "source": "CLAUDE.md Section 10"
+  },
+  "dump_share_table": {
+    "value": [
+      {"r_below": 1.3, "u": 0.0},
+      {"r_below": 2.0, "u": 0.05},
+      {"r_below": 3.0, "u": 0.20},
+      {"r_below": null, "u": 0.40}
+    ],
+    "unit": "share unsold or dumped, by arrival ratio R (r_below is the exclusive upper bound of the band)",
+    "status": "placeholder",
+    "source": "CLAUDE.md Section 9 Step 6 heuristic; calibrate by FPO interview"
+  }
+}
