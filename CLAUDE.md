@@ -22,6 +22,7 @@ AnnaSetu stops edible fruit and vegetables from becoming waste before the truck 
 - There is no live demo. Judges score only what is submitted. A feature not shown in the video does not count.
 - Judging: idea and impact, AWS usage, design and usability.
 - AWS must be central to how the product works, not bolted on.
+- Prize eligibility (rules page, https://www.wemakedevs.org/aws/env/rules): the project must use at least one AWS open-source tool or be deployed on AWS. The event page's AWS stack names SAM CLI, LocalStack, Lambda, API Gateway and Step Functions. AnnaSetu meets both conditions: it is deployed on AWS (Section 15) and built, run locally and deployed with the AWS SAM CLI (open source). See Section 22.
 - Both team members need AWS Builder Center profiles with student verification.
 
 ---
@@ -238,7 +239,7 @@ Second-life outlets use offer price (processor) or 0 (food bank, feed, compost) 
 
 1. Sort the day's loads by quantity, largest first.
 2. For each load, compute net(j) for all reachable outlets using current dA.
-3. Assign to the best outlet unless it pushes that market's projected R into glut; then the next best.
+3. Assign to the best outlet unless it pushes that market's projected R into glut; then the next best. Projected R = A7 recomputed with today's arrivals plus dA(j), divided by B (same definition as Step 1).
 4. Add to that market's dA; repeat.
 5. If no fresh market has net > 0: processor, then food bank, then feed or compost.
 6. If best net < harvest cost per kg: advise delaying harvest (storable crops) or harvesting only what has a buyer (non-storable).
@@ -261,6 +262,8 @@ Default = nearest mandi. u = unsold or dumped share, a placeholder heuristic unt
 | > 3.0 | 40% |
 
 Always show both W (waste avoided, range) and Q (redirected). Never merge them.
+
+Range for W: mid uses u(R) of the band R falls in; low and high use u of the band below and above for the default market, combined with the low and high spoilage estimate. Labelled "(estimate)".
 
 ### Resource accounting
 
@@ -570,7 +573,9 @@ annasetu/
 ├── data/
 │   ├── snapshot/             or a script that rebuilds it
 │   └── distance_fallback.json
-├── analysis/backtest.ipynb   lead-lag, thresholds, price gaps, video charts
+├── analysis/
+│   ├── backtest.py           deterministic CLI: lead-lag, thresholds, price gaps; writes results JSON and charts
+│   └── backtest.ipynb        viewer only: loads backtest.py outputs, video charts
 ├── scripts/                  geocode_markets.py  seed.py
 ├── app/                      Expo app
 │   ├── app/                  screens (expo-router)
@@ -662,6 +667,22 @@ Seeded Second Life outlets (Kolar region, from desk research): SNR Foods (proces
 5. Bedrock model and quota confirmed in ap-south-1.
 6. National ingest volume fits in Lambda, or split by state.
 
+### 19.1 Decisions resolved (October 8, 2026)
+
+| # | Decision | Resolution |
+| --- | --- | --- |
+| D1 | Data access | Pull tomato daily prices and arrivals, Jan 2022 - Jun 2025, for the Kolar belt and every reporting market within 300 km. The build environment must allow agmarknet.gov.in, api.data.gov.in, archive-api.open-meteo.com and github.com; otherwise the team uploads snapshot CSVs. No data is invented. |
+| D2 | Placeholder costs (freight, fee %, commission % per state, handling, diesel l/km, stale range widening) | The team supplies the values or approves a proposed list. Each is stored with `status: placeholder` and shown as "(estimate)". |
+| D3 | Tomato sl_ref_hours, q10, alpha, water_l_per_kg | SL_ref and Q10 from the cited references (ASHRAE, USDA HB66); alpha stays a placeholder that the team approves. |
+| D4 | Projected R in allocation | Defined in Section 9, Step 5. |
+| D5 | Waste-avoided range | Defined in Section 9, Step 6. |
+| D6 | Backtest format | `analysis/backtest.py` deterministic CLI; notebook is a viewer (Section 16). |
+| D7 | Market coordinates | Team runs `scripts/geocode_markets.py` in its AWS account. Until then demo markets use manual coordinates with a source per market; distances are haversine x 1.3 and marked "approx.". |
+| D8 | Second demo region | Started only after Kolar works end to end. If it does not fit, the README says so. |
+| D9 | Demo loads | Tests use 10 loads (Section 17.3); the video uses the count that the chosen backtest day shows most clearly. |
+
+Known risk: one FPO's volume may barely move Kolar's ratio or price, so load spreading may come mostly from price impact at smaller markets. Report what the data shows; never tune the model to force a split.
+
 Risks: AGMARKNET blocks cloud IPs (use snapshot + data.gov.in); placeholders drive the headline number (ranges, labels, calibration); wrong regional strings (native review); slow batch transcription (short clips, progress state); geocoding errors (confidence filter, overrides).
 
 ---
@@ -685,3 +706,33 @@ Risks: AGMARKNET blocks cloud IPs (use snapshot + data.gov.in); placeholders dri
 ## 21. Out of scope
 
 Cold storage booking, photo quality grading, sensors, payments, real user accounts, App Store or TestFlight submission, retail and household waste, crops without a complete profile.
+
+---
+
+## 22. Build plan (October 8-11, 2026)
+
+Build from the decision engine outward. Each milestone ends with a check that must pass before the next starts. Deadline: October 11, 8:00 PM IST.
+
+### 22.1 AWS tooling (prize eligibility)
+
+| Requirement | How AnnaSetu meets it |
+| --- | --- |
+| Deployed on AWS | API Gateway, Lambda, S3, DynamoDB, EventBridge Scheduler, Transcribe, Polly, Bedrock, Location Service, SSM, CloudWatch in ap-south-1 (Section 15) |
+| At least one AWS open-source tool | AWS SAM CLI: `infra/template.yaml`, `sam build`, `sam deploy`, and `sam local start-api` for local runs of the handlers |
+
+Not added: Strands Agents (Bedrock only parses and explains; no agent), Step Functions (only if national ingest exceeds Lambda limits, Section 15.1), LocalStack (adapters are tested with stubbed clients; add only if a test needs it). Name SAM CLI and every AWS service in the README and the writeup.
+
+### 22.2 Milestones
+
+| # | Milestone | Day | Output | Check |
+| --- | --- | --- | --- | --- |
+| M0 | Data snapshot | Oct 8 | `backend/adapters/agmarknet.py`, `datagov.py`: fetch, Rs/quintal to Rs/kg, arrival units verified and stored in tonnes, varieties aggregated with arrival-weighted modal price, IDs from `config/markets.json`. `data/snapshot/agmarknet_tomato_<from>_<to>.csv` plus a manifest (source, pull date, row counts, sha256) | Coverage report per market; missing days stay missing |
+| M1 | Kolar backtest | Oct 8-9 | `analysis/backtest.py` runs Section 17.2 steps 1-8; `results_<run_id>.json` split into observed, model, assumptions, simulated; charts | The documented Jan-Apr 2025 crash appears in observed prices, or work stops and is reported. Mode per crop set in `config/model.json` from this evidence (default `same_day`). Demo day chosen |
+| M2 | Core engine | Oct 9 | `backend/core/` risk, pricing, spoilage, netvalue, allocate, impact; `config/` model, assumptions (status on every value), crops/tomato, outlets (Section 18 outlets, "Not yet partnered") | pytest covers Section 17.3 and: normal week, glut day, 10 loads, market overloaded, all fresh negative, hold, second-life fallback, harvest-cost threshold, stale data, null crop, unit conversion, transport cost, spoilage, interstate fees. Deterministic |
+| M3 | API and replay | Oct 9 | `backend/handlers/advisor.py`: /risk, /recommend, /plan, /impact per Section 13, including 422 and stale cases. `DATA_SOURCE=snapshot\|dynamodb`; `replay_date` drives "Replaying <date> data". Local runs via `sam local start-api` | Sample requests stored as fixtures and asserted in tests |
+| M4 | Bedrock and voice | Oct 10 | `adapters/bedrock.py` (parse, explain, number guard, per-language templates), `adapters/speech.py`, `handlers/voice.py`. Typed form input is the fallback | Stubbed-client tests: explanation with a foreign number uses the template; "two tonnes tomato" parses to tomato, 2,000 kg |
+| M5 | Mobile app | Oct 10 | Expo + TypeScript, 7 screens (Section 14.2), Recommendation card first (Section 14.3), i18n from `config/copy` (en, hi, kn; native review pending), typed API client | `tsc` passes; Android export builds; team tests on a real phone |
+| M6 | AWS | Oct 10 | `infra/template.yaml` (Section 15.1 resources, Section 15.2 roles), `scripts/seed.py`, `scripts/geocode_markets.py` | `sam validate` passes. Team sets the budget alert, deploys and runs the Section 15.4 smoke test (no credentials in this repo) |
+| M7 | Demo and README | Oct 11 | Replay of the backtest day: radar, loads, nearest-mandi default vs AnnaSetu allocation, impact; counterfactuals labelled as modelled. README: data provenance, Section 18 disclosure, model, architecture, AWS and SAM usage, limitations (no Kannada Polly voice, placeholders) | Every UI figure traces to `config/` or computed data with its status |
+
+Second demo region (D8) starts after M3 if time allows.
