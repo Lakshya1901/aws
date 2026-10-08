@@ -4,7 +4,7 @@ snapshot: market days from data/snapshot/*_<crop>_*.csv, outlets from config/out
 in-process dict (plus PLANS_FILE, a local JSON file, when set).
 dynamodb: tables named by env MARKET_DAY_TABLE, OUTLETS_TABLE, PLANS_TABLE (MarketDay pk "market_id#crop",
 sk "date"). Markets, crops and assumptions always come from config/.
-Temperature comes from Open-Meteo snapshot files data/snapshot/weather_*.json (backend/adapters/weather.py).
+Temperature comes from weather snapshot files data/snapshot/weather_*.json (backend/adapters/weather.py: Open-Meteo or NASA POWER).
 """
 import csv
 import glob
