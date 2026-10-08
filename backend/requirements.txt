@@ -1,0 +1,4 @@
+# The Lambda python3.13 runtime already provides boto3; the SAM build (infra/Makefile) packages no dependencies.
+# Local use: tests need only pytest (AWS clients are stubbed); scripts/seed.py and scripts/geocode_markets.py need boto3.
+boto3
+pytest
