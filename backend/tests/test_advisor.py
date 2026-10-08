@@ -234,20 +234,19 @@ def test_plans_file_persists_between_processes(api, tmp_path, monkeypatch):
     assert call("GET", "/impact", {"plan_id": r["plan_id"]})[0] == 200
 
 
-def test_smoke_real_snapshot_replay_day(tmp_path, monkeypatch):
-    """Real CEDA snapshot on the replay day with TEST ONLY routes and weather. Structure only, no numbers."""
+@pytest.mark.parametrize("day", ["2023-09-06", "2025-03-19"])  # demo replay days (D18)
+def test_smoke_real_snapshot_replay_day(day, tmp_path, monkeypatch):
+    """Real CEDA snapshot on a replay day with TEST ONLY routes and weather. Structure only, no numbers."""
     snap = tmp_path / "snap"
     snap.mkdir()
     for f in (REPO / "data/snapshot").glob("*.csv"):
         (snap / f.name).symlink_to(f)
-    day = json.loads((REPO / "config/model.json").read_text())["replay_date"]
-    assert day == "2025-02-07"
     (snap / "weather_test.json").write_text(json.dumps(synthetic_weather_test_only(day)))
     (tmp_path / "routes.json").write_text(json.dumps(synthetic_routes_test_only([(ORIGIN["lat"], ORIGIN["lon"])])))
     for k, v in {"SNAPSHOT_DIR": str(snap), "ROUTES_CACHE": str(tmp_path / "routes.json"),
-                 "DATA_SOURCE": "snapshot"}.items():
+                 "DATA_SOURCE": "snapshot", "REPLAY_DATE": day}.items():
         monkeypatch.setenv(k, v)
-    for k in ("REPLAY_DATE", "PLANS_FILE", "BEDROCK_ENABLED", "CONFIG_DIR"):
+    for k in ("PLANS_FILE", "BEDROCK_ENABLED", "CONFIG_DIR"):
         monkeypatch.delenv(k, raising=False)
     monkeypatch.setattr(store, "_plans", {})
 
