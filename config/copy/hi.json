@@ -18,7 +18,8 @@
       "listen_lang_note", "compare_title", "col_default", "col_recommended", "row_risk", "row_ratio", "row_distance",
       "row_spoilage", "row_earn_kg", "row_earn_load", "close", "accepted", "err_no_markets", "err_crop_not_setup",
       "err_network", "err_generic", "plan_empty", "added_per_market", "market_capped", "total_impact",
-      "diesel", "co2", "water", "litres_value", "kg_value", "km_value", "impact_title", "no_plan", "rs_range"
+      "diesel", "co2", "water", "litres_value", "kg_value", "km_value", "impact_title", "no_plan", "rs_range",
+      "type_hold", "hold_title", "hold_body", "waste_none_load", "waste_none_total", "waste_spoilage", "waste_range_loss", "water_lost", "shorter_km_value", "diesel_saved_value", "coords", "coords_invalid", "err_origin_unknown", "err_drive_time", "err_temperature", "err_plan_not_found", "err_bad_request"
     ]
   },
 
@@ -141,5 +142,22 @@
   "km_value": "{v} किमी",
   "impact_title": "हमने क्या बचाया?",
   "no_plan": "अभी कोई योजना नहीं। पहले एक सलाह चुनें।",
-  "rs_range": "₹{low}-{high}"
+  "rs_range": "₹{low}-{high}",
+  "type_hold": "रोकें (भंडार में रखें)",
+  "hold_title": "यह लोड अभी रोककर रखें",
+  "hold_body": "आज कोई ताज़ा मंडी फ़ायदा नहीं देती। यह फसल रखी जा सकती है, इसलिए अभी बेचने से रोकना बेहतर हो सकता है।",
+  "waste_none_load": "इस लोड पर कोई बर्बादी नहीं टली",
+  "waste_none_total": "कुल मिलाकर कोई बर्बादी नहीं टली",
+  "waste_spoilage": "लंबी यात्रा में लगभग {kg} किलो अतिरिक्त खराबी",
+  "waste_range_loss": "(संभवतः {loss} किलो नुकसान से {high} किलो बचत तक)",
+  "water_lost": "कोई पानी नहीं बचा (लगभग {v} लीटर नुकसान)",
+  "shorter_km_value": "{km} किमी कम",
+  "diesel_saved_value": "लगभग {l} लीटर कम डीज़ल",
+  "coords": "या निर्देशांक डालें (अक्षांश, देशांतर)",
+  "coords_invalid": "निर्देशांक ऐसे डालें: 13.14, 78.13",
+  "err_origin_unknown": "मंडियाँ खोजने के लिए आपकी लोकेशन चाहिए। लोकेशन की अनुमति दें, या निर्देशांक (अक्षांश, देशांतर) डालें।",
+  "err_drive_time": "इस जगह के लिए रास्ता अभी उपलब्ध नहीं है",
+  "err_temperature": "इस जगह के लिए मौसम की जानकारी अभी उपलब्ध नहीं है",
+  "err_plan_not_found": "यह योजना नहीं मिली। कृपया नया लोड शुरू करें।",
+  "err_bad_request": "कुछ जानकारी स्वीकार नहीं हुई। कृपया फ़ॉर्म जाँचकर फिर कोशिश करें।"
 }

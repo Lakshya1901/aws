@@ -18,7 +18,8 @@
       "listen_lang_note", "compare_title", "col_default", "col_recommended", "row_risk", "row_ratio", "row_distance",
       "row_spoilage", "row_earn_kg", "row_earn_load", "close", "accepted", "err_no_markets", "err_crop_not_setup",
       "err_network", "err_generic", "plan_empty", "added_per_market", "market_capped", "total_impact",
-      "diesel", "co2", "water", "litres_value", "kg_value", "km_value", "impact_title", "no_plan", "rs_range"
+      "diesel", "co2", "water", "litres_value", "kg_value", "km_value", "impact_title", "no_plan", "rs_range",
+      "type_hold", "hold_title", "hold_body", "waste_none_load", "waste_none_total", "waste_spoilage", "waste_range_loss", "water_lost", "shorter_km_value", "diesel_saved_value", "coords", "coords_invalid", "err_origin_unknown", "err_drive_time", "err_temperature", "err_plan_not_found", "err_bad_request"
     ]
   },
 
@@ -141,5 +142,22 @@
   "km_value": "{v} ಕಿಮೀ",
   "impact_title": "ನಾವು ಏನು ಉಳಿಸಿದೆವು?",
   "no_plan": "ಇನ್ನೂ ಯೋಜನೆ ಇಲ್ಲ. ಮೊದಲು ಒಂದು ಸಲಹೆಯನ್ನು ಬಳಸಿ.",
-  "rs_range": "₹{low}-{high}"
+  "rs_range": "₹{low}-{high}",
+  "type_hold": "ತಡೆಹಿಡಿಯಿರಿ (ಸಂಗ್ರಹದಲ್ಲಿಡಿ)",
+  "hold_title": "ಈ ಲೋಡ್ ಅನ್ನು ಸದ್ಯಕ್ಕೆ ಇಟ್ಟುಕೊಳ್ಳಿ",
+  "hold_body": "ಇಂದು ಯಾವುದೇ ತಾಜಾ ಮಾರುಕಟ್ಟೆ ಲಾಭ ನೀಡುವುದಿಲ್ಲ. ಈ ಬೆಳೆಯನ್ನು ಸಂಗ್ರಹಿಸಬಹುದು, ಆದ್ದರಿಂದ ಈಗ ಮಾರುವುದಕ್ಕಿಂತ ಇಟ್ಟುಕೊಳ್ಳುವುದು ಉತ್ತಮವಾಗಬಹುದು.",
+  "waste_none_load": "ಈ ಲೋಡ್‌ನಲ್ಲಿ ಯಾವುದೇ ವ್ಯರ್ಥ ತಪ್ಪಿಲ್ಲ",
+  "waste_none_total": "ಒಟ್ಟಾರೆ ಯಾವುದೇ ವ್ಯರ್ಥ ತಪ್ಪಿಲ್ಲ",
+  "waste_spoilage": "ಹೆಚ್ಚುವರಿ ಪ್ರಯಾಣದಲ್ಲಿ ಸುಮಾರು {kg} ಕೆಜಿ ಹಾಳು",
+  "waste_range_loss": "(ಬಹುಶಃ {loss} ಕೆಜಿ ನಷ್ಟದಿಂದ {high} ಕೆಜಿ ಉಳಿತಾಯದವರೆಗೆ)",
+  "water_lost": "ನೀರು ಉಳಿದಿಲ್ಲ (ಸುಮಾರು {v} ಲೀಟರ್ ನಷ್ಟ)",
+  "shorter_km_value": "{km} ಕಿಮೀ ಕಡಿಮೆ",
+  "diesel_saved_value": "ಸುಮಾರು {l} ಲೀಟರ್ ಕಡಿಮೆ ಡೀಸೆಲ್",
+  "coords": "ಅಥವಾ ನಿರ್ದೇಶಾಂಕ ನಮೂದಿಸಿ (ಅಕ್ಷಾಂಶ, ರೇಖಾಂಶ)",
+  "coords_invalid": "ನಿರ್ದೇಶಾಂಕವನ್ನು ಹೀಗೆ ನಮೂದಿಸಿ: 13.14, 78.13",
+  "err_origin_unknown": "ಮಾರುಕಟ್ಟೆಗಳನ್ನು ಹುಡುಕಲು ನಿಮ್ಮ ಸ್ಥಳ ಬೇಕು. ಸ್ಥಳದ ಅನುಮತಿ ನೀಡಿ, ಅಥವಾ ನಿರ್ದೇಶಾಂಕ (ಅಕ್ಷಾಂಶ, ರೇಖಾಂಶ) ನಮೂದಿಸಿ.",
+  "err_drive_time": "ಈ ಸ್ಥಳಕ್ಕೆ ಮಾರ್ಗ ಇನ್ನೂ ಲಭ್ಯವಿಲ್ಲ",
+  "err_temperature": "ಈ ಸ್ಥಳಕ್ಕೆ ಹವಾಮಾನ ಮಾಹಿತಿ ಇನ್ನೂ ಲಭ್ಯವಿಲ್ಲ",
+  "err_plan_not_found": "ಈ ಯೋಜನೆ ಸಿಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಹೊಸ ಲೋಡ್ ಪ್ರಾರಂಭಿಸಿ.",
+  "err_bad_request": "ಕೆಲವು ವಿವರಗಳು ಸ್ವೀಕಾರವಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಫಾರ್ಮ್ ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
 }

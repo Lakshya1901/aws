@@ -12,6 +12,19 @@ import { Btn, Chip, T, s } from './ui';
 type Unit = keyof typeof UNIT_KG | 'box';
 const HARVESTS: Harvest[] = ['today', 'tomorrow', 'harvested'];
 
+const fmtCoords = (lat: number | null, lon: number | null) =>
+  lat !== null && lon !== null ? `${lat.toFixed(4)}, ${lon.toFixed(4)}` : '';
+
+/** "13.14, 78.13" (comma or space separated) -> coordinates, or null. */
+function parseCoords(text: string): { lat: number; lon: number } | null {
+  const parts = text.trim().split(/[\s,]+/);
+  if (parts.length !== 2) return null;
+  const [lat, lon] = parts.map(Number);
+  return Number.isFinite(lat) && Number.isFinite(lon) && Math.abs(lat) <= 90 && Math.abs(lon) <= 180
+    ? { lat, lon }
+    : null;
+}
+
 export function LoadForm({
   draft,
   onChange,
@@ -25,6 +38,7 @@ export function LoadForm({
   const [unit, setUnit] = useState<Unit>('kg');
   const [qtyText, setQtyText] = useState(draft.quantity_kg ? String(draft.quantity_kg) : '');
   const [locMsg, setLocMsg] = useState<string | null>(null);
+  const [coordText, setCoordText] = useState(fmtCoords(draft.lat, draft.lon));
   const boxKg = draft.crop && draft.crop === radarCrop ? unitBoxKg : null;
   const hl = (k: keyof LoadDraft) => !!highlight?.includes(k);
 
@@ -45,9 +59,17 @@ export function LoadForm({
       const geo = await Location.reverseGeocodeAsync(pos.coords).catch(() => []);
       const place = geo[0]?.city ?? geo[0]?.district ?? geo[0]?.subregion ?? draft.origin_place;
       onChange({ ...draft, lat: pos.coords.latitude, lon: pos.coords.longitude, origin_place: place ?? null });
+      setCoordText(fmtCoords(pos.coords.latitude, pos.coords.longitude));
     } catch {
-      setLocMsg(t('location_failed'));
+      // The API needs coordinates (422 origin_unknown): ask for location access or typed coordinates.
+      setLocMsg(t('err_origin_unknown'));
     }
+  }
+
+  function setCoords(text: string) {
+    setCoordText(text);
+    const c = parseCoords(text);
+    onChange({ ...draft, lat: c?.lat ?? null, lon: c?.lon ?? null });
   }
 
   const inputStyle = (k: keyof LoadDraft) => ({
@@ -107,6 +129,16 @@ export function LoadForm({
       />
       <Btn kind="secondary" label={t('use_location')} onPress={() => void useLocation()} />
       {locMsg && <T color={C.errorBg}>{locMsg}</T>}
+      <T bold>{t('coords')}</T>
+      <TextInput
+        value={coordText}
+        onChangeText={setCoords}
+        keyboardType="numbers-and-punctuation"
+        placeholder="13.14, 78.13"
+        accessibilityLabel={t('coords')}
+        style={inputStyle('lat')}
+      />
+      {coordText.trim() !== '' && draft.lat === null && <T color={C.errorBg}>{t('coords_invalid')}</T>}
 
       <T bold>{t('harvest')}</T>
       <View style={s.row}>

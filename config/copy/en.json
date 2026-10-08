@@ -18,7 +18,8 @@
       "listen_lang_note", "compare_title", "col_default", "col_recommended", "row_risk", "row_ratio", "row_distance",
       "row_spoilage", "row_earn_kg", "row_earn_load", "close", "accepted", "err_no_markets", "err_crop_not_setup",
       "err_network", "err_generic", "plan_empty", "added_per_market", "market_capped", "total_impact",
-      "diesel", "co2", "water", "litres_value", "kg_value", "km_value", "impact_title", "no_plan", "rs_range"
+      "diesel", "co2", "water", "litres_value", "kg_value", "km_value", "impact_title", "no_plan", "rs_range",
+      "type_hold", "hold_title", "hold_body", "waste_none_load", "waste_none_total", "waste_spoilage", "waste_range_loss", "water_lost", "shorter_km_value", "diesel_saved_value", "coords", "coords_invalid", "err_origin_unknown", "err_drive_time", "err_temperature", "err_plan_not_found", "err_bad_request"
     ]
   },
 
@@ -141,5 +142,22 @@
   "km_value": "{v} km",
   "impact_title": "What did we save?",
   "no_plan": "No plan yet. Use a recommendation first.",
-  "rs_range": "Rs {low}-{high}"
+  "rs_range": "Rs {low}-{high}",
+  "type_hold": "hold (keep in storage)",
+  "hold_title": "Keep this load for now",
+  "hold_body": "No fresh market pays today. This crop stores, so holding it may be better than selling now.",
+  "waste_none_load": "No waste avoided on this load",
+  "waste_none_total": "No waste avoided in total",
+  "waste_spoilage": "Extra trip spoilage about {kg} kg",
+  "waste_range_loss": "(likely between {loss} kg lost and {high} kg avoided)",
+  "water_lost": "No water saved (about {v} litres lost)",
+  "shorter_km_value": "{km} km shorter",
+  "diesel_saved_value": "about {l} litres less diesel",
+  "coords": "Or enter coordinates (lat, lon)",
+  "coords_invalid": "Enter coordinates like 13.14, 78.13",
+  "err_origin_unknown": "We need your location to find markets. Allow location access, or enter coordinates (lat, lon).",
+  "err_drive_time": "Route not available for this place yet",
+  "err_temperature": "Weather data is not available for this place yet",
+  "err_plan_not_found": "This plan was not found. Please start a new load.",
+  "err_bad_request": "Some details were not accepted. Please check the form and try again."
 }

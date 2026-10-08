@@ -49,10 +49,12 @@ export function CompareSheet({
       default:
         return (
           <T bold size={SIZE.large}>
-            {`${t('rs_range', {
-              low: fmtNum(o.net_rs_per_kg.low * quantityKg),
-              high: fmtNum(o.net_rs_per_kg.high * quantityKg),
-            })} ${est}`}
+            {o.net_rs_per_kg
+              ? `${t('rs_range', {
+                  low: fmtNum(o.net_rs_per_kg.low * quantityKg),
+                  high: fmtNum(o.net_rs_per_kg.high * quantityKg),
+                })} ${est}`
+              : t('not_estimated')}
           </T>
         );
     }
@@ -73,20 +75,20 @@ export function CompareSheet({
         <View style={{ backgroundColor: C.bg, borderTopLeftRadius: 16, borderTopRightRadius: 16, maxHeight: '90%' }}>
           <ScrollView contentContainerStyle={{ padding: 16, gap: 12 }}>
             <T bold size={SIZE.title}>
-              {t('compare_title', { default: dflt.name, top: top.name })}
+              {t('compare_title', { default: L.name(dflt), top: L.name(top) })}
             </T>
             <T>{t('load_line', { qty: fmtNum(quantityKg), crop: '' }).trim()}</T>
             <View style={{ flexDirection: 'row', gap: 8 }}>
               <View style={{ flex: 1 }} />
               <View style={{ flex: 1 }}>
                 <T bold>{t('col_default')}</T>
-                <T>{dflt.name}</T>
+                <T>{L.name(dflt)}</T>
               </View>
               <View style={{ flex: 1 }}>
                 <T bold color={C.primary}>
                   {t('col_recommended')}
                 </T>
-                <T>{top.name}</T>
+                <T>{L.name(top)}</T>
               </View>
             </View>
             {rows.map(([key, label]) => (
@@ -99,7 +101,7 @@ export function CompareSheet({
               </View>
             ))}
             <Btn label={t('close')} onPress={onClose} />
-            <Btn kind="secondary" label={`${t('send_here')}: ${dflt.name}`} onPress={onUseDefault} />
+            <Btn kind="secondary" label={`${t('send_here')}: ${L.name(dflt)}`} onPress={onUseDefault} />
           </ScrollView>
         </View>
       </View>
