@@ -27,6 +27,9 @@ EXPO_PUBLIC_API_MOCK=1 npx expo start --clear
 ```
 
 Every screen shows a purple "FIXTURE DATA" banner. Fixtures live in `api/fixtures/*.fixture.json` and carry `"_fixture": true`.
+Risk, recommend (glut day, price crash), plan and impact fixtures are copied from the backend's stored responses in
+`backend/tests/api_fixtures/` (synthetic test data), so they have the real response shapes; the Second Life and voice
+fixtures are hand-written in the same shapes.
 They are for development only: the real-mode bundle does not include them, and the real client rejects any response containing `_fixture`.
 Use `--clear` when switching between mock and real mode so Metro re-inlines the env var.
 
@@ -34,12 +37,26 @@ Mock behaviour by crop on the New load screen:
 
 | Crop | State exercised |
 | --- | --- |
-| Tomato | Glut-day recommendation, replay banner, demo loads, alternatives, "Why not" sheet |
-| Onion | Second Life (processor), stale banner, same_day, delay-harvest warning, template text |
+| Tomato | Glut-day recommendation (arrival multiple cited), replay banner, demo loads, alternatives, "Why not" sheet |
+| Tomato, harvest "Tomorrow" | Price crash with normal arrivals (D10): no arrival multiple, the API explanation is shown (Hindi text in this fixture), negative waste avoided |
+| Onion | Second Life (processor without an offer: "not yet estimated"), stale banner, same_day, delay-harvest warning, template text |
 | Potato | 422 "No reporting markets near you for this crop" |
 | Banana | 422 "This crop isn't set up yet" |
 
 `/speak` always fails in mock mode, so Listen stays hidden (the "audio hidden" state). Voice upload/parse returns a low-confidence parse with a missing place, so Confirm highlights fields.
+
+### Local backend
+
+Run the API on your machine (from the repo root) and point the app at your computer's LAN IP, so a phone on the same
+Wi-Fi can reach it:
+
+```bash
+python -m backend.handlers.local_server --host 0.0.0.0 --port 8787
+```
+
+```
+EXPO_PUBLIC_API_URL=http://<lan-ip>:8787
+```
 
 ### Real mode
 
@@ -55,6 +72,12 @@ npx expo start --clear
 ```
 
 The app sends the key as the `x-api-key` header. It never calls AWS services directly and holds no AWS credentials.
+
+### Origin
+
+`/recommend` and `/plan` need origin `lat`/`lon`; place names are not geocoded and the API answers 422 `origin_unknown`
+without coordinates. The app uses the device location (expo-location). If permission is denied, it says so and the
+load form accepts typed coordinates ("13.14, 78.13").
 
 ### Checks
 
