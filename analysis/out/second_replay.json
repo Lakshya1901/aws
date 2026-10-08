@@ -1,0 +1,731 @@
+{
+ "baseline_note": "R uses backtest.risk() with baseline_int_weeks() (backtest.baseline wraps UInt32 ISO-week differences, widening the baseline to prior years' weeks 1..w+1). R_backtest_as_is shows the unpatched value.",
+ "candidates": [
+  {
+   "accepted": true,
+   "caveat": null,
+   "documented_by": [
+    {
+     "date": "2023-09-04",
+     "quote": "The prices fell drastically as the arrival of fresh produce caused a glut, while the demand in North India and Andhra Pradesh dropped in the last couple of weeks. [...] In the first week of July, a crate containing 15 kg of tomatoes was sold at Rs 2,400. Now, it has come down to Rs 100-240 (Rs 6-16 per kg). According to Deputy Director of Horticulture Kumaraswamy, the arrival of tomatoes has increased in the district.",
+     "title": "Tomato prices down at Kolar market (FreshPlaza, source: newindianexpress.com)",
+     "url": "https://www.freshplaza.com/asia/article/9556365/tomato-prices-down-at-kolar-market/"
+    },
+    {
+     "date": "2023-09-26",
+     "quote": "The price crash is being attributed by officials from the Horticultural Department and the Agricultural Produce Market Committee (APMC) to the arrival of a large quantity of tomatoes and fall in demand from other states. [...] This month alone, the Kolar APMC, Asia's second-largest tomato market, received 4.21 lakh quintals of tomatoes. In the same period last year, the APMC received 2.31 lakh quintals [...] a box of 15 kg of tomatoes that was sold at Rs 2,300 in July and August is now being sold at Rs 45 to Rs 120. [...] many farmers in Kolar and surrounding areas have decided not to harvest the yield as the labour cost of harvesting is higher than the returns in the market.",
+     "title": "Rs 200 to Rs 10: Tomato farmers' hopes crash (Deccan Herald)",
+     "url": "https://www.deccanherald.com/india/karnataka/rs-200-to-rs-10-tomato-farmers-hopes-crash-2700660"
+    }
+   ],
+   "id": "kolar_2023_09",
+   "market_id": "kolar",
+   "news_attributes_to_arrivals": "yes",
+   "qualifying_days_count": 6,
+   "reason": "meets data criteria and is documented by dated news",
+   "recommended": true,
+   "search_note": null,
+   "top_days": [
+    {
+     "R": 1.76,
+     "R_backtest_as_is": 2.51,
+     "arrivals_7day_mean_t": 2860.3,
+     "arrivals_t": 3078.0,
+     "baseline_B_t": 1627.0,
+     "baseline_prior_iso_years": [
+      2022
+     ],
+     "best_alternative": {
+      "R": 0.47,
+      "gross_gap_rs_kg": 3.96,
+      "level": "watch",
+      "market_id": "madanapalle",
+      "modal_rs_kg": 10.6,
+      "straight_line_km": 61.3
+     },
+     "completeness": {
+      "alternative_7_of_7_days": true,
+      "market_7_of_7_days": true
+     },
+     "dP_3day": -0.287,
+     "date": "2023-09-06",
+     "level": "glut",
+     "market_id": "kolar",
+     "modal_rs_kg": 6.64,
+     "modal_rs_kg_3_days_earlier": 9.31
+    },
+    {
+     "R": 1.33,
+     "R_backtest_as_is": 1.63,
+     "arrivals_7day_mean_t": 1884.3,
+     "arrivals_t": 1973.0,
+     "baseline_B_t": 1414.0,
+     "baseline_prior_iso_years": [
+      2022
+     ],
+     "best_alternative": {
+      "R": 0.58,
+      "gross_gap_rs_kg": 3.9,
+      "level": "safe",
+      "market_id": "madanapalle",
+      "modal_rs_kg": 9.02,
+      "straight_line_km": 61.3
+     },
+     "completeness": {
+      "alternative_7_of_7_days": true,
+      "market_7_of_7_days": true
+     },
+     "dP_3day": -0.179,
+     "date": "2023-09-22",
+     "level": "watch",
+     "market_id": "kolar",
+     "modal_rs_kg": 5.12,
+     "modal_rs_kg_3_days_earlier": 6.24
+    },
+    {
+     "R": 1.88,
+     "R_backtest_as_is": 2.02,
+     "arrivals_7day_mean_t": 2341.7,
+     "arrivals_t": 2639.0,
+     "baseline_B_t": 1244.0,
+     "baseline_prior_iso_years": [
+      2022
+     ],
+     "best_alternative": {
+      "R": 1.0,
+      "gross_gap_rs_kg": 3.87,
+      "level": "safe",
+      "market_id": "madanapalle",
+      "modal_rs_kg": 9.3,
+      "straight_line_km": 61.3
+     },
+     "completeness": {
+      "alternative_7_of_7_days": true,
+      "market_7_of_7_days": true
+     },
+     "dP_3day": -0.235,
+     "date": "2023-09-30",
+     "level": "watch",
+     "market_id": "kolar",
+     "modal_rs_kg": 5.43,
+     "modal_rs_kg_3_days_earlier": 7.1
+    },
+    {
+     "R": 1.87,
+     "R_backtest_as_is": 2.01,
+     "arrivals_7day_mean_t": 2329.4,
+     "arrivals_t": 2835.0,
+     "baseline_B_t": 1244.0,
+     "baseline_prior_iso_years": [
+      2022
+     ],
+     "best_alternative": {
+      "R": 1.17,
+      "gross_gap_rs_kg": 3.45,
+      "level": "safe",
+      "market_id": "madanapalle",
+      "modal_rs_kg": 9.42,
+      "straight_line_km": 61.3
+     },
+     "completeness": {
+      "alternative_7_of_7_days": true,
+      "market_7_of_7_days": true
+     },
+     "dP_3day": -0.252,
+     "date": "2023-09-29",
+     "level": "glut",
+     "market_id": "kolar",
+     "modal_rs_kg": 5.97,
+     "modal_rs_kg_3_days_earlier": 7.98
+    },
+    {
+     "R": 1.52,
+     "R_backtest_as_is": 2.17,
+     "arrivals_7day_mean_t": 2468.7,
+     "arrivals_t": 2729.0,
+     "baseline_B_t": 1627.0,
+     "baseline_prior_iso_years": [
+      2022
+     ],
+     "best_alternative": {
+      "R": 0.81,
+      "gross_gap_rs_kg": 3.31,
+      "level": "safe",
+      "market_id": "bengaluru",
+      "modal_rs_kg": 9.5,
+      "straight_line_km": 61.5
+     },
+     "completeness": {
+      "alternative_7_of_7_days": true,
+      "market_7_of_7_days": true
+     },
+     "dP_3day": -0.346,
+     "date": "2023-09-08",
+     "level": "glut",
+     "market_id": "kolar",
+     "modal_rs_kg": 6.19,
+     "modal_rs_kg_3_days_earlier": 9.47
+    }
+   ],
+   "window": [
+    "2023-09-01",
+    "2023-09-30"
+   ],
+   "window_summary": {
+    "R_backtest_as_is_median": 2.02,
+    "R_days_known": 30,
+    "R_max": 1.88,
+    "R_median": 1.52,
+    "arrival_days": 30,
+    "arrivals_t_median": 2493.5,
+    "baseline_B_t_median": 1564.0,
+    "level_days": {
+     "glut": 3,
+     "safe": 1,
+     "watch": 26
+    },
+    "modal_rs_kg_median": 6.51,
+    "modal_rs_kg_min": 5.12,
+    "price_days": 30,
+    "window_days": 30
+   }
+  },
+  {
+   "accepted": true,
+   "caveat": "The article gives demand loss (exports stopped) as the trigger; extra arrivals from Anantapur are a second factor.",
+   "documented_by": [
+    {
+     "date": "2024-12-26",
+     "quote": "Farmers of the erstwhile Chittoor district, particularly those from Madanapalle, Punganur and Palamaner regions, are shocked due to a dramatic plunge in tomato prices. Just weeks ago, a 15-kg crate of tomatoes fetched Rs 600 to Rs 900 in the wholesale market. Currently, it is selling for just Rs 200 to Rs 300. [...] The crisis surfaced when tomato exports to major consumer states, such as Tamil Nadu, Maharashtra, Gujarat, Kolkata and Delhi, stopped. [...] Further, tomatoes are also arriving from the neighbouring Anantapur district, pushing the fruit's prices further downward.",
+     "title": "Farmers struggle as tomato prices plummet (Deccan Chronicle)",
+     "url": "https://www.deccanchronicle.com/southern-states/andhra-pradesh/farmers-struggle-as-tomato-prices-plummet-1849854"
+    }
+   ],
+   "id": "madanapalle_2024_12",
+   "market_id": "madanapalle",
+   "news_attributes_to_arrivals": "partly",
+   "qualifying_days_count": 1,
+   "reason": "meets data criteria and is documented by dated news",
+   "recommended": false,
+   "search_note": null,
+   "top_days": [
+    {
+     "R": 3.87,
+     "R_backtest_as_is": 1.25,
+     "arrivals_7day_mean_t": 366.6,
+     "arrivals_t": 477.0,
+     "baseline_B_t": 94.8,
+     "baseline_prior_iso_years": [
+      2022,
+      2023
+     ],
+     "best_alternative": {
+      "R": 0.2,
+      "gross_gap_rs_kg": 4.77,
+      "level": "watch",
+      "market_id": "bengaluru",
+      "modal_rs_kg": 20.0,
+      "straight_line_km": 117.8
+     },
+     "completeness": {
+      "alternative_7_of_7_days": true,
+      "market_7_of_7_days": true
+     },
+     "dP_3day": -0.633,
+     "date": "2024-12-10",
+     "level": "glut",
+     "market_id": "madanapalle",
+     "modal_rs_kg": 15.23,
+     "modal_rs_kg_3_days_earlier": 41.48
+    }
+   ],
+   "window": [
+    "2024-12-01",
+    "2024-12-26"
+   ],
+   "window_summary": {
+    "R_backtest_as_is_median": 1.23,
+    "R_days_known": 26,
+    "R_max": 4.71,
+    "R_median": 3.87,
+    "arrival_days": 26,
+    "arrivals_t_median": 341.6,
+    "baseline_B_t_median": 94.8,
+    "level_days": {
+     "glut": 26
+    },
+    "modal_rs_kg_median": 24.64,
+    "modal_rs_kg_min": 14.8,
+    "price_days": 16,
+    "window_days": 26
+   }
+  },
+  {
+   "accepted": false,
+   "caveat": "The article attributes the crash to lost demand (Bangladesh exports halted), not to higher arrivals.",
+   "documented_by": [
+    {
+     "date": "2024-08-16",
+     "quote": "At Kolar APMC, the prices of tomatoes crashed from Rs 40 a kg a fortnight ago to Rs 12 a kg. [...] Kolar APMC secretary Kiran Narayanswamy said, \"Around 40 to 50 trucks of tomatoes were being transported from Kolar to West Bengal every day before the first week of August. Now, the quantity has come down to 20 trucks a day.\"",
+     "title": "Tomato exports to Bangladesh stop, price crash hits farmers in Karnataka's Kolar (Deccan Herald)",
+     "url": "https://www.deccanherald.com/india/karnataka/tomato-exports-to-b-desh-stop-price-crash-hits-kolar-farmers-3152262"
+    }
+   ],
+   "id": "kolar_2024_08",
+   "market_id": "kolar",
+   "news_attributes_to_arrivals": "no",
+   "qualifying_days_count": 4,
+   "reason": "meets data criteria and is documented, but the news attributes the crash to lost demand, not arrivals",
+   "recommended": false,
+   "search_note": null,
+   "top_days": [
+    {
+     "R": 1.32,
+     "R_backtest_as_is": 3.38,
+     "arrivals_7day_mean_t": 3594.3,
+     "arrivals_t": 3933.0,
+     "baseline_B_t": 2733.0,
+     "baseline_prior_iso_years": [
+      2022,
+      2023
+     ],
+     "best_alternative": {
+      "R": 1.2,
+      "gross_gap_rs_kg": 13.22,
+      "level": "safe",
+      "market_id": "madanapalle",
+      "modal_rs_kg": 25.65,
+      "straight_line_km": 61.3
+     },
+     "completeness": {
+      "alternative_7_of_7_days": true,
+      "market_7_of_7_days": true
+     },
+     "dP_3day": -0.351,
+     "date": "2024-08-18",
+     "level": "watch",
+     "market_id": "kolar",
+     "modal_rs_kg": 12.43,
+     "modal_rs_kg_3_days_earlier": 19.15
+    },
+    {
+     "R": 1.44,
+     "R_backtest_as_is": 4.13,
+     "arrivals_7day_mean_t": 4244.6,
+     "arrivals_t": 3931.0,
+     "baseline_B_t": 2955.0,
+     "baseline_prior_iso_years": [
+      2022,
+      2023
+     ],
+     "best_alternative": {
+      "R": 1.05,
+      "gross_gap_rs_kg": 11.17,
+      "level": "safe",
+      "market_id": "madanapalle",
+      "modal_rs_kg": 25.67,
+      "straight_line_km": 61.3
+     },
+     "completeness": {
+      "alternative_7_of_7_days": true,
+      "market_7_of_7_days": true
+     },
+     "dP_3day": -0.163,
+     "date": "2024-08-11",
+     "level": "watch",
+     "market_id": "kolar",
+     "modal_rs_kg": 14.49,
+     "modal_rs_kg_3_days_earlier": 17.32
+    },
+    {
+     "R": 1.36,
+     "R_backtest_as_is": 3.39,
+     "arrivals_7day_mean_t": 3688.4,
+     "arrivals_t": 3576.0,
+     "baseline_B_t": 2704.0,
+     "baseline_prior_iso_years": [
+      2022,
+      2023
+     ],
+     "best_alternative": {
+      "R": 1.76,
+      "gross_gap_rs_kg": 10.22,
+      "level": "watch",
+      "market_id": "madanapalle",
+      "modal_rs_kg": 21.75,
+      "straight_line_km": 61.3
+     },
+     "completeness": {
+      "alternative_7_of_7_days": true,
+      "market_7_of_7_days": true
+     },
+     "dP_3day": -0.361,
+     "date": "2024-08-20",
+     "level": "watch",
+     "market_id": "kolar",
+     "modal_rs_kg": 11.53,
+     "modal_rs_kg_3_days_earlier": 18.06
+    },
+    {
+     "R": 1.33,
+     "R_backtest_as_is": 3.29,
+     "arrivals_7day_mean_t": 3584.9,
+     "arrivals_t": 4179.0,
+     "baseline_B_t": 2704.0,
+     "baseline_prior_iso_years": [
+      2022,
+      2023
+     ],
+     "best_alternative": {
+      "R": 1.79,
+      "gross_gap_rs_kg": 8.29,
+      "level": "watch",
+      "market_id": "madanapalle",
+      "modal_rs_kg": 20.94,
+      "straight_line_km": 61.3
+     },
+     "completeness": {
+      "alternative_7_of_7_days": true,
+      "market_7_of_7_days": true
+     },
+     "dP_3day": -0.208,
+     "date": "2024-08-19",
+     "level": "watch",
+     "market_id": "kolar",
+     "modal_rs_kg": 12.65,
+     "modal_rs_kg_3_days_earlier": 15.98
+    }
+   ],
+   "window": [
+    "2024-08-01",
+    "2024-08-31"
+   ],
+   "window_summary": {
+    "R_backtest_as_is_median": 3.38,
+    "R_days_known": 23,
+    "R_max": 1.56,
+    "R_median": 1.36,
+    "arrival_days": 27,
+    "arrivals_t_median": 3638.0,
+    "baseline_B_t_median": 2733.0,
+    "level_days": {
+     "safe": 3,
+     "unknown": 8,
+     "watch": 20
+    },
+    "modal_rs_kg_median": 13.11,
+    "modal_rs_kg_min": 10.82,
+    "price_days": 28,
+    "window_days": 31
+   }
+  },
+  {
+   "accepted": false,
+   "caveat": null,
+   "documented_by": null,
+   "id": "madanapalle_2025_05_06",
+   "market_id": "madanapalle",
+   "news_attributes_to_arrivals": null,
+   "qualifying_days_count": 1,
+   "reason": "meets data criteria but no dated news article documents it",
+   "recommended": false,
+   "search_note": "Searched Deccan Herald, The Hindu, Times of India, New Indian Express, Hans India, Deccan Chronicle coverage of Madanapalle/Chittoor/Annamayya tomato prices for May-June 2025; no dated article documenting a glut at Madanapalle in that window was found.",
+   "top_days": [
+    {
+     "R": 2.51,
+     "R_backtest_as_is": 22.32,
+     "arrivals_7day_mean_t": 3744.6,
+     "arrivals_t": 1854.5,
+     "baseline_B_t": 1492.8,
+     "baseline_prior_iso_years": [
+      2022,
+      2023,
+      2024
+     ],
+     "best_alternative": {
+      "R": 0.74,
+      "gross_gap_rs_kg": 4.57,
+      "level": "safe",
+      "market_id": "bengaluru",
+      "modal_rs_kg": 17.0,
+      "straight_line_km": 117.8
+     },
+     "completeness": {
+      "alternative_7_of_7_days": true,
+      "market_7_of_7_days": true
+     },
+     "dP_3day": -0.151,
+     "date": "2025-06-07",
+     "level": "glut",
+     "market_id": "madanapalle",
+     "modal_rs_kg": 12.43,
+     "modal_rs_kg_3_days_earlier": 14.64
+    }
+   ],
+   "window": [
+    "2025-05-01",
+    "2025-06-30"
+   ],
+   "window_summary": {
+    "R_backtest_as_is_median": 16.13,
+    "R_days_known": 61,
+    "R_max": 2.88,
+    "R_median": 1.86,
+    "arrival_days": 61,
+    "arrivals_t_median": 2803.6,
+    "baseline_B_t_median": 1397.5,
+    "level_days": {
+     "glut": 25,
+     "watch": 36
+    },
+    "modal_rs_kg_median": 9.58,
+    "modal_rs_kg_min": 7.9,
+    "price_days": 61,
+    "window_days": 61
+   }
+  },
+  {
+   "accepted": false,
+   "caveat": null,
+   "documented_by": null,
+   "id": "kolar_2022_07",
+   "market_id": "kolar",
+   "news_attributes_to_arrivals": null,
+   "qualifying_days_count": 0,
+   "reason": "R not computable (no prior-year baseline in the snapshot)",
+   "recommended": false,
+   "search_note": "No dated article for a July 2022 Kolar crash was found. R cannot be computed for 2022 anyway: the snapshot starts 2022-01-01, so there are no prior-year arrivals for the baseline.",
+   "top_days": [],
+   "window": [
+    "2022-07-01",
+    "2022-07-31"
+   ],
+   "window_summary": {
+    "R_backtest_as_is_median": null,
+    "R_days_known": 0,
+    "R_max": null,
+    "R_median": null,
+    "arrival_days": 31,
+    "arrivals_t_median": 6708.0,
+    "baseline_B_t_median": null,
+    "level_days": {
+     "unknown": 31
+    },
+    "modal_rs_kg_median": 7.49,
+    "modal_rs_kg_min": 5.28,
+    "price_days": 31,
+    "window_days": 31
+   }
+  }
+ ],
+ "criteria": "R >= watch_r (arrival-driven) and 3-day dP <= watch_dp (price falls) at the market; alternative within max_alt_km pays >= min_gap_rs_kg and >= min_alt_ratio x; 7 of last 7 days with price and arrivals at both markets; accepted only with a dated news source that ties the crash at least partly to arrivals",
+ "gap_note": "gross modal price difference only; no freight, fees or spoilage",
+ "observed_vs_model": "arrivals, prices, gaps and km are observed or computed from observed data; R and levels are model output",
+ "params": {
+  "crop": "tomato",
+  "max_alt_km": 200,
+  "min_alt_ratio": 1.25,
+  "min_gap_rs_kg": 3.0,
+  "require_full_7_of_7": true
+ },
+ "recommended": {
+  "candidate_id": "kolar_2023_09",
+  "date": "2023-09-06",
+  "market_id": "kolar",
+  "why": "largest gross gap among qualifying days in the best-documented arrival-driven glut"
+ },
+ "risk_thresholds": {
+  "glut_dp": -0.25,
+  "glut_r": 2.0,
+  "glut_r_with_dp": 1.5,
+  "watch_dp": -0.15,
+  "watch_r": 1.3
+ },
+ "scan_all_markets": [
+  {
+   "R": 1.38,
+   "best_alternative": "bengaluru",
+   "best_day": "2023-04-28",
+   "gross_gap_rs_kg": 3.77,
+   "market_id": "kolar",
+   "modal_rs_kg": 3.6,
+   "month": "2023-04",
+   "qualifying_days": 2
+  },
+  {
+   "R": 1.82,
+   "best_alternative": "bengaluru",
+   "best_day": "2023-05-19",
+   "gross_gap_rs_kg": 7.24,
+   "market_id": "kolar",
+   "modal_rs_kg": 5.13,
+   "month": "2023-05",
+   "qualifying_days": 5
+  },
+  {
+   "R": 1.76,
+   "best_alternative": "madanapalle",
+   "best_day": "2023-09-06",
+   "gross_gap_rs_kg": 3.96,
+   "market_id": "kolar",
+   "modal_rs_kg": 6.64,
+   "month": "2023-09",
+   "qualifying_days": 6
+  },
+  {
+   "R": 1.3,
+   "best_alternative": "bengaluru",
+   "best_day": "2024-02-14",
+   "gross_gap_rs_kg": 6.01,
+   "market_id": "kolar",
+   "modal_rs_kg": 8.32,
+   "month": "2024-02",
+   "qualifying_days": 4
+  },
+  {
+   "R": 2.07,
+   "best_alternative": "bengaluru",
+   "best_day": "2024-05-12",
+   "gross_gap_rs_kg": 15.59,
+   "market_id": "kolar",
+   "modal_rs_kg": 9.41,
+   "month": "2024-05",
+   "qualifying_days": 6
+  },
+  {
+   "R": 1.32,
+   "best_alternative": "madanapalle",
+   "best_day": "2024-08-18",
+   "gross_gap_rs_kg": 13.22,
+   "market_id": "kolar",
+   "modal_rs_kg": 12.43,
+   "month": "2024-08",
+   "qualifying_days": 4
+  },
+  {
+   "R": 1.33,
+   "best_alternative": "madanapalle",
+   "best_day": "2024-09-09",
+   "gross_gap_rs_kg": 12.74,
+   "market_id": "kolar",
+   "modal_rs_kg": 11.4,
+   "month": "2024-09",
+   "qualifying_days": 1
+  },
+  {
+   "R": 1.48,
+   "best_alternative": "madanapalle",
+   "best_day": "2025-06-13",
+   "gross_gap_rs_kg": 8.86,
+   "market_id": "kolar",
+   "modal_rs_kg": 10.32,
+   "month": "2025-06",
+   "qualifying_days": 4
+  },
+  {
+   "R": 3.88,
+   "best_alternative": "bengaluru",
+   "best_day": "2023-06-17",
+   "gross_gap_rs_kg": 11.27,
+   "market_id": "madanapalle",
+   "modal_rs_kg": 19.6,
+   "month": "2023-06",
+   "qualifying_days": 2
+  },
+  {
+   "R": 2.68,
+   "best_alternative": "bengaluru",
+   "best_day": "2023-11-16",
+   "gross_gap_rs_kg": 12.29,
+   "market_id": "madanapalle",
+   "modal_rs_kg": 15.33,
+   "month": "2023-11",
+   "qualifying_days": 1
+  },
+  {
+   "R": 1.91,
+   "best_alternative": "bengaluru",
+   "best_day": "2024-04-25",
+   "gross_gap_rs_kg": 11.65,
+   "market_id": "madanapalle",
+   "modal_rs_kg": 13.35,
+   "month": "2024-04",
+   "qualifying_days": 2
+  },
+  {
+   "R": 1.8,
+   "best_alternative": "bengaluru",
+   "best_day": "2024-05-11",
+   "gross_gap_rs_kg": 16.65,
+   "market_id": "madanapalle",
+   "modal_rs_kg": 11.35,
+   "month": "2024-05",
+   "qualifying_days": 1
+  },
+  {
+   "R": 1.58,
+   "best_alternative": "bengaluru",
+   "best_day": "2024-10-26",
+   "gross_gap_rs_kg": 15.08,
+   "market_id": "madanapalle",
+   "modal_rs_kg": 34.92,
+   "month": "2024-10",
+   "qualifying_days": 1
+  },
+  {
+   "R": 3.87,
+   "best_alternative": "bengaluru",
+   "best_day": "2024-12-10",
+   "gross_gap_rs_kg": 4.77,
+   "market_id": "madanapalle",
+   "modal_rs_kg": 15.23,
+   "month": "2024-12",
+   "qualifying_days": 2
+  },
+  {
+   "R": 1.81,
+   "best_alternative": "kolar",
+   "best_day": "2025-02-20",
+   "gross_gap_rs_kg": 4.8,
+   "market_id": "madanapalle",
+   "modal_rs_kg": 11.35,
+   "month": "2025-02",
+   "qualifying_days": 1
+  },
+  {
+   "R": 2.51,
+   "best_alternative": "bengaluru",
+   "best_day": "2025-06-07",
+   "gross_gap_rs_kg": 4.57,
+   "market_id": "madanapalle",
+   "modal_rs_kg": 12.43,
+   "month": "2025-06",
+   "qualifying_days": 1
+  },
+  {
+   "R": 8.14,
+   "best_alternative": "bengaluru",
+   "best_day": "2023-08-06",
+   "gross_gap_rs_kg": 17.5,
+   "market_id": "mandya",
+   "modal_rs_kg": 62.5,
+   "month": "2023-08",
+   "qualifying_days": 2
+  },
+  {
+   "R": 1.44,
+   "best_alternative": "bengaluru",
+   "best_day": "2024-05-18",
+   "gross_gap_rs_kg": 7.73,
+   "market_id": "mysuru",
+   "modal_rs_kg": 16.6,
+   "month": "2024-05",
+   "qualifying_days": 1
+  }
+ ],
+ "snapshot": {
+  "path": "data/snapshot/ceda_tomato_2022-01-01_2025-06-30.csv",
+  "sha256": "11890d38f2ed32679aa2491a12f8a15a56724d0efef348c0b44af61f090ef415",
+  "source": "CEDA AGMARKNET, district aggregate"
+ }
+}
