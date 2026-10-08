@@ -1,0 +1,15 @@
+{
+  "_fixture": true,
+  "_note": "Development fixture. Illustrative values only, not real data.",
+  "crop": "tomato",
+  "mode": "predictive",
+  "replay_date": "2025-04-04",
+  "unit_box_kg": 15,
+  "markets": [
+    {"market_id": "kolar", "name": "Kolar (fixture)", "state": "Karnataka", "risk_level": "glut", "arrival_ratio": 3.1, "modal_price_rs_per_kg": 2.0, "price_change_3d": -0.31, "as_of_date": "2025-04-04", "stale": false, "lead_days": 0, "distance_km": 25, "distance_approx": false},
+    {"market_id": "chintamani", "name": "Chintamani (fixture)", "state": "Karnataka", "risk_level": "watch", "arrival_ratio": 1.6, "modal_price_rs_per_kg": 6.5, "price_change_3d": -0.12, "as_of_date": "2025-04-04", "stale": false, "lead_days": 2, "distance_km": 48, "distance_approx": true},
+    {"market_id": "madanapalle", "name": "Madanapalle (fixture)", "state": "Andhra Pradesh", "risk_level": "safe", "arrival_ratio": 1.1, "modal_price_rs_per_kg": 12.0, "price_change_3d": 0.04, "as_of_date": "2025-04-04", "stale": false, "lead_days": null, "distance_km": 62, "distance_approx": false},
+    {"market_id": "bengaluru", "name": "Bengaluru (fixture)", "state": "Karnataka", "risk_level": "safe", "arrival_ratio": 1.2, "modal_price_rs_per_kg": 11.0, "price_change_3d": 0.01, "as_of_date": "2025-04-01", "stale": true, "lead_days": null, "distance_km": 70, "distance_approx": false},
+    {"market_id": "srinivaspura", "name": "Srinivaspura (fixture)", "state": "Karnataka", "risk_level": null, "arrival_ratio": null, "modal_price_rs_per_kg": null, "price_change_3d": null, "as_of_date": null, "stale": false, "lead_days": null, "distance_km": 40, "distance_approx": true}
+  ]
+}

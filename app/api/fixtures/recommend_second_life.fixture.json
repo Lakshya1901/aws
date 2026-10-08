@@ -1,0 +1,29 @@
+{
+  "_fixture": true,
+  "_note": "Development fixture for the Second Life, stale, same_day, delay-harvest and template-text states. Not real data.",
+  "plan_id": "p_fixture_02",
+  "mode": "same_day",
+  "replay_date": null,
+  "demo_loads": false,
+  "data": {"as_of_date": "2025-04-01", "stale": true},
+  "top": {"outlet_id": "proc_fixture", "name": "Processor (fixture)", "type": "processor",
+          "net_rs_per_kg": {"low": 0.5, "mid": 1.0, "high": 1.5},
+          "distance_km": 30, "distance_approx": true, "drive_hours": 0.9, "spoilage_share": 0.02,
+          "partnered": false},
+  "default": {"outlet_id": "mandi_fixture", "name": "Nearest mandi (fixture)", "type": "mandi",
+              "net_rs_per_kg": {"low": -2.0, "mid": -1.0, "high": 0.2},
+              "distance_km": 20, "distance_approx": false,
+              "risk_level": "glut", "arrival_ratio": 2.6},
+  "alternatives": [
+    {"outlet_id": "foodbank_fixture", "name": "Food bank (fixture)", "type": "food_bank",
+     "net_rs_per_kg": {"low": 0, "mid": 0, "high": 0},
+     "distance_km": 55, "distance_approx": false, "partnered": false}
+  ],
+  "impact": {"redirected_kg": 1000,
+             "waste_avoided_kg": {"low": 100, "mid": 200, "high": 300},
+             "extra_km": 10, "diesel_l": null, "co2_kg": null, "water_l": null},
+  "explanation": {"language": "en", "text": "Fixture template text: no fresh market pays after costs today; prices may be out of date.", "source": "template"},
+  "advice": "delay_harvest",
+  "harvest_cost_rs_per_kg": 4.0,
+  "assumptions_used": ["freight_rs_per_tonne_km", "dump_share_table", "handling_rs_per_kg"]
+}

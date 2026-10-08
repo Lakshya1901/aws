@@ -1,0 +1,17 @@
+{
+  "_fixture": true,
+  "_note": "Development fixture. Not real data. The mock client fills allocations from the loads you send.",
+  "plan_id": "p_fixture_01",
+  "mode": "predictive",
+  "replay_date": "2025-04-04",
+  "demo_loads": true,
+  "data": {"as_of_date": "2025-04-04", "stale": false},
+  "allocations": [],
+  "markets": [
+    {"market_id": "madanapalle", "name": "Madanapalle (fixture)", "added_kg": 4000, "capped": true},
+    {"market_id": "bengaluru", "name": "Bengaluru (fixture)", "added_kg": 2000, "capped": false}
+  ],
+  "impact": {"redirected_kg": 6000,
+             "waste_avoided_kg": {"low": 1200, "mid": 1800, "high": 2400},
+             "extra_km": 90, "diesel_l": null, "co2_kg": null, "water_l": null}
+}
