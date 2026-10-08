@@ -13,5 +13,5 @@
   "min_days_of_last_7": 5,
   "nearest_markets": 15,
   "bedrock": {"model_id": null, "temperature": 0, "timeout_s": 3, "status": "placeholder"},
-  "replay_date": null
+  "replay_date": "2025-02-07"
 }

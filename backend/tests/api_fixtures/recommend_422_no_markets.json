@@ -1,0 +1,26 @@
+{
+ "dataset": "normal_week",
+ "request": {
+  "method": "POST",
+  "path": "/recommend",
+  "query": null,
+  "body": {
+   "crop": "tomato",
+   "quantity_kg": 2000,
+   "origin": {
+    "lat": 28.61,
+    "lon": 77.21,
+    "place": "Delhi"
+   },
+   "harvest": "today",
+   "language": "en"
+  }
+ },
+ "response": {
+  "status": 422,
+  "body": {
+   "error": "no_markets_in_radius",
+   "message": "No reporting markets near you for this crop"
+  }
+ }
+}

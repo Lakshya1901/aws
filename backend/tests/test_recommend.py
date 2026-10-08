@@ -183,3 +183,33 @@ def test_price_crash_without_arrival_spike_prefers_higher_priced_alternative(con
     assert r["top"]["outlet_id"] != "kolar"
     assert r["top"]["net_rs_per_kg"]["mid"] > d["net_rs_per_kg"]["mid"]
     assert r["impact"]["redirected_kg"] == 2000
+
+
+def _kolar_crash(kolar_price):
+    # Kolar-like crash: arrivals normal (R ~ 1), 3-day price change below -25%.
+    kolar = history("kolar", 100, kolar_price)
+    for r in kolar[-3:]:
+        r["modal_price_kg"] *= 0.6
+    return kolar + history("chintamani", 50, 20) + history("bengaluru", 300, 20) + history("madanapalle", 80, 20)
+
+
+def test_price_below_cost_dump_counts_waste_avoided_when_arrivals_normal(configs):
+    r = recommend(load(), _kolar_crash(7), MARKETS, OUTLETS, configs, AS_OF)
+    d, t, q = r["default"], r["top"], 2000
+    assert d["outlet_id"] == "kolar" and d["arrival_ratio"] < 1.3 and d["risk_level"] == "watch"
+    assert d["net_rs_per_kg"]["mid"] < 4.7 and t["outlet_id"] != "kolar"
+    w = r["impact"]["waste_avoided_kg"]
+    assert 0 < w["mid"] < q and w["low"] <= w["mid"] <= w["high"]
+    # u_default = max(u(R)=0, 0.40) mid; advised side keeps u(R) of its band (0 here).
+    expected_mid = q * (min(1, d["spoilage_range"]["mid"] + 0.40) - t["spoilage_range"]["mid"])
+    assert w["mid"] == pytest.approx(expected_mid, abs=0.5)  # inputs rounded to 4 dp
+    assert "below_cost_dump_share" in r["assumptions_used"]
+
+
+def test_default_net_at_or_above_cost_keeps_u_of_r(configs):
+    r = recommend(load(), _kolar_crash(20), MARKETS, OUTLETS, configs, AS_OF)
+    d, t = r["default"], r["top"]
+    assert d["net_rs_per_kg"]["mid"] >= 4.7 and t["outlet_id"] != "kolar"
+    expected_mid = 2000 * (d["spoilage_range"]["mid"] - t["spoilage_range"]["mid"])  # u(R) = 0 on both sides
+    assert r["impact"]["waste_avoided_kg"]["mid"] == pytest.approx(expected_mid, abs=0.5)  # inputs rounded to 4 dp
+    assert "below_cost_dump_share" not in r["assumptions_used"]

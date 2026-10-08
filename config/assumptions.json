@@ -68,5 +68,11 @@
     "unit": "share unsold or dumped, by arrival ratio R (r_below is the exclusive upper bound of the band)",
     "status": "placeholder",
     "source": "CLAUDE.md Section 9 Step 6 heuristic; calibrate by FPO interview"
+  },
+  "below_cost_dump_share": {
+    "value": {"low": 0.20, "mid": 0.40, "high": 0.40},
+    "unit": "minimum share unsold or dumped at the default market when its mid net value per kg is below the crop's harvest cost (u_default = max(u(R), value))",
+    "status": "placeholder",
+    "source": "reuses Section 9 u(R) table values; D12"
   }
 }
