@@ -1,11 +1,15 @@
 {
-  "_fixture": true,
-  "_note": "Development fixture. Not real data.",
-  "plan_id": "p_fixture_01",
-  "redirected_kg": 6000,
-  "waste_avoided_kg": {"low": 1200, "mid": 1800, "high": 2400},
-  "extra_km": 90,
-  "diesel_l": null,
-  "co2_kg": null,
-  "water_l": null
+ "_fixture": true,
+ "_note": "Development fixture copied from backend/tests/api_fixtures/plan_ten_loads.json (plan_id + total impact, as GET /impact returns it); the backend's synthetic TEST ONLY data. Not real data.",
+ "plan_id": "p_20250404_cd2fa2dec8",
+ "redirected_kg": 16000,
+ "waste_avoided_kg": {
+  "low": 491.8396,
+  "mid": 3116.5833,
+  "high": 6527.9207
+ },
+ "extra_km": 651.1,
+ "diesel_l": 91.154,
+ "co2_kg": 244.2927,
+ "water_l": 573451.3191
 }

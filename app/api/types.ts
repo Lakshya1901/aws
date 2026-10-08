@@ -1,5 +1,5 @@
 // Request/response types for the AnnaSetu API (CLAUDE.md Section 13).
-// Fields marked "ASSUMED" are not spelled out in Section 13; the backend must match them.
+// Shapes match backend/handlers/advisor.py and voice.py and the stored responses in backend/tests/api_fixtures/.
 
 export type Lang = 'en' | 'hi' | 'kn';
 export type CropId = 'tomato' | 'onion' | 'potato' | 'banana';
@@ -7,7 +7,8 @@ export const CROPS: CropId[] = ['tomato', 'onion', 'potato', 'banana']; // MVP c
 export type RiskLevel = 'safe' | 'watch' | 'glut';
 export type Mode = 'predictive' | 'same_day';
 export type Harvest = 'today' | 'tomorrow' | 'harvested';
-export type OutletType = 'mandi' | 'processor' | 'food_bank' | 'feed_compost';
+/** 'hold' = keep a storable crop (no outlet); 'feed_compost' can also be a fallback with no outlet. */
+export type OutletType = 'mandi' | 'processor' | 'food_bank' | 'feed_compost' | 'hold';
 
 export interface Range {
   low: number;
@@ -25,6 +26,12 @@ export interface FixtureMark {
   _fixture?: true;
 }
 
+/** Set on every advisor response: replay_date when replaying historical data; demo_loads then true. */
+interface Envelope {
+  replay_date: string | null;
+  demo_loads: boolean;
+}
+
 // ---------- GET /risk?crop=&state=&lat=&lon= ----------
 
 export interface RiskQuery {
@@ -36,24 +43,25 @@ export interface RiskQuery {
 
 export interface RiskMarket {
   market_id: string;
-  name: string; // ASSUMED: display name
+  name: string;
   state: string;
-  risk_level: RiskLevel | null; // null = market not reported recently (ASSUMED)
+  risk_level: RiskLevel | null; // null = market not reported recently
   arrival_ratio: number | null;
-  modal_price_rs_per_kg: number | null; // ASSUMED name for "price"
-  price_change_3d: number | null; // fraction, e.g. -0.18 (ASSUMED name for "change_3d")
+  modal_price_rs_per_kg: number | null;
+  price_change_3d: number | null; // fraction, e.g. -0.18
   as_of_date: string | null;
-  stale: boolean; // ASSUMED per-market flag (Section 8.6)
+  stale: boolean;
+  data_complete: boolean | null;
   lead_days: number | null; // only meaningful in predictive mode
-  distance_km: number | null; // ASSUMED: from the requested lat/lon
-  distance_approx: boolean; // ASSUMED: true when haversine fallback used
+  distance_km: number | null; // from the requested lat/lon; null without one
+  distance_approx: boolean; // true when the haversine fallback was used
 }
 
-export interface RiskResponse extends FixtureMark {
+export interface RiskResponse extends Envelope, FixtureMark {
   crop: CropId;
   mode: Mode;
-  replay_date: string | null; // ASSUMED: set when replaying historical data
-  unit_box_kg: number | null; // ASSUMED: crop profile box size, for the box unit
+  unit_box_kg: number | null;
+  data: Freshness;
   markets: RiskMarket[];
 }
 
@@ -65,7 +73,7 @@ export interface VoiceUploadRequest {
 }
 
 export interface VoiceUploadResponse extends FixtureMark {
-  upload_url: string; // ASSUMED name for "presigned S3 URL"
+  upload_url: string;
   audio_key: string;
 }
 
@@ -91,10 +99,11 @@ export interface VoiceParseResponse extends FixtureMark {
 
 // ---------- POST /recommend ----------
 
+/** lat and lon are required: the API answers 422 origin_unknown without them (place names are not geocoded). */
 export interface Origin {
-  lat: number | null; // ASSUMED nullable when only a place name is known
-  lon: number | null;
-  place: string;
+  lat: number;
+  lon: number;
+  place?: string | null;
 }
 
 export interface RecommendRequest {
@@ -107,19 +116,36 @@ export interface RecommendRequest {
 }
 
 export interface OutletOption {
-  outlet_id: string;
-  name: string; // ASSUMED: display name
+  /** null for hold and for the feed/compost fallback with no seeded outlet in radius. */
+  outlet_id: string | null;
+  /** Absent for hold and for the feed/compost fallback. */
+  name?: string;
   type: OutletType;
-  net_rs_per_kg: Range;
+  state?: string;
+  /** null = not yet estimated (processor without an offer, hold, fallback compost). Can be negative. */
+  net_rs_per_kg: Range | null;
+  net_note?: string | null;
+  price_rs_per_kg?: Range;
   distance_km?: number | null;
-  distance_approx?: boolean; // ASSUMED: haversine fallback -> "approx."
+  distance_approx?: boolean; // haversine fallback -> "approx."
   drive_hours?: number | null;
   spoilage_share?: number | null;
-  risk_level?: RiskLevel | null;
-  arrival_ratio?: number | null;
-  partnered?: boolean; // ASSUMED: false -> "Not yet partnered" label
+  spoilage_range?: Range;
+  risk_level?: RiskLevel | null; // mandis only
+  arrival_ratio?: number | null; // mandis only
+  projected_arrival_ratio?: number | null;
+  projected_risk_level?: RiskLevel | null;
+  price_change_3d?: number | null;
+  stale?: boolean;
+  latest_date?: string | null;
+  data_complete?: boolean | null;
+  contact?: string;
+  note?: string;
+  /** Second Life outlets only (false -> "Not yet partnered"). Absent on mandis: not applicable. */
+  partnered?: boolean;
 }
 
+/** waste_avoided_kg: null = not yet estimated; any value can be negative (the trip loses more than it saves). */
 export interface Impact {
   redirected_kg: number;
   waste_avoided_kg: Range | null;
@@ -137,63 +163,68 @@ export interface Explanation {
 
 export type Advice = 'delay_harvest' | 'harvest_to_order';
 
-export interface RecommendResponse extends FixtureMark {
+export interface RecommendResponse extends Envelope, FixtureMark {
   plan_id: string;
   mode: Mode;
-  replay_date: string | null; // ASSUMED
-  demo_loads: boolean; // ASSUMED: true -> "Demo loads" label
   data: Freshness;
+  crop: CropId;
+  quantity_kg: number;
   top: OutletOption;
   default: OutletOption;
+  /** May include the default market again; ordered fresh markets by net value, then Second Life. */
   alternatives: OutletOption[];
   impact: Impact;
   explanation: Explanation;
-  advice: Advice | null; // ASSUMED shape for Section 13 "advice"
-  harvest_cost_rs_per_kg: number | null; // ASSUMED: for the advice warning
+  advice: Advice | null;
+  harvest_cost_rs_per_kg: number;
   assumptions_used: string[];
 }
 
 // ---------- POST /plan ----------
 
 export interface PlanLoad {
-  load_id: string; // ASSUMED: client-generated id
+  load_id: string; // client-generated id
   crop: CropId;
   quantity_kg: number;
   origin: Origin;
   harvest: Harvest;
-  chosen_outlet_id?: string; // ASSUMED: records "Use this" or an override
-  override?: boolean; // ASSUMED: true when chosen != recommended
+  chosen_outlet_id?: string | null; // records "Use this" or an override
+  override?: boolean; // true when chosen != recommended
 }
 
 export interface PlanRequest {
   loads: PlanLoad[];
   language: Lang;
-  plan_id?: string; // ASSUMED
+  plan_id?: string;
 }
 
 export interface PlanAllocation {
   load_id: string;
-  outlet: OutletOption;
+  crop: CropId;
   quantity_kg: number;
+  outlet: OutletOption;
+  default: OutletOption;
   advice: Advice | null;
+  impact: Impact;
 }
 
 export interface MarketAddition {
   market_id: string;
-  name: string;
+  name: string | null;
+  crop: CropId | null; // null for a market capped without any load added
   added_kg: number; // dA
-  capped: boolean; // ASSUMED: allocation stopped here to avoid pushing it into glut
+  capped: boolean; // passed over so this plan's loads do not push it into glut
 }
 
-export interface PlanResponse extends FixtureMark {
+export interface PlanResponse extends Envelope, FixtureMark {
   plan_id: string;
   mode: Mode;
-  replay_date: string | null;
-  demo_loads: boolean;
+  modes: Partial<Record<CropId, Mode>>;
   data: Freshness;
   allocations: PlanAllocation[];
-  markets: MarketAddition[]; // ASSUMED name for "dA per market"
+  markets: MarketAddition[];
   impact: Impact; // total
+  assumptions_used: string[];
 }
 
 // ---------- POST /speak ----------
@@ -204,7 +235,7 @@ export interface SpeakRequest {
 }
 
 export interface SpeakResponse extends FixtureMark {
-  audio_url: string; // ASSUMED name for "presigned MP3 URL"
+  audio_url: string;
 }
 
 // ---------- GET /impact?plan_id= ----------
@@ -215,8 +246,21 @@ export interface ImpactResponse extends Impact, FixtureMark {
 
 // ---------- Errors ----------
 
-/** ASSUMED error body: {"error": "<code>", "message": "..."}. */
-export type ApiErrorCode = 'no_markets_in_radius' | 'crop_not_configured' | string;
+/** Error body {"error": "<code>", "message": "..."}; 400 bad_request, 404 plan_not_found, 422 for the rest, 502 voice. */
+export type ApiErrorCode =
+  | 'bad_request'
+  | 'plan_not_found'
+  | 'not_found'
+  | 'origin_unknown'
+  | 'no_markets_in_radius'
+  | 'crop_not_configured'
+  | 'drive_time_unavailable'
+  | 'temperature_unavailable'
+  | 'speak_language_unsupported'
+  | 'transcribe_failed'
+  | 'speak_failed'
+  | 'internal_error'
+  | (string & {});
 
 export interface ApiErrorBody {
   error: ApiErrorCode;
