@@ -140,6 +140,7 @@ One flag in `config/model.json`, settable per crop. All other components are ide
 | Source | Fields | Refresh | Access | Fallback |
 | --- | --- | --- | --- | --- |
 | AGMARKNET price and arrival reports | date, state, district, market, commodity, variety, arrivals, min/max/modal price | Daily, plus one-time 3-year history | Undocumented public backend (client: https://github.com/makrand999/agmarknet-api); may rate-limit or block cloud IPs | Snapshot CSV in S3; data.gov.in for prices |
+| CEDA Agri Market Data (Ashoka University), https://agmarknet.ceda.ashoka.edu.in | AGMARKNET daily min/max/modal price (Rs/quintal) and arrivals (tonnes), aggregated per Census 2011 district | Monthly refresh by CEDA | Public JSON API, no key (`backend/adapters/ceda.py`) | Snapshot CSV |
 | data.gov.in mandi prices, resource 9ef84268-d588-465a-a308-a864a43d0070 | state, district, market, commodity, variety, grade, arrival_date, min/max/modal price (no arrivals) | Daily | Free API key | Snapshot |
 | Open-Meteo | Hourly temperature, relative humidity; forecast and history | Per request, cached 6 h | Free, no key | Monthly averages per state in config |
 | Amazon Location Service | Market geocoding (once); route distance and drive time | Geocode once; routes cached per pair | AWS | Haversine distance x road factor 1.3, flagged as estimate |
@@ -149,6 +150,7 @@ One flag in `config/model.json`, settable per crop. All other components are ide
 - Prices are Rs per quintal; divide by 100 for Rs per kg.
 - Verify arrival units on first pull (tonnes vs quintals); store tonnes.
 - Aggregate varieties per market-day: arrivals summed, modal price weighted by arrivals.
+- Demo snapshot (D1): agmarknet.gov.in and api.data.gov.in refuse connections from cloud IPs, so the 2022-2025 history comes from CEDA, which is district level. Each "market" in `config/markets.json` is one district aggregate, named after its main tomato market town (Kolar district = Kolar, Chittoor = Madanapalle, Chikkaballapura = Chintamani). CEDA's district price is its own aggregate, not arrival-weighted by us. Market-level AGMARKNET data replaces it when available; the engine is unchanged. Districts with a unit problem or no prior-year baseline are excluded and listed in `config/markets.json`.
 - Market names map to internal IDs through `config/markets.json`; never fuzzy-match at runtime.
 - Missing days stay missing, never zero. Compute risk only when at least 5 of the last 7 days exist.
 
@@ -231,7 +233,7 @@ T = mean forecast temperature over the trip. t_wait default 6 h at mandis.
 net(j) = P_hat(j) * (1 - s(j))
          - freight_rs_per_tonne_km * distance_km(j) / 1000
          - P_hat(j) * (fee_pct(state) + commission_pct(state))
-         - handling_rs_per_kg
+         - P_hat(j) * handling_pct(state)
 ```
 Second-life outlets use offer price (processor) or 0 (food bank, feed, compost) for P_hat.
 
@@ -283,14 +285,15 @@ All in `config/assumptions.json`, each with `value`, `unit`, `status` (sourced |
 | Input | Default | Status | Source / how to fill |
 | --- | --- | --- | --- |
 | Tomato harvest + local transport | Rs 70 per 15 kg box (~Rs 4.7/kg) | sourced (Kolar 2025) | Outlook Business |
-| Freight, small truck | Rs per tonne-km | placeholder | FPO interviews per region |
-| Market fee | % of sale, per state | placeholder | State APMC rules |
-| Commission | % of sale, per state | placeholder | FPO interviews |
-| Handling and packing | Rs per kg | placeholder | FPO interviews |
-| Diesel use | litres per km | placeholder | Vehicle type |
+| Freight, small truck | Rs 11 per tonne-km | placeholder | 14 ft LCV quoted at Rs 20-35 per km (Indian truck-rate guides, 2025-26) divided by an assumed 2.5 t payload; FPO interviews per region |
+| Market fee | Karnataka 0% on fruit and vegetables (sourced: Karnataka APMC Act 1966 s.65, https://indiankanoon.org/doc/117259766/; user charges not found). Andhra Pradesh 1% (sourced: AP Agricultural Marketing Dept, levied on purchases, https://spsnellore.ap.gov.in/agricultural-marketing-department/; deducting it from the seller is an assumption). Default 1% (assumption) | per state | State APMC rules |
+| Commission | Karnataka 5% (https://citizenmatters.in/how-bengaluru-apmc-system-works-farm-laws-yeshwanthpur-yard-commission-agents-farmers-cartelisation/); Andhra Pradesh 4%, reported range 4-10% (https://www.thenewsminute.com/article/how-social-capital-enabled-tomato-farmers-andhra-sell-produce-during-lockdown-123892); default 5% | placeholder | FPO interviews |
+| Handling (hamali) | 1% of sale (`handling_pct`; Deccan Herald: "5% commission and 1% hamali", https://www.deccanherald.com/india/karnataka/state-not-denotify-fruits-veggies-1993495) | placeholder | FPO interviews |
+| Diesel use | 0.14 litres per km (Tata 407-class, published 7-10 km/l, lower end for loaded running; https://trucksbuses.com/trucks/cargo-truck/tata-sfc-407-bsiv/mileage) | placeholder | Vehicle type |
 | Wait at mandi | 6 h | assumption | FPO interviews |
 | Dump share table u(R) | Section 9 | placeholder | FPO interviews |
 | Reachable radius | 300 km | assumption | Config |
+| Stale-data range widening | 1.5x the residual standard deviation | assumption | Config |
 
 ### Languages
 
@@ -312,10 +315,11 @@ One JSON file per crop in `config/crops/`. A profile with a null required field 
 | --- | --- | --- | --- | --- |
 | Recommended storage | ~10 C ripe, ~13 C mature green | ~0 C, 70-75% RH | to source | 12-15 C |
 | Good-condition storage life | days to ~2 weeks | ~6-8 months | months (cold store) | weeks, ripening-dependent |
-| SL_ref at T_ref (25 C) | placeholder | placeholder | placeholder | placeholder |
-| Q10 | placeholder (often 2-3) | placeholder | placeholder | placeholder |
-| alpha | placeholder | placeholder | placeholder | placeholder |
+| SL_ref at T_ref (25 C) | 132 h, range 96-168 h (4-7 days holding at ambient for ripening stages; https://www.researchgate.net/publication/294485852) | placeholder | placeholder | placeholder |
+| Q10 | 2.0, derived from UC Davis respiration rates for mature-green tomato: 8-14 mL CO2/kg.h at 15 C, 18-26 at 25 C (https://postharvest.ucdavis.edu/produce-facts-sheets/tomato; page read through a search excerpt, verify) | placeholder | placeholder | placeholder |
+| alpha | 0.31, placeholder: calibrated so a 14 h trip (6 h since harvest + 2 h drive + 6 h wait) at 25 C gives 3.25% loss, the market-stage tomato loss in Section 3.2 | placeholder | placeholder | placeholder |
 | Storable (hold option) | no | yes | yes | limited |
+| Water footprint | 184 L/kg world average, tropical production 200-900 L/kg (Hoekstra, cited in Nederhoff and Stanghellini 2010, https://edepot.wur.nl/156932) | placeholder | placeholder | placeholder |
 | Harvest cost per kg | ~Rs 4.7 (Kolar) | placeholder | placeholder | placeholder |
 | Second life | puree/paste, food bank, compost | dehydration, food bank | processing, food bank | ripening/retail, chips, food bank, feed |
 
@@ -562,7 +566,7 @@ annasetu/
 │   ├── core/                 pure Python, no AWS imports
 │   │   ├── risk.py  pricing.py  spoilage.py  netvalue.py  allocate.py  impact.py
 │   ├── adapters/             all external calls
-│   │   ├── agmarknet.py  datagov.py  weather.py  location.py  bedrock.py  speech.py
+│   │   ├── ceda.py  agmarknet.py  datagov.py  weather.py  location.py  bedrock.py  speech.py
 │   ├── handlers/             thin Lambda wrappers
 │   │   ├── ingest.py  advisor.py  voice.py
 │   └── tests/
@@ -576,7 +580,7 @@ annasetu/
 ├── analysis/
 │   ├── backtest.py           deterministic CLI: lead-lag, thresholds, price gaps; writes results JSON and charts
 │   └── backtest.ipynb        viewer only: loads backtest.py outputs, video charts
-├── scripts/                  geocode_markets.py  seed.py
+├── scripts/                  build_snapshot.py  geocode_markets.py  seed.py
 ├── app/                      Expo app
 │   ├── app/                  screens (expo-router)
 │   ├── components/           RecommendationCard, RiskList, MicButton, CompareSheet
@@ -647,7 +651,7 @@ annasetu/
 | Glut events | Real, documented | Sources in README |
 | Weather, routes | Real | README |
 | Crop parameters | Published references; some placeholders | "Reference parameters"; placeholders marked |
-| Freight, fees, commission, handling, diesel | Placeholders until FPO interviews | "(estimate)" |
+| Freight, fees, commission, handling, diesel | Desk-research values; placeholders until FPO interviews | "(estimate)" |
 | Dump share u(R) | Placeholder heuristic | "(estimate)" |
 | Processors and food banks | Real organisations, not contacted | "Not yet partnered" |
 | Loads and villages | Simulated loads, real villages | "Demo loads" |
@@ -671,9 +675,9 @@ Seeded Second Life outlets (Kolar region, from desk research): SNR Foods (proces
 
 | # | Decision | Resolution |
 | --- | --- | --- |
-| D1 | Data access | Pull tomato daily prices and arrivals, Jan 2022 - Jun 2025, for the Kolar belt and every reporting market within 300 km. The build environment must allow agmarknet.gov.in, api.data.gov.in, archive-api.open-meteo.com and github.com; otherwise the team uploads snapshot CSVs. No data is invented. |
-| D2 | Placeholder costs (freight, fee %, commission % per state, handling, diesel l/km, stale range widening) | The team supplies the values or approves a proposed list. Each is stored with `status: placeholder` and shown as "(estimate)". |
-| D3 | Tomato sl_ref_hours, q10, alpha, water_l_per_kg | SL_ref and Q10 from the cited references (ASHRAE, USDA HB66); alpha stays a placeholder that the team approves. |
+| D1 | Data access | Done. agmarknet.gov.in (403) and api.data.gov.in (TLS reset) refuse cloud IPs. Tomato daily prices and arrivals, Jan 2022 - Jun 2025, pulled from CEDA at district level (Section 8.2) with `scripts/build_snapshot.py`; manifest records hashes. Open-Meteo and Nominatim reachable. No data is invented. |
+| D2 | Placeholder costs | Filled from desk research (Section 10), each with its source and status; shown as "(estimate)". Handling became `handling_pct` (hamali is quoted as % of sale). Replace with FPO interview values. |
+| D3 | Tomato sl_ref_hours, q10, alpha, water_l_per_kg | Filled (Section 11): SL_ref 132 h (96-168), Q10 2.0 derived, alpha 0.31 calibrated placeholder, water 184 L/kg. ASHRAE and USDA HB66 were not reachable; sources used are listed. |
 | D4 | Projected R in allocation | Defined in Section 9, Step 5. |
 | D5 | Waste-avoided range | Defined in Section 9, Step 6. |
 | D6 | Backtest format | `analysis/backtest.py` deterministic CLI; notebook is a viewer (Section 16). |
