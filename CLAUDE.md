@@ -263,6 +263,8 @@ Default = nearest mandi. u = unsold or dumped share, a placeholder heuristic unt
 | 2.0-3.0 | 20% |
 | > 3.0 | 40% |
 
+Price-below-cost dump (D12): if the default market's mid net value per kg is below the crop's harvest cost, the load counts as likely dumped or left unharvested there (documented Kolar 2025, Section 3.2). Then u_default = max(u(R), 0.40), with low 0.20 and high 0.40 (values reused from the u(R) table; placeholder). Applies only to the default side.
+
 Always show both W (waste avoided, range) and Q (redirected). Never merge them.
 
 Range for W: mid uses u(R) of the band R falls in; low and high use u of the band below and above for the default market, combined with the low and high spoilage estimate. Labelled "(estimate)".
@@ -684,6 +686,11 @@ Seeded Second Life outlets (Kolar region, from desk research): SNR Foods (proces
 | D7 | Market coordinates | Team runs `scripts/geocode_markets.py` in its AWS account. Until then demo markets use manual coordinates with a source per market; distances are haversine x 1.3 and marked "approx.". |
 | D8 | Second demo region | Started only after Kolar works end to end. If it does not fit, the README says so. |
 | D9 | Demo loads | Tests use 10 loads (Section 17.3); the video uses the count that the chosen backtest day shows most clearly. |
+
+| D10 | Demo story | Both. Headline: Kolar Jan-Apr 2025 is a price crash with normal arrivals (backtest: median R 0.80, max 1.25; modal price down to Rs 4.60/kg, 7 days below harvest cost; alternatives Rs 9.6-13.5/kg). The card cites the price drop and net-value gap, never an arrival multiple. Candidate day 2025-02-07 (Kolar Rs 7.37 vs Madanapalle Rs 18.20/kg). Second replay: an arrival-driven glut, only if a news source documents it. |
+| D11 | Drive time | No speed default. Drive time comes from Amazon Location routes cached in `data/routes_cache.json`; a request without a cached or live route returns 422 `drive_time_unavailable`. |
+| D12 | Waste avoided when arrivals are normal | Price-below-cost dump rule added to Section 9 Step 6. |
+| D13 | Mode | Tomato `same_day`. Backtest run 78dc0a403b99: flags at least 2 days ahead on 49.6% of 123 crash episodes (full rule) and 29.3% (arrival ratio only); arrival ratio does not lead price (lag 1 correlation -0.001). No "days early" claims. |
 
 Known risk: one FPO's volume may barely move Kolar's ratio or price, so load spreading may come mostly from price impact at smaller markets. Report what the data shows; never tune the model to force a split.
 
