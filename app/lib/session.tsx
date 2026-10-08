@@ -5,7 +5,6 @@ import type {
   CropId,
   Harvest,
   Lang,
-  Origin,
   ParsedFields,
   PlanLoad,
   RecommendRequest,
@@ -131,8 +130,4 @@ export async function readCachedRisk(crop: CropId): Promise<RiskResponse | null>
   } catch {
     return null;
   }
-}
-
-export function originOf(d: LoadDraft): Origin {
-  return { lat: d.lat, lon: d.lon, place: d.origin_place ?? '' };
 }

@@ -1,7 +1,7 @@
 {
  "_fixture": true,
- "_note": "Development fixture copied from backend/tests/api_fixtures/recommend_glut_day.json; the backend's synthetic TEST ONLY data. Not real data.",
- "plan_id": "p_20250404_2d9643e8e0",
+ "_note": "Development fixture copied from backend/tests/api_fixtures/recommend_price_crash_hi.json; the backend's synthetic TEST ONLY data. Not real data.",
+ "plan_id": "p_20250404_a9e6732dd9",
  "mode": "same_day",
  "replay_date": "2025-04-04",
  "demo_loads": true,
@@ -56,14 +56,14 @@
   "type": "mandi",
   "state": "KA",
   "net_rs_per_kg": {
-   "low": 12.4984,
-   "mid": 12.8767,
-   "high": 13.2179
+   "low": 11.6713,
+   "mid": 12.2119,
+   "high": 12.7307
   },
   "price_rs_per_kg": {
-   "low": 13.7935,
-   "mid": 14.0895,
-   "high": 14.3918
+   "low": 12.8863,
+   "mid": 13.3664,
+   "high": 13.8644
   },
   "distance_km": 7.12,
   "distance_approx": false,
@@ -79,12 +79,12 @@
   "fee_pct": 0.0,
   "commission_pct": 0.05,
   "handling_pct": 0.01,
-  "risk_level": "glut",
-  "arrival_ratio": 2.4485,
-  "projected_arrival_ratio": 2.4513,
-  "projected_risk_level": "glut",
-  "price_change_3d": 0.163,
-  "elasticity_b": -0.4988,
+  "risk_level": "watch",
+  "arrival_ratio": 0.9794,
+  "projected_arrival_ratio": 0.9822,
+  "projected_risk_level": "watch",
+  "price_change_3d": -0.3022,
+  "elasticity_b": -0.4857,
   "stale": false,
   "latest_date": "2025-04-04",
   "data_complete": true
@@ -174,14 +174,14 @@
    "type": "mandi",
    "state": "KA",
    "net_rs_per_kg": {
-    "low": 12.4984,
-    "mid": 12.8767,
-    "high": 13.2179
+    "low": 11.6713,
+    "mid": 12.2119,
+    "high": 12.7307
    },
    "price_rs_per_kg": {
-    "low": 13.7935,
-    "mid": 14.0895,
-    "high": 14.3918
+    "low": 12.8863,
+    "mid": 13.3664,
+    "high": 13.8644
    },
    "distance_km": 7.12,
    "distance_approx": false,
@@ -197,12 +197,12 @@
    "fee_pct": 0.0,
    "commission_pct": 0.05,
    "handling_pct": 0.01,
-   "risk_level": "glut",
-   "arrival_ratio": 2.4485,
-   "projected_arrival_ratio": 2.4513,
-   "projected_risk_level": "glut",
-   "price_change_3d": 0.163,
-   "elasticity_b": -0.4988,
+   "risk_level": "watch",
+   "arrival_ratio": 0.9794,
+   "projected_arrival_ratio": 0.9822,
+   "projected_risk_level": "watch",
+   "price_change_3d": -0.3022,
+   "elasticity_b": -0.4857,
    "stale": false,
    "latest_date": "2025-04-04",
    "data_complete": true
@@ -311,18 +311,18 @@
  "impact": {
   "redirected_kg": 2000,
   "waste_avoided_kg": {
-   "low": 67.4692,
-   "mid": 393.9287,
-   "high": 819.4125
+   "low": -32.5308,
+   "mid": -6.0713,
+   "high": 119.4125
   },
   "extra_km": 36.56,
   "diesel_l": 5.1184,
   "co2_kg": 13.7173,
-  "water_l": 72482.8879
+  "water_l": -1117.1121
  },
  "explanation": {
-  "language": "en",
-  "text": "Send to Chintamani. Rs 19.3-20.5 per kg. Kolar is receiving 2.4x its usual tomato today. (Kolar: Rs 12.5-13.2).",
+  "language": "hi",
+  "text": "Chintamani भेजें. ₹19.3-20.5 प्रति किलो. Kolar: 3 दिन में -30%. (Kolar: ₹11.7-12.7).",
   "source": "template"
  },
  "advice": null,

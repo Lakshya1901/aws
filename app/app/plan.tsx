@@ -10,11 +10,12 @@ import { Banner, Btn, DataBanners, Loading, RiskBadge, Screen, T, s, useErrorTex
 import { fmtNum } from '../i18n';
 import { useSession } from '../lib/session';
 import { C, SIZE } from '../lib/theme';
-import { ImpactRows } from '../components/ImpactRows';
+import { ImpactRows, useWasteText } from '../components/ImpactRows';
 
 export default function PlanScreen() {
   const { t, lang, loads, planId, setPlanId } = useSession();
   const L = useOutletLabels();
+  const wasteText = useWasteText();
   const errorText = useErrorText();
   const [data, setData] = useState<PlanResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -68,14 +69,15 @@ export default function PlanScreen() {
             demoLoads={data.demo_loads}
           />
           {data.allocations.map((a) => {
-            const src = loads.find((l) => l.load_id === a.load_id);
+            const hold = a.outlet.type === 'hold';
+            const waste = wasteText(a.impact.waste_avoided_kg, 'load');
             return (
               <View key={a.load_id} style={s.card}>
                 <T bold size={SIZE.large}>
-                  {t('load_line', { qty: fmtNum(a.quantity_kg), crop: src ? t(`crop_${src.crop}`) : '' })}
+                  {t('load_line', { qty: fmtNum(a.quantity_kg), crop: t(`crop_${a.crop}`) })}
                 </T>
                 <T bold size={SIZE.number}>
-                  {t('send_to', { outlet: a.outlet.name })}
+                  {hold ? t('hold_title') : t('send_to', { outlet: L.name(a.outlet) })}
                 </T>
                 <View style={s.row}>
                   {a.outlet.type === 'mandi' ? (
@@ -85,8 +87,10 @@ export default function PlanScreen() {
                   )}
                   {a.outlet.partnered === false && <Banner kind="warn" text={t('not_partnered')} />}
                 </View>
-                <T>{`${L.earn(a.outlet)} (${t('estimate')})`}</T>
-                <T color={C.muted}>{L.km(a.outlet)}</T>
+                <T>{a.outlet.net_rs_per_kg ? `${L.earn(a.outlet)} (${t('estimate')})` : L.earn(a.outlet)}</T>
+                {!hold && <T color={C.muted}>{L.km(a.outlet)}</T>}
+                <T>{`${t('waste_avoided')}: ${waste.value}`}</T>
+                {waste.sub ? <T color={C.muted}>{waste.sub}</T> : null}
               </View>
             );
           })}
@@ -98,7 +102,7 @@ export default function PlanScreen() {
             <View key={m.market_id} style={[s.card, { flexDirection: 'row', justifyContent: 'space-between' }]}>
               <View style={{ flexShrink: 1, gap: 4 }}>
                 <T bold size={SIZE.large}>
-                  {m.name}
+                  {m.name ?? m.market_id}
                 </T>
                 {m.capped && <Banner kind="warn" text={t('market_capped')} />}
               </View>
