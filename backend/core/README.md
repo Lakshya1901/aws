@@ -93,3 +93,4 @@ Hold option (storable crops only): `{"outlet_id": null, "type": "hold", "net_rs_
 - Second-life outlets: no mandi wait, fee, commission or handling. In W, processor and food bank have u = 0; feed/compost counts as fully lost as food (L = 1). Hold: W null.
 - No harvest advice when the load is already harvested.
 - Predictive-mode forward projection of R is not implemented; `mode` is passed through from `config/model.json`.
+- Price-below-cost dump (D12): when the default mandi's mid net per kg is below the crop's `harvest_cost_rs_per_kg`, the default side of W uses u = max(u(R), `below_cost_dump_share`) for each of low/mid/high (`config/assumptions.json`, placeholder) and `assumptions_used` lists `below_cost_dump_share`. The advised side is unchanged.

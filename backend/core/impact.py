@@ -28,11 +28,20 @@ def _loss_parts(option, table):
     return option["spoilage_range"], u
 
 
-def waste_avoided(quantity_kg, default, advised, assumptions):
+def below_cost(default, harvest_cost_rs_per_kg):
+    """D12: the default mandi's mid net value per kg is below the crop's harvest cost."""
+    net = default.get("net_rs_per_kg")
+    return (default["type"] == "mandi" and net is not None and harvest_cost_rs_per_kg is not None
+            and net["mid"] < harvest_cost_rs_per_kg)
+
+
+def waste_avoided(quantity_kg, default, advised, assumptions, harvest_cost_rs_per_kg=None):
     """W = Q * (L_default - L_advised), L = min(1, s + u(R)), as {low, mid, high} or None.
 
     low: default with the band below and low spoilage vs advised with high spoilage;
     high: default with the band above and high spoilage vs advised with low spoilage.
+    Price-below-cost dump (D12): when below_cost(default), u_default = max(u(R), below_cost_dump_share)
+    for each of low/mid/high. Default side only.
     """
     if advised["outlet_id"] == default["outlet_id"] and advised["type"] == default["type"]:
         return {"low": 0.0, "mid": 0.0, "high": 0.0}
@@ -41,6 +50,9 @@ def waste_avoided(quantity_kg, default, advised, assumptions):
     if d is None or a is None:
         return None
     (sd, ud), (sa, ua) = d, a
+    if below_cost(default, harvest_cost_rs_per_kg):
+        floor = assumption(assumptions, "below_cost_dump_share")
+        ud = {k: max(ud[k], floor[k]) for k in ud}
 
     def loss(s, u):
         return min(1.0, s + u)
@@ -53,7 +65,7 @@ def waste_avoided(quantity_kg, default, advised, assumptions):
 
 def impact(quantity_kg, default, advised, crop, assumptions):
     """Impact Ledger entry for one load. waste_avoided_kg and redirected_kg are separate keys, always."""
-    w = waste_avoided(quantity_kg, default, advised, assumptions)
+    w = waste_avoided(quantity_kg, default, advised, assumptions, crop.get("harvest_cost_rs_per_kg"))
     moved = not (advised["outlet_id"] == default["outlet_id"] and advised["type"] == default["type"])
     extra_km = None if advised.get("distance_km") is None else advised["distance_km"] - default["distance_km"]
     diesel = None if extra_km is None else extra_km * assumption(assumptions, "diesel_l_per_km")

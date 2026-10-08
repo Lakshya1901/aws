@@ -4,7 +4,7 @@ The API layer adds plan_id and explanation, and maps CoreError codes to 422.
 """
 from .allocate import allocate
 from .config import assumption_entry, crop_mode, get_crop
-from .impact import total_impact
+from .impact import below_cost, total_impact
 from .pricing import fit_elasticity
 from .risk import market_risk, to_date
 
@@ -63,6 +63,8 @@ def _assumptions_used(results, crops, configs):
         i = r["impact"]
         if i["waste_avoided_kg"] is not None and i["redirected_kg"]:
             keys.add("dump_share_table")
+            if below_cost(r["default"], crops[r["crop"]]["harvest_cost_rs_per_kg"]):
+                keys.add("below_cost_dump_share")
         if i["diesel_l"] is not None:
             keys.update(("diesel_l_per_km", "co2_kg_per_l_diesel"))
     used = {k for k in keys if a[k]["status"] != "sourced"}
