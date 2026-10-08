@@ -1,0 +1,365 @@
+{
+ "dataset": "glut_day",
+ "request": {
+  "method": "POST",
+  "path": "/recommend",
+  "query": null,
+  "body": {
+   "crop": "tomato",
+   "quantity_kg": 2000,
+   "origin": {
+    "lat": 13.1,
+    "lon": 78.1,
+    "place": "test village near Kolar"
+   },
+   "harvest": "today",
+   "language": "en"
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "plan_id": "p_20250404_2d9643e8e0",
+   "mode": "same_day",
+   "replay_date": "2025-04-04",
+   "demo_loads": true,
+   "data": {
+    "as_of_date": "2025-04-04",
+    "stale": false
+   },
+   "crop": "tomato",
+   "quantity_kg": 2000,
+   "top": {
+    "outlet_id": "chintamani",
+    "name": "Chintamani",
+    "type": "mandi",
+    "state": "KA",
+    "net_rs_per_kg": {
+     "low": 19.314,
+     "mid": 19.9355,
+     "high": 20.4885
+    },
+    "price_rs_per_kg": {
+     "low": 21.8094,
+     "mid": 22.2774,
+     "high": 22.7554
+    },
+    "distance_km": 43.68,
+    "distance_approx": false,
+    "drive_hours": 1.092,
+    "spoilage_share": 0.0236,
+    "spoilage_range": {
+     "low": 0.0185,
+     "mid": 0.0236,
+     "high": 0.0324
+    },
+    "freight_rs_per_kg": 0.4805,
+    "freight_rs_load": 960.96,
+    "fee_pct": 0.0,
+    "commission_pct": 0.05,
+    "handling_pct": 0.01,
+    "risk_level": "safe",
+    "arrival_ratio": 0.9794,
+    "projected_arrival_ratio": 0.9849,
+    "projected_risk_level": "safe",
+    "price_change_3d": 0.163,
+    "elasticity_b": -0.5004,
+    "stale": false,
+    "latest_date": "2025-04-04",
+    "data_complete": true
+   },
+   "default": {
+    "outlet_id": "kolar",
+    "name": "Kolar",
+    "type": "mandi",
+    "state": "KA",
+    "net_rs_per_kg": {
+     "low": 12.4984,
+     "mid": 12.8767,
+     "high": 13.2179
+    },
+    "price_rs_per_kg": {
+     "low": 13.7935,
+     "mid": 14.0895,
+     "high": 14.3918
+    },
+    "distance_km": 7.12,
+    "distance_approx": false,
+    "drive_hours": 0.178,
+    "spoilage_share": 0.0205,
+    "spoilage_range": {
+     "low": 0.0161,
+     "mid": 0.0205,
+     "high": 0.0282
+    },
+    "freight_rs_per_kg": 0.0783,
+    "freight_rs_load": 156.64,
+    "fee_pct": 0.0,
+    "commission_pct": 0.05,
+    "handling_pct": 0.01,
+    "risk_level": "glut",
+    "arrival_ratio": 2.4485,
+    "projected_arrival_ratio": 2.4513,
+    "projected_risk_level": "glut",
+    "price_change_3d": 0.163,
+    "elasticity_b": -0.4988,
+    "stale": false,
+    "latest_date": "2025-04-04",
+    "data_complete": true
+   },
+   "alternatives": [
+    {
+     "outlet_id": "bengaluru",
+     "name": "Bengaluru",
+     "type": "mandi",
+     "state": "KA",
+     "net_rs_per_kg": {
+      "low": 18.9052,
+      "mid": 19.5462,
+      "high": 20.1102
+     },
+     "price_rs_per_kg": {
+      "low": 21.8094,
+      "mid": 22.2774,
+      "high": 22.7554
+     },
+     "distance_km": 73.98,
+     "distance_approx": false,
+     "drive_hours": 1.85,
+     "spoilage_share": 0.0261,
+     "spoilage_range": {
+      "low": 0.0205,
+      "mid": 0.0261,
+      "high": 0.0358
+     },
+     "freight_rs_per_kg": 0.8138,
+     "freight_rs_load": 1627.56,
+     "fee_pct": 0.0,
+     "commission_pct": 0.05,
+     "handling_pct": 0.01,
+     "risk_level": "safe",
+     "arrival_ratio": 0.9794,
+     "projected_arrival_ratio": 0.9803,
+     "projected_risk_level": "safe",
+     "price_change_3d": 0.163,
+     "elasticity_b": -0.5004,
+     "stale": false,
+     "latest_date": "2025-04-04",
+     "data_complete": true
+    },
+    {
+     "outlet_id": "madanapalle",
+     "name": "Madanapalle",
+     "type": "mandi",
+     "state": "AP",
+     "net_rs_per_kg": {
+      "low": 18.7326,
+      "mid": 19.3818,
+      "high": 19.9504
+     },
+     "price_rs_per_kg": {
+      "low": 21.8094,
+      "mid": 22.2774,
+      "high": 22.7554
+     },
+     "distance_km": 86.78,
+     "distance_approx": false,
+     "drive_hours": 2.169,
+     "spoilage_share": 0.0271,
+     "spoilage_range": {
+      "low": 0.0213,
+      "mid": 0.0271,
+      "high": 0.0373
+     },
+     "freight_rs_per_kg": 0.9546,
+     "freight_rs_load": 1909.16,
+     "fee_pct": 0.01,
+     "commission_pct": 0.04,
+     "handling_pct": 0.01,
+     "risk_level": "safe",
+     "arrival_ratio": 0.9794,
+     "projected_arrival_ratio": 0.9829,
+     "projected_risk_level": "safe",
+     "price_change_3d": 0.163,
+     "elasticity_b": -0.5004,
+     "stale": false,
+     "latest_date": "2025-04-04",
+     "data_complete": true
+    },
+    {
+     "outlet_id": "kolar",
+     "name": "Kolar",
+     "type": "mandi",
+     "state": "KA",
+     "net_rs_per_kg": {
+      "low": 12.4984,
+      "mid": 12.8767,
+      "high": 13.2179
+     },
+     "price_rs_per_kg": {
+      "low": 13.7935,
+      "mid": 14.0895,
+      "high": 14.3918
+     },
+     "distance_km": 7.12,
+     "distance_approx": false,
+     "drive_hours": 0.178,
+     "spoilage_share": 0.0205,
+     "spoilage_range": {
+      "low": 0.0161,
+      "mid": 0.0205,
+      "high": 0.0282
+     },
+     "freight_rs_per_kg": 0.0783,
+     "freight_rs_load": 156.64,
+     "fee_pct": 0.0,
+     "commission_pct": 0.05,
+     "handling_pct": 0.01,
+     "risk_level": "glut",
+     "arrival_ratio": 2.4485,
+     "projected_arrival_ratio": 2.4513,
+     "projected_risk_level": "glut",
+     "price_change_3d": 0.163,
+     "elasticity_b": -0.4988,
+     "stale": false,
+     "latest_date": "2025-04-04",
+     "data_complete": true
+    },
+    {
+     "outlet_id": "snr_foods",
+     "name": "SNR Foods",
+     "type": "processor",
+     "state": "KA",
+     "net_rs_per_kg": null,
+     "net_note": "not yet estimated",
+     "distance_km": 38.1,
+     "distance_approx": false,
+     "drive_hours": 0.953,
+     "spoilage_share": 0.0032,
+     "spoilage_range": {
+      "low": 0.0025,
+      "mid": 0.0032,
+      "high": 0.0044
+     },
+     "freight_rs_per_kg": 0.4191,
+     "freight_rs_load": 838.2,
+     "contact": "https://snrfoods.in/about",
+     "verified": false,
+     "note": "Not yet partnered",
+     "partnered": false
+    },
+    {
+     "outlet_id": "feel_fresh_foods",
+     "name": "Feel Fresh Foods",
+     "type": "processor",
+     "state": "AP",
+     "net_rs_per_kg": null,
+     "net_note": "not yet estimated",
+     "distance_km": 141.38,
+     "distance_approx": false,
+     "drive_hours": 3.534,
+     "spoilage_share": 0.0117,
+     "spoilage_range": {
+      "low": 0.0092,
+      "mid": 0.0117,
+      "high": 0.0161
+     },
+     "freight_rs_per_kg": 1.5552,
+     "freight_rs_load": 3110.36,
+     "contact": "https://www.feelfreshfoods.com/about-us.html",
+     "verified": false,
+     "note": "Not yet partnered",
+     "partnered": false
+    },
+    {
+     "outlet_id": "kolar_food_bank",
+     "name": "Kolar Food Bank",
+     "type": "food_bank",
+     "state": "KA",
+     "net_rs_per_kg": {
+      "low": -0.0783,
+      "mid": -0.0783,
+      "high": -0.0783
+     },
+     "net_note": null,
+     "distance_km": 7.12,
+     "distance_approx": false,
+     "drive_hours": 0.178,
+     "spoilage_share": 0.0006,
+     "spoilage_range": {
+      "low": 0.0005,
+      "mid": 0.0006,
+      "high": 0.0008
+     },
+     "freight_rs_per_kg": 0.0783,
+     "freight_rs_load": 156.64,
+     "contact": "https://kolarfoodbank.1ngo.in/",
+     "verified": false,
+     "note": "Not yet partnered",
+     "partnered": false
+    },
+    {
+     "outlet_id": "bangalore_food_bank",
+     "name": "Bangalore Food Bank (fresh produce recovery)",
+     "type": "food_bank",
+     "state": "KA",
+     "net_rs_per_kg": {
+      "low": -0.8138,
+      "mid": -0.8138,
+      "high": -0.8138
+     },
+     "net_note": null,
+     "distance_km": 73.98,
+     "distance_approx": false,
+     "drive_hours": 1.85,
+     "spoilage_share": 0.0061,
+     "spoilage_range": {
+      "low": 0.0048,
+      "mid": 0.0061,
+      "high": 0.0084
+     },
+     "freight_rs_per_kg": 0.8138,
+     "freight_rs_load": 1627.56,
+     "contact": "https://bangalorefoodbank.com/",
+     "verified": false,
+     "note": "Not yet partnered",
+     "partnered": false
+    }
+   ],
+   "impact": {
+    "redirected_kg": 2000,
+    "waste_avoided_kg": {
+     "low": 67.4692,
+     "mid": 393.9287,
+     "high": 819.4125
+    },
+    "extra_km": 36.56,
+    "diesel_l": 5.1184,
+    "co2_kg": 13.7173,
+    "water_l": 72482.8879
+   },
+   "explanation": {
+    "language": "en",
+    "text": "Send to Chintamani. Rs 19.3-20.5 per kg. Kolar is receiving 2.4x its usual tomato today. (Kolar: Rs 12.5-13.2).",
+    "source": "template"
+   },
+   "advice": null,
+   "harvest_cost_rs_per_kg": 4.7,
+   "assumptions_used": [
+    "co2_kg_per_l_diesel",
+    "commission_pct",
+    "diesel_l_per_km",
+    "dump_share_table",
+    "freight_rs_per_tonne_km",
+    "handling_pct",
+    "max_radius_km",
+    "t_wait_h",
+    "tomato.alpha",
+    "tomato.q10",
+    "tomato.sl_ref_hours",
+    "tomato.sl_ref_hours_range",
+    "tomato.water_l_per_kg"
+   ]
+  }
+ }
+}

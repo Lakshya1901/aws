@@ -1,0 +1,26 @@
+{
+ "dataset": "normal_week",
+ "request": {
+  "method": "POST",
+  "path": "/recommend",
+  "query": null,
+  "body": {
+   "crop": "onion",
+   "quantity_kg": 2000,
+   "origin": {
+    "lat": 13.1,
+    "lon": 78.1,
+    "place": "test village near Kolar"
+   },
+   "harvest": "today",
+   "language": "en"
+  }
+ },
+ "response": {
+  "status": 422,
+  "body": {
+   "error": "crop_not_configured",
+   "message": "Crop profile 'onion' is incomplete: null or missing sl_ref_hours, sl_ref_hours_range, q10, alpha, harvest_cost_rs_per_kg"
+  }
+ }
+}
