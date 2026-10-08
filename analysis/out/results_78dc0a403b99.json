@@ -57,7 +57,7 @@
   "candidates": [
    {
     "alt": {
-     "R": 1.84,
+     "R": 1.56,
      "arrivals_t": 6.0,
      "level": "watch",
      "modal_rs_kg": 19.73
@@ -66,7 +66,7 @@
     "date": "2025-03-01",
     "gross_gap_rs_kg": 14.27,
     "kolar": {
-     "R": 0.69,
+     "R": 0.65,
      "arrivals_t": 694.0,
      "level": "safe",
      "modal_rs_kg": 5.47
@@ -75,7 +75,7 @@
    },
    {
     "alt": {
-     "R": 0.94,
+     "R": 1.14,
      "arrivals_t": 27.0,
      "level": "safe",
      "modal_rs_kg": 15.91
@@ -84,7 +84,7 @@
     "date": "2025-04-24",
     "gross_gap_rs_kg": 11.31,
     "kolar": {
-     "R": 0.93,
+     "R": 0.81,
      "arrivals_t": 840.0,
      "level": "watch",
      "modal_rs_kg": 4.6
@@ -93,7 +93,7 @@
    },
    {
     "alt": {
-     "R": 1.55,
+     "R": 1.47,
      "arrivals_t": 189.1,
      "level": "watch",
      "modal_rs_kg": 18.2
@@ -102,7 +102,7 @@
     "date": "2025-02-07",
     "gross_gap_rs_kg": 10.83,
     "kolar": {
-     "R": 0.82,
+     "R": 0.73,
      "arrivals_t": 673.0,
      "level": "safe",
      "modal_rs_kg": 7.37
@@ -113,7 +113,7 @@
   "candidates_kolar_flagged_watch_or_glut": [
    {
     "alt": {
-     "R": 0.94,
+     "R": 1.14,
      "arrivals_t": 27.0,
      "level": "safe",
      "modal_rs_kg": 15.91
@@ -122,7 +122,7 @@
     "date": "2025-04-24",
     "gross_gap_rs_kg": 11.31,
     "kolar": {
-     "R": 0.93,
+     "R": 0.81,
      "arrivals_t": 840.0,
      "level": "watch",
      "modal_rs_kg": 4.6
@@ -131,7 +131,7 @@
    },
    {
     "alt": {
-     "R": 0.71,
+     "R": 0.72,
      "arrivals_t": 14.0,
      "level": "safe",
      "modal_rs_kg": 15.0
@@ -149,7 +149,7 @@
    },
    {
     "alt": {
-     "R": 1.61,
+     "R": 1.73,
      "arrivals_t": 163.7,
      "level": "watch",
      "modal_rs_kg": 15.78
@@ -158,7 +158,7 @@
     "date": "2025-02-01",
     "gross_gap_rs_kg": 9.3,
     "kolar": {
-     "R": 1.02,
+     "R": 1.01,
      "arrivals_t": 672.0,
      "level": "watch",
      "modal_rs_kg": 6.48
@@ -172,9 +172,9 @@
   "alternative_pays_gross": true,
   "mode": "same_day",
   "rule": "predictive only if arrival-ratio flags lead crash episodes by >= 2 days on most (>50%) scorable episodes and an alternative pays; else same_day (CLAUDE.md Sections 7, 17.2)",
-  "share_episodes_any_flag_lead_ge_2": 0.496,
-  "share_episodes_arrival_lead_ge_2": 0.293,
-  "strongest_negative_corr": -0.001,
+  "share_episodes_any_flag_lead_ge_2": 0.463,
+  "share_episodes_arrival_lead_ge_2": 0.268,
+  "strongest_negative_corr": 0.003,
   "strongest_negative_lag_days": 1
  },
  "model": {
@@ -284,7 +284,7 @@
     "start": "2022-12-24"
    },
    {
-    "R_at_start": 0.58,
+    "R_at_start": 0.65,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -300,7 +300,7 @@
     "start": "2023-02-05"
    },
    {
-    "R_at_start": 0.53,
+    "R_at_start": 0.57,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -308,7 +308,7 @@
     "start": "2023-02-22"
    },
    {
-    "R_at_start": 0.51,
+    "R_at_start": 0.98,
     "lead_any_flag_days": 5,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -316,15 +316,15 @@
     "start": "2023-03-27"
    },
    {
-    "R_at_start": 0.67,
-    "lead_any_flag_days": 6,
-    "lead_arrival_flag_days": null,
+    "R_at_start": 0.79,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
     "market_id": "bengaluru",
     "price_kg_at_start": 5.75,
     "start": "2023-04-22"
    },
    {
-    "R_at_start": 0.86,
+    "R_at_start": 0.74,
     "lead_any_flag_days": 1,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -332,7 +332,7 @@
     "start": "2023-08-05"
    },
    {
-    "R_at_start": 0.96,
+    "R_at_start": 0.98,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -340,7 +340,7 @@
     "start": "2023-10-02"
    },
    {
-    "R_at_start": 0.85,
+    "R_at_start": 0.88,
     "lead_any_flag_days": 5,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -348,7 +348,7 @@
     "start": "2023-10-24"
    },
    {
-    "R_at_start": 0.76,
+    "R_at_start": 0.66,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -356,7 +356,7 @@
     "start": "2023-11-22"
    },
    {
-    "R_at_start": 0.75,
+    "R_at_start": 0.65,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -364,7 +364,7 @@
     "start": "2023-12-23"
    },
    {
-    "R_at_start": 0.58,
+    "R_at_start": 0.59,
     "lead_any_flag_days": 6,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -372,7 +372,7 @@
     "start": "2024-01-15"
    },
    {
-    "R_at_start": 0.64,
+    "R_at_start": 0.67,
     "lead_any_flag_days": 6,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -380,7 +380,7 @@
     "start": "2024-02-14"
    },
    {
-    "R_at_start": 0.91,
+    "R_at_start": 0.98,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -388,7 +388,7 @@
     "start": "2024-03-02"
    },
    {
-    "R_at_start": 0.7,
+    "R_at_start": 0.78,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -404,7 +404,7 @@
     "start": "2024-07-27"
    },
    {
-    "R_at_start": 0.95,
+    "R_at_start": 0.99,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -412,7 +412,7 @@
     "start": "2024-09-01"
    },
    {
-    "R_at_start": 0.57,
+    "R_at_start": 0.58,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -420,7 +420,7 @@
     "start": "2024-10-08"
    },
    {
-    "R_at_start": 0.6,
+    "R_at_start": 0.63,
     "lead_any_flag_days": 1,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -428,7 +428,7 @@
     "start": "2024-10-21"
    },
    {
-    "R_at_start": 0.52,
+    "R_at_start": 0.57,
     "lead_any_flag_days": 5,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -436,7 +436,7 @@
     "start": "2024-11-06"
    },
    {
-    "R_at_start": 0.18,
+    "R_at_start": 0.17,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -452,7 +452,7 @@
     "start": "2024-12-31"
    },
    {
-    "R_at_start": 0.79,
+    "R_at_start": 0.77,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -460,7 +460,7 @@
     "start": "2025-02-21"
    },
    {
-    "R_at_start": 0.76,
+    "R_at_start": 0.84,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -468,7 +468,7 @@
     "start": "2025-03-16"
    },
    {
-    "R_at_start": 0.8,
+    "R_at_start": 0.92,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -476,7 +476,7 @@
     "start": "2025-03-31"
    },
    {
-    "R_at_start": 0.71,
+    "R_at_start": 0.81,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "bengaluru",
@@ -572,7 +572,7 @@
     "start": "2022-12-23"
    },
    {
-    "R_at_start": 1.2,
+    "R_at_start": 0.98,
     "lead_any_flag_days": 1,
     "lead_arrival_flag_days": null,
     "market_id": "chintamani",
@@ -580,15 +580,15 @@
     "start": "2023-03-04"
    },
    {
-    "R_at_start": 1.13,
+    "R_at_start": 1.78,
     "lead_any_flag_days": 7,
-    "lead_arrival_flag_days": null,
+    "lead_arrival_flag_days": 7,
     "market_id": "chintamani",
     "price_kg_at_start": 8.9,
     "start": "2023-05-01"
    },
    {
-    "R_at_start": 0.87,
+    "R_at_start": 0.82,
     "lead_any_flag_days": 6,
     "lead_arrival_flag_days": null,
     "market_id": "chintamani",
@@ -596,7 +596,7 @@
     "start": "2023-05-30"
    },
    {
-    "R_at_start": 1.21,
+    "R_at_start": 0.28,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "chintamani",
@@ -612,7 +612,7 @@
     "start": "2023-11-24"
    },
    {
-    "R_at_start": 1.02,
+    "R_at_start": 0.86,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "chintamani",
@@ -620,7 +620,7 @@
     "start": "2024-02-16"
    },
    {
-    "R_at_start": 1.24,
+    "R_at_start": 1.0,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "chintamani",
@@ -644,7 +644,7 @@
     "start": "2024-09-23"
    },
    {
-    "R_at_start": 1.06,
+    "R_at_start": 0.81,
     "lead_any_flag_days": 3,
     "lead_arrival_flag_days": null,
     "market_id": "chintamani",
@@ -844,7 +844,7 @@
     "start": "2023-01-05"
    },
    {
-    "R_at_start": 0.8,
+    "R_at_start": 0.88,
     "lead_any_flag_days": 1,
     "lead_arrival_flag_days": null,
     "market_id": "kolar",
@@ -852,7 +852,7 @@
     "start": "2023-01-23"
    },
    {
-    "R_at_start": 0.66,
+    "R_at_start": 0.6,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "kolar",
@@ -860,7 +860,7 @@
     "start": "2023-02-23"
    },
    {
-    "R_at_start": 0.54,
+    "R_at_start": 0.5,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "kolar",
@@ -868,7 +868,7 @@
     "start": "2023-03-07"
    },
    {
-    "R_at_start": 0.83,
+    "R_at_start": 0.81,
     "lead_any_flag_days": null,
     "lead_arrival_flag_days": null,
     "market_id": "kolar",
@@ -876,15 +876,15 @@
     "start": "2023-04-05"
    },
    {
-    "R_at_start": 1.53,
-    "lead_any_flag_days": 5,
-    "lead_arrival_flag_days": 5,
+    "R_at_start": 1.82,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
     "market_id": "kolar",
     "price_kg_at_start": 5.13,
     "start": "2023-05-19"
    },
    {
-    "R_at_start": 1.45,
+    "R_at_start": 1.02,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": 7,
     "market_id": "kolar",
@@ -892,15 +892,15 @@
     "start": "2023-06-03"
    },
    {
-    "R_at_start": 1.36,
-    "lead_any_flag_days": 7,
-    "lead_arrival_flag_days": 7,
+    "R_at_start": 0.22,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
     "market_id": "kolar",
     "price_kg_at_start": 62.42,
     "start": "2023-08-03"
    },
    {
-    "R_at_start": 2.01,
+    "R_at_start": 1.87,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": 7,
     "market_id": "kolar",
@@ -916,7 +916,7 @@
     "start": "2023-12-13"
    },
    {
-    "R_at_start": 1.32,
+    "R_at_start": 1.3,
     "lead_any_flag_days": 5,
     "lead_arrival_flag_days": 0,
     "market_id": "kolar",
@@ -924,7 +924,7 @@
     "start": "2024-02-14"
    },
    {
-    "R_at_start": 1.99,
+    "R_at_start": 2.07,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": 7,
     "market_id": "kolar",
@@ -940,7 +940,7 @@
     "start": "2024-07-24"
    },
    {
-    "R_at_start": 3.38,
+    "R_at_start": 1.32,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": 7,
     "market_id": "kolar",
@@ -948,7 +948,7 @@
     "start": "2024-08-18"
    },
    {
-    "R_at_start": 1.22,
+    "R_at_start": 0.73,
     "lead_any_flag_days": 3,
     "lead_arrival_flag_days": null,
     "market_id": "kolar",
@@ -956,7 +956,7 @@
     "start": "2024-10-11"
    },
    {
-    "R_at_start": 1.16,
+    "R_at_start": 0.81,
     "lead_any_flag_days": 2,
     "lead_arrival_flag_days": null,
     "market_id": "kolar",
@@ -964,15 +964,15 @@
     "start": "2024-10-26"
    },
    {
-    "R_at_start": 1.44,
-    "lead_any_flag_days": 1,
-    "lead_arrival_flag_days": 1,
+    "R_at_start": 1.19,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
     "market_id": "kolar",
     "price_kg_at_start": 14.42,
     "start": "2024-11-10"
    },
    {
-    "R_at_start": 0.62,
+    "R_at_start": 0.69,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "kolar",
@@ -980,7 +980,7 @@
     "start": "2024-12-08"
    },
    {
-    "R_at_start": 0.84,
+    "R_at_start": 1.11,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "kolar",
@@ -996,7 +996,7 @@
     "start": "2025-01-15"
    },
    {
-    "R_at_start": 0.93,
+    "R_at_start": 0.78,
     "lead_any_flag_days": 1,
     "lead_arrival_flag_days": null,
     "market_id": "kolar",
@@ -1004,7 +1004,7 @@
     "start": "2025-02-12"
    },
    {
-    "R_at_start": 0.74,
+    "R_at_start": 0.65,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "kolar",
@@ -1012,7 +1012,7 @@
     "start": "2025-02-23"
    },
    {
-    "R_at_start": 0.76,
+    "R_at_start": 0.75,
     "lead_any_flag_days": null,
     "lead_arrival_flag_days": null,
     "market_id": "kolar",
@@ -1020,7 +1020,7 @@
     "start": "2025-03-19"
    },
    {
-    "R_at_start": 0.6,
+    "R_at_start": 0.59,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "kolar",
@@ -1028,7 +1028,7 @@
     "start": "2025-04-03"
    },
    {
-    "R_at_start": 0.93,
+    "R_at_start": 0.81,
     "lead_any_flag_days": 2,
     "lead_arrival_flag_days": null,
     "market_id": "kolar",
@@ -1036,7 +1036,7 @@
     "start": "2025-04-24"
    },
    {
-    "R_at_start": 1.07,
+    "R_at_start": 0.78,
     "lead_any_flag_days": null,
     "lead_arrival_flag_days": null,
     "market_id": "kolar",
@@ -1044,15 +1044,15 @@
     "start": "2025-05-07"
    },
    {
-    "R_at_start": 1.07,
-    "lead_any_flag_days": 7,
-    "lead_arrival_flag_days": 7,
+    "R_at_start": 0.68,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
     "market_id": "kolar",
     "price_kg_at_start": 3.17,
     "start": "2025-05-27"
    },
    {
-    "R_at_start": 3.64,
+    "R_at_start": 1.48,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": 7,
     "market_id": "kolar",
@@ -1148,7 +1148,7 @@
     "start": "2022-12-15"
    },
    {
-    "R_at_start": 0.97,
+    "R_at_start": 1.03,
     "lead_any_flag_days": 1,
     "lead_arrival_flag_days": null,
     "market_id": "madanapalle",
@@ -1156,7 +1156,7 @@
     "start": "2023-01-22"
    },
    {
-    "R_at_start": 0.37,
+    "R_at_start": 0.3,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "madanapalle",
@@ -1164,7 +1164,7 @@
     "start": "2023-02-24"
    },
    {
-    "R_at_start": 0.2,
+    "R_at_start": 0.13,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "madanapalle",
@@ -1172,7 +1172,7 @@
     "start": "2023-03-14"
    },
    {
-    "R_at_start": 9.89,
+    "R_at_start": 5.09,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": 7,
     "market_id": "madanapalle",
@@ -1180,7 +1180,7 @@
     "start": "2023-06-03"
    },
    {
-    "R_at_start": 7.17,
+    "R_at_start": 3.88,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": 7,
     "market_id": "madanapalle",
@@ -1188,23 +1188,23 @@
     "start": "2023-06-17"
    },
    {
-    "R_at_start": 0.99,
-    "lead_any_flag_days": 7,
-    "lead_arrival_flag_days": 7,
+    "R_at_start": 0.4,
+    "lead_any_flag_days": 4,
+    "lead_arrival_flag_days": null,
     "market_id": "madanapalle",
     "price_kg_at_start": 17.9,
     "start": "2023-08-24"
    },
    {
-    "R_at_start": 0.92,
-    "lead_any_flag_days": 5,
-    "lead_arrival_flag_days": null,
+    "R_at_start": 2.68,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
     "market_id": "madanapalle",
     "price_kg_at_start": 15.33,
     "start": "2023-11-16"
    },
    {
-    "R_at_start": 1.72,
+    "R_at_start": 6.1,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": 7,
     "market_id": "madanapalle",
@@ -1221,14 +1221,14 @@
    },
    {
     "R_at_start": 1.63,
-    "lead_any_flag_days": 4,
-    "lead_arrival_flag_days": 4,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
     "market_id": "madanapalle",
     "price_kg_at_start": 17.1,
     "start": "2024-01-05"
    },
    {
-    "R_at_start": 0.79,
+    "R_at_start": 0.85,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "madanapalle",
@@ -1236,7 +1236,7 @@
     "start": "2024-01-20"
    },
    {
-    "R_at_start": 1.42,
+    "R_at_start": 1.17,
     "lead_any_flag_days": 6,
     "lead_arrival_flag_days": 6,
     "market_id": "madanapalle",
@@ -1244,7 +1244,7 @@
     "start": "2024-02-24"
    },
    {
-    "R_at_start": 0.88,
+    "R_at_start": 0.64,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "madanapalle",
@@ -1268,7 +1268,7 @@
     "start": "2024-07-24"
    },
    {
-    "R_at_start": 2.24,
+    "R_at_start": 1.52,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": 7,
     "market_id": "madanapalle",
@@ -1276,15 +1276,15 @@
     "start": "2024-10-10"
    },
    {
-    "R_at_start": 2.37,
-    "lead_any_flag_days": 7,
-    "lead_arrival_flag_days": 7,
+    "R_at_start": 2.78,
+    "lead_any_flag_days": 5,
+    "lead_arrival_flag_days": 5,
     "market_id": "madanapalle",
     "price_kg_at_start": 18.85,
     "start": "2024-11-09"
    },
    {
-    "R_at_start": 1.05,
+    "R_at_start": 3.7,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": 7,
     "market_id": "madanapalle",
@@ -1300,7 +1300,7 @@
     "start": "2024-12-30"
    },
    {
-    "R_at_start": 1.8,
+    "R_at_start": 1.91,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": 7,
     "market_id": "madanapalle",
@@ -1316,7 +1316,7 @@
     "start": "2025-02-13"
    },
    {
-    "R_at_start": 2.55,
+    "R_at_start": 1.89,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": 7,
     "market_id": "madanapalle",
@@ -1412,7 +1412,7 @@
     "start": "2022-10-23"
    },
    {
-    "R_at_start": 1.25,
+    "R_at_start": 1.11,
     "lead_any_flag_days": 4,
     "lead_arrival_flag_days": 4,
     "market_id": "mandya",
@@ -1422,13 +1422,13 @@
    {
     "R_at_start": null,
     "lead_any_flag_days": 7,
-    "lead_arrival_flag_days": 6,
+    "lead_arrival_flag_days": null,
     "market_id": "mandya",
     "price_kg_at_start": 10.0,
     "start": "2023-02-19"
    },
    {
-    "R_at_start": 1.92,
+    "R_at_start": 1.7,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": 7,
     "market_id": "mandya",
@@ -1436,15 +1436,15 @@
     "start": "2023-04-03"
    },
    {
-    "R_at_start": 1.71,
-    "lead_any_flag_days": 7,
-    "lead_arrival_flag_days": 7,
+    "R_at_start": 0.85,
+    "lead_any_flag_days": 0,
+    "lead_arrival_flag_days": null,
     "market_id": "mandya",
     "price_kg_at_start": 10.0,
     "start": "2023-06-11"
    },
    {
-    "R_at_start": 2.86,
+    "R_at_start": 8.57,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": 7,
     "market_id": "mandya",
@@ -1452,7 +1452,7 @@
     "start": "2023-08-05"
    },
    {
-    "R_at_start": 1.56,
+    "R_at_start": 2.33,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": 7,
     "market_id": "mandya",
@@ -1460,7 +1460,7 @@
     "start": "2023-08-30"
    },
    {
-    "R_at_start": 0.67,
+    "R_at_start": 1.0,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "mandya",
@@ -1492,7 +1492,7 @@
     "start": "2024-04-04"
    },
    {
-    "R_at_start": 0.55,
+    "R_at_start": 0.2,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "mandya",
@@ -1500,7 +1500,7 @@
     "start": "2024-04-28"
    },
    {
-    "R_at_start": 0.42,
+    "R_at_start": 0.33,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "mandya",
@@ -1540,7 +1540,7 @@
     "start": "2024-07-28"
    },
    {
-    "R_at_start": 0.57,
+    "R_at_start": 0.67,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "mandya",
@@ -1564,7 +1564,7 @@
     "start": "2024-12-29"
    },
    {
-    "R_at_start": 1.92,
+    "R_at_start": 1.6,
     "lead_any_flag_days": 5,
     "lead_arrival_flag_days": 5,
     "market_id": "mandya",
@@ -1580,7 +1580,7 @@
     "start": "2025-05-09"
    },
    {
-    "R_at_start": 4.56,
+    "R_at_start": 3.42,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": 7,
     "market_id": "mandya",
@@ -1700,7 +1700,7 @@
     "start": "2023-02-25"
    },
    {
-    "R_at_start": 0.09,
+    "R_at_start": 0.11,
     "lead_any_flag_days": 6,
     "lead_arrival_flag_days": null,
     "market_id": "mysuru",
@@ -1708,7 +1708,7 @@
     "start": "2023-03-11"
    },
    {
-    "R_at_start": 0.07,
+    "R_at_start": 0.09,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": null,
     "market_id": "mysuru",
@@ -1716,7 +1716,7 @@
     "start": "2023-03-19"
    },
    {
-    "R_at_start": 0.08,
+    "R_at_start": 0.14,
     "lead_any_flag_days": 2,
     "lead_arrival_flag_days": null,
     "market_id": "mysuru",
@@ -1724,7 +1724,7 @@
     "start": "2023-05-16"
    },
    {
-    "R_at_start": 0.1,
+    "R_at_start": 0.12,
     "lead_any_flag_days": 1,
     "lead_arrival_flag_days": null,
     "market_id": "mysuru",
@@ -1732,7 +1732,7 @@
     "start": "2023-06-05"
    },
    {
-    "R_at_start": 0.08,
+    "R_at_start": 0.06,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "mysuru",
@@ -1740,7 +1740,7 @@
     "start": "2023-07-05"
    },
    {
-    "R_at_start": 0.07,
+    "R_at_start": 0.06,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "mysuru",
@@ -1756,7 +1756,7 @@
     "start": "2023-09-08"
    },
    {
-    "R_at_start": 0.11,
+    "R_at_start": 0.2,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "mysuru",
@@ -1764,7 +1764,7 @@
     "start": "2023-09-19"
    },
    {
-    "R_at_start": 0.1,
+    "R_at_start": 0.64,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "mysuru",
@@ -1796,7 +1796,7 @@
     "start": "2024-02-05"
    },
    {
-    "R_at_start": 0.64,
+    "R_at_start": 0.54,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": null,
     "market_id": "mysuru",
@@ -1804,17 +1804,17 @@
     "start": "2024-02-19"
    },
    {
-    "R_at_start": 1.08,
+    "R_at_start": 1.33,
     "lead_any_flag_days": 0,
-    "lead_arrival_flag_days": null,
+    "lead_arrival_flag_days": 0,
     "market_id": "mysuru",
     "price_kg_at_start": 11.41,
     "start": "2024-03-18"
    },
    {
-    "R_at_start": 1.36,
-    "lead_any_flag_days": 3,
-    "lead_arrival_flag_days": 3,
+    "R_at_start": 1.56,
+    "lead_any_flag_days": 7,
+    "lead_arrival_flag_days": 7,
     "market_id": "mysuru",
     "price_kg_at_start": 23.8,
     "start": "2024-05-29"
@@ -1845,8 +1845,8 @@
    },
    {
     "R_at_start": null,
-    "lead_any_flag_days": 5,
-    "lead_arrival_flag_days": 5,
+    "lead_any_flag_days": null,
+    "lead_arrival_flag_days": null,
     "market_id": "mysuru",
     "price_kg_at_start": 13.83,
     "start": "2024-10-03"
@@ -1860,7 +1860,7 @@
     "start": "2024-12-09"
    },
    {
-    "R_at_start": 0.84,
+    "R_at_start": 0.79,
     "lead_any_flag_days": 7,
     "lead_arrival_flag_days": null,
     "market_id": "mysuru",
@@ -1868,7 +1868,7 @@
     "start": "2025-02-20"
    },
    {
-    "R_at_start": 0.92,
+    "R_at_start": 1.11,
     "lead_any_flag_days": 0,
     "lead_arrival_flag_days": null,
     "market_id": "mysuru",
@@ -1903,7 +1903,7 @@
      "start": "2025-01-15"
     },
     {
-     "R_at_start": 0.93,
+     "R_at_start": 0.78,
      "lead_any_flag_days": 1,
      "lead_arrival_flag_days": null,
      "market_id": "kolar",
@@ -1911,7 +1911,7 @@
      "start": "2025-02-12"
     },
     {
-     "R_at_start": 0.74,
+     "R_at_start": 0.65,
      "lead_any_flag_days": 0,
      "lead_arrival_flag_days": null,
      "market_id": "kolar",
@@ -1919,7 +1919,7 @@
      "start": "2025-02-23"
     },
     {
-     "R_at_start": 0.76,
+     "R_at_start": 0.75,
      "lead_any_flag_days": null,
      "lead_arrival_flag_days": null,
      "market_id": "kolar",
@@ -1927,7 +1927,7 @@
      "start": "2025-03-19"
     },
     {
-     "R_at_start": 0.6,
+     "R_at_start": 0.59,
      "lead_any_flag_days": 0,
      "lead_arrival_flag_days": null,
      "market_id": "kolar",
@@ -1935,7 +1935,7 @@
      "start": "2025-04-03"
     },
     {
-     "R_at_start": 0.93,
+     "R_at_start": 0.81,
      "lead_any_flag_days": 2,
      "lead_arrival_flag_days": null,
      "market_id": "kolar",
@@ -1949,116 +1949,116 @@
     "watch": 24
    },
    "kolar_max_R": 1.26,
-   "kolar_median_R": 0.8
+   "kolar_median_R": 0.75
   },
   "lead_arrival_ratio_only": {
    "episodes_scorable": 123,
    "episodes_total": 214,
-   "false_alarm_days": 1028,
-   "false_alarm_share": 0.757,
-   "flag_days": 1358,
-   "flagged_in_window": 39,
-   "lead_ge_2_days": 36,
-   "share_lead_ge_2": 0.293
+   "false_alarm_days": 862,
+   "false_alarm_share": 0.75,
+   "flag_days": 1149,
+   "flagged_in_window": 36,
+   "lead_ge_2_days": 33,
+   "share_lead_ge_2": 0.268
   },
   "lead_full_rule": {
    "episodes_scorable": 123,
    "episodes_total": 214,
-   "false_alarm_days": 1191,
-   "false_alarm_share": 0.663,
-   "flag_days": 1797,
-   "flagged_in_window": 117,
-   "lead_ge_2_days": 61,
-   "share_lead_ge_2": 0.496
+   "false_alarm_days": 1029,
+   "false_alarm_share": 0.642,
+   "flag_days": 1603,
+   "flagged_in_window": 116,
+   "lead_ge_2_days": 57,
+   "share_lead_ge_2": 0.463
   },
   "note": "R, risk levels, flags and leads are model output from the Section 9 Step 1 rule on observed data.",
   "threshold_sweep_arrival_ratio": [
    {
     "episodes_scorable": 123,
     "episodes_total": 214,
-    "false_alarm_days": 1337,
-    "false_alarm_share": 0.743,
-    "flag_days": 1799,
-    "flagged_in_window": 48,
-    "lead_ge_2_days": 45,
-    "share_lead_ge_2": 0.366,
+    "false_alarm_days": 1156,
+    "false_alarm_share": 0.755,
+    "flag_days": 1531,
+    "flagged_in_window": 46,
+    "lead_ge_2_days": 42,
+    "share_lead_ge_2": 0.341,
     "watch_r": 1.1
    },
    {
     "episodes_scorable": 123,
     "episodes_total": 214,
-    "false_alarm_days": 1165,
-    "false_alarm_share": 0.745,
-    "flag_days": 1564,
-    "flagged_in_window": 46,
-    "lead_ge_2_days": 43,
-    "share_lead_ge_2": 0.35,
+    "false_alarm_days": 1012,
+    "false_alarm_share": 0.758,
+    "flag_days": 1335,
+    "flagged_in_window": 38,
+    "lead_ge_2_days": 36,
+    "share_lead_ge_2": 0.293,
     "watch_r": 1.2
    },
    {
     "episodes_scorable": 123,
     "episodes_total": 214,
-    "false_alarm_days": 1028,
-    "false_alarm_share": 0.757,
-    "flag_days": 1358,
-    "flagged_in_window": 39,
-    "lead_ge_2_days": 36,
-    "share_lead_ge_2": 0.293,
+    "false_alarm_days": 862,
+    "false_alarm_share": 0.75,
+    "flag_days": 1149,
+    "flagged_in_window": 36,
+    "lead_ge_2_days": 33,
+    "share_lead_ge_2": 0.268,
     "watch_r": 1.3
    },
    {
     "episodes_scorable": 123,
     "episodes_total": 214,
-    "false_alarm_days": 830,
-    "false_alarm_share": 0.771,
-    "flag_days": 1076,
-    "flagged_in_window": 31,
-    "lead_ge_2_days": 30,
-    "share_lead_ge_2": 0.244,
+    "false_alarm_days": 687,
+    "false_alarm_share": 0.744,
+    "flag_days": 924,
+    "flagged_in_window": 30,
+    "lead_ge_2_days": 29,
+    "share_lead_ge_2": 0.236,
     "watch_r": 1.5
    },
    {
     "episodes_scorable": 123,
     "episodes_total": 214,
-    "false_alarm_days": 727,
-    "false_alarm_share": 0.797,
-    "flag_days": 912,
+    "false_alarm_days": 563,
+    "false_alarm_share": 0.752,
+    "flag_days": 749,
     "flagged_in_window": 24,
-    "lead_ge_2_days": 20,
-    "share_lead_ge_2": 0.163,
+    "lead_ge_2_days": 23,
+    "share_lead_ge_2": 0.187,
     "watch_r": 1.7
    },
    {
     "episodes_scorable": 123,
     "episodes_total": 214,
-    "false_alarm_days": 573,
-    "false_alarm_share": 0.785,
-    "flag_days": 730,
+    "false_alarm_days": 438,
+    "false_alarm_share": 0.762,
+    "flag_days": 575,
     "flagged_in_window": 19,
-    "lead_ge_2_days": 15,
-    "share_lead_ge_2": 0.122,
+    "lead_ge_2_days": 17,
+    "share_lead_ge_2": 0.138,
     "watch_r": 2.0
    },
    {
     "episodes_scorable": 123,
     "episodes_total": 214,
-    "false_alarm_days": 434,
-    "false_alarm_share": 0.854,
-    "flag_days": 508,
-    "flagged_in_window": 12,
-    "lead_ge_2_days": 11,
-    "share_lead_ge_2": 0.089,
+    "false_alarm_days": 311,
+    "false_alarm_share": 0.757,
+    "flag_days": 411,
+    "flagged_in_window": 14,
+    "lead_ge_2_days": 12,
+    "share_lead_ge_2": 0.098,
     "watch_r": 2.5
    },
    {
     "episodes_scorable": 123,
     "episodes_total": 214,
-    "false_alarm_days": 343,
-    "false_alarm_share": 0.9,
-    "flag_days": 381,
-    "flagged_in_window": 5,
-    "lead_ge_2_days": 5,
-    "share_lead_ge_2": 0.041,
+    "false_alarm_days": 235,
+    "false_alarm_share": 0.746,
+    "flag_days": 315,
+    "flagged_in_window": 10,
+    "lead_ge_2_days": 9,
+    "share_lead_ge_2": 0.073,
     "watch_r": 3.0
    }
   ],
@@ -2067,97 +2067,97 @@
     "1": {
      "n": 3334,
      "per_market": {
-      "bengaluru": 0.004,
-      "chintamani": 0.092,
+      "bengaluru": 0.02,
+      "chintamani": 0.051,
       "doddaballapura": -0.034,
-      "kolar": 0.016,
-      "madanapalle": 0.092,
-      "mandya": -0.1,
-      "mysuru": -0.029
+      "kolar": 0.023,
+      "madanapalle": 0.06,
+      "mandya": -0.03,
+      "mysuru": -0.037
      },
-     "pooled_corr": -0.001
+     "pooled_corr": 0.003
     },
     "2": {
      "n": 3261,
      "per_market": {
-      "bengaluru": 0.071,
-      "chintamani": 0.109,
+      "bengaluru": 0.086,
+      "chintamani": 0.116,
       "doddaballapura": -0.027,
-      "kolar": 0.038,
-      "madanapalle": 0.143,
-      "mandya": -0.077,
-      "mysuru": -0.025
+      "kolar": 0.046,
+      "madanapalle": 0.099,
+      "mandya": -0.045,
+      "mysuru": -0.019
      },
-     "pooled_corr": 0.026
+     "pooled_corr": 0.015
     },
     "3": {
      "n": 3266,
      "per_market": {
-      "bengaluru": 0.093,
-      "chintamani": 0.104,
+      "bengaluru": 0.107,
+      "chintamani": 0.118,
       "doddaballapura": -0.003,
-      "kolar": 0.065,
-      "madanapalle": 0.192,
-      "mandya": -0.036,
-      "mysuru": -0.017
+      "kolar": 0.083,
+      "madanapalle": 0.13,
+      "mandya": -0.044,
+      "mysuru": -0.008
      },
-     "pooled_corr": 0.051
+     "pooled_corr": 0.023
     },
     "4": {
      "n": 3255,
      "per_market": {
-      "bengaluru": 0.096,
-      "chintamani": 0.114,
+      "bengaluru": 0.116,
+      "chintamani": 0.157,
       "doddaballapura": 0.106,
-      "kolar": 0.085,
-      "madanapalle": 0.229,
-      "mandya": -0.065,
-      "mysuru": -0.008
+      "kolar": 0.105,
+      "madanapalle": 0.153,
+      "mandya": -0.043,
+      "mysuru": -0.007
      },
-     "pooled_corr": 0.067
+     "pooled_corr": 0.031
     },
     "5": {
      "n": 3226,
      "per_market": {
-      "bengaluru": 0.096,
-      "chintamani": 0.147,
+      "bengaluru": 0.118,
+      "chintamani": 0.162,
       "doddaballapura": 0.153,
-      "kolar": 0.102,
-      "madanapalle": 0.259,
-      "mandya": -0.034,
-      "mysuru": 0.033
+      "kolar": 0.125,
+      "madanapalle": 0.169,
+      "mandya": -0.028,
+      "mysuru": 0.038
      },
-     "pooled_corr": 0.097
+     "pooled_corr": 0.049
     },
     "6": {
      "n": 3241,
      "per_market": {
-      "bengaluru": 0.122,
-      "chintamani": 0.205,
+      "bengaluru": 0.133,
+      "chintamani": 0.194,
       "doddaballapura": -0.013,
-      "kolar": 0.116,
-      "madanapalle": 0.275,
-      "mandya": -0.019,
-      "mysuru": 0.012
+      "kolar": 0.137,
+      "madanapalle": 0.18,
+      "mandya": -0.031,
+      "mysuru": 0.001
      },
-     "pooled_corr": 0.106
+     "pooled_corr": 0.058
     },
     "7": {
      "n": 3332,
      "per_market": {
-      "bengaluru": 0.134,
-      "chintamani": 0.192,
+      "bengaluru": 0.139,
+      "chintamani": 0.14,
       "doddaballapura": 0.064,
-      "kolar": 0.121,
-      "madanapalle": 0.291,
-      "mandya": -0.033,
-      "mysuru": -0.014
+      "kolar": 0.144,
+      "madanapalle": 0.201,
+      "mandya": 0.012,
+      "mysuru": -0.023
      },
-     "pooled_corr": 0.11
+     "pooled_corr": 0.068
     }
    },
    "note": "a glut signal that leads price would show clearly negative correlation; values near 0 or positive mean R does not lead price",
-   "strongest_negative_corr": -0.001,
+   "strongest_negative_corr": 0.003,
    "strongest_negative_lag_days": 1
   }
  },

@@ -52,7 +52,7 @@ def daily_tables(df):
 
 def baseline(arr_m):
     """B: median arrivals in ISO weeks w-1..w+1 of prior ISO years only (weeks 52/53 wrap to 1)."""
-    iso = arr_m.index.isocalendar()
+    iso = arr_m.index.isocalendar().astype("int64")
     obs = pd.DataFrame({"y": iso.year.values, "w": iso.week.values, "a": arr_m.values}).dropna()
     out = pd.Series(np.nan, index=arr_m.index)
     for (y, w), days in pd.DataFrame({"y": iso.year.values, "w": iso.week.values}, index=arr_m.index).groupby(["y", "w"]):
