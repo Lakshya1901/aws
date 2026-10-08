@@ -1,0 +1,7 @@
+{
+  "_fixture": true,
+  "_note": "Development fixture. Low confidence and a null field so the Confirm screen highlights chips.",
+  "transcript": "do ton tamatar, aaj todenge",
+  "fields": {"crop": "tomato", "quantity_kg": 2000, "origin_place": null, "harvest": "today"},
+  "confidence": "low"
+}
