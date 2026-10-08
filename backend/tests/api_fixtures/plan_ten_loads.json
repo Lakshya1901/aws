@@ -155,14 +155,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 19.314,
+       "low": 18.6462,
        "mid": 19.9355,
-       "high": 20.4885
+       "high": 21.2207
       },
       "price_rs_per_kg": {
-       "low": 21.8094,
+       "low": 21.0736,
        "mid": 22.2774,
-       "high": 22.7554
+       "high": 23.55
       },
       "distance_km": 43.68,
       "distance_approx": false,
@@ -194,14 +194,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.4984,
+       "low": 12.0429,
        "mid": 12.8767,
-       "high": 13.2179
+       "high": 13.7176
       },
       "price_rs_per_kg": {
-       "low": 13.7935,
+       "low": 13.2939,
        "mid": 14.0895,
-       "high": 14.3918
+       "high": 14.9327
       },
       "distance_km": 7.12,
       "distance_approx": false,
@@ -251,14 +251,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 18.9052,
+       "low": 18.2399,
        "mid": 19.5462,
-       "high": 20.1102
+       "high": 20.8408
       },
       "price_rs_per_kg": {
-       "low": 21.8094,
+       "low": 21.0736,
        "mid": 22.2774,
-       "high": 22.7554
+       "high": 23.55
       },
       "distance_km": 73.98,
       "distance_approx": false,
@@ -290,14 +290,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.4984,
+       "low": 12.0429,
        "mid": 12.8767,
-       "high": 13.2179
+       "high": 13.7176
       },
       "price_rs_per_kg": {
-       "low": 13.7935,
+       "low": 13.2939,
        "mid": 14.0895,
-       "high": 14.3918
+       "high": 14.9327
       },
       "distance_km": 7.12,
       "distance_approx": false,
@@ -347,14 +347,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 18.8045,
+       "low": 18.1426,
        "mid": 19.4422,
-       "high": 20.0033
+       "high": 20.7302
       },
       "price_rs_per_kg": {
-       "low": 21.698,
+       "low": 20.9659,
        "mid": 22.1636,
-       "high": 22.6392
+       "high": 23.4297
       },
       "distance_km": 73.98,
       "distance_approx": false,
@@ -386,14 +386,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.4984,
+       "low": 12.0429,
        "mid": 12.8767,
-       "high": 13.2179
+       "high": 13.7176
       },
       "price_rs_per_kg": {
-       "low": 13.7935,
+       "low": 13.2939,
        "mid": 14.0895,
-       "high": 14.3918
+       "high": 14.9327
       },
       "distance_km": 7.12,
       "distance_approx": false,
@@ -443,14 +443,14 @@
       "type": "mandi",
       "state": "AP",
       "net_rs_per_kg": {
-       "low": 18.7326,
+       "low": 18.0684,
        "mid": 19.3818,
-       "high": 19.9504
+       "high": 20.6804
       },
       "price_rs_per_kg": {
-       "low": 21.8094,
+       "low": 21.0736,
        "mid": 22.2774,
-       "high": 22.7554
+       "high": 23.55
       },
       "distance_km": 86.78,
       "distance_approx": false,
@@ -482,14 +482,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.4984,
+       "low": 12.0429,
        "mid": 12.8767,
-       "high": 13.2179
+       "high": 13.7176
       },
       "price_rs_per_kg": {
-       "low": 13.7935,
+       "low": 13.2939,
        "mid": 14.0895,
-       "high": 14.3918
+       "high": 14.9327
       },
       "distance_km": 7.12,
       "distance_approx": false,
@@ -539,14 +539,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 18.725,
+       "low": 18.0658,
        "mid": 19.3601,
-       "high": 19.919
+       "high": 20.6429
       },
       "price_rs_per_kg": {
-       "low": 21.6101,
+       "low": 20.881,
        "mid": 22.0738,
-       "high": 22.5475
+       "high": 23.3348
       },
       "distance_km": 73.98,
       "distance_approx": false,
@@ -578,14 +578,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.4984,
+       "low": 12.0429,
        "mid": 12.8767,
-       "high": 13.2179
+       "high": 13.7176
       },
       "price_rs_per_kg": {
-       "low": 13.7935,
+       "low": 13.2939,
        "mid": 14.0895,
-       "high": 14.3918
+       "high": 14.9327
       },
       "distance_km": 7.12,
       "distance_approx": false,
@@ -635,14 +635,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 18.666,
+       "low": 18.0088,
        "mid": 19.2992,
-       "high": 19.8564
+       "high": 20.5781
       },
       "price_rs_per_kg": {
-       "low": 21.5448,
+       "low": 20.8179,
        "mid": 22.0072,
-       "high": 22.4794
+       "high": 23.2643
       },
       "distance_km": 73.98,
       "distance_approx": false,
@@ -674,14 +674,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.4984,
+       "low": 12.0429,
        "mid": 12.8767,
-       "high": 13.2179
+       "high": 13.7176
       },
       "price_rs_per_kg": {
-       "low": 13.7935,
+       "low": 13.2939,
        "mid": 14.0895,
-       "high": 14.3918
+       "high": 14.9327
       },
       "distance_km": 7.12,
       "distance_approx": false,
@@ -731,14 +731,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 18.6076,
+       "low": 17.9523,
        "mid": 19.2388,
-       "high": 19.7943
+       "high": 20.5139
       },
       "price_rs_per_kg": {
-       "low": 21.4802,
+       "low": 20.7555,
        "mid": 21.9411,
-       "high": 22.412
+       "high": 23.1945
       },
       "distance_km": 73.98,
       "distance_approx": false,
@@ -770,14 +770,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.4984,
+       "low": 12.0429,
        "mid": 12.8767,
-       "high": 13.2179
+       "high": 13.7176
       },
       "price_rs_per_kg": {
-       "low": 13.7935,
+       "low": 13.2939,
        "mid": 14.0895,
-       "high": 14.3918
+       "high": 14.9327
       },
       "distance_km": 7.12,
       "distance_approx": false,
@@ -827,14 +827,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 18.5612,
+       "low": 17.9075,
        "mid": 19.1909,
-       "high": 19.7451
+       "high": 20.463
       },
       "price_rs_per_kg": {
-       "low": 21.4289,
+       "low": 20.7059,
        "mid": 21.8887,
-       "high": 22.3584
+       "high": 23.1391
       },
       "distance_km": 73.98,
       "distance_approx": false,
@@ -866,14 +866,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.4984,
+       "low": 12.0429,
        "mid": 12.8767,
-       "high": 13.2179
+       "high": 13.7176
       },
       "price_rs_per_kg": {
-       "low": 13.7935,
+       "low": 13.2939,
        "mid": 14.0895,
-       "high": 14.3918
+       "high": 14.9327
       },
       "distance_km": 7.12,
       "distance_approx": false,
@@ -923,14 +923,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 18.5228,
+       "low": 17.8704,
        "mid": 19.1513,
-       "high": 19.7044
+       "high": 20.4208
       },
       "price_rs_per_kg": {
-       "low": 21.3864,
+       "low": 20.6649,
        "mid": 21.8453,
-       "high": 22.3141
+       "high": 23.0933
       },
       "distance_km": 73.98,
       "distance_approx": false,
@@ -962,14 +962,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.4984,
+       "low": 12.0429,
        "mid": 12.8767,
-       "high": 13.2179
+       "high": 13.7176
       },
       "price_rs_per_kg": {
-       "low": 13.7935,
+       "low": 13.2939,
        "mid": 14.0895,
-       "high": 14.3918
+       "high": 14.9327
       },
       "distance_km": 7.12,
       "distance_approx": false,
@@ -1019,14 +1019,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 18.4922,
+       "low": 17.8409,
        "mid": 19.1197,
-       "high": 19.672
+       "high": 20.3873
       },
       "price_rs_per_kg": {
-       "low": 21.3526,
+       "low": 20.6322,
        "mid": 21.8108,
-       "high": 22.2788
+       "high": 23.0568
       },
       "distance_km": 73.98,
       "distance_approx": false,
@@ -1058,14 +1058,14 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.4984,
+       "low": 12.0429,
        "mid": 12.8767,
-       "high": 13.2179
+       "high": 13.7176
       },
       "price_rs_per_kg": {
-       "low": 13.7935,
+       "low": 13.2939,
        "mid": 14.0895,
-       "high": 14.3918
+       "high": 14.9327
       },
       "distance_km": 7.12,
       "distance_approx": false,

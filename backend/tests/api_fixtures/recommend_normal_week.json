@@ -35,14 +35,14 @@
     "type": "mandi",
     "state": "KA",
     "net_rs_per_kg": {
-     "low": 19.8072,
+     "low": 19.1363,
      "mid": 20.4053,
-     "high": 20.9449
+     "high": 21.679
     },
     "price_rs_per_kg": {
-     "low": 21.8094,
+     "low": 21.0736,
      "mid": 22.2774,
-     "high": 22.7554
+     "high": 23.55
     },
     "distance_km": 7.12,
     "distance_approx": false,
@@ -74,14 +74,14 @@
     "type": "mandi",
     "state": "KA",
     "net_rs_per_kg": {
-     "low": 19.8072,
+     "low": 19.1363,
      "mid": 20.4053,
-     "high": 20.9449
+     "high": 21.679
     },
     "price_rs_per_kg": {
-     "low": 21.8094,
+     "low": 21.0736,
      "mid": 22.2774,
-     "high": 22.7554
+     "high": 23.55
     },
     "distance_km": 7.12,
     "distance_approx": false,
@@ -114,14 +114,14 @@
      "type": "mandi",
      "state": "KA",
      "net_rs_per_kg": {
-      "low": 19.314,
+      "low": 18.6462,
       "mid": 19.9355,
-      "high": 20.4885
+      "high": 21.2207
      },
      "price_rs_per_kg": {
-      "low": 21.8094,
+      "low": 21.0736,
       "mid": 22.2774,
-      "high": 22.7554
+      "high": 23.55
      },
      "distance_km": 43.68,
      "distance_approx": false,
@@ -153,14 +153,14 @@
      "type": "mandi",
      "state": "KA",
      "net_rs_per_kg": {
-      "low": 18.9052,
+      "low": 18.2399,
       "mid": 19.5462,
-      "high": 20.1102
+      "high": 20.8408
      },
      "price_rs_per_kg": {
-      "low": 21.8094,
+      "low": 21.0736,
       "mid": 22.2774,
-      "high": 22.7554
+      "high": 23.55
      },
      "distance_km": 73.98,
      "distance_approx": false,
@@ -192,14 +192,14 @@
      "type": "mandi",
      "state": "AP",
      "net_rs_per_kg": {
-      "low": 18.7326,
+      "low": 18.0684,
       "mid": 19.3818,
-      "high": 19.9504
+      "high": 20.6804
      },
      "price_rs_per_kg": {
-      "low": 21.8094,
+      "low": 21.0736,
       "mid": 22.2774,
-      "high": 22.7554
+      "high": 23.55
      },
      "distance_km": 86.78,
      "distance_approx": false,
@@ -340,7 +340,7 @@
    },
    "explanation": {
     "language": "en",
-    "text": "Send to Kolar. Rs 19.8-20.9 per kg.",
+    "text": "Send to Kolar. Rs 19.1-21.7 per kg.",
     "source": "template"
    },
    "advice": null,

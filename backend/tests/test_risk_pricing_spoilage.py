@@ -3,7 +3,7 @@ from math import log
 import pytest
 
 from backend.core.netvalue import net_value
-from backend.core.pricing import fit_elasticity, price_on_arrival
+from backend.core.pricing import fit_elasticity, price_change_sd, price_on_arrival
 from backend.core.risk import market_risk, projected_ratio, risk_level
 from backend.core.spoilage import spoilage_share
 from backend.tests.fixtures import AS_OF, history
@@ -79,6 +79,15 @@ def test_price_on_arrival_falls_with_added_load_and_range_is_one_sd():
     assert log(p2["mid"] / p2["low"]) == pytest.approx(0.1)
     wide = price_on_arrival(20, 10, 10, -0.5, 0.1, 1.5)
     assert log(wide["high"] / wide["mid"]) == pytest.approx(0.15)
+
+
+def test_price_range_sd_is_day_to_day_change_and_skips_gaps():
+    rows = [{"date": d, "modal_price_kg": p} for d, p in
+            [("2025-04-01", 10), ("2025-04-02", 20), ("2025-04-03", 10), ("2025-04-04", 20), ("2025-04-20", 1)]]
+    # changes ln2, -ln2, ln2 (the 16-day gap to 04-20 is skipped): mean ln2/3, sample sd = 2ln2/sqrt(3)
+    assert price_change_sd(rows, "2025-04-30", 3) == pytest.approx(2 * log(2) / 3 ** 0.5)
+    assert price_change_sd(rows[:3], "2025-04-30", 3) is None
+    assert price_change_sd(rows, "2025-04-02", 3) is None
 
 
 def test_spoilage_increases_with_temperature_and_time(configs):

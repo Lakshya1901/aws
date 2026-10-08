@@ -8,15 +8,17 @@ def fit_elasticity(rows, as_of_date, model):
     """Fit b by OLS of ln(price) on ln(arrivals) over the market's history up to as_of_date.
 
     b is clipped to the configured range; if R^2 < r2_min (or the fit is degenerate) the fallback b
-    is used. resid_sd is the residual standard deviation (log space) of the b actually used, with
-    the intercept refitted for that b. Fewer than 3 points -> resid_sd None.
+    is used. resid_sd (D15) is the standard deviation of day-to-day changes in ln(modal price) between
+    reported days at most max_gap_days apart: the uncertainty of selling at today's price on arrival.
+    Fewer than 3 such changes -> resid_sd None.
     """
     cfg = model["elasticity"]
     pts = [(log(r["arrivals_t"]), log(r["modal_price_kg"])) for r in by_date(rows, as_of_date).values()
            if r.get("arrivals_t") and r.get("modal_price_kg") and r["arrivals_t"] > 0 and r["modal_price_kg"] > 0]
     n = len(pts)
+    resid_sd = price_change_sd(rows, as_of_date, cfg["range_max_gap_days"])
     if n < 3:
-        return {"b": cfg["fallback_b"], "r2": None, "resid_sd": None, "n": n, "b_source": "fallback"}
+        return {"b": cfg["fallback_b"], "r2": None, "resid_sd": resid_sd, "n": n, "b_source": "fallback"}
     mx = sum(x for x, _ in pts) / n
     my = sum(y for _, y in pts) / n
     sxx = sum((x - mx) ** 2 for x, _ in pts)
@@ -30,9 +32,18 @@ def fit_elasticity(rows, as_of_date, model):
         b_ols = sxy / sxx
         b = min(hi, max(lo, b_ols))
         source = "fit" if b == b_ols else "clipped"
-    a = my - b * mx
-    resid_sd = sqrt(sum((y - a - b * x) ** 2 for x, y in pts) / (n - 2))
     return {"b": b, "r2": r2, "resid_sd": resid_sd, "n": n, "b_source": source}
+
+
+def price_change_sd(rows, as_of_date, max_gap_days):
+    """SD of ln(P_t / P_prev) over consecutive reported days at most max_gap_days apart."""
+    days = sorted((d, log(r["modal_price_kg"])) for d, r in by_date(rows, as_of_date).items()
+                  if r.get("modal_price_kg") and r["modal_price_kg"] > 0)
+    ch = [y2 - y1 for (d1, y1), (d2, y2) in zip(days, days[1:]) if (d2 - d1).days <= max_gap_days]
+    if len(ch) < 3:
+        return None
+    m = sum(ch) / len(ch)
+    return sqrt(sum((c - m) ** 2 for c in ch) / (len(ch) - 1))
 
 
 def price_on_arrival(price_kg, arrivals_t, added_t, b, resid_sd, sd_multiplier=1.0):
