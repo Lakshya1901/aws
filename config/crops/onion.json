@@ -1,0 +1,27 @@
+{
+  "crop_id": "onion",
+  "names": {"en": "Onion"},
+  "agmarknet_commodity": "Onion",
+  "t_ref_c": 25,
+  "sl_ref_hours": null,
+  "sl_ref_hours_range": null,
+  "q10": null,
+  "alpha": null,
+  "storable": true,
+  "harvest_cost_rs_per_kg": null,
+  "unit_box_kg": null,
+  "water_l_per_kg": null,
+  "second_life": ["processor", "food_bank"],
+  "status": {
+    "t_ref_c": "sourced",
+    "storable": "sourced",
+    "sl_ref_hours": "placeholder",
+    "q10": "placeholder",
+    "alpha": "placeholder",
+    "harvest_cost_rs_per_kg": "placeholder"
+  },
+  "sources": {
+    "storable": "CLAUDE.md Section 11: ~0 C, 70-75% RH, ~6-8 months good-condition storage",
+    "second_life": "CLAUDE.md Section 11: dehydration (processor), food bank"
+  }
+}

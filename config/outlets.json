@@ -1,0 +1,21 @@
+{
+  "_note": "Second Life outlets seeded from desk research (CLAUDE.md Section 18). Real organisations, not contacted. Coordinates are the town (not the premises), geocoded with OpenStreetMap Nominatim on 2026-10-08 (structured query city=<town>&country=India). offer_price_kg is unknown, so net value renders 'not yet estimated'.",
+  "outlets": [
+    {"outlet_id": "snr_foods", "type": "processor", "name": "SNR Foods", "state": "KA",
+      "town": "Srinivaspura", "lat": 13.3401, "lon": 78.2117, "coord_source": "nominatim node 245620044 (Srinivaspur)",
+      "crops": ["tomato"], "min_qty_kg": null, "offer_price_kg": null,
+      "contact": "https://snrfoods.in/about", "verified": false, "seeded": true, "note": "Not yet partnered"},
+    {"outlet_id": "feel_fresh_foods", "type": "processor", "name": "Feel Fresh Foods", "state": "AP",
+      "town": "Chittoor", "lat": 13.2161, "lon": 79.0973, "coord_source": "nominatim node 245619134 (Chittoor)",
+      "crops": ["tomato"], "min_qty_kg": null, "offer_price_kg": null,
+      "contact": "https://www.feelfreshfoods.com/about-us.html", "verified": false, "seeded": true, "note": "Not yet partnered"},
+    {"outlet_id": "kolar_food_bank", "type": "food_bank", "name": "Kolar Food Bank", "state": "KA",
+      "town": "Kolar", "lat": 13.1367, "lon": 78.1337, "coord_source": "nominatim node 245618507 (Kolar)",
+      "crops": ["tomato"], "min_qty_kg": null, "offer_price_kg": null,
+      "contact": "https://kolarfoodbank.1ngo.in/", "verified": false, "seeded": true, "note": "Not yet partnered"},
+    {"outlet_id": "bangalore_food_bank", "type": "food_bank", "name": "Bangalore Food Bank (fresh produce recovery)", "state": "KA",
+      "town": "Bengaluru", "lat": 12.9768, "lon": 77.5901, "coord_source": "nominatim relation 7902476 (Bengaluru)",
+      "crops": ["tomato"], "min_qty_kg": null, "offer_price_kg": null,
+      "contact": "https://bangalorefoodbank.com/", "verified": false, "seeded": true, "note": "Not yet partnered"}
+  ]
+}
