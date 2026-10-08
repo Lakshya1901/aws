@@ -173,7 +173,7 @@ Onion, potato and banana profiles exist but have placeholder fields; a profile w
 | Dump share u(R) | Placeholder heuristic | "(estimate)" |
 | Processors and food banks | Real organisations, not contacted | "Not yet partnered" |
 | Loads and villages | Simulated loads, real villages | "Demo loads" |
-| Users | Volunteers in a usability test | Stated as such |
+| Users | No usability test run yet; planned with volunteers before the demo video | Update this row once it happens |
 | Spoilage | Estimated, not measured | On the card and here |
 
 Seeded Second Life outlets (Kolar region, desk research, all "Not yet partnered"): [SNR Foods](https://snrfoods.in/about) (processor, Srinivaspura), [Feel Fresh Foods](https://www.feelfreshfoods.com/about-us.html) (processor, Chittoor belt), [Kolar Food Bank](https://kolarfoodbank.1ngo.in/), [Bangalore Food Bank](https://bangalorefoodbank.com/) fresh produce recovery.
