@@ -19,7 +19,8 @@
       "row_spoilage", "row_earn_kg", "row_earn_load", "close", "accepted", "err_no_markets", "err_crop_not_setup",
       "err_network", "err_generic", "plan_empty", "added_per_market", "market_capped", "total_impact",
       "diesel", "co2", "water", "litres_value", "kg_value", "km_value", "impact_title", "no_plan", "rs_range",
-      "type_hold", "hold_title", "hold_body", "waste_none_load", "waste_none_total", "waste_spoilage", "waste_range_loss", "water_lost", "shorter_km_value", "diesel_saved_value", "coords", "coords_invalid", "err_origin_unknown", "err_drive_time", "err_temperature", "err_plan_not_found", "err_bad_request"
+      "type_hold", "hold_title", "hold_body", "waste_none_load", "waste_none_total", "waste_spoilage", "waste_range_loss", "water_lost", "shorter_km_value", "diesel_saved_value", "coords", "coords_invalid", "err_origin_unknown", "err_drive_time", "err_temperature", "err_plan_not_found", "err_bad_request",
+      "unsold_stock", "hours_since_harvest", "edible", "spoiled", "kept_out_of_landfill", "prevented", "rescued", "recovered", "biogas_energy", "type_feed", "type_biogas", "type_compost", "no_recover_outlet"
     ]
   },
 
@@ -159,5 +160,18 @@
   "err_drive_time": "Route not available for this place yet",
   "err_temperature": "Weather data is not available for this place yet",
   "err_plan_not_found": "This plan was not found. Please start a new load.",
-  "err_bad_request": "Some details were not accepted. Please check the form and try again."
+  "err_bad_request": "Some details were not accepted. Please check the form and try again.",
+  "unsold_stock": "I have unsold stock at the market",
+  "hours_since_harvest": "Hours since harvest",
+  "edible": "Still good to eat",
+  "spoiled": "Spoiled",
+  "kept_out_of_landfill": "Kept out of landfill",
+  "prevented": "Prevented",
+  "rescued": "Rescued",
+  "recovered": "Recovered",
+  "biogas_energy": "Biogas energy",
+  "type_feed": "animal feed",
+  "type_biogas": "biogas unit",
+  "type_compost": "compost unit",
+  "no_recover_outlet": "No biogas or compost unit near you yet"
 }

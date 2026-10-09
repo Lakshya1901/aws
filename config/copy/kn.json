@@ -19,7 +19,8 @@
       "row_spoilage", "row_earn_kg", "row_earn_load", "close", "accepted", "err_no_markets", "err_crop_not_setup",
       "err_network", "err_generic", "plan_empty", "added_per_market", "market_capped", "total_impact",
       "diesel", "co2", "water", "litres_value", "kg_value", "km_value", "impact_title", "no_plan", "rs_range",
-      "type_hold", "hold_title", "hold_body", "waste_none_load", "waste_none_total", "waste_spoilage", "waste_range_loss", "water_lost", "shorter_km_value", "diesel_saved_value", "coords", "coords_invalid", "err_origin_unknown", "err_drive_time", "err_temperature", "err_plan_not_found", "err_bad_request"
+      "type_hold", "hold_title", "hold_body", "waste_none_load", "waste_none_total", "waste_spoilage", "waste_range_loss", "water_lost", "shorter_km_value", "diesel_saved_value", "coords", "coords_invalid", "err_origin_unknown", "err_drive_time", "err_temperature", "err_plan_not_found", "err_bad_request",
+      "unsold_stock", "hours_since_harvest", "edible", "spoiled", "kept_out_of_landfill", "prevented", "rescued", "recovered", "biogas_energy", "type_feed", "type_biogas", "type_compost", "no_recover_outlet"
     ]
   },
 
@@ -159,5 +160,18 @@
   "err_drive_time": "ಈ ಸ್ಥಳಕ್ಕೆ ಮಾರ್ಗ ಇನ್ನೂ ಲಭ್ಯವಿಲ್ಲ",
   "err_temperature": "ಈ ಸ್ಥಳಕ್ಕೆ ಹವಾಮಾನ ಮಾಹಿತಿ ಇನ್ನೂ ಲಭ್ಯವಿಲ್ಲ",
   "err_plan_not_found": "ಈ ಯೋಜನೆ ಸಿಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಹೊಸ ಲೋಡ್ ಪ್ರಾರಂಭಿಸಿ.",
-  "err_bad_request": "ಕೆಲವು ವಿವರಗಳು ಸ್ವೀಕಾರವಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಫಾರ್ಮ್ ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
+  "err_bad_request": "ಕೆಲವು ವಿವರಗಳು ಸ್ವೀಕಾರವಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಫಾರ್ಮ್ ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  "unsold_stock": "ಮಾರುಕಟ್ಟೆಯಲ್ಲಿ ನನ್ನ ಮಾಲು ಮಾರಾಟವಾಗಿಲ್ಲ",
+  "hours_since_harvest": "ಕಟಾವಿನ ನಂತರ ಎಷ್ಟು ಗಂಟೆ",
+  "edible": "ಇನ್ನೂ ತಿನ್ನಲು ಯೋಗ್ಯ",
+  "spoiled": "ಕೆಟ್ಟುಹೋಗಿದೆ",
+  "kept_out_of_landfill": "ಕಸದ ಗುಂಡಿಗೆ ಹೋಗದಂತೆ ತಡೆದದ್ದು",
+  "prevented": "ತಡೆಯಲಾಗಿದೆ",
+  "rescued": "ರಕ್ಷಿಸಲಾಗಿದೆ",
+  "recovered": "ಮರುಬಳಕೆ",
+  "biogas_energy": "ಜೈವಿಕ ಅನಿಲ ಶಕ್ತಿ",
+  "type_feed": "ಪಶು ಆಹಾರ",
+  "type_biogas": "ಜೈವಿಕ ಅನಿಲ ಘಟಕ",
+  "type_compost": "ಗೊಬ್ಬರ ಘಟಕ",
+  "no_recover_outlet": "ನಿಮ್ಮ ಹತ್ತಿರ ಇನ್ನೂ ಯಾವುದೇ ಜೈವಿಕ ಅನಿಲ ಅಥವಾ ಗೊಬ್ಬರ ಘಟಕ ಇಲ್ಲ"
 }

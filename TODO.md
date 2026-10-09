@@ -53,6 +53,9 @@ TODO.md as they are done and commit TODO.md with the work.
 - [ ] 4.2 Native-speaker review of every Hindi and Kannada string in `config/copy/` (keys listed under `_review`); clear `_review` when approved.
 - [ ] 4.3 Usability test with a few volunteers (first-time user gets a recommendation by voice and can repeat the reason). Then update the "Users" row in README.md and CLAUDE.md Section 18.
 
+- [ ] 4.4 Farm-to-city reframe (CLAUDE.md D19): implement M8 (Rescue and Recover) after the team approves the code-change summary.
+- [ ] 4.5 Fill open decisions D20 (real outlets per Rescue city: Bengaluru, Delhi, Mumbai), D21 (biogas yield source), D22 (video beat 1 source of dumping at a city mandi).
+
 ### 5. Verification
 - [x] 5.1 Full checks: `python -m pytest backend/tests -q`, `cd app && npx tsc --noEmit`, `cd infra && sam validate --lint`. Oct 9: 85 passed, tsc clean, template valid. Re-run after any later change.
 - [x] 5.2 Reproducibility: re-run `python analysis/backtest.py --crop tomato` and `python analysis/second_replay.py`; outputs must be byte-identical to the committed files. Oct 9: JSON and both PNGs byte-identical (charts need matplotlib).

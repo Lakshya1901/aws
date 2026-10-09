@@ -74,5 +74,11 @@
     "unit": "minimum share unsold or dumped at the default market when its mid net value per kg is below the crop's harvest cost (u_default = max(u(R), value))",
     "status": "placeholder",
     "source": "reuses Section 9 u(R) table values; D12"
+  },
+  "biogas_yield": {
+    "value": null,
+    "unit": null,
+    "status": "placeholder",
+    "source": "to source: published anaerobic digestion yield for fruit and vegetable waste, or the partner unit's figure (CLAUDE.md D21). Null renders 'not yet estimated'."
   }
 }

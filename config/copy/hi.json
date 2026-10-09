@@ -19,7 +19,8 @@
       "row_spoilage", "row_earn_kg", "row_earn_load", "close", "accepted", "err_no_markets", "err_crop_not_setup",
       "err_network", "err_generic", "plan_empty", "added_per_market", "market_capped", "total_impact",
       "diesel", "co2", "water", "litres_value", "kg_value", "km_value", "impact_title", "no_plan", "rs_range",
-      "type_hold", "hold_title", "hold_body", "waste_none_load", "waste_none_total", "waste_spoilage", "waste_range_loss", "water_lost", "shorter_km_value", "diesel_saved_value", "coords", "coords_invalid", "err_origin_unknown", "err_drive_time", "err_temperature", "err_plan_not_found", "err_bad_request"
+      "type_hold", "hold_title", "hold_body", "waste_none_load", "waste_none_total", "waste_spoilage", "waste_range_loss", "water_lost", "shorter_km_value", "diesel_saved_value", "coords", "coords_invalid", "err_origin_unknown", "err_drive_time", "err_temperature", "err_plan_not_found", "err_bad_request",
+      "unsold_stock", "hours_since_harvest", "edible", "spoiled", "kept_out_of_landfill", "prevented", "rescued", "recovered", "biogas_energy", "type_feed", "type_biogas", "type_compost", "no_recover_outlet"
     ]
   },
 
@@ -159,5 +160,18 @@
   "err_drive_time": "इस जगह के लिए रास्ता अभी उपलब्ध नहीं है",
   "err_temperature": "इस जगह के लिए मौसम की जानकारी अभी उपलब्ध नहीं है",
   "err_plan_not_found": "यह योजना नहीं मिली। कृपया नया लोड शुरू करें।",
-  "err_bad_request": "कुछ जानकारी स्वीकार नहीं हुई। कृपया फ़ॉर्म जाँचकर फिर कोशिश करें।"
+  "err_bad_request": "कुछ जानकारी स्वीकार नहीं हुई। कृपया फ़ॉर्म जाँचकर फिर कोशिश करें।",
+  "unsold_stock": "मंडी में मेरा माल बिना बिका है",
+  "hours_since_harvest": "तुड़ाई के बाद कितने घंटे",
+  "edible": "अभी खाने लायक",
+  "spoiled": "खराब",
+  "kept_out_of_landfill": "कूड़े के ढेर में जाने से बचाया",
+  "prevented": "रोका गया",
+  "rescued": "बचाया गया",
+  "recovered": "दोबारा उपयोग",
+  "biogas_energy": "बायोगैस ऊर्जा",
+  "type_feed": "पशु आहार",
+  "type_biogas": "बायोगैस इकाई",
+  "type_compost": "खाद इकाई",
+  "no_recover_outlet": "आपके पास अभी कोई बायोगैस या खाद इकाई नहीं है"
 }

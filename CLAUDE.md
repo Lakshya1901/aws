@@ -6,9 +6,15 @@ This file is the complete specification for AnnaSetu. Read all of it before plan
 
 ## 1. One-line summary
 
-AnnaSetu stops edible fruit and vegetables from becoming waste before the truck leaves the farm. It tells farmer collectives anywhere in India where each load should go (sell fresh, hold, process, donate, feed or compost) using public mandi data, and allocates loads across markets so they don't all crash the same one.
+Pitch: "Every day, a city's mandis turn good food into garbage. AnnaSetu stops the glut before the truck leaves, rescues what's left before it's dumped, and turns the rest into energy, not landfill."
 
-- Track: Waste and Energy (food waste prevention)
+AnnaSetu is a farm-to-city surplus router centred on the city mandi. One engine, three entry points:
+
+1. **Prevent:** tells farmer collectives anywhere in India where each load should go (sell fresh, hold, process, donate, feed, biogas or compost) using public mandi data, and allocates loads across markets so they don't all crash the same one.
+2. **Rescue:** a trader at a city mandi logs unsold end-of-day stock; the router sends the edible part to food banks or processors before it is dumped.
+3. **Recover:** what can't be eaten goes to animal feed, biogas or compost instead of landfill.
+
+- Track: Waste and Energy. Fit: "close the loop on what a city throws away" (Rescue, Recover), "make the city lighter" (Prevent: less surplus reaches the city mandi), "power it cleaner" (Recover: biogas, energy shown only as a labelled estimate)
 - Platform: mobile app for Android and iOS, backed by AWS
 - Scope: pan-India architecture; demo replays real, documented 2025 gluts
 
@@ -61,7 +67,7 @@ Scale anchor: 1% of the 19.3 Mt of fruit and vegetables lost each year is about 
 1. Blind dispatch: decisions use yesterday's local price and a trader's word. Software can fix this.
 2. Everyone moves at once: growers in a belt harvest together and ship to the nearest mandi; arrivals spike, prices crash. Software can fix this only if it allocates, not just predicts.
 3. Nobody is paid to prevent loss: commission agents, cold stores and transporters earn on volume, rent or trips. Software can only give the risk-bearer better options.
-4. Few escape routes: most vegetables never touch a cold link; processors and food banks aren't connected to the moment of a glut. Recommendations must work inside this constraint.
+4. Few escape routes: most vegetables never touch a cold link; processors, food banks and biogas or compost units aren't connected to the moment of a glut or to a city mandi's unsold stock at the end of the day. Recommendations must work inside this constraint.
 
 ### 3.5 Where the problem sits in the journey
 
@@ -71,9 +77,10 @@ Scale anchor: 1% of the 19.3 Mt of fruit and vegetables lost each year is about 
 | Harvest and load | Which market? Send or hold? | Old local price and hearsay | Dispatch Advisor: net value per outlet |
 | On the road | Nothing left to decide | Shelf life lost, never counted | Spoilage cost in the ranking |
 | At the mandi | Sell or dump? | Price below the cost of sending | Allocation keeps markets from glutting |
-| After sale | Markdown or discard? | No channel for unsold food | Second Life: process, donate |
+| After sale (city mandi, end of day) | Markdown or discard? | No channel for unsold food; dumped as city waste | Rescue: process, donate |
+| Inedible remainder | Dump or recover? | Landfill | Recover: feed, biogas, compost |
 
-The first two stages are the decision window where loss is set. Interventions at the mandi gate are too late.
+The first two stages are the decision window where loss is set (Prevent). Interventions at the mandi gate are too late to prevent the surplus, so the last two stages are about where it goes instead of a city dump (Rescue, Recover).
 
 ### 3.6 What we are not building, and why
 
@@ -91,20 +98,30 @@ The first two stages are the decision window where loss is set. Interventions at
 
 **Primary: FPO dispatch manager.** Runs daily dispatch for a farmer producer organisation of a few hundred growers. Decides each morning who harvests, how much and where each truck goes. Uses WhatsApp and phone calls, comfortable with a smartphone, not dashboards. Speaks a regional language. Bears the blame when a load sells below cost. Chosen first because they control enough volume to split loads across markets, which is what prevents herding.
 
+**Rescue user: city mandi trader or wholesaler.** Holds unsold stock at a city mandi at the end of the day (demo cities in Section 6). Today the choice is a markdown or the dump. Uses a smartphone and the same app; does not need the Glut Radar.
+
 **Secondary:** individual farmers asking by voice; district horticulture officers watching the Glut Radar to trigger diversion schemes such as Operation Greens.
 
-**Job to be done:** When my members' crop is ready, I want to know where each load should go today and what it will actually earn after costs, so I can avoid sending food into a crash and explain the decision to my members.
+**Job to be done (FPO manager):** When my members' crop is ready, I want to know where each load should go today and what it will actually earn after costs, so I can avoid sending food into a crash and explain the decision to my members.
+
+**Job to be done (trader):** When stock is left unsold at the end of the day, I want to know who will take the edible part and where the rest can go, so it is not dumped.
 
 ---
 
 ## 5. Product
 
-Four parts around one decision: where should this load go?
+Three layers (Section 1) around one decision: where should this surplus go? One router: Rescue and Recover reuse the Dispatch Advisor and Second Life logic with a different entry point, not a second engine.
+
+| Layer | Entry point | User | Parts |
+| --- | --- | --- | --- |
+| Prevent | New load (before harvest or loading) | FPO dispatch manager | Glut Radar, Dispatch Advisor |
+| Rescue | "I have unsold stock at the market" | City mandi trader | Second Life (processor, food bank) |
+| Recover | Inedible part of any load or rescued stock | Either | Second Life last rung (feed, biogas, compost) |
 
 1. **Glut Radar.** Daily glut risk for every reporting mandi in India, per crop. Shows safe, watch or glut, and days of warning in predictive mode.
 2. **Dispatch Advisor.** For one load (crop, quantity, origin, harvest timing), ranks every reachable outlet by net value per kg after freight, fees and spoilage, with ranges. Allocates multiple loads across outlets so AnnaSetu never pushes a market into glut itself.
-3. **Second Life.** When no fresh market pays, walks down the food waste hierarchy: hold (storable crops only), processor, food bank, animal feed or compost. Never a dump.
-4. **Impact Ledger.** For every decision: kg waste avoided (expected) and kg redirected (shown separately), extra km, diesel, CO2, embedded water.
+3. **Second Life.** When no fresh market pays, or for rescued stock, walks down the food waste hierarchy: hold (storable crops only), processor, food bank, then (Recover) animal feed, biogas, compost. Never a dump.
+4. **Impact Ledger.** Headline: kg kept out of landfill (Section 9, Step 6). Separate lines: Prevented (waste avoided, range), Rescued (kg), Recovered (kg to feed, biogas or compost; biogas energy as an estimate). Redirected is shown on its own line and never added to any of these. Plus extra km, diesel, CO2, embedded water.
 
 AnnaSetu advises; people decide. Every recommendation can be overridden, and overrides are logged.
 
@@ -117,7 +134,8 @@ AnnaSetu advises; people decide. Every recommendation can be overridden, and ove
 - **Demo regions** (real, documented gluts, replayed from historical data):
   - Kolar tomato belt (Karnataka and Andhra border): Kolar, Chintamani, Srinivaspura, Madanapalle, Bengaluru; January-April 2025 glut.
   - A second region to prove pan-India, chosen by the data check. Candidate: Nashik onion belt (Lasalgaon, Pimpalgaon, Nashik, Pune). Verify a documented glut and data density before committing.
-- **Second Life outlets** are seeded for the demo regions only; the schema is national.
+- **Rescue demo cities:** Bengaluru, Delhi, Mumbai. Rescue routes from the trader's location to Second Life outlets only, so it needs no mandi price data for the city. Each city needs real seeded outlets before it is shown (Section 19, D20).
+- **Second Life outlets** (processor, food bank, feed, biogas, compost) are seeded for the demo regions and cities only; the schema is national.
 - **Cost inputs** are configured per state, with national defaults.
 
 ---
@@ -178,8 +196,8 @@ DynamoDB (on-demand):
 | --- | --- | --- | --- |
 | MarketDay | `market_id#crop` | `date` | arrivals_t, min/max/modal_price_kg, source, ingested_at |
 | MarketRisk | `crop` | `market_id` | as_of_date, arrival_ratio, price_change_3d, risk_level, lead_days, elasticity_b, baseline_t, data_complete, state, lat, lon |
-| Outlets | `outlet_id` | - | type (mandi, processor, food_bank, feed_compost), name, state, lat, lon, crops, min_qty_kg, offer_price_kg, contact, verified, seeded |
-| Plans | `plan_id` | - | created_at, loads, allocations, impact, language, explanation inputs and outputs |
+| Outlets | `outlet_id` | - | type (mandi, processor, food_bank, feed, biogas, compost), name, state, lat, lon, crops, min_qty_kg, offer_price_kg, contact, verified, seeded |
+| Plans | `plan_id` | - | created_at, source (farm, mandi_unsold), loads, allocations, impact, language, explanation inputs and outputs |
 
 Crop profiles, cost assumptions, markets and copy live in versioned JSON in `config/`, not the database.
 
@@ -235,7 +253,7 @@ net(j) = P_hat(j) * (1 - s(j))
          - P_hat(j) * (fee_pct(state) + commission_pct(state))
          - P_hat(j) * handling_pct(state)
 ```
-Second-life outlets use offer price (processor) or 0 (food bank, feed, compost) for P_hat.
+Second-life outlets use offer price (processor) or 0 (food bank, feed, biogas, compost) for P_hat.
 
 ### Step 5. Allocation (anti-herding)
 
@@ -243,10 +261,19 @@ Second-life outlets use offer price (processor) or 0 (food bank, feed, compost) 
 2. For each load, compute net(j) for all reachable outlets using current dA.
 3. Assign to the best outlet unless it pushes that market's projected R into glut; then the next best. A market whose projected R is unknown (fewer than 5 of the last 7 days, or no prior-year baseline) cannot be checked, so it is listed as an alternative but never chosen (D17). Projected R = A7 recomputed with today's arrivals plus dA(j), divided by B (same definition as Step 1).
 4. Add to that market's dA; repeat.
-5. If no fresh market has net > 0: processor, then food bank, then feed or compost.
+5. If no fresh market has net > 0: processor, then food bank, then feed, then biogas, then compost (food recovery hierarchy; nearest first within a type).
 6. If best net < harvest cost per kg: advise delaying harvest (storable crops) or harvesting only what has a buyer (non-storable).
 
 Greedy is sufficient. No optimiser.
+
+### Step 5b. Rescue (source = mandi_unsold)
+
+Same router, different entry point. Origin is the trader's location at the city mandi; harvest timing does not apply.
+
+1. Split: the engine proposes a spoiled share with Step 3, s = min(1, alpha * f), where f = hours since harvest / SL(T) and T is the current temperature at the origin. Proposed spoiled_kg = Q * s, edible_kg = Q - spoiled_kg, labelled "(estimate)". The trader confirms or edits both; trader values replace the estimate and are logged as such.
+2. Edible part: Second Life only (processor, then food bank), nearest first within a type. Fresh mandis are not ranked: the stock already failed to sell at a mandi today. If no eligible outlet is in radius, it goes to the Recover rung.
+3. Spoiled part: Recover rung only (feed, then biogas, then compost).
+4. Delay-harvest advice and allocation dA do not apply.
 
 ### Step 6. Waste avoided
 
@@ -266,6 +293,13 @@ Default = nearest mandi. u = unsold or dumped share, a placeholder heuristic unt
 Price-below-cost dump (D12): if the default market's mid net value per kg is below the crop's harvest cost, the load counts as likely dumped or left unharvested there (documented Kolar 2025, Section 3.2). Then u_default = max(u(R), 0.40), with low 0.20 and high 0.40 (values reused from the u(R) table; placeholder). Applies only to the default side.
 
 Always show both W (waste avoided, range) and Q (redirected). Never merge them.
+
+Impact Ledger lines (all kg; each kept separate):
+- Prevented = W (range) from Prevent loads.
+- Rescued = edible kg routed to a processor or food bank in Rescue (the trader's value, or the proposed split if the trader accepted it).
+- Recovered = kg routed to feed, biogas or compost, from either entry point.
+- Kept out of landfill (headline) = Prevented + Rescued + Recovered, as a range, labelled "(estimate)". Redirected is never added to it.
+- Biogas energy = kg to biogas x `biogas_yield` (Section 10), labelled "(estimate)"; while the yield is null it renders "not yet estimated". No national energy-savings claims (Section 3.3).
 
 Range for W: mid uses u(R) of the band R falls in; low and high use u of the band below and above for the default market, combined with the low and high spoilage estimate. Labelled "(estimate)".
 
@@ -296,6 +330,7 @@ All in `config/assumptions.json`, each with `value`, `unit`, `status` (sourced |
 | Dump share table u(R) | Section 9 | placeholder | FPO interviews |
 | Reachable radius | 300 km | assumption | Config |
 | Stale-data range widening | 1.5x the residual standard deviation | assumption | Config |
+| Biogas yield per kg of fruit and vegetable waste | null (to source) | placeholder | Published anaerobic digestion yield for vegetable waste, or the partner unit's figure (D21) |
 
 ### Languages
 
@@ -323,7 +358,7 @@ One JSON file per crop in `config/crops/`. A profile with a null required field 
 | Storable (hold option) | no | yes | yes | limited |
 | Water footprint | 184 L/kg world average, tropical production 200-900 L/kg (Hoekstra, cited in Nederhoff and Stanghellini 2010, https://edepot.wur.nl/156932) | placeholder | placeholder | placeholder |
 | Harvest cost per kg | ~Rs 4.7 (Kolar) | placeholder | placeholder | placeholder |
-| Second life | puree/paste, food bank, compost | dehydration, food bank | processing, food bank | ripening/retail, chips, food bank, feed |
+| Second life | puree/paste, food bank; Recover: biogas, compost | dehydration, food bank; Recover: biogas, compost | processing, food bank; Recover: biogas, compost | ripening/retail, chips, food bank; Recover: feed, biogas, compost |
 
 Sources: ASHRAE vegetables chapter (https://handbook.ashrae.org/Handbooks/R26/IP/r26_ch37/r26_ch37_ip.aspx), Indian tomato supply chain study (https://www.mdpi.com/2071-1050/15/2/1331), USDA Handbook 66, ICAR-NRCB (https://nrcb.org.in/Pages/achievements_pht). Present these in the app as "reference post-harvest parameters" and state that spoilage is estimated from outside temperature and travel time.
 
@@ -341,7 +376,7 @@ Profile shape:
   "harvest_cost_rs_per_kg": 4.7,
   "unit_box_kg": 15,
   "water_l_per_kg": null,
-  "second_life": ["processor", "food_bank", "feed_compost"],
+  "second_life": ["processor", "food_bank", "biogas", "compost"],
   "sources": {"harvest_cost_rs_per_kg": "Outlook Business, Apr 2025"}
 }
 ```
@@ -389,10 +424,10 @@ All JSON via API Gateway. The app never calls AWS services directly.
 | GET /risk?crop=&state=&lat=&lon= | Glut Radar | crop, optional state or location | markets with risk_level, ratio, price, change_3d, as_of_date, mode |
 | POST /voice/upload | Upload slot | language, content_type | presigned S3 URL, audio_key |
 | POST /voice/parse | Transcribe + parse | audio_key, language | transcript, fields, confidence |
-| POST /recommend | One load | crop, quantity_kg, origin {lat, lon, place}, harvest, language, plan_id? | ranked outlets, default outlet, impact, explanation, data freshness, assumptions_used |
+| POST /recommend | One load (Prevent) or unsold stock (Rescue) | crop, quantity_kg, origin {lat, lon, place}, harvest, language, plan_id?, source? ("farm" default, or "mandi_unsold"); for mandi_unsold: hours_since_harvest, edible_kg?, spoiled_kg? (both or neither; omitted = engine proposes the split) | ranked outlets, default outlet, impact, explanation, data freshness, assumptions_used; for mandi_unsold also split {edible_kg, spoiled_kg, source: estimate or trader} and recover (outlet for the spoiled part) |
 | POST /plan | All loads together | loads[], language | allocation per load, dA per market, total impact |
 | POST /speak | Spoken reply | text, language (hi or en) | presigned MP3 URL |
-| GET /impact?plan_id= | Impact Ledger | plan_id | redirected_kg, waste_avoided_kg range, extra_km, diesel_l, co2_kg, water_l |
+| GET /impact?plan_id= | Impact Ledger | plan_id | kept_out_of_landfill_kg range, waste_avoided_kg range (Prevented), rescued_kg, recovered_kg, biogas_energy (estimate or null), redirected_kg, extra_km, diesel_l, co2_kg, water_l |
 
 Example `/recommend` response (illustrative values):
 ```json
@@ -420,6 +455,8 @@ Example `/recommend` response (illustrative values):
 | Data > 2 days old | stale: true, wider ranges | Yellow banner |
 | No arrivals | mode: same_day | No "days early" |
 | No fresh market pays | top is processor/food bank | Second Life screen |
+| Rescue: no processor or food bank in radius | edible part goes to the Recover rung | Recover outlet shown with the reason |
+| Rescue: no Recover outlet in radius | recover: null | "No biogas or compost unit near you yet" |
 | Harvest doesn't pay | advice: delay_harvest or harvest_to_order | Plain warning with numbers |
 | Voice not understood | null fields, low confidence | Confirm screen, fields highlighted |
 | No reporting markets in radius | 422 | "No reporting markets near you for this crop" |
@@ -446,10 +483,11 @@ Example `/recommend` response (illustrative values):
 | Language (first launch) | Which language? | Large buttons | - |
 | Today (Glut Radar) | Is a glut coming near me? | Nearby markets for the chosen crop, colour + word + icon, ratio, price | Loading, stale, same_day, market not reported |
 | New load | What am I sending? | Big mic button; form below (crop, qty, place, harvest) | Recording, processing, parse failed |
+| Unsold stock (Rescue) | I have unsold stock at the market | Crop, quantity, hours since harvest; proposed edible/spoiled split, editable | Estimate vs trader values, no outlet in radius |
 | Confirm | Did we hear you right? | Editable chips | Low confidence: all highlighted |
 | Recommendation | Where should this load go? | The card, plus two alternatives | Stale, Second Life, delay harvest, template text |
 | Today's plan | How do I split all loads? | Loads with outlets, added qty per market | Market capped |
-| Impact | What did we save? | Session totals | "Not yet estimated" values |
+| Impact | What did we keep out of landfill? | Headline kg kept out of landfill, then Prevented, Rescued, Recovered (biogas energy estimate), Redirected on separate lines | "Not yet estimated" values |
 
 ### 14.3 Recommendation card
 
@@ -494,6 +532,8 @@ Target under 15 s from release to card. Clips under 20 s. Record AAC/m4a; if Tra
 | risk levels | Safe / Watch / Glut | सुरक्षित / ध्यान दें / अधिक आवक | ಸುರಕ್ಷಿತ / ಗಮನಿಸಿ / ಅತಿಯಾದ ಆವಕ |
 | why_not | Why not {market}? | {market} क्यों नहीं? | {market} ಏಕೆ ಬೇಡ? |
 | estimate | estimate | अनुमान | ಅಂದಾಜು |
+
+Rescue and Recover keys (unsold_stock, hours_since_harvest, edible, spoiled, kept_out_of_landfill, prevented, rescued, recovered, biogas_energy, type_feed, type_biogas, type_compost, no_recover_outlet) are in `config/copy/<lang>.json` under `_review` until approved.
 
 ### 14.6 Visual and accessibility
 
@@ -602,6 +642,12 @@ annasetu/
 - Historical weather for that day.
 - Five demo loads from real FPO villages in the demo region.
 - App shows "Replaying <date> data" openly in replay mode.
+- Rescue demo: one simulated unsold lot at a Rescue demo city mandi (Section 6), routed to real seeded outlets only (D20).
+
+Demo video, three beats (3 minutes or less):
+1. Produce dumped at a city mandi: "this was thrown away by a city" (footage or a documented source, D22).
+2. Trace back and prevent: glut forming on the radar, the FPO manager gets advice by voice, loads split across markets.
+3. Rescue and recover: a trader logs unsold stock, a food bank takes the edible part, a biogas unit takes the rest; Impact Ledger totals.
 
 ### 17.2 Backtest (analysis/backtest.ipynb)
 
@@ -635,6 +681,11 @@ annasetu/
 | Explanation with a foreign number | Template used |
 | Interstate outlet | Destination state's fees applied |
 | Kannada/Hindi voice parse of "two tonnes tomato" | crop tomato, 2,000 kg |
+| Rescue, no split given | Split proposed from Step 3, labelled estimate; edible to processor or food bank, spoiled to feed, biogas or compost |
+| Rescue, trader split | Trader values used, split source trader |
+| Rescue, no processor or food bank in radius | Edible part goes to the Recover rung |
+| Recover order | Feed before biogas before compost |
+| Impact lines | Headline = Prevented + Rescued + Recovered; redirected separate; biogas energy null until yield sourced |
 
 ### 17.4 Acceptance
 
@@ -655,12 +706,14 @@ annasetu/
 | Crop parameters | Published references; some placeholders | "Reference parameters"; placeholders marked |
 | Freight, fees, commission, handling, diesel | Desk-research values; placeholders until FPO interviews | "(estimate)" |
 | Dump share u(R) | Placeholder heuristic | "(estimate)" |
-| Processors and food banks | Real organisations, not contacted | "Not yet partnered" |
+| Processors, food banks, biogas and compost units | Real organisations, not contacted | "Not yet partnered" |
+| Unsold stock at a city mandi | Simulated lot | "Demo stock" |
+| Biogas energy | Estimate from a sourced yield (D21) | "(estimate)" |
 | Loads and villages | Simulated loads, real villages | "Demo loads" |
 | Users | Volunteers in a usability test | Stated as such |
 | Spoilage | Estimated, not measured | On card and in README |
 
-Seeded Second Life outlets (Kolar region, from desk research): SNR Foods (processor, Srinivaspura, https://snrfoods.in/about), Feel Fresh Foods (processor, Chittoor belt, https://www.feelfreshfoods.com/about-us.html), Kolar Food Bank (https://kolarfoodbank.1ngo.in/), Bangalore Food Bank fresh produce recovery (https://bangalorefoodbank.com/). Kolar horticulture FPOs: https://coefpo.org/publications/fpo-list-english.pdf. Seed the second demo region's outlets the same way once chosen.
+Seeded Second Life outlets (Kolar region, from desk research): SNR Foods (processor, Srinivaspura, https://snrfoods.in/about), Feel Fresh Foods (processor, Chittoor belt, https://www.feelfreshfoods.com/about-us.html), Kolar Food Bank (https://kolarfoodbank.1ngo.in/), Bangalore Food Bank fresh produce recovery (https://bangalorefoodbank.com/). Kolar horticulture FPOs: https://coefpo.org/publications/fpo-list-english.pdf. Seed the second demo region's outlets the same way once chosen. Biogas and compost units, and Delhi and Mumbai outlets, are open (D20); none are seeded until a real organisation and source are given.
 
 ---
 
@@ -672,6 +725,7 @@ Seeded Second Life outlets (Kolar region, from desk research): SNR Foods (proces
 4. Voice accuracy test in Hindi and Kannada on real sentences; if poor, make text input primary.
 5. Bedrock model and quota confirmed in ap-south-1.
 6. National ingest volume fits in Lambda, or split by state.
+7. D20-D22 (farm-to-city reframe): real outlets per Rescue city, biogas yield source, beat 1 source.
 
 ### 19.1 Decisions resolved (October 8, 2026)
 
@@ -696,6 +750,10 @@ Seeded Second Life outlets (Kolar region, from desk research): SNR Foods (proces
 | D17 | Markets with unknown risk | Never chosen as the destination, only listed. Found when Doddaballapura (about 1 t/day, latest price 15 days old on 2023-09-06) absorbed 16 t in a 10-load plan. |
 | D18 | Demo replay days | Headline 2023-09-06 (documented arrival glut, D14; `config/model.json` replay_date): ten loads spread over several markets. Second 2025-03-19 (Kolar's 2025 low, Rs 4.60/kg, below harvest cost; run with `REPLAY_DATE=2025-03-19`). 2025-02-07 dropped: Kolar still paid above harvest cost, so waste avoided was negative. Final figures wait for Amazon Location routes (D11); waste avoided on 2025-03-19 is driven by the placeholder dump share (D12) and must carry "(estimate)". |
 | D14 | Second replay (D10) | Kolar 2023-09-06, an arrival-driven glut: R 1.76 (glut), 3-day price change -28.7%, modal Rs 6.64/kg; Madanapalle Rs 10.60/kg, 61 km. Documented: Deccan Herald 2023-09-26 (https://www.deccanherald.com/india/karnataka/rs-200-to-rs-10-tomato-farmers-hopes-crash-2700660, officials attribute the crash to "the arrival of a large quantity of tomatoes"; 4.21 vs 2.31 lakh quintals year on year) and FreshPlaza/New Indian Express 2023-09-04. Baseline uses one prior year (2022). `analysis/second_replay.py`. |
+| D19 | Farm-to-city reframe (October 9) | Prevent, Rescue, Recover on one router (Sections 1, 5, 9). Rescue reuses POST /recommend with source mandi_unsold. Edible split: engine proposes from Step 3, trader confirms or edits. Recover order: feed, biogas, compost (`feed_compost` split into `feed` and `compost`). Headline kg kept out of landfill = Prevented + Rescued + Recovered. Rescue demo cities: Bengaluru, Delhi, Mumbai. |
+| D20 | Rescue city outlets | **Open, for the team.** For each of Bengaluru, Delhi, Mumbai: the city mandi to use (name; candidates to confirm: Bengaluru district market in `config/markets.json`, Delhi Azadpur, Mumbai Vashi APMC), and real processors, food banks, and biogas or compost units with a source URL each. Bengaluru already has Bangalore Food Bank seeded. Nothing is seeded without a source. |
+| D21 | Biogas yield | **Open, for the team.** A sourced yield per kg of fruit and vegetable waste (or the partner unit's figure) and its unit, for `biogas_yield` in `config/assumptions.json`. Until then energy renders "not yet estimated". |
+| D22 | Video beat 1 | **Open, for the team.** Footage or a documented news source of produce dumped at a city mandi (Bengaluru, Delhi or Mumbai). |
 
 Known risk: one FPO's volume may barely move Kolar's ratio or price, so load spreading may come mostly from price impact at smaller markets. Report what the data shows; never tune the model to force a split.
 
@@ -750,5 +808,6 @@ Not added: Strands Agents (Bedrock only parses and explains; no agent), Step Fun
 | M5 | Mobile app | Oct 10 | Expo + TypeScript, 7 screens (Section 14.2), Recommendation card first (Section 14.3), i18n from `config/copy` (en, hi, kn; native review pending), typed API client | `tsc` passes; Android export builds; team tests on a real phone |
 | M6 | AWS | Oct 10 | `infra/template.yaml` (Section 15.1 resources, Section 15.2 roles), `scripts/seed.py`, `scripts/geocode_markets.py` | `sam validate` passes. Team sets the budget alert, deploys and runs the Section 15.4 smoke test (no credentials in this repo) |
 | M7 | Demo and README | Oct 11 | Replay of the backtest day: radar, loads, nearest-mandi default vs AnnaSetu allocation, impact; counterfactuals labelled as modelled. README: data provenance, Section 18 disclosure, model, architecture, AWS and SAM usage, limitations (no Kannada Polly voice, placeholders) | Every UI figure traces to `config/` or computed data with its status |
+| M8 | Rescue and Recover | Oct 10 | `source: mandi_unsold` in /recommend, split proposal, Recover rung (feed, biogas, compost), Impact Ledger lines and headline, "Unsold stock" screen | pytest covers the Section 17.3 Rescue rows; `tsc` passes |
 
 Second demo region (D8) starts after M3 if time allows.
