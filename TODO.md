@@ -78,6 +78,7 @@ TODO.md as they are done and commit TODO.md with the work.
 - [ ] 10. Commit history check: clear messages, no secrets, no model identifiers, no `node_modules` or build output.
 - [ ] 11. Demo video, 3 minutes or less: the live app on a phone, the 2025 Kolar price crash (2025-03-19), and the second case study (2023-09-06 arrival glut, ten loads split). Show "Replaying <date> data", label counterfactuals as modelled, waste avoided separate from redirected. Then fill the video link in README.md (replace "TBD").
 - [ ] 12. Blog / short writeup: problem, build, AWS usage (name the SAM CLI and every AWS service; CLAUDE.md Section 22.1).
+  List the AI coding tools used (Claude Code), as the rules require: "You can use AI coding tools. List the ones you used in your writeup." (https://www.wemakedevs.org/aws/env/rules). Add the same line to README.md.
 
 ## Sunday (October 11)
 
