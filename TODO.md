@@ -36,6 +36,7 @@ TODO.md as they are done and commit TODO.md with the work.
   - Oct 9 (new session): STS OK as `annasetu-deployer`, region ap-south-1.
 - [ ] 1.5 Create SSM SecureStrings `/annasetu/datagov_key` and `/annasetu/app_api_key` (`infra/README.md`).
   - Oct 9: `/annasetu/app_api_key` created (random). `/annasetu/datagov_key` not created: no key yet; no code reads it (IAM grant only), so deploy does not need it.
+  - Oct 10: data now comes from the India Data Portal bulk files (D24), so the data.gov.in key is not needed at all.
 
 ### 2. Routes and deploy
 - [x] 2.1 Cache routes from the Kolar demo origin: `python scripts/cache_routes.py 13.137,78.134`. Add the demo FPO villages as `<village_id>=lat,lon` if used. Commit `data/routes_cache.json`.
@@ -48,8 +49,15 @@ TODO.md as they are done and commit TODO.md with the work.
   - Oct 9: `sam build` passes; 99 backend tests pass. Deploy waits for confirmation. Bedrock off (both parameters empty).
   - Oct 9: first deploy (NameSuffix abcd11, no AlarmEmail) failed: `annasetu-deployer` was denied `iam:CreateRole` (with tags) and `iam:DeleteRolePolicy` on `annasetu-*` roles; stack is `ROLLBACK_FAILED`. Needs the inline IAM policy fixed in the console (CreateRole, TagRole, DeleteRolePolicy and related on `role/annasetu-*`), then delete the stack and redeploy.
   - Oct 9: policy fixed, stack deleted and redeployed: `CREATE_COMPLETE`. API `https://udlpm9qppa.execute-api.ap-south-1.amazonaws.com`. Smoke test found two bugs, fixed in code (MarketDay query used key `pk` instead of `market_crop`; authorizer timed out cold at 128 MB, now 256 MB); redeploy pending confirmation.
+  - Oct 10: redeployed with D24 (SQS fetch queue + DLQ alarm, /crops, /crops/fetch) and D25: `UPDATE_COMPLETE`. 400 commodity files in `s3://annasetu-data-abcd11/idp/`; 20 preload crops in MarketRisk (~14,500 market rows) via the SQS fan-out; tomato ingest 7.4 s, 109 MB. Live smoke test: every endpoint 200 (wrong key 403), recommend/plan match the local replay, guava fetched on demand (available -> fetching -> ready < 30 s), radar 42 rows near Kolar.
 - [x] 2.4 `python scripts/geocode_markets.py` (review the diff, commit), `python scripts/seed.py`, invoke ingest once with `{"as_of_date": "2023-09-06"}`, confirm MarketRisk rows.
   - Oct 9: geocoded (7/7 relevance 1.00, within about 1.6 km of manual coords), seeded 4 outlets and 6,802 MarketDay rows, snapshot in S3; ingest for 2023-09-06 wrote 7 MarketRisk rows (Kolar glut, R 1.76, -28.7% in 3 days, matches D14).
+
+### 2b. All crops, pan-India (D24, D25; October 10)
+- [x] Market-level AGMARKNET data for every commodity from the India Data Portal; `config/markets.json` (4,142 markets) and `config/commodities.json` (400); offline snapshot for tomato and onion near Kolar.
+- [x] Glut Radar for any crop; top 20 fruits and vegetables preloaded; any other fetched on request (SQS). App: crop chips from `/crops`, Other crop screen with fetch-later.
+- [x] Onion profile sourced (routing on). Potato and banana: no sourced harvest cost; radar only until one is supplied.
+- [ ] Headline replay day (D18): on market-level data 2023-09-06 gives waste avoided about -8 kg and no load split; 2023-09-15 and 2023-09-29 split the ten loads with positive waste avoided. Team to choose; then set `replay_date` and re-run ingest.
 
 ### 3. iPhone and Android test
 - [ ] 3.1 Put the API URL and key in `app/.env` (from `app/.env.example`); never commit it.
@@ -68,8 +76,8 @@ TODO.md as they are done and commit TODO.md with the work.
 - [ ] 4.5 Fill open decisions D20 (real outlets per Rescue city: Bengaluru, Delhi, Mumbai), D21 (biogas yield source), D22 (video beat 1 source of dumping at a city mandi).
 
 ### 5. Verification
-- [x] 5.1 Full checks: `python -m pytest backend/tests -q`, `cd app && npx tsc --noEmit`, `cd infra && sam validate --lint`. Oct 9: 85 passed, tsc clean, template valid. Re-run after any later change.
-- [x] 5.2 Reproducibility: re-run `python analysis/backtest.py --crop tomato` and `python analysis/second_replay.py`; outputs must be byte-identical to the committed files. Oct 9: JSON and both PNGs byte-identical (charts need matplotlib).
+- [x] 5.1 Full checks (Oct 10: 105 passed, tsc clean, template valid): `python -m pytest backend/tests -q`, `cd app && npx tsc --noEmit`, `cd infra && sam validate --lint`. Oct 9: 85 passed, tsc clean, template valid. Re-run after any later change.
+- [x] 5.2 Reproducibility (Oct 10: backtest 937fb04f9baf JSON and both PNGs byte-identical on re-run): re-run `python analysis/backtest.py --crop tomato` and `python analysis/second_replay.py`; outputs must be byte-identical to the committed files. Oct 9: JSON and both PNGs byte-identical (charts need matplotlib).
 - [ ] 5.3 Every number on screen traces to `config/` or computed data with its status (CLAUDE.md Section 20). No Section 3.3 claims anywhere. No "days early" wording (mode is `same_day`).
   - Oct 9: no Section 3.3 claims in app, config, backend or README; `glut_in_days` renders only in `predictive` mode. Number tracing waits on 2.2 figures and phone screens.
 
