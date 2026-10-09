@@ -42,7 +42,11 @@ def main(argv):
             k = f"{key}|{dest_id}"
             if k in cache and not refresh:
                 continue
-            cache[k] = location.calculate_route(origin, dest)
+            try:
+                cache[k] = location.calculate_route(origin, dest)
+            except Exception as e:  # e.g. coordinates off the road network: left out, the API falls back to approx
+                print(k, "skipped:", str(e)[:120])
+                continue
             print(k, cache[k]["distance_km"], "km", round(cache[k]["drive_hours"], 2), "h")
             path.write_text(json.dumps(cache, indent=1, ensure_ascii=False) + "\n")
 

@@ -52,6 +52,8 @@ def synthetic_routes_test_only(origins, markets=None):
     cache = {"_note": "TEST ONLY synthetic routes, not Amazon Location"}
     for lat, lon in origins:
         for d in dests:
+            if d.get("lat") is None:
+                continue
             km = haversine_km(lat, lon, d["lat"], d["lon"]) * 1.3
             cache[f"{lat:.3f},{lon:.3f}|{d.get('market_id') or d['outlet_id']}"] = {
                 "distance_km": round(km, 2), "drive_hours": round(km / TEST_SPEED_KMPH, 3), "source": "test_only"}
@@ -256,10 +258,10 @@ def test_plans_file_persists_between_processes(api, tmp_path, monkeypatch):
 
 @pytest.mark.parametrize("day", ["2023-09-06", "2025-03-19"])  # demo replay days (D18)
 def test_smoke_real_snapshot_replay_day(day, tmp_path, monkeypatch):
-    """Real CEDA snapshot on a replay day with TEST ONLY routes and weather. Structure only, no numbers."""
+    """Real market-level snapshot (D24) on a replay day with TEST ONLY routes and weather. Structure only, no numbers."""
     snap = tmp_path / "snap"
     snap.mkdir()
-    for f in (REPO / "data/snapshot").glob("*.csv"):
+    for f in (REPO / "data/snapshot").glob("*.csv*"):
         (snap / f.name).symlink_to(f)
     (snap / "weather_test.json").write_text(json.dumps(synthetic_weather_test_only(day)))
     (tmp_path / "routes.json").write_text(json.dumps(synthetic_routes_test_only([(ORIGIN["lat"], ORIGIN["lon"])])))
@@ -285,7 +287,7 @@ def test_smoke_real_snapshot_replay_day(day, tmp_path, monkeypatch):
         assert s == 200 and r["explanation"]["language"] == lang and r["explanation"]["text"]
         assert {"plan_id", "mode", "replay_date", "demo_loads", "data", "top", "default", "alternatives", "impact",
                 "advice", "harvest_cost_rs_per_kg", "assumptions_used"} <= set(r)
-        assert r["default"]["outlet_id"] == "kolar"
+        assert r["default"]["outlet_id"] == "29-kolar"  # nearest market to the Kolar origin (D24 market ids)
     s, p = call("POST", "/plan", body=_plan_body())
     assert s == 200 and len(p["allocations"]) == 10 and p["markets"]
     assert call("GET", "/impact", {"plan_id": p["plan_id"]})[0] == 200
@@ -378,3 +380,16 @@ def test_contexts_dynamodb_reads_market_risk(monkeypatch):
     ctx = store.contexts("tomato", AS_OF)
     assert [c["market"]["market_id"] for c in ctx] == ["kolar"]
     assert ctx[0]["risk"]["price_kg"] == 20.5 and ctx[0]["fit"] == {"b": -0.5, "resid_sd": 0.1}
+
+
+def test_destinations_limited_to_nearest_reporting_markets_in_radius():
+    """Routing (paid Amazon Location calls) is limited to what allocation considers: the crop's nearest
+    nearest_markets reporting markets within max_radius_km, plus outlets in radius (D24)."""
+    cfg = dict(store.configs(), markets=[{"market_id": f"m{i}", "lat": 13.0 + i * 0.1, "lon": 78.0} for i in range(40)]
+               + [{"market_id": "far", "lat": 28.6, "lon": 77.2}, {"market_id": "nocoords", "lat": None, "lon": None}])
+    origin = {"lat": 13.0, "lon": 78.0}
+    ctx = [{"market": m} for m in cfg["markets"]]
+    ids = [d["id"] for d in advisor._destinations(cfg, [], origin, ctx)]
+    assert ids == [f"m{i}" for i in range(cfg["model"]["nearest_markets"])]
+    all_in_radius = [d["id"] for d in advisor._destinations(cfg, [], origin)]
+    assert "far" not in all_in_radius and "nocoords" not in all_in_radius and len(all_in_radius) == 27  # 0.1 deg lat = 11.1 km: m0..m26

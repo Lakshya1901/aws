@@ -1,6 +1,6 @@
 """Second replay day (CLAUDE.md Section 19.1 D10): an arrival-driven tomato glut, documented by dated news.
 
-Usage: python analysis/second_replay.py [--snapshot data/snapshot/ceda_tomato_2022-01-01_2025-06-30.csv]
+Usage: python analysis/second_replay.py [--snapshot data/snapshot/idp_tomato_2021-01-01_2026-05-31.csv.gz]
 
 Writes analysis/out/second_replay.json. Deterministic: no timestamps; reuses analysis/backtest.py.
 
@@ -36,7 +36,7 @@ PARAMS = {
 DOCUMENTED = [
     {
         "id": "kolar_2023_09",
-        "market_id": "kolar",
+        "market_id": "29-kolar",
         "news_attributes_to_arrivals": "yes",
         "window": ["2023-09-01", "2023-09-30"],
         "documented_by": [
@@ -56,7 +56,7 @@ DOCUMENTED = [
     },
     {
         "id": "madanapalle_2024_12",
-        "market_id": "madanapalle",
+        "market_id": "28-madanapalli",
         "news_attributes_to_arrivals": "partly",
         "window": ["2024-12-01", "2024-12-26"],
         "documented_by": [
@@ -71,7 +71,7 @@ DOCUMENTED = [
     },
     {
         "id": "kolar_2024_08",
-        "market_id": "kolar",
+        "market_id": "29-kolar",
         "news_attributes_to_arrivals": "no",
         "window": ["2024-08-01", "2024-08-31"],
         "documented_by": [
@@ -86,14 +86,14 @@ DOCUMENTED = [
     },
     {
         "id": "madanapalle_2025_05_06",
-        "market_id": "madanapalle",
+        "market_id": "28-madanapalli",
         "window": ["2025-05-01", "2025-06-30"],
         "documented_by": None,
         "search_note": "Searched Deccan Herald, The Hindu, Times of India, New Indian Express, Hans India, Deccan Chronicle coverage of Madanapalle/Chittoor/Annamayya tomato prices for May-June 2025; no dated article documenting a glut at Madanapalle in that window was found.",
     },
     {
         "id": "kolar_2022_07",
-        "market_id": "kolar",
+        "market_id": "29-kolar",
         "window": ["2022-07-01", "2022-07-31"],
         "documented_by": None,
         "search_note": "No dated article for a July 2022 Kolar crash was found. R cannot be computed for 2022 anyway: the snapshot starts 2022-01-01, so there are no prior-year arrivals for the baseline.",
@@ -151,7 +151,7 @@ def day_record(d, m, best, arr, price, R, dP, B, level):
 
 
 def main(snapshot):
-    snap = pathlib.Path(snapshot) if snapshot else ROOT / "data/snapshot/ceda_tomato_2022-01-01_2025-06-30.csv"
+    snap = pathlib.Path(snapshot) if snapshot else ROOT / "data/snapshot/idp_tomato_2021-01-01_2026-05-31.csv.gz"
     sha = hashlib.sha256(snap.read_bytes()).hexdigest()
     markets = {m["market_id"]: m for m in json.loads((ROOT / "config/markets.json").read_text())["markets"]}
     df = pd.read_csv(snap, parse_dates=["date"])
@@ -220,7 +220,7 @@ def main(snapshot):
         c["recommended"] = rec is not None and c["id"] == rec["candidate_id"]
 
     results = {
-        "snapshot": {"path": str(snap.relative_to(ROOT)), "sha256": sha, "source": "CEDA AGMARKNET, district aggregate"},
+        "snapshot": {"path": str(snap.relative_to(ROOT)), "sha256": sha, "source": "AGMARKNET market level, India Data Portal (D24)"},
         "params": PARAMS, "risk_thresholds": th,
         "criteria": "R >= watch_r (arrival-driven) and 3-day dP <= watch_dp (price falls) at the market; alternative within max_alt_km pays >= min_gap_rs_kg and >= min_alt_ratio x; 7 of last 7 days with price and arrivals at both markets; accepted only with a dated news source that ties the crash at least partly to arrivals",
         "gap_note": "gross modal price difference only; no freight, fees or spoilage",

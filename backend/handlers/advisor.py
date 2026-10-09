@@ -166,13 +166,25 @@ def _float(v, name):
         raise ApiError(400, "bad_request", f"{name} must be a number") from None
 
 
-def _destinations(cfg, outlets):
-    return ([{"id": m["market_id"], "lat": m["lat"], "lon": m["lon"]} for m in cfg["markets"] if m.get("lat") is not None]
-            + [{"id": o["outlet_id"], "lat": o["lat"], "lon": o["lon"]} for o in outlets])
+def _destinations(cfg, outlets, origin, market_ctx=None):
+    """Destinations to route from origin (Section 8.4): markets and outlets within max_radius_km straight-line; with
+    market_ctx (a crop's reporting markets), only its nearest `nearest_markets`, the set allocation considers."""
+    radius = assumption(cfg["assumptions"], "max_radius_km")
+
+    def near(items):
+        scored = sorted((haversine_km(origin["lat"], origin["lon"], x["lat"], x["lon"]), x["id"], x) for x in items
+                        if x["lat"] is not None)
+        return [x for d, _, x in scored if d <= radius]
+    markets = ([c["market"] for c in market_ctx] if market_ctx is not None else cfg["markets"])
+    markets = near([{"id": m["market_id"], "lat": m.get("lat"), "lon": m.get("lon")} for m in markets])
+    if market_ctx is not None:
+        markets = markets[:cfg["model"]["nearest_markets"]]
+    return markets + near([{"id": o["outlet_id"], "lat": o["lat"], "lon": o["lon"]} for o in outlets])
 
 
-def core_load(l, cfg, outlets, day):
-    """Validate one load from the request and add temperature and cached routes."""
+def core_load(l, cfg, outlets, day, ctx=None):
+    """Validate one load from the request and add temperature and routes (ctx: {crop: market_context} limits
+    routing to the markets allocation considers)."""
     if not isinstance(l.get("crop"), str):
         raise ApiError(400, "bad_request", "crop is required")
     q = l.get("quantity_kg")
@@ -194,7 +206,8 @@ def core_load(l, cfg, outlets, day):
     if temp is None:
         raise ApiError(422, "temperature_unavailable", f"No weather data near this origin for {day}")
     return {"crop": l["crop"], "quantity_kg": q, "origin": origin, "harvest": l["harvest"], "temp_c": temp,
-            "routes": location.routes_for(origin, _destinations(cfg, outlets)), "load_id": l.get("load_id")}
+            "routes": location.routes_for(origin, _destinations(cfg, outlets, origin, (ctx or {}).get(l["crop"]))),
+            "load_id": l.get("load_id")}
 
 
 def _plan_id(body, day):
@@ -248,7 +261,7 @@ def get_risk(q):
     origin = None
     if q.get("lat") not in (None, "") and q.get("lon") not in (None, ""):
         origin = {"lat": _float(q["lat"], "lat"), "lon": _float(q["lon"], "lon"), "place": q.get("place")}
-        routes = location.routes_for(origin, _destinations(cfg, []))
+        routes = location.routes_for(origin, _destinations(cfg, [], origin), live=False)  # radar: no paid routing
     a = cfg["assumptions"]
     rows = []
     # Without an origin or a state, only markets reporting this crop (the national list is long).
@@ -302,7 +315,7 @@ def rescue_request(b, cfg, outlets, day):
     origin = {"lat": _float(o["lat"], "origin.lat"), "lon": _float(o["lon"], "origin.lon"), "place": o.get("place")}
     return {"crop": b["crop"], "quantity_kg": q, "origin": origin, "hours_since_harvest": h, "split": split,
             "temp_c": store.temperature_c(origin["lat"], origin["lon"], day),
-            "routes": location.routes_for(origin, _destinations({"markets": []}, outlets))}
+            "routes": location.routes_for(origin, _destinations(dict(cfg, markets=[]), outlets, origin))}
 
 
 def post_rescue(body):
@@ -331,8 +344,10 @@ def post_recommend(body):
         return post_rescue(body)
     cfg, day = store.configs(), as_of_date()
     lang, outlets = _language(body), store.outlets()
-    load = core_load(body, cfg, outlets, day)
-    r = recommend(load, [], cfg["markets"], outlets, cfg, day, ctx={load["crop"]: store.contexts(load["crop"], day)})
+    crop_id = body.get("crop")
+    ctx = {crop_id: store.contexts(crop_id, day)} if crop_id in cfg["crops"] else {}
+    load = core_load(body, cfg, outlets, day, ctx)
+    r = recommend(load, [], cfg["markets"], outlets, cfg, day, ctx=ctx)
     crop = get_crop(cfg, load["crop"])
     facts = explanation_facts(r, crop, lang, cfg)
     expl = explain(facts, lang)
@@ -368,9 +383,9 @@ def post_plan(body):
         raise ApiError(400, "bad_request", "loads must be a non-empty list")
     if any(l.get("source", "farm") != "farm" for l in loads):
         raise ApiError(400, "bad_request", "/plan takes farm loads only; send unsold stock to /recommend")
-    core_loads = [core_load(dict(l, load_id=l.get("load_id") or f"L{i + 1}"), cfg, outlets, day)
+    ctx = {c: store.contexts(c, day) for c in sorted({l.get("crop") for l in loads if l.get("crop") in cfg["crops"]})}
+    core_loads = [core_load(dict(l, load_id=l.get("load_id") or f"L{i + 1}"), cfg, outlets, day, ctx)
                   for i, l in enumerate(loads)]
-    ctx = {c: store.contexts(c, day) for c in sorted({l["crop"] for l in core_loads})}
     p = plan(core_loads, [], cfg["markets"], outlets, cfg, day, ctx=ctx)
     names = {m["market_id"]: m["name"] for m in cfg["markets"]}
     capped = _capped(p["allocations"])

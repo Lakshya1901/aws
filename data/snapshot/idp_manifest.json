@@ -1,0 +1,35 @@
+{
+ "_note": "Offline demo snapshot (D24): markets within 350 km of the Kolar demo origin (13.137, 78.134), built by scripts/build_idp.py then scripts/build_idp_config.py --snapshot-crops tomato,onion.",
+ "source": "https://ckandev.indiadataportal.com/dataset/agriculture-marketing",
+ "license": "Open Data Commons Attribution License",
+ "inputs": {
+  "old.csv": {
+   "bytes": 4233268613,
+   "sha256": "0e6b03cb5f44e8002474e11fd3f9d83248b3ca53a8b6051be075da3db0b3cc74"
+  },
+  "new.csv": {
+   "bytes": 802731921,
+   "sha256": "f8a4372f3c4d532cc0a1a584933b9cfded8f71a6648e4724497976bcbc0025e3"
+  }
+ },
+ "dropped_rows": {
+  "unit": 169233,
+  "invalid": 372
+ },
+ "markets": 4142,
+ "commodities": 400,
+ "units": {
+  "arrivals": "tonnes",
+  "price": "Rs/quintal in source, Rs/kg in output"
+ },
+ "snapshot_files": {
+  "idp_onion_2021-01-01_2026-05-31.csv.gz": {
+   "sha256": "3d5248c1d2949c4d6f7612cf7128cb1645b2405c83aa5194e7367446bca28ded",
+   "bytes": 615410
+  },
+  "idp_tomato_2021-01-01_2026-05-31.csv.gz": {
+   "sha256": "d0f549fbeaa040c9b73ce0bfca5dc5bb48b6b2bfc43da53ec0b5221ad9fba0ec",
+   "bytes": 810826
+  }
+ }
+}

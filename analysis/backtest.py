@@ -1,6 +1,9 @@
-"""Backtest of the glut-risk rule (CLAUDE.md Section 9 Step 1, Section 17.2) on the CEDA snapshot.
+"""Backtest of the glut-risk rule (CLAUDE.md Section 9 Step 1, Section 17.2) on the market-level snapshot (D24).
 
-Usage: python analysis/backtest.py --crop tomato [--snapshot data/snapshot/ceda_tomato_2022-01-01_2025-06-30.csv]
+Usage: python analysis/backtest.py --crop tomato [--snapshot data/snapshot/idp_tomato_2021-01-01_2026-05-31.csv.gz]
+
+Crash scoring uses every market in the snapshot (markets within 350 km of the Kolar demo origin); price gaps and
+the comparison chart use PARAMS["alternatives"].
 
 Writes analysis/out/results_<run_id>.json and PNG charts. Deterministic: run_id is a hash of the
 snapshot sha256 and PARAMS; the JSON has no timestamps.
@@ -18,7 +21,10 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 OUT = ROOT / "analysis/out"
 
 PARAMS = {
-    "default_market": "kolar",
+    "default_market": "29-kolar",
+    # Kolar-belt tomato markets with at least ~750 reported days in the snapshot (D24 market ids).
+    "alternatives": ["29-chintamani", "29-srinivasapur", "29-mulabagilu", "29-bangarpet", "29-binnymillbengaluru",
+                     "29-ramanagara", "28-madanapalli", "28-punganur", "28-kalikiri", "28-palamaner"],
     "thresholds": {"watch_r": 1.3, "glut_r": 2.0, "glut_r_with_dp": 1.5, "watch_dp": -0.15, "glut_dp": -0.25},
     "min_days_of_last_7": 5,
     "dp_days": 3,
@@ -174,7 +180,7 @@ def haversine_km(a, b):
 
 
 def main(crop, snapshot):
-    snap = pathlib.Path(snapshot) if snapshot else ROOT / f"data/snapshot/ceda_{crop}_2022-01-01_2025-06-30.csv"
+    snap = pathlib.Path(snapshot) if snapshot else ROOT / f"data/snapshot/idp_{crop}_2021-01-01_2026-05-31.csv.gz"
     sha = hashlib.sha256(snap.read_bytes()).hexdigest()
     run_id = hashlib.sha256((sha + json.dumps(PARAMS, sort_keys=True)).encode()).hexdigest()[:12]
     markets = {m["market_id"]: m for m in json.loads((ROOT / "config/markets.json").read_text())["markets"]}
@@ -186,7 +192,7 @@ def main(crop, snapshot):
     known = level != "unknown"
     crash = crash_days(price)
     K = PARAMS["default_market"]
-    alts = [m for m in price.columns if m != K]
+    alts = [m for m in PARAMS["alternatives"] if m in price.columns]
 
     # Step 5: leads with the full rule, and with arrival-only flags (Section 7 asks whether arrivals lead price).
     full_score, full_eps = score(level.isin(["watch", "glut"]), known, crash)
@@ -217,8 +223,8 @@ def main(crop, snapshot):
     g0, g1 = PARAMS["glut_window"]
     months = [1, 2, 3, 4]
     kp = price[K]
-    same_months = {str(y): rnd(kp[(kp.index.year == y) & kp.index.month.isin(months)].median(), 2) for y in (2022, 2023, 2024, 2025)}
-    same_months_arr = {str(y): rnd(arr[K][(arr.index.year == y) & arr.index.month.isin(months)].median(), 1) for y in (2022, 2023, 2024, 2025)}
+    same_months = {str(y): rnd(kp[(kp.index.year == y) & kp.index.month.isin(months)].median(), 2) for y in (2021, 2022, 2023, 2024, 2025, 2026)}
+    same_months_arr = {str(y): rnd(arr[K][(arr.index.year == y) & arr.index.month.isin(months)].median(), 1) for y in (2021, 2022, 2023, 2024, 2025, 2026)}
     win = slice(g0, g1)
     glut_check = {
         "window": [g0, g1],
@@ -257,7 +263,7 @@ def main(crop, snapshot):
     results = {
         "run_id": run_id, "crop": crop,
         "observed": {
-            "snapshot": {"path": str(snap.relative_to(ROOT)), "sha256": sha, "source": "CEDA AGMARKNET, district aggregate"},
+            "snapshot": {"path": str(snap.relative_to(ROOT)), "sha256": sha, "source": "AGMARKNET market level, India Data Portal (D24)"},
             "coverage_days": {m: {"price": int(price[m].notna().sum()), "arrivals": int(arr[m].notna().sum())} for m in price.columns},
             "kolar_2025_glut_check": glut_check,
             "crash_days_per_market": {m: int(crash[m].sum()) for m in crash.columns},
@@ -299,12 +305,12 @@ def main(crop, snapshot):
     OUT.mkdir(parents=True, exist_ok=True)
     out = OUT / f"results_{run_id}.json"
     out.write_text(json.dumps(results, indent=1, sort_keys=True) + "\n")
-    charts(price, arr, R, level, K, alts, demo)
+    charts(price, arr, R, level, K, alts, demo, {m: markets[m]["name"] for m in [K] + alts})
     print(out.relative_to(ROOT))
     return results
 
 
-def charts(price, arr, R, level, K, alts, demo):
+def charts(price, arr, R, level, K, alts, demo, names):
     try:
         import matplotlib
         matplotlib.use("Agg")
@@ -332,7 +338,7 @@ def charts(price, arr, R, level, K, alts, demo):
     a2.axhline(PARAMS["thresholds"]["glut_r"], color="#d1495b", ls=":", lw=1)
     a2.set_ylabel("R = A7 / B")
     a2.legend(loc="upper left", fontsize=8, frameon=False)
-    a1.set_title("Kolar tomato, Dec 2024 - May 2025 (CEDA AGMARKNET district data)")
+    a1.set_title("Kolar tomato, Dec 2024 - May 2025 (AGMARKNET market data, India Data Portal)")
     fig.tight_layout()
     fig.savefig(OUT / "kolar_glut_2025.png", dpi=130, metadata=meta)
     plt.close(fig)
@@ -340,7 +346,7 @@ def charts(price, arr, R, level, K, alts, demo):
     fig, ax = plt.subplots(figsize=(10, 4.5))
     roll = price[w].rolling(7, min_periods=5).mean()
     for m in alts:
-        ax.plot(roll.index, roll[m], lw=1, alpha=0.8, label=m.capitalize())
+        ax.plot(roll.index, roll[m], lw=1, alpha=0.8, label=names[m])
     ax.plot(roll.index, roll[K], lw=2.5, color="#222", label="Kolar")
     for c in demo:
         ax.axvline(pd.Timestamp(c["date"]), color="#d1495b", lw=0.8, ls=":")

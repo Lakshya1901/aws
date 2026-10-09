@@ -3,9 +3,10 @@
 Markets: coordinates come from the source data (CLAUDE.md Section 8.3 otherwise geocodes every market).
   - both sources in India and within AGREE_KM of each other, or only one source in India: that coordinate
     (new source preferred), coord_confidence "high";
-  - sources disagree, or neither is in India: Amazon Location place search "<market>, <district>, <state>, India".
-    Relevance >= MIN_RELEVANCE: the source coordinate nearest the hit if within AGREE_KM of it, else the hit;
-    otherwise coord_confidence "low" (left out of routing until fixed).
+  - sources disagree: Amazon Location place search "<market>, <district>, <state>, India", then without the
+    district (districts renamed or split since 2011 confuse the geocoder). The first source coordinate within
+    AGREE_KM of a hit with relevance >= MIN_RELEVANCE wins; if no hit confirms either, coord_confidence "low";
+  - neither source in India: the first confident hit, else "low". Low = left out of routing until fixed.
 Commodities: every commodity, with preload = the top N fruits and vegetables by number of reporting markets.
 Snapshot (--snapshot-crops): data/snapshot/idp_<crop>_<from>_<to>.csv.gz for the markets within --snapshot-radius km
 of --snapshot-origin, so the demo replays run offline (CLAUDE.md Section 20).
@@ -26,8 +27,11 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 AGREE_KM = 15
 MIN_RELEVANCE = 0.9
 PRELOAD_CATEGORIES = ("Vegetables", "Fruits")
+# Extra geocode query for markets whose AGMARKNET spelling or new district the geocoder does not know; the hit must
+# still confirm a source coordinate. 28-madanapalli: "Madanapalle, Chittoor" (district split in 2022).
+QUERY_ALIASES = {"28-madanapalli": "Madanapalle, Chittoor, Andhra Pradesh, India"}
 STATES = {  # state name in the source -> code used by config/assumptions.json per-state overrides
-    "Andaman and Nicobar": "AN", "Andhra Pradesh": "AP", "Arunachal Pradesh": "AR", "Assam": "AS", "Bihar": "BR",
+    "Andaman and Nicobar": "AN", "Andaman and Nicobar Islands": "AN", "Andhra Pradesh": "AP", "Arunachal Pradesh": "AR", "Assam": "AS", "Bihar": "BR",
     "Chandigarh": "CH", "Chhattisgarh": "CG", "Dadra and Nagar Haveli": "DN", "Daman and Diu": "DD",
     "Dadra and Nagar Haveli and Daman and Diu": "DN", "Goa": "GA", "Gujarat": "GJ", "Haryana": "HR",
     "Himachal Pradesh": "HP", "Jammu and Kashmir": "JK", "Jharkhand": "JH", "Karnataka": "KA", "Kerala": "KL",
@@ -39,8 +43,8 @@ STATES = {  # state name in the source -> code used by config/assumptions.json p
 
 
 def state_code(name):
-    key = name.replace("&", "and").strip()
-    return STATES.get(key) or STATES.get(key.title())
+    key = name.replace("&", "and").strip().lower()
+    return {k.lower(): v for k, v in STATES.items()}.get(key)
 
 
 def in_india(c):
@@ -60,14 +64,17 @@ def resolve(m, geocode):
     if len(srcs) == 1 or (len(srcs) == 2 and km(srcs["old"], srcs["new"]) <= AGREE_KM):
         kind = "new" if "new" in srcs else "old"
         return (*srcs[kind], f"idp {kind} source", "high")
-    hit = geocode(f"{m['name']}, {m['district']}, {m['state_name']}, India")
-    if hit is None or hit[2] < MIN_RELEVANCE:
-        best = srcs.get("new") or srcs.get("old") or (None, None)
-        return (*best, "idp; sources disagree or missing, geocode not confident", "low")
-    near = min(srcs.items(), key=lambda kv: km(kv[1], hit[:2]), default=None)
-    if near and km(near[1], hit[:2]) <= AGREE_KM:
-        return (*near[1], f"idp {near[0]} source, confirmed by amazon location", "high")
-    return (hit[0], hit[1], "amazon location place search", "high")
+    queries = [f"{m['name']}, {m['district']}, {m['state_name']}, India", f"{m['name']}, {m['state_name']}, India"]
+    queries += [QUERY_ALIASES[m["market_id"]]] if m["market_id"] in QUERY_ALIASES else []
+    hits = [h for h in map(geocode, queries) if h and h[2] >= MIN_RELEVANCE]
+    for h in hits:
+        for kind in ("new", "old"):
+            if kind in srcs and km(srcs[kind], h[:2]) <= AGREE_KM:
+                return (*srcs[kind], f"idp {kind} source, confirmed by amazon location", "high")
+    if not srcs and hits:
+        return (hits[0][0], hits[0][1], "amazon location place search (no source coordinates)", "high")
+    best = srcs.get("new") or srcs.get("old") or (None, None)
+    return (*best, "idp; sources disagree or missing, not confirmed by amazon location", "low")
 
 
 def main(idp, index, top, dry_run):

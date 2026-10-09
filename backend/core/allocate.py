@@ -1,5 +1,6 @@
 """Step 5: greedy allocation across outlets, anti-herding (CLAUDE.md Section 9)."""
 from .config import CoreError, assumption
+from .risk import to_date
 from .impact import EDIBLE_TYPES, RECOVER_TYPES, impact, rescue_impact
 from .netvalue import fresh_option, haversine_km, second_life_option
 from .spoilage import spoilage_share
@@ -27,11 +28,16 @@ def allocate_load(load, crop, market_ctx, outlets, added_kg, configs):
     if not near:
         raise CoreError("no_markets_in_radius", "No reporting markets near you for this crop")
     q = load["quantity_kg"]
+    # D25: a price older than max_data_age_days says nothing about today's market; list it, never choose it.
+    max_age = assumption(a, "max_data_age_days")
+    too_old = {m["market_id"] for m in near
+               if (to_date(m["_ctx"]["risk"]["as_of_date"]) - to_date(m["_ctx"]["risk"]["latest_date"])).days > max_age}
     fresh = [fresh_option(load, m["_ctx"], added_kg.get(m["market_id"], 0), crop, configs) for m in near]
     fresh.sort(key=lambda o: -o["net_rs_per_kg"]["mid"])
     default = min(fresh, key=lambda o: o["distance_km"])
     # D17: only markets whose projected R is known can be checked for glut, so only they can be chosen.
-    paying = [o for o in fresh if o["net_rs_per_kg"]["mid"] > 0 and o["projected_risk_level"] is not None]
+    paying = [o for o in fresh if o["net_rs_per_kg"]["mid"] > 0 and o["projected_risk_level"] is not None
+              and o["outlet_id"] not in too_old]
     # Best paying market whose projected R stays out of glut; if every paying market would be in glut, the best one.
     top = next((o for o in paying if o["projected_risk_level"] != "glut"), paying[0] if paying else None)
 

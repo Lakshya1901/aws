@@ -307,3 +307,13 @@ def test_prevent_load_routed_to_recover_rung_counts_as_recovered(configs):
     none = recommend(load(), rows, MARKETS, [], configs, AS_OF)
     assert none["top"]["type"] == "compost" and none["top"]["outlet_id"] is None
     assert none["impact"]["recovered_kg"] == 0  # no real unit in radius: nothing recovered
+
+
+def test_market_with_old_data_is_listed_but_never_chosen(configs):
+    """D25: Madanapalle's last report is 20 days old at a far higher price; it is listed, never chosen."""
+    rows = ([r for r in normal_week() if r["market_id"] != "madanapalle"]
+            + history("madanapalle", 80, 60, end="2025-03-15"))
+    r = recommend(load(), rows, MARKETS, OUTLETS, configs, AS_OF)
+    listed = {o["outlet_id"]: o for o in [r["top"], r["default"]] + r["alternatives"]}
+    assert "madanapalle" in listed and r["top"]["outlet_id"] != "madanapalle"
+    assert listed["madanapalle"]["net_rs_per_kg"]["mid"] > r["top"]["net_rs_per_kg"]["mid"]

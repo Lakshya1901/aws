@@ -58,6 +58,10 @@
     "value": 1.5, "unit": "x residual standard deviation", "status": "assumption",
     "source": "CLAUDE.md Section 10"
   },
+  "max_data_age_days": {
+    "value": 7, "unit": "days", "status": "assumption",
+    "source": "CLAUDE.md D25: a market whose latest report is older than this is listed but never chosen (same rule as D17); 7 = the A7 window"
+  },
   "dump_share_table": {
     "value": [
       {"r_below": 1.3, "u": 0.0},
