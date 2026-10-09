@@ -7,8 +7,9 @@ export const CROPS: CropId[] = ['tomato', 'onion', 'potato', 'banana']; // MVP c
 export type RiskLevel = 'safe' | 'watch' | 'glut';
 export type Mode = 'predictive' | 'same_day';
 export type Harvest = 'today' | 'tomorrow' | 'harvested';
-/** 'hold' = keep a storable crop (no outlet); 'feed_compost' can also be a fallback with no outlet. */
-export type OutletType = 'mandi' | 'processor' | 'food_bank' | 'feed_compost' | 'hold';
+/** 'hold' = keep a storable crop (no outlet); 'compost' can also be a fallback with no outlet.
+ * feed, biogas and compost are the Recover rung (CLAUDE.md D19). */
+export type OutletType = 'mandi' | 'processor' | 'food_bank' | 'feed' | 'biogas' | 'compost' | 'hold';
 
 export interface Range {
   low: number;
@@ -116,9 +117,9 @@ export interface RecommendRequest {
 }
 
 export interface OutletOption {
-  /** null for hold and for the feed/compost fallback with no seeded outlet in radius. */
+  /** null for hold and for the compost fallback with no seeded outlet in radius. */
   outlet_id: string | null;
-  /** Absent for hold and for the feed/compost fallback. */
+  /** Absent for hold and for the compost fallback. */
   name?: string;
   type: OutletType;
   state?: string;
@@ -145,8 +146,18 @@ export interface OutletOption {
   partnered?: boolean;
 }
 
-/** waste_avoided_kg: null = not yet estimated; any value can be negative (the trip loses more than it saves). */
+/**
+ * Impact Ledger (CLAUDE.md Section 9 Step 6). kept_out_of_landfill_kg = Prevented (waste_avoided_kg) + Rescued +
+ * Recovered; redirected_kg is never added. waste_avoided_kg: null = not yet estimated; any value can be negative
+ * (the trip loses more than it saves). biogas_energy: null while the biogas yield is unsourced.
+ */
 export interface Impact {
+  kept_out_of_landfill_kg: Range | null;
+  rescued_kg: number;
+  recovered_kg: number;
+  biogas_kg: number;
+  biogas_energy: number | null;
+  biogas_energy_unit: string | null;
   redirected_kg: number;
   waste_avoided_kg: Range | null;
   extra_km: number | null;
@@ -177,6 +188,44 @@ export interface RecommendResponse extends Envelope, FixtureMark {
   explanation: Explanation;
   advice: Advice | null;
   harvest_cost_rs_per_kg: number;
+  assumptions_used: string[];
+}
+
+// ---------- POST /recommend, source "mandi_unsold" (Rescue, Step 5b) ----------
+
+/** edible_kg and spoiled_kg: both or neither; omitted = the engine proposes the split (needs weather). */
+export interface RescueRequest {
+  source: 'mandi_unsold';
+  crop: CropId;
+  quantity_kg: number;
+  hours_since_harvest: number;
+  edible_kg?: number;
+  spoiled_kg?: number;
+  origin: Origin;
+  language: Lang;
+  plan_id?: string;
+}
+
+export interface Split {
+  edible_kg: number;
+  spoiled_kg: number;
+  source: 'estimate' | 'trader';
+}
+
+export interface RescueResponse extends Envelope, FixtureMark {
+  plan_id: string;
+  source: 'mandi_unsold';
+  data: Freshness;
+  crop: CropId;
+  quantity_kg: number;
+  split: Split;
+  /** Processor or food bank for the edible part; null when none is in radius. */
+  top: OutletOption | null;
+  /** Feed, biogas or compost for the spoiled part (and the edible part when top is null); null when none. */
+  recover: OutletOption | null;
+  alternatives: OutletOption[];
+  impact: Impact;
+  explanation: Explanation;
   assumptions_used: string[];
 }
 
@@ -256,6 +305,7 @@ export type ApiErrorCode =
   | 'crop_not_configured'
   | 'drive_time_unavailable'
   | 'temperature_unavailable'
+  | 'split_required'
   | 'speak_language_unsupported'
   | 'transcribe_failed'
   | 'speak_failed'

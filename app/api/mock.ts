@@ -7,6 +7,8 @@ import type {
   PlanResponse,
   RecommendRequest,
   RecommendResponse,
+  RescueRequest,
+  RescueResponse,
   RiskQuery,
   RiskResponse,
   SpeakResponse,
@@ -42,6 +44,14 @@ export const mock = {
           ? (require('./fixtures/recommend_price_crash.fixture.json') as RecommendResponse)
           : (require('./fixtures/recommend.fixture.json') as RecommendResponse);
     return { ...base, impact: { ...base.impact, redirected_kg: req.quantity_kg } };
+  },
+  // Rescue: trader split -> the trader-split fixture; no split -> the estimate fixture, except at an origin
+  // far from the synthetic test region (no weather there), which answers 422 split_required.
+  async rescue(req: RescueRequest): Promise<RescueResponse> {
+    await delay(600);
+    if (req.edible_kg != null) return require('./fixtures/rescue_trader.fixture.json') as RescueResponse;
+    if (req.origin.lat > 20) throw new ApiError(422, 'split_required');
+    return require('./fixtures/rescue.fixture.json') as RescueResponse;
   },
   // The stored ten-load plan from the backend tests, whatever loads are sent.
   async plan(_req: PlanRequest): Promise<PlanResponse> {

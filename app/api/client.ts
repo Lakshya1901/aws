@@ -7,6 +7,8 @@ import type {
   PlanResponse,
   RecommendRequest,
   RecommendResponse,
+  RescueRequest,
+  RescueResponse,
   RiskQuery,
   RiskResponse,
   SpeakRequest,
@@ -97,6 +99,12 @@ export const api = {
 
   recommend(req: RecommendRequest): Promise<RecommendResponse> {
     if (mock) return mock.recommend(req);
+    return request('POST', '/recommend', req);
+  },
+
+  /** Unsold stock at a city mandi: the same POST /recommend with source "mandi_unsold". */
+  rescue(req: RescueRequest): Promise<RescueResponse> {
+    if (mock) return mock.rescue(req);
     return request('POST', '/recommend', req);
   },
 

@@ -15,7 +15,7 @@ export function useOutletLabels() {
   const { t } = useSession();
   return {
     typeLabel: (o: OutletOption) => t(`type_${o.type}`),
-    /** Hold and the feed/compost fallback have no name. */
+    /** Hold and the compost fallback have no name. */
     name: (o: OutletOption) => o.name ?? t(`type_${o.type}`),
     /** Stable key and "Use this" identity; hold/fallback have outlet_id null. */
     key: (o: OutletOption) => o.outlet_id ?? `_${o.type}`,

@@ -67,6 +67,7 @@ export default function TodayScreen() {
   return (
     <Screen>
       <Btn label={t('new_load')} onPress={() => router.push('/new-load')} style={{ minHeight: 64 }} />
+      <Btn kind="secondary" label={t('unsold_stock')} onPress={() => router.push('/rescue')} />
       <View style={s.row}>
         <Btn kind="secondary" label={t('todays_plan')} onPress={() => router.push('/plan')} />
         <Btn kind="secondary" label={t('impact')} onPress={() => router.push('/impact')} />

@@ -16,7 +16,7 @@ const fmtCoords = (lat: number | null, lon: number | null) =>
   lat !== null && lon !== null ? `${lat.toFixed(4)}, ${lon.toFixed(4)}` : '';
 
 /** "13.14, 78.13" (comma or space separated) -> coordinates, or null. */
-function parseCoords(text: string): { lat: number; lon: number } | null {
+export function parseCoords(text: string): { lat: number; lon: number } | null {
   const parts = text.trim().split(/[\s,]+/);
   if (parts.length !== 2) return null;
   const [lat, lon] = parts.map(Number);
