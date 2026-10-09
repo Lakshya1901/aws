@@ -1,7 +1,7 @@
 # AnnaSetu: to do (handoff for a fresh Claude Code session)
 
 Deadline: Sunday October 11, 2026, 8:00 PM IST.
-Branch: `edit/festive-darwin-bd1y1i` (not merged to `main` yet). Spec and every decision so far: `CLAUDE.md` (D1-D18 in Section 19.1).
+Branch: `edit/beautiful-ritchie-ij5zmf` (`edit/festive-darwin-bd1y1i` was merged to `main` on October 9). Spec and every decision so far: `CLAUDE.md` (D1-D18 in Section 19.1).
 
 ## How to start the new session
 
@@ -31,6 +31,7 @@ TODO.md as they are done and commit TODO.md with the work.
 - [ ] 1.2 Create IAM user `annasetu-deployer` (not root): `PowerUserAccess` plus an inline policy allowing `iam:CreateRole`, `iam:PutRolePolicy`, `iam:AttachRolePolicy`, `iam:DetachRolePolicy`, `iam:PassRole`, `iam:GetRole`, `iam:DeleteRole*` on `arn:aws:iam::*:role/annasetu-*`. Create an access key. Delete it after the hackathon.
 - [ ] 1.3 Bedrock console, ap-south-1: enable a small Claude model; note its model ID and whether it needs an APAC inference profile (`infra/README.md`).
 - [ ] 1.4 Environment settings (session title bar, cloud environment menu, Edit): add `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION=ap-south-1`. Never paste keys in chat or commit them.
+  - Oct 9: both keys are set, but STS rejects them (`InvalidClientTokenId`: key deleted, inactive, mistyped, or has stray whitespace/quotes). `AWS_DEFAULT_REGION` is not set. Re-enter the key pair, then start a new session. Blocks 1.5, 2.1, 2.3, 2.4.
 - [ ] 1.5 Create SSM SecureStrings `/annasetu/datagov_key` and `/annasetu/app_api_key` (`infra/README.md`).
 
 ### 2. Routes and deploy
@@ -41,7 +42,7 @@ TODO.md as they are done and commit TODO.md with the work.
 
 ### 3. iPhone and Android test
 - [ ] 3.1 Put the API URL and key in `app/.env` (from `app/.env.example`); never commit it.
-- [ ] 3.2 Android: `app/eas.json` does not exist yet; create it with a `preview` profile that builds an APK (`npx eas build:configure`, needs an Expo account). Then `eas build -p android --profile preview`; install the APK; one typed and one voice recommendation end to end (target under 15 s from release to card).
+- [ ] 3.2 Android: `app/eas.json` has a `preview` profile that builds an APK (EAS environment `preview`). Needs an Expo account (`eas login`). EAS does not upload the git-ignored `app/.env`, so set `EXPO_PUBLIC_API_URL` and `EXPO_PUBLIC_API_KEY` with `eas env:create --environment preview` (key as a secret). Then `eas build -p android --profile preview`; install the APK; one typed and one voice recommendation end to end (target under 15 s from release to card).
 - [ ] 3.3 iPhone: run through Expo Go (no App Store / TestFlight). Same two flows.
 - [ ] 3.4 Check Listen (Hindi and English only; Kannada shows the note), Second Life screen, stale banner, 422 messages.
 
@@ -51,9 +52,10 @@ TODO.md as they are done and commit TODO.md with the work.
 - [ ] 4.3 Usability test with a few volunteers (first-time user gets a recommendation by voice and can repeat the reason). Then update the "Users" row in README.md and CLAUDE.md Section 18.
 
 ### 5. Verification
-- [ ] 5.1 Full checks: `python -m pytest backend/tests -q`, `cd app && npx tsc --noEmit`, `cd infra && sam validate --lint`.
-- [ ] 5.2 Reproducibility: re-run `python analysis/backtest.py --crop tomato` and `python analysis/second_replay.py`; outputs must be byte-identical to the committed files.
+- [x] 5.1 Full checks: `python -m pytest backend/tests -q`, `cd app && npx tsc --noEmit`, `cd infra && sam validate --lint`. Oct 9: 85 passed, tsc clean, template valid. Re-run after any later change.
+- [x] 5.2 Reproducibility: re-run `python analysis/backtest.py --crop tomato` and `python analysis/second_replay.py`; outputs must be byte-identical to the committed files. Oct 9: JSON and both PNGs byte-identical (charts need matplotlib).
 - [ ] 5.3 Every number on screen traces to `config/` or computed data with its status (CLAUDE.md Section 20). No Section 3.3 claims anywhere. No "days early" wording (mode is `same_day`).
+  - Oct 9: no Section 3.3 claims in app, config, backend or README; `glut_in_days` renders only in `predictive` mode. Number tracing waits on 2.2 figures and phone screens.
 
 ### 6. Stat report generation
 - [ ] 6.1 One report of the final numbers for both replay days from the live or local API: per load and 10-load plan, waste avoided (range), redirected, extra km, diesel, CO2, net value default vs advised. Save as `analysis/out/demo_report.json` (+ a readable `.md`).
@@ -70,12 +72,12 @@ TODO.md as they are done and commit TODO.md with the work.
 
 ### 9. README, final push, public repo
 - [ ] 9.1 Update README.md with the stat report figures, screenshots in `docs/`, and the APK link (replace "TBD").
-- [ ] 9.2 Merge `edit/festive-darwin-bd1y1i` into `main` (via a PR; confirm first).
+- [ ] 9.2 Merge the working branch into `main` (via a PR; confirm first). `edit/festive-darwin-bd1y1i` already merged on October 9.
 - [ ] 9.3 Make the repo public. Check nothing secret is committed (no keys, `samconfig.toml`, `.env`).
 
 ## Tomorrow (October 10)
 
-- [ ] 10. Commit history check: clear messages, no secrets, no model identifiers, no `node_modules` or build output.
+- [x] 10. Commit history check: clear messages, no secrets, no model identifiers, no `node_modules` or build output. Oct 9: no keys, `.env`, `samconfig.toml`, `node_modules`, build output or model IDs in any commit. Early messages (`v1`, `merge (#1)`) are terse; left as is (rewriting `main` is not worth it). Re-check before 9.3.
 - [ ] 11. Demo video, 3 minutes or less: the live app on a phone, the 2025 Kolar price crash (2025-03-19), and the second case study (2023-09-06 arrival glut, ten loads split). Show "Replaying <date> data", label counterfactuals as modelled, waste avoided separate from redirected. Then fill the video link in README.md (replace "TBD").
 - [ ] 12. Blog / short writeup: problem, build, AWS usage (name the SAM CLI and every AWS service; CLAUDE.md Section 22.1).
   List the AI coding tools used (Claude Code), as the rules require: "You can use AI coding tools. List the ones you used in your writeup." (https://www.wemakedevs.org/aws/env/rules). Add the same line to README.md.
