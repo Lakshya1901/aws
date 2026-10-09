@@ -13,13 +13,15 @@ from datetime import datetime, timedelta, timezone
 from functools import lru_cache
 
 from backend.adapters import location, store
+from backend.core.allocate import SECOND_LIFE_ORDER
 from backend.core.config import CoreError, assumption, crop_mode, get_crop
 from backend.core.impact import total_impact
 from backend.core.netvalue import haversine_km
-from backend.core.recommend import glut_radar, plan, recommend
+from backend.core.recommend import glut_radar, plan, recommend, rescue
 
 LANGS = ("en", "hi", "kn")
 HARVEST = ("today", "tomorrow", "harvested")
+SOURCES = ("farm", "mandi_unsold")
 ERROR_CODES = {"crop_profile_incomplete": "crop_not_configured"}
 
 
@@ -112,6 +114,29 @@ def template_text(f, lang):
     return ". ".join(p.rstrip(".") for p in parts) + "."
 
 
+def rescue_text(r, lang):
+    """Rescue explanation from the template only (no Bedrock, D19): edible kg and outlet, then spoiled kg and the
+    Recover outlet, which also takes the edible part when no processor or food bank is in radius."""
+    c = _copy(store.config_dir(), lang)
+    split, top, rec = r["split"], r["top"], r["recover"]
+
+    est = f" ({c['estimate']})" if split["source"] == "estimate" else ""
+
+    def kg(x):
+        return _fill(c["kg_value"], v=round(x)) + est
+
+    def dest(o):
+        return _fill(c["send_to"], outlet=o.get("name") or c[f"type_{o['type']}"])
+    parts = []
+    if split["edible_kg"] > 0:
+        parts += [f"{c['edible']}: {kg(split['edible_kg'])}"] + ([dest(top)] if top else [])
+    if split["spoiled_kg"] > 0:
+        parts.append(f"{c['spoiled']}: {kg(split['spoiled_kg'])}")
+    if split["spoiled_kg"] > 0 or not top:  # the Recover rung takes the spoiled part, and the edible part too
+        parts.append(dest(rec) if rec else c["no_recover_outlet"])  # when no processor or food bank is near
+    return ". ".join(p.rstrip(".") for p in parts) + "."
+
+
 def explain(facts, lang):
     """Bedrock (adapters/bedrock.py, when present and BEDROCK_ENABLED=1) else the template."""
     if os.environ.get("BEDROCK_ENABLED", "").lower() in ("1", "true"):
@@ -182,7 +207,9 @@ def _plan_id(body, day):
 
 def _outlet(o):
     """Core option plus partnered (second-life outlets only; seeded outlets are not partnered)."""
-    if o["type"] in ("processor", "food_bank", "feed_compost"):
+    if o is None:
+        return None
+    if o["type"] in SECOND_LIFE_ORDER:
         return dict(o, partnered=o.get("verified") is True)
     return o
 
@@ -202,8 +229,9 @@ def _save(plan_id, day, lang, update):
                                       "as_of_date": day, "recommendations": [], "plan": None, "overrides": []}
     rec["language"] = lang
     update(rec)
-    rec["impact"] = (rec["plan"]["impact"] if rec["plan"]
-                     else total_impact([x["impact"] for x in rec["recommendations"]]))
+    farm = [x["impact"] for x in rec["recommendations"] if x.get("source", "farm") == "farm"]
+    rescued = [x["impact"] for x in rec["recommendations"] if x.get("source", "farm") != "farm"]
+    rec["impact"] = total_impact(([rec["plan"]["impact"]] if rec["plan"] else farm) + rescued)
     store.put_plan(rec)
 
 
@@ -246,7 +274,59 @@ def get_risk(q):
             "data": {"as_of_date": day, "stale": any(x["stale"] for x in rows)}, "markets": rows}
 
 
+def rescue_request(b, cfg, outlets, day):
+    """Validate a mandi_unsold request (Step 5b) and add temperature (may be None) and cached routes."""
+    if not isinstance(b.get("crop"), str):
+        raise ApiError(400, "bad_request", "crop is required")
+    q = b.get("quantity_kg")
+    if isinstance(q, bool) or not isinstance(q, (int, float)) or q <= 0:
+        raise ApiError(400, "bad_request", "quantity_kg must be a positive number")
+    h = b.get("hours_since_harvest")
+    if isinstance(h, bool) or not isinstance(h, (int, float)) or h < 0:
+        raise ApiError(400, "bad_request", "hours_since_harvest must be a number >= 0")
+    e, sp = b.get("edible_kg"), b.get("spoiled_kg")
+    split = None
+    if e is not None or sp is not None:
+        if any(isinstance(x, bool) or not isinstance(x, (int, float)) or x < 0 for x in (e, sp)):
+            raise ApiError(400, "bad_request", "edible_kg and spoiled_kg must both be numbers >= 0, or both omitted")
+        if abs(e + sp - q) > 0.5:
+            raise ApiError(400, "bad_request", "edible_kg + spoiled_kg must equal quantity_kg")
+        split = {"edible_kg": e, "spoiled_kg": sp}
+    get_crop(cfg, b["crop"])
+    o = b.get("origin") or {}
+    if o.get("lat") is None or o.get("lon") is None:
+        raise ApiError(422, "origin_unknown",
+                       "Origin needs lat and lon; place names are not geocoded. Send the device location.")
+    origin = {"lat": _float(o["lat"], "origin.lat"), "lon": _float(o["lon"], "origin.lon"), "place": o.get("place")}
+    return {"crop": b["crop"], "quantity_kg": q, "origin": origin, "hours_since_harvest": h, "split": split,
+            "temp_c": store.temperature_c(origin["lat"], origin["lon"], day),
+            "routes": location.routes_for(origin, _destinations({"markets": []}, outlets))}
+
+
+def post_rescue(body):
+    cfg, day = store.configs(), as_of_date()
+    lang, outlets = _language(body), store.outlets()
+    load = rescue_request(body, cfg, outlets, day)
+    r = rescue(load, outlets, cfg, day)
+    expl = {"language": lang, "text": rescue_text(r, lang), "source": "template"}
+    plan_id = body.get("plan_id") or _plan_id(body, day)
+    _save(plan_id, day, lang, lambda rec: rec["recommendations"].append(
+        {"source": "mandi_unsold", "load": load, "split": r["split"],
+         "top": (r["top"] or {}).get("outlet_id"), "recover": (r["recover"] or {}).get("outlet_id"),
+         "impact": r["impact"], "explanation": expl}))
+    return {"plan_id": plan_id, "source": "mandi_unsold", **_envelope(), "data": r["data"],
+            "crop": r["crop"], "quantity_kg": r["quantity_kg"], "split": r["split"],
+            "top": _outlet(r["top"]), "recover": _outlet(r["recover"]),
+            "alternatives": [_outlet(o) for o in r["alternatives"]],
+            "impact": r["impact"], "explanation": expl, "assumptions_used": r["assumptions_used"]}
+
+
 def post_recommend(body):
+    source = body.get("source", "farm")
+    if source not in SOURCES:
+        raise ApiError(400, "bad_request", f"source must be one of {', '.join(SOURCES)}")
+    if source == "mandi_unsold":
+        return post_rescue(body)
     cfg, day = store.configs(), as_of_date()
     lang, outlets = _language(body), store.outlets()
     load = core_load(body, cfg, outlets, day)
@@ -284,6 +364,8 @@ def post_plan(body):
     loads = body.get("loads")
     if not isinstance(loads, list) or not loads:
         raise ApiError(400, "bad_request", "loads must be a non-empty list")
+    if any(l.get("source", "farm") != "farm" for l in loads):
+        raise ApiError(400, "bad_request", "/plan takes farm loads only; send unsold stock to /recommend")
     core_loads = [core_load(dict(l, load_id=l.get("load_id") or f"L{i + 1}"), cfg, outlets, day)
                   for i, l in enumerate(loads)]
     rows = [r for c in sorted({l["crop"] for l in core_loads}) for r in store.market_days(c, day)]

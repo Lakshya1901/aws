@@ -81,22 +81,26 @@ def fresh_option(load, mkt, added_kg, crop, configs):
 
 
 def second_life_option(load, outlet, crop, configs):
-    """Processor: P_hat = offer_price_kg (null -> net null, 'not yet estimated'). Food bank, feed/compost: P_hat = 0.
+    """Processor: P_hat = offer_price_kg (null -> net null, 'not yet estimated'). Food bank, feed, biogas,
+    compost: P_hat = 0.
 
-    No mandi wait, fee, commission or handling applies at a second-life outlet.
+    No mandi wait, fee, commission or handling applies at a second-life outlet. Rescue with a trader split may
+    have no temperature (temp_c None): spoilage and net are then null, 'not yet estimated'.
     """
     a = configs["assumptions"]
     distance, hours, approx = route(load["origin"], outlet["outlet_id"], outlet, load.get("routes"), a)
-    spoil = spoilage_share(load.get("hours_since_harvest", 0) + hours, load["temp_c"], crop)
+    spoil = (None if load["temp_c"] is None
+             else spoilage_share(load.get("hours_since_harvest", 0) + hours, load["temp_c"], crop))
     freight_rate = assumption(a, "freight_rs_per_tonne_km")
     p = outlet.get("offer_price_kg") if outlet["type"] == "processor" else 0.0
-    net = None if p is None else net_value({"low": p, "mid": p, "high": p}, spoil, distance, freight_rate, 0.0)
+    net = (None if p is None or spoil is None
+           else net_value({"low": p, "mid": p, "high": p}, spoil, distance, freight_rate, 0.0))
     return {
         "outlet_id": outlet["outlet_id"], "name": outlet.get("name"), "type": outlet["type"],
         "state": outlet.get("state"),
         "net_rs_per_kg": net, "net_note": "not yet estimated" if net is None else None,
         "distance_km": distance, "distance_approx": approx, "drive_hours": hours,
-        "spoilage_share": spoil["mid"], "spoilage_range": spoil,
+        "spoilage_share": None if spoil is None else spoil["mid"], "spoilage_range": spoil,
         "freight_rs_per_kg": freight_rate * distance / 1000,
         "freight_rs_load": freight_rate * distance / 1000 * load["quantity_kg"],
         "contact": outlet.get("contact"), "verified": outlet.get("verified"), "note": outlet.get("note"),

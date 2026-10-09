@@ -40,7 +40,9 @@ Floats in `recommend`, `plan` and `glut_radar` outputs are rounded to 4 decimals
 ```
 {"mode": "same_day", "data": {"as_of_date", "stale"}, "crop", "quantity_kg",
  "top": option, "default": option (nearest reporting mandi), "alternatives": [option, ...],
- "impact": {"redirected_kg", "waste_avoided_kg": {"low","mid","high"} | null,
+ "impact": {"kept_out_of_landfill_kg": {"low","mid","high"} | null, "rescued_kg", "recovered_kg", "biogas_kg",
+            "biogas_energy" (null while biogas_yield is unsourced), "biogas_energy_unit",
+            "redirected_kg", "waste_avoided_kg": {"low","mid","high"} | null,
             "extra_km", "diesel_l", "co2_kg", "water_l"},
  "advice": null | {"code": "delay_harvest" | "harvest_to_order", "best_net_rs_per_kg", "harvest_cost_rs_per_kg"},
  "assumptions_used": ["freight_rs_per_tonne_km", "dump_share_table", "tomato.alpha", ...]}   # non-sourced inputs only
@@ -54,10 +56,10 @@ Floats in `recommend`, `plan` and `glut_radar` outputs are rounded to 4 decimals
  "risk_level", "arrival_ratio", "projected_arrival_ratio", "projected_risk_level", "price_change_3d",
  "elasticity_b", "stale", "latest_date", "data_complete"}
 ```
-Second-life option (`type`: `processor` | `food_bank` | `feed_compost`): `outlet_id, name, type, state, net_rs_per_kg (null when offer price unknown), net_note, distance_km, distance_approx, drive_hours, spoilage_share, spoilage_range, freight_rs_per_kg, freight_rs_load, contact, verified, note`.
+Second-life option (`type`: `processor` | `food_bank` | `feed` | `biogas` | `compost`): `outlet_id, name, type, state, net_rs_per_kg (null when offer price unknown, or spoilage unknown in Rescue without weather), net_note, distance_km, distance_approx, drive_hours, spoilage_share, spoilage_range, freight_rs_per_kg, freight_rs_load, contact, verified, note`.
 Hold option (storable crops only): `{"outlet_id": null, "type": "hold", "net_rs_per_kg": null, "net_note": "not yet estimated"}`.
 
-`alternatives` = the other fresh mandis ranked by net mid (highest first), then second-life outlets in hierarchy order (processor, food bank, feed/compost; nearest first within a type).
+`alternatives` = the other fresh mandis ranked by net mid (highest first), then second-life outlets in hierarchy order (processor, food bank, feed, biogas, compost; nearest first within a type).
 
 `plan(loads, market_days, markets, outlets, configs, as_of_date) -> dict` (`/plan`):
 ```
@@ -67,6 +69,14 @@ Hold option (storable crops only): `{"outlet_id": null, "type": "hold", "net_rs_
  "impact": totals (a total is null if any load's value is null),
  "assumptions_used": [...]}
 ```
+
+`rescue(load, outlets, configs, as_of_date) -> dict` (`/recommend` with `source: "mandi_unsold"`, Step 5b; `load` has `hours_since_harvest`, `split` {edible_kg, spoiled_kg} or null, `temp_c` or null):
+```
+{"source": "mandi_unsold", "data", "crop", "quantity_kg", "split": {"edible_kg", "spoiled_kg", "source": "estimate" | "trader"},
+ "top": option | null (processor or food bank for the edible part), "recover": option | null (feed, biogas or compost),
+ "alternatives": [option, ...], "impact", "assumptions_used"}
+```
+CoreError `split_required` when no split is given and there is no weather at the origin.
 
 `glut_radar(crop_id, market_days, markets, configs, as_of_date) -> dict` (`/risk`):
 `{"mode", "data": {"as_of_date", "stale"}, "markets": [risk dict + name, state, lat, lon, elasticity_b]}`.
@@ -81,8 +91,8 @@ Hold option (storable crops only): `{"outlet_id": null, "type": "hold", "net_rs_
 - `pricing.fit_elasticity(rows, as_of_date, model) -> {b, r2, resid_sd, n, b_source: fit|clipped|fallback}`; `pricing.price_on_arrival(price_kg, arrivals_t, added_t, b, resid_sd, sd_multiplier=1) -> {low, mid, high}`.
 - `spoilage.shelf_life_hours(temp_c, sl_ref_hours, q10, t_ref_c)`; `spoilage.spoilage_share(hours, temp_c, crop) -> {low, mid, high}`.
 - `netvalue.haversine_km(...)`, `netvalue.route(origin, dest_id, dest, routes, assumptions) -> (km, hours, approx)`, `netvalue.net_value(price, spoil, distance_km, freight_rate, deduct_pct)`, `netvalue.fresh_option(...)`, `netvalue.second_life_option(...)`.
-- `allocate.allocate(loads, crops, market_ctx, outlets, configs)`, `allocate.allocate_load(...)`.
-- `impact.impact(quantity_kg, default, advised, crop, assumptions)`, `impact.waste_avoided(...)`, `impact.total_impact(impacts)`.
+- `allocate.allocate(loads, crops, market_ctx, outlets, configs)`, `allocate.allocate_load(...)`, `allocate.rescue_load(load, crop, outlets, configs)`.
+- `impact.impact(quantity_kg, default, advised, crop, assumptions)`, `impact.rescue_impact(split, edible_outlet, recover_outlet, assumptions)`, `impact.waste_avoided(...)`, `impact.total_impact(impacts)`.
 
 ## Model choices not fixed by the spec
 

@@ -104,6 +104,13 @@ def _plan_body():
     return {"language": "en", "loads": [dict(_recommend_body(quantity_kg=q), load_id=f"L{i}") for i, q in enumerate(qs)]}
 
 
+def _rescue_body(**kw):
+    return dict({"source": "mandi_unsold", "crop": "tomato", "quantity_kg": 1000, "origin": dict(ORIGIN),
+                 "hours_since_harvest": 48, "language": "en"}, **kw)
+
+
+DELHI = {"lat": 28.61, "lon": 77.21, "place": "Delhi"}
+
 CASES = {
     "risk_normal_week": ("normal_week", "GET", "/risk", {"crop": "tomato", "lat": "13.10", "lon": "78.10"}, None),
     "recommend_normal_week": ("normal_week", "POST", "/recommend", None, _recommend_body()),
@@ -118,6 +125,12 @@ CASES = {
     "recommend_422_origin_unknown": ("normal_week", "POST", "/recommend", None,
                                      _recommend_body(origin={"lat": None, "lon": None, "place": "Holur"})),
     "plan_ten_loads": ("ten_loads", "POST", "/plan", None, _plan_body()),
+    "recommend_rescue_estimate": ("normal_week", "POST", "/recommend", None, _rescue_body()),
+    "recommend_rescue_trader_split_kn": ("normal_week", "POST", "/recommend", None,
+                                         _rescue_body(edible_kg=700, spoiled_kg=300, language="kn")),
+    "recommend_422_split_required": ("normal_week", "POST", "/recommend", None, _rescue_body(origin=DELHI)),
+    "recommend_rescue_delhi_trader_split": ("normal_week", "POST", "/recommend", None,
+                                            _rescue_body(origin=DELHI, edible_kg=700, spoiled_kg=300)),
 }
 
 
@@ -270,3 +283,27 @@ def test_smoke_real_snapshot_replay_day(day, tmp_path, monkeypatch):
     assert s == 200 and len(p["allocations"]) == 10 and p["markets"]
     assert call("GET", "/impact", {"plan_id": p["plan_id"]})[0] == 200
 
+
+
+def test_rescue_bad_requests_and_plan_rejects_unsold(api):
+    setup, call = api
+    setup("normal_week")
+    assert call("POST", "/recommend", body=_rescue_body(source="shop"))[0] == 400
+    assert call("POST", "/recommend", body=_rescue_body(hours_since_harvest=None))[0] == 400
+    assert call("POST", "/recommend", body=_rescue_body(edible_kg=700))[0] == 400  # both or neither
+    assert call("POST", "/recommend", body=_rescue_body(edible_kg=700, spoiled_kg=200))[0] == 400  # sum != qty
+    body = _plan_body()
+    body["loads"][0]["source"] = "mandi_unsold"
+    assert call("POST", "/plan", body=body)[0] == 400
+
+
+def test_impact_adds_rescue_to_plan_total(api):
+    setup, call = api
+    setup("ten_loads")
+    _, p = call("POST", "/plan", body=_plan_body())
+    _, r = call("POST", "/recommend", body=_rescue_body(plan_id=p["plan_id"], edible_kg=700, spoiled_kg=300))
+    _, imp = call("GET", "/impact", {"plan_id": p["plan_id"]})
+    assert imp["rescued_kg"] == r["impact"]["rescued_kg"] == 700
+    assert imp["redirected_kg"] == p["impact"]["redirected_kg"]  # rescue never adds to redirected
+    k, w = imp["kept_out_of_landfill_kg"], p["impact"]["waste_avoided_kg"]
+    assert k["mid"] == pytest.approx(w["mid"] + 700 + r["impact"]["recovered_kg"])

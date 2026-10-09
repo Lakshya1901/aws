@@ -3,9 +3,11 @@ import copy
 import pytest
 
 from backend.core.config import CoreError
-from backend.core.recommend import glut_radar, plan, recommend
+from backend.core.recommend import glut_radar, plan, recommend, rescue
 from backend.core.risk import market_risk, projected_ratio
-from backend.tests.fixtures import AS_OF, MARKETS, OUTLETS, glut_day, history, load, normal_week
+from backend.core.spoilage import spoilage_share
+from backend.tests.fixtures import (AS_OF, MARKETS, OUTLETS, RECOVER_OUTLETS, glut_day, history, load, normal_week,
+                                    unsold)
 
 
 def test_normal_week_one_load_goes_to_nearest_mandi(configs):
@@ -223,3 +225,85 @@ def test_market_with_unknown_risk_is_never_chosen_but_listed(configs):
     alt = next(o for o in r["alternatives"] if o["outlet_id"] == "chintamani")
     assert alt["risk_level"] is None and alt["net_rs_per_kg"]["mid"] > r["top"]["net_rs_per_kg"]["mid"]
     assert r["top"]["outlet_id"] != "chintamani"
+
+
+# ---------- Rescue and Recover (Step 5b, D19) ----------
+
+def test_rescue_without_split_proposes_estimate_and_routes_both_parts(configs):
+    r = rescue(unsold(), OUTLETS + RECOVER_OUTLETS, configs, AS_OF)
+    s = spoilage_share(48, 30, configs["crops"]["tomato"])["mid"]
+    assert r["split"]["source"] == "estimate"
+    assert r["split"]["spoiled_kg"] == pytest.approx(1000 * s, abs=1e-3)
+    assert r["split"]["edible_kg"] + r["split"]["spoiled_kg"] == pytest.approx(1000, abs=1e-3)
+    assert r["top"]["type"] == "processor"  # processor before food bank
+    assert r["recover"]["type"] == "biogas"  # tomato has no feed: biogas before the nearer compost unit
+    assert all(o["type"] != "mandi" for o in r["alternatives"])  # fresh mandis are not ranked
+    assert {"tomato.alpha", "tomato.q10", "tomato.sl_ref_hours"} <= set(r["assumptions_used"])
+
+
+def test_rescue_uses_trader_split(configs):
+    r = rescue(unsold(split={"edible_kg": 700, "spoiled_kg": 300}), OUTLETS + RECOVER_OUTLETS, configs, AS_OF)
+    assert r["split"] == {"edible_kg": 700, "spoiled_kg": 300, "source": "trader"}
+    i = r["impact"]
+    assert (i["rescued_kg"], i["recovered_kg"], i["biogas_kg"]) == (700, 300, 300)
+    assert "tomato.alpha" not in r["assumptions_used"]
+
+
+def test_rescue_needs_split_without_weather_and_works_with_one(configs):
+    with pytest.raises(CoreError) as e:
+        rescue(unsold(temp_c=None), OUTLETS, configs, AS_OF)
+    assert e.value.code == "split_required"
+    r = rescue(unsold(temp_c=None, split={"edible_kg": 800, "spoiled_kg": 200}), OUTLETS, configs, AS_OF)
+    assert r["top"]["outlet_id"] == "proc" and r["top"]["spoilage_share"] is None
+
+
+def test_rescue_edible_goes_to_recover_rung_without_processor_or_food_bank(configs):
+    r = rescue(unsold(split={"edible_kg": 600, "spoiled_kg": 400}), RECOVER_OUTLETS, configs, AS_OF)
+    assert r["top"] is None and r["recover"]["type"] == "biogas"
+    assert (r["impact"]["rescued_kg"], r["impact"]["recovered_kg"]) == (0, 1000)
+
+
+def test_rescue_without_any_outlet_routes_nothing(configs):
+    r = rescue(unsold(split={"edible_kg": 600, "spoiled_kg": 400}), [], configs, AS_OF)
+    assert r["top"] is None and r["recover"] is None
+    i = r["impact"]
+    assert (i["rescued_kg"], i["recovered_kg"]) == (0, 0)
+    assert i["kept_out_of_landfill_kg"] == {"low": 0, "mid": 0, "high": 0}
+
+
+def test_recover_order_feed_then_biogas_then_compost(configs):
+    c = copy.deepcopy(configs)
+    c["crops"]["tomato"]["second_life"] = ["processor", "food_bank", "feed", "biogas", "compost"]
+    lot = unsold(split={"edible_kg": 0, "spoiled_kg": 500})
+    assert rescue(lot, RECOVER_OUTLETS, c, AS_OF)["recover"]["type"] == "feed"
+    no_feed = [o for o in RECOVER_OUTLETS if o["type"] != "feed"]
+    assert rescue(lot, no_feed, c, AS_OF)["recover"]["type"] == "biogas"
+    only_compost = [o for o in RECOVER_OUTLETS if o["type"] == "compost"]
+    assert rescue(lot, only_compost, c, AS_OF)["recover"]["type"] == "compost"
+
+
+def test_impact_lines_stay_separate_and_headline_adds_them(configs):
+    c = copy.deepcopy(configs)
+    lot = unsold(split={"edible_kg": 700, "spoiled_kg": 300})
+    i = rescue(lot, OUTLETS + RECOVER_OUTLETS, c, AS_OF)["impact"]
+    assert i["redirected_kg"] == 0 and i["waste_avoided_kg"] == {"low": 0, "mid": 0, "high": 0}
+    assert i["kept_out_of_landfill_kg"] == {"low": 1000, "mid": 1000, "high": 1000}
+    assert i["biogas_energy"] is None  # biogas_yield not sourced yet: not yet estimated
+    c["assumptions"]["biogas_yield"].update(value=2.0, energy_unit="TEST_UNIT")  # TEST ONLY value
+    i2 = rescue(lot, OUTLETS + RECOVER_OUTLETS, c, AS_OF)["impact"]
+    assert (i2["biogas_energy"], i2["biogas_energy_unit"]) == (600.0, "TEST_UNIT")
+    g = recommend(load(2000), glut_day(), MARKETS, OUTLETS, configs, AS_OF)["impact"]
+    assert g["kept_out_of_landfill_kg"] == g["waste_avoided_kg"]  # Prevent only: redirected never added
+    assert g["redirected_kg"] == 2000 and g["rescued_kg"] == 0 and g["recovered_kg"] == 0
+    assert g["biogas_energy"] == 0.0  # nothing went to biogas
+
+
+def test_prevent_load_routed_to_recover_rung_counts_as_recovered(configs):
+    rows = (history("kolar", 100, 0.05) + history("chintamani", 50, 0.05) + history("bengaluru", 300, 0.05)
+            + history("madanapalle", 80, 0.05))
+    r = recommend(load(), rows, MARKETS, RECOVER_OUTLETS, configs, AS_OF)
+    assert r["top"]["type"] == "biogas"
+    assert r["impact"]["recovered_kg"] == 2000 and r["impact"]["biogas_kg"] == 2000
+    none = recommend(load(), rows, MARKETS, [], configs, AS_OF)
+    assert none["top"]["type"] == "compost" and none["top"]["outlet_id"] is None
+    assert none["impact"]["recovered_kg"] == 0  # no real unit in radius: nothing recovered

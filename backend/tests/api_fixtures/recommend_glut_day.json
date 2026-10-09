@@ -327,6 +327,16 @@
     }
    ],
    "impact": {
+    "kept_out_of_landfill_kg": {
+     "low": 67.4692,
+     "mid": 393.9287,
+     "high": 819.4125
+    },
+    "rescued_kg": 0,
+    "recovered_kg": 0,
+    "biogas_kg": 0,
+    "biogas_energy": 0.0,
+    "biogas_energy_unit": null,
     "redirected_kg": 2000,
     "waste_avoided_kg": {
      "low": 67.4692,

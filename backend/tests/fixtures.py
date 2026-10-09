@@ -22,6 +22,16 @@ OUTLETS = [
      "crops": ["tomato"], "offer_price_kg": None},
 ]
 
+# TEST ONLY Recover-rung outlets (no real biogas or compost unit is seeded yet, D20). Compost is nearest.
+RECOVER_OUTLETS = [
+    {"outlet_id": "compost", "type": "compost", "name": "Test compost unit", "state": "KA", "lat": 13.11, "lon": 78.11,
+     "crops": ["tomato"], "offer_price_kg": None},
+    {"outlet_id": "biogas", "type": "biogas", "name": "Test biogas unit", "state": "KA", "lat": 13.20, "lon": 78.20,
+     "crops": ["tomato"], "offer_price_kg": None},
+    {"outlet_id": "feed", "type": "feed", "name": "Test feed buyer", "state": "KA", "lat": 13.30, "lon": 78.30,
+     "crops": ["tomato"], "offer_price_kg": None},
+]
+
 
 def history(market_id, base_t, price_kg, as_of=AS_OF, start="2023-01-01", b=-0.5, noise=0.03,
             last7_mult=1.0, end=None, skip=()):
@@ -51,6 +61,12 @@ def normal_week():
 def glut_day():
     return (history("kolar", 100, 20, last7_mult=2.5) + history("chintamani", 50, 20)
             + history("bengaluru", 300, 20) + history("madanapalle", 80, 20))
+
+
+def unsold(q=1000, **kw):
+    """Rescue lot at the test origin (Step 5b): no split given unless passed."""
+    return dict({"crop": "tomato", "quantity_kg": q, "origin": dict(ORIGIN), "hours_since_harvest": 48,
+                 "split": None, "temp_c": 30}, **kw)
 
 
 def load(q=2000, **kw):

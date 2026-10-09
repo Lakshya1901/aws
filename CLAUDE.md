@@ -457,6 +457,7 @@ Example `/recommend` response (illustrative values):
 | No fresh market pays | top is processor/food bank | Second Life screen |
 | Rescue: no processor or food bank in radius | edible part goes to the Recover rung | Recover outlet shown with the reason |
 | Rescue: no Recover outlet in radius | recover: null | "No biogas or compost unit near you yet" |
+| Rescue: no split and no weather at the origin (Delhi, Mumbai) | 422 split_required | Edible and spoiled fields highlighted; the trader enters both |
 | Harvest doesn't pay | advice: delay_harvest or harvest_to_order | Plain warning with numbers |
 | Voice not understood | null fields, low confidence | Confirm screen, fields highlighted |
 | No reporting markets in radius | 422 | "No reporting markets near you for this crop" |
@@ -533,7 +534,7 @@ Target under 15 s from release to card. Clips under 20 s. Record AAC/m4a; if Tra
 | why_not | Why not {market}? | {market} क्यों नहीं? | {market} ಏಕೆ ಬೇಡ? |
 | estimate | estimate | अनुमान | ಅಂದಾಜು |
 
-Rescue and Recover keys (unsold_stock, hours_since_harvest, edible, spoiled, kept_out_of_landfill, prevented, rescued, recovered, biogas_energy, type_feed, type_biogas, type_compost, no_recover_outlet) are in `config/copy/<lang>.json` under `_review` until approved.
+Rescue and Recover keys (unsold_stock, hours_since_harvest, edible, spoiled, kept_out_of_landfill, prevented, rescued, recovered, biogas_energy, type_feed, type_biogas, type_compost, no_recover_outlet, err_split_required, split_hint, split_sum) are in `config/copy/<lang>.json` under `_review` until approved.
 
 ### 14.6 Visual and accessibility
 
@@ -750,7 +751,7 @@ Seeded Second Life outlets (Kolar region, from desk research): SNR Foods (proces
 | D17 | Markets with unknown risk | Never chosen as the destination, only listed. Found when Doddaballapura (about 1 t/day, latest price 15 days old on 2023-09-06) absorbed 16 t in a 10-load plan. |
 | D18 | Demo replay days | Headline 2023-09-06 (documented arrival glut, D14; `config/model.json` replay_date): ten loads spread over several markets. Second 2025-03-19 (Kolar's 2025 low, Rs 4.60/kg, below harvest cost; run with `REPLAY_DATE=2025-03-19`). 2025-02-07 dropped: Kolar still paid above harvest cost, so waste avoided was negative. Final figures wait for Amazon Location routes (D11); waste avoided on 2025-03-19 is driven by the placeholder dump share (D12) and must carry "(estimate)". |
 | D14 | Second replay (D10) | Kolar 2023-09-06, an arrival-driven glut: R 1.76 (glut), 3-day price change -28.7%, modal Rs 6.64/kg; Madanapalle Rs 10.60/kg, 61 km. Documented: Deccan Herald 2023-09-26 (https://www.deccanherald.com/india/karnataka/rs-200-to-rs-10-tomato-farmers-hopes-crash-2700660, officials attribute the crash to "the arrival of a large quantity of tomatoes"; 4.21 vs 2.31 lakh quintals year on year) and FreshPlaza/New Indian Express 2023-09-04. Baseline uses one prior year (2022). `analysis/second_replay.py`. |
-| D19 | Farm-to-city reframe (October 9) | Prevent, Rescue, Recover on one router (Sections 1, 5, 9). Rescue reuses POST /recommend with source mandi_unsold. Edible split: engine proposes from Step 3, trader confirms or edits. Recover order: feed, biogas, compost (`feed_compost` split into `feed` and `compost`). Headline kg kept out of landfill = Prevented + Rescued + Recovered. Rescue demo cities: Bengaluru, Delhi, Mumbai. |
+| D19 | Farm-to-city reframe (October 9) | Prevent, Rescue, Recover on one router (Sections 1, 5, 9). Rescue reuses POST /recommend with source mandi_unsold. Edible split: engine proposes from Step 3, trader confirms or edits. Recover order: feed, biogas, compost (`feed_compost` split into `feed` and `compost`). Headline kg kept out of landfill = Prevented + Rescued + Recovered. Rescue demo cities: Bengaluru, Delhi, Mumbai. Delhi and Mumbai use trader-entered splits only (no weather snapshot there; 422 split_required without one). Rescue explanations use the per-language template only, not Bedrock. |
 | D20 | Rescue city outlets | **Open, for the team.** For each of Bengaluru, Delhi, Mumbai: the city mandi to use (name; candidates to confirm: Bengaluru district market in `config/markets.json`, Delhi Azadpur, Mumbai Vashi APMC), and real processors, food banks, and biogas or compost units with a source URL each. Bengaluru already has Bangalore Food Bank seeded. Nothing is seeded without a source. |
 | D21 | Biogas yield | **Open, for the team.** A sourced yield per kg of fruit and vegetable waste (or the partner unit's figure) and its unit, for `biogas_yield` in `config/assumptions.json`. Until then energy renders "not yet estimated". |
 | D22 | Video beat 1 | **Open, for the team.** Footage or a documented news source of produce dumped at a city mandi (Bengaluru, Delhi or Mumbai). |

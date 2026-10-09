@@ -11,7 +11,7 @@
   "harvest_cost_rs_per_kg": null,
   "unit_box_kg": null,
   "water_l_per_kg": null,
-  "second_life": ["processor", "food_bank", "feed_compost"],
+  "second_life": ["processor", "food_bank", "feed", "biogas", "compost"],
   "status": {
     "t_ref_c": "sourced",
     "sl_ref_hours": "placeholder",
@@ -22,6 +22,6 @@
   },
   "sources": {
     "storable": "CLAUDE.md Section 11 says 'limited' (12-15 C, weeks, ripening-dependent); no hold rule defined, so left null",
-    "second_life": "CLAUDE.md Section 11: ripening/retail, chips (processor), food bank, feed"
+    "second_life": "CLAUDE.md Section 11: ripening/retail, chips (processor), food bank, feed; Recover: feed, biogas, compost (D19)"
   }
 }
