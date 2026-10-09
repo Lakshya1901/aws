@@ -38,12 +38,18 @@ TODO.md as they are done and commit TODO.md with the work.
   - Oct 9: `/annasetu/app_api_key` created (random). `/annasetu/datagov_key` not created: no key yet; no code reads it (IAM grant only), so deploy does not need it.
 
 ### 2. Routes and deploy
-- [ ] 2.1 Cache routes from the Kolar demo origin: `python scripts/cache_routes.py 13.137,78.134`. Add the demo FPO villages as `<village_id>=lat,lon` if used. Commit `data/routes_cache.json`.
-- [ ] 2.2 Re-run both replay days locally (`python -m backend.handlers.local_server`, `REPLAY_DATE=2025-03-19` for the second) and record the real figures (top outlet, net ranges, waste avoided, redirected, extra km, 10-load split).
-- [ ] 2.3 `cd infra && sam build && sam deploy --guided` (confirm first; creates billable resources). Pass `BedrockModelId` / `BedrockModelArns`.
+- [x] 2.1 Cache routes from the Kolar demo origin: `python scripts/cache_routes.py 13.137,78.134`. Add the demo FPO villages as `<village_id>=lat,lon` if used. Commit `data/routes_cache.json`.
+  - Oct 9: cached from Kolar (13.137,78.134) and the Bengaluru mandi (12.977,77.575) to all 7 markets and 4 outlets. Delhi and Mumbai skipped: no city mandi chosen and no outlet within 300 km yet (D20); add them once outlets are seeded.
+- [x] 2.2 Re-run both replay days locally (`python -m backend.handlers.local_server`, `REPLAY_DATE=2025-03-19` for the second) and record the real figures (top outlet, net ranges, waste avoided, redirected, extra km, 10-load split).
+  - Oct 9, snapshot mode, origin Kolar, loads 3000/2500/2000/2000/1500/1500/1200/1000/800/500 kg (demo loads). Both days report `stale: true`; check before the video.
+    - 2023-09-06, one 2,000 kg load: top Mandya net Rs 14.0-30.8/kg (mid 21.0) vs default Kolar Rs 5.2-7.2 (mid 6.1); waste avoided -36 to 403 kg (mid 85; range crosses zero); redirected 2,000 kg; extra 184 km, 25.7 l diesel, 68.9 kg CO2. Ten loads: Mandya 5,500, Bengaluru 5,300, Madanapalle 5,200 kg; waste avoided -234 to 3,254 kg (mid 717); redirected 16,000 kg; extra 978 km.
+    - 2025-03-19, one 2,000 kg load: top Bengaluru Rs 7.3-10.6/kg (mid 8.8) vs Kolar Rs 3.6-5.0 (mid 4.2, below harvest cost 4.7); waste avoided 365-812 kg (mid 789; placeholder dump share, D12); extra 73 km, 10.2 l diesel. Ten loads: all 16,000 kg to Bengaluru (not capped); waste avoided 2,921-6,494 kg (mid 6,314); extra 727 km.
+- [x] 2.3 `cd infra && sam build && sam deploy --guided` (confirm first; creates billable resources). Pass `BedrockModelId` / `BedrockModelArns`.
   - Oct 9: `sam build` passes; 99 backend tests pass. Deploy waits for confirmation. Bedrock off (both parameters empty).
   - Oct 9: first deploy (NameSuffix abcd11, no AlarmEmail) failed: `annasetu-deployer` was denied `iam:CreateRole` (with tags) and `iam:DeleteRolePolicy` on `annasetu-*` roles; stack is `ROLLBACK_FAILED`. Needs the inline IAM policy fixed in the console (CreateRole, TagRole, DeleteRolePolicy and related on `role/annasetu-*`), then delete the stack and redeploy.
-- [ ] 2.4 `python scripts/geocode_markets.py` (review the diff, commit), `python scripts/seed.py`, invoke ingest once with `{"as_of_date": "2023-09-06"}`, confirm MarketRisk rows.
+  - Oct 9: policy fixed, stack deleted and redeployed: `CREATE_COMPLETE`. API `https://udlpm9qppa.execute-api.ap-south-1.amazonaws.com`. Smoke test found two bugs, fixed in code (MarketDay query used key `pk` instead of `market_crop`; authorizer timed out cold at 128 MB, now 256 MB); redeploy pending confirmation.
+- [x] 2.4 `python scripts/geocode_markets.py` (review the diff, commit), `python scripts/seed.py`, invoke ingest once with `{"as_of_date": "2023-09-06"}`, confirm MarketRisk rows.
+  - Oct 9: geocoded (7/7 relevance 1.00, within about 1.6 km of manual coords), seeded 4 outlets and 6,802 MarketDay rows, snapshot in S3; ingest for 2023-09-06 wrote 7 MarketRisk rows (Kolar glut, R 1.76, -28.7% in 3 days, matches D14).
 
 ### 3. iPhone and Android test
 - [ ] 3.1 Put the API URL and key in `app/.env` (from `app/.env.example`); never commit it.
