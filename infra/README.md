@@ -22,9 +22,10 @@ writes your account's choices there.
 1. **Budget alert first.** Billing console -> Budgets -> create a monthly cost budget (for example USD 10) with an
    email alert at 80% and 100%.
 2. **Bedrock model access (optional; without it the app uses templates and the rule parser).**
-   Bedrock console in ap-south-1 -> Model access -> enable one small, fast Claude model (a Claude Haiku model).
-   Check in the console that it is offered in ap-south-1 and whether it is invoked on demand or only through an
-   APAC cross-region inference profile. Test one prompt in the playground. Note:
+   Bedrock console in ap-south-1 -> Model access -> enable Amazon Nova Lite (CLAUDE.md D23; any model that supports
+   the Converse API works, e.g. a Claude Haiku model if your account has Anthropic access). Check in the console that
+   it is offered in ap-south-1 and whether it is invoked on demand or only through an APAC cross-region inference
+   profile. Test one prompt in the playground. Note:
    - the ID you will invoke (model ID, or inference profile ID) -> parameter `BedrockModelId`;
    - the ARN(s) to allow -> parameter `BedrockModelArns` (comma-separated). On-demand:
      `arn:aws:bedrock:ap-south-1::foundation-model/<model-id>`. Inference profile: the profile ARN

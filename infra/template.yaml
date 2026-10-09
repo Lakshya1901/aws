@@ -10,7 +10,7 @@ Parameters:
   BedrockModelId:
     Type: String
     Default: ""
-    Description: Model ID or inference profile ID passed to InvokeModel. Empty = Bedrock disabled (templates and fallback parser).
+    Description: Model ID or inference profile ID passed to the Bedrock Converse API. Empty = Bedrock disabled (templates and fallback parser).
   BedrockModelArns:
     Type: CommaDelimitedList
     Default: ""

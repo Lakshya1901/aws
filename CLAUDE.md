@@ -385,7 +385,7 @@ Profile shape:
 
 ## 12. Bedrock
 
-Two jobs only. It never calculates, chooses outlets or adds numbers. Small fast Claude model available in ap-south-1; model ID in `config/model.json`; temperature 0; 3 s timeout.
+Two jobs only. It never calculates, chooses outlets or adds numbers. One small fast model called through the Bedrock Converse API (model-agnostic): Amazon Nova Lite, or a Claude Haiku model if Anthropic access is granted (D23); model ID from the deploy parameter (`config/model.json` keeps null); temperature 0; 3 s timeout.
 
 **Job 1: parse a spoken load.**
 ```
@@ -562,7 +562,7 @@ Rescue and Recover keys (unsold_stock, hours_since_harvest, edible, spoiled, kep
 | DynamoDB | MarketDay, MarketRisk, Outlets, Plans | on-demand |
 | Transcribe | batch jobs | hi-IN, kn-IN, en-IN |
 | Polly | SynthesizeSpeech | Hindi and Indian English voices, MP3 |
-| Bedrock | InvokeModel | one small Claude model |
+| Bedrock | Converse (InvokeModel permission) | one small model: Amazon Nova Lite (D23) |
 | Location Service | place index, route calculator | geocode markets once; routes cached |
 | SSM Parameter Store | /annasetu/datagov_key | SecureString |
 | CloudWatch | logs, alarm | alarm on ingest failure |
@@ -755,6 +755,7 @@ Seeded Second Life outlets (Kolar region, from desk research): SNR Foods (proces
 | D20 | Rescue city outlets | **Open, for the team.** For each of Bengaluru, Delhi, Mumbai: the city mandi to use (name; candidates to confirm: Bengaluru district market in `config/markets.json`, Delhi Azadpur, Mumbai Vashi APMC), and real processors, food banks, and biogas or compost units with a source URL each. Bengaluru already has Bangalore Food Bank seeded. Nothing is seeded without a source. |
 | D21 | Biogas yield | **Open, for the team.** A sourced yield per kg of fruit and vegetable waste (or the partner unit's figure) and its unit, for `biogas_yield` in `config/assumptions.json`. Until then energy renders "not yet estimated". |
 | D22 | Video beat 1 | **Open, for the team.** Footage or a documented news source of produce dumped at a city mandi (Bengaluru, Delhi or Mumbai). |
+| D23 | Bedrock model (October 9) | The account was refused Anthropic model access ("Your account is not authorized" on the use-case form). The adapter now uses the Converse API, so the model is a deploy parameter: Amazon Nova Lite in ap-south-1 (model or APAC inference profile ID confirmed in the console at deploy). Claude Haiku can replace it with no code change if a support case grants access. Without any model, templates and the rule parser run as before. |
 
 Known risk: one FPO's volume may barely move Kolar's ratio or price, so load spreading may come mostly from price impact at smaller markets. Report what the data shows; never tune the model to force a split.
 
