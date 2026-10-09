@@ -35,7 +35,7 @@
      "stale": false,
      "data_complete": true,
      "lead_days": null,
-     "distance_km": 7.12,
+     "distance_km": 6.89,
      "distance_approx": false
     },
     {
@@ -50,7 +50,7 @@
      "stale": false,
      "data_complete": true,
      "lead_days": null,
-     "distance_km": 43.68,
+     "distance_km": 44.03,
      "distance_approx": false
     },
     {
@@ -65,7 +65,7 @@
      "stale": false,
      "data_complete": true,
      "lead_days": null,
-     "distance_km": 73.98,
+     "distance_km": 76.01,
      "distance_approx": false
     },
     {
@@ -80,7 +80,7 @@
      "stale": false,
      "data_complete": null,
      "lead_days": null,
-     "distance_km": 83.19,
+     "distance_km": 83.97,
      "distance_approx": false
     },
     {
@@ -95,7 +95,7 @@
      "stale": false,
      "data_complete": true,
      "lead_days": null,
-     "distance_km": 86.78,
+     "distance_km": 86.31,
      "distance_approx": false
     },
     {
@@ -110,7 +110,7 @@
      "stale": false,
      "data_complete": null,
      "lead_days": null,
-     "distance_km": 189.01,
+     "distance_km": 189.0,
      "distance_approx": false
     },
     {
@@ -125,7 +125,7 @@
      "stale": false,
      "data_complete": null,
      "lead_days": null,
-     "distance_km": 234.25,
+     "distance_km": 233.83,
      "distance_approx": false
     }
    ]
