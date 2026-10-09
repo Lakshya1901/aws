@@ -2,9 +2,12 @@
 // Every fixture carries "_fixture": true and the UI shows a FIXTURE banner for it.
 import { ApiError } from './errors';
 import type {
+  CropsResponse,
+  FetchResponse,
   ImpactResponse,
   PlanRequest,
   PlanResponse,
+  RadarCropId,
   RecommendRequest,
   RecommendResponse,
   RescueRequest,
@@ -18,7 +21,26 @@ import type {
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+const MOCK_CROPS = ['tomato', 'onion', 'potato', 'banana'];
+
 export const mock = {
+  async crops(crop?: RadarCropId): Promise<CropsResponse> {
+    await delay(200);
+    const all = MOCK_CROPS.map((c) => ({
+      crop_id: c,
+      name: c[0].toUpperCase() + c.slice(1),
+      category: c === 'banana' ? 'Fruits' : 'Vegetables',
+      markets: 0,
+      preload: true,
+      routing: c === 'tomato' || c === 'onion',
+      status: 'ready' as const,
+    }));
+    return { _fixture: true, crops: crop ? all.filter((c) => c.crop_id === crop) : all };
+  },
+  async fetchCrop(crop: RadarCropId): Promise<FetchResponse> {
+    await delay(200);
+    return { _fixture: true, crop, status: 'ready' };
+  },
   async risk(_q: RiskQuery): Promise<RiskResponse> {
     await delay(400);
     return require('./fixtures/risk.fixture.json') as RiskResponse;

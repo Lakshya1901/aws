@@ -131,6 +131,7 @@ AnnaSetu advises; people decide. Every recommendation can be overridden, and ove
 
 - **Architecture is national.** Ingest covers every AGMARKNET market reporting the configured crops. Any origin in India gets recommendations from markets within the reachable radius.
 - **Crops (MVP):** tomato (fully tuned), onion, potato, banana. Adding a crop means adding a profile and copy, not code.
+- **Glut Radar crops (D24):** every AGMARKNET commodity in `config/commodities.json` (about 400). The top 20 fruits and vegetables by number of reporting markets are loaded daily; any other is loaded on request (POST /crops/fetch). Routing (Dispatch Advisor, Rescue, Recover) still needs a complete profile in `config/crops/` (now tomato and onion).
 - **Demo regions** (real, documented gluts, replayed from historical data):
   - Kolar tomato belt (Karnataka and Andhra border): Kolar, Chintamani, Srinivaspura, Madanapalle, Bengaluru; January-April 2025 glut.
   - A second region to prove pan-India, chosen by the data check. Candidate: Nashik onion belt (Lasalgaon, Pimpalgaon, Nashik, Pune). Verify a documented glut and data density before committing.
@@ -158,6 +159,7 @@ One flag in `config/model.json`, settable per crop. All other components are ide
 | Source | Fields | Refresh | Access | Fallback |
 | --- | --- | --- | --- | --- |
 | AGMARKNET price and arrival reports | date, state, district, market, commodity, variety, arrivals, min/max/modal price | Daily, plus one-time 3-year history | Undocumented public backend (client: https://github.com/makrand999/agmarknet-api); may rate-limit or block cloud IPs | Snapshot CSV in S3; data.gov.in for prices |
+| India Data Portal AGMARKNET bulk files (D24), https://ckandev.indiadataportal.com/dataset/agriculture-marketing | Market-level daily arrivals (tonnes) and min/max/modal price (Rs/quintal), every commodity, with market coordinates; 2021-01-01 to 2026-05-31 | Periodic refresh by the portal | Two public CSVs, Open Data Commons Attribution License (`scripts/build_idp.py`) | Per-commodity files in S3 |
 | CEDA Agri Market Data (Ashoka University), https://agmarknet.ceda.ashoka.edu.in | AGMARKNET daily min/max/modal price (Rs/quintal) and arrivals (tonnes), aggregated per Census 2011 district | Monthly refresh by CEDA | Public JSON API, no key (`backend/adapters/ceda.py`) | Snapshot CSV |
 | data.gov.in mandi prices, resource 9ef84268-d588-465a-a308-a864a43d0070 | state, district, market, commodity, variety, grade, arrival_date, min/max/modal price (no arrivals) | Daily | Free API key | Snapshot |
 | Open-Meteo | Hourly temperature, relative humidity; forecast and history | Per request, cached 6 h | Free, no key | NASA POWER hourly T2M/RH2M (MERRA-2, free, no key; D16), then monthly averages per state in config |
@@ -168,7 +170,8 @@ One flag in `config/model.json`, settable per crop. All other components are ide
 - Prices are Rs per quintal; divide by 100 for Rs per kg.
 - Verify arrival units on first pull (tonnes vs quintals); store tonnes.
 - Aggregate varieties per market-day: arrivals summed, modal price weighted by arrivals.
-- Demo snapshot (D1): agmarknet.gov.in and api.data.gov.in refuse connections from cloud IPs, so the 2022-2025 history comes from CEDA, which is district level. Each "market" in `config/markets.json` is one district aggregate, named after its main tomato market town (Kolar district = Kolar, Chittoor = Madanapalle, Chikkaballapura = Chintamani). CEDA's district price is its own aggregate, not arrival-weighted by us. Market-level AGMARKNET data replaces it when available; the engine is unchanged. Districts with a unit problem or no prior-year baseline are excluded and listed in `config/markets.json`.
+- Market-level data (D24) replaces the CEDA district snapshot below: `scripts/build_idp.py` splits the India Data Portal files into one market-level file per commodity (varieties aggregated per market-day as above; bundle- and unit-priced rows dropped, never converted). `market_id` = census state code + normalised market name (official city renames folded), so a market keeps its history across the portal's two files. Coordinates come from the data; disputed or missing ones are checked with Amazon Location (`scripts/build_idp_config.py`), and low-confidence markets are left out of routing.
+- Demo snapshot (D1, superseded by D24): agmarknet.gov.in and api.data.gov.in refuse connections from cloud IPs, so the 2022-2025 history comes from CEDA, which is district level. Each "market" in `config/markets.json` is one district aggregate, named after its main tomato market town (Kolar district = Kolar, Chittoor = Madanapalle, Chikkaballapura = Chintamani). CEDA's district price is its own aggregate, not arrival-weighted by us. Market-level AGMARKNET data replaces it when available; the engine is unchanged. Districts with a unit problem or no prior-year baseline are excluded and listed in `config/markets.json`.
 - Market names map to internal IDs through `config/markets.json`; never fuzzy-match at runtime.
 - Missing days stay missing, never zero. Compute risk only when at least 5 of the last 7 days exist.
 
@@ -352,12 +355,12 @@ One JSON file per crop in `config/crops/`. A profile with a null required field 
 | --- | --- | --- | --- | --- |
 | Recommended storage | ~10 C ripe, ~13 C mature green | ~0 C, 70-75% RH | to source | 12-15 C |
 | Good-condition storage life | days to ~2 weeks | ~6-8 months | months (cold store) | weeks, ripening-dependent |
-| SL_ref at T_ref (25 C) | 132 h, range 96-168 h (4-7 days holding at ambient for ripening stages; https://www.researchgate.net/publication/294485852) | placeholder | placeholder | placeholder |
-| Q10 | 2.0, derived from UC Davis respiration rates for mature-green tomato: 8-14 mL CO2/kg.h at 15 C, 18-26 at 25 C (https://postharvest.ucdavis.edu/produce-facts-sheets/tomato; page read through a search excerpt, verify) | placeholder | placeholder | placeholder |
-| alpha | 0.31, placeholder: calibrated so a 14 h trip (6 h since harvest + 2 h drive + 6 h wait) at 25 C gives 3.25% loss, the market-stage tomato loss in Section 3.2 | placeholder | placeholder | placeholder |
+| SL_ref at T_ref (25 C) | 132 h, range 96-168 h (4-7 days holding at ambient for ripening stages; https://www.researchgate.net/publication/294485852) | 2,880 h (4 months ambient storage), range 2,490-3,350 h (Gorrepati et al., Indian J. Hort., https://journal.iahs.org.in/index.php/ijh/article/view/321) | placeholder | placeholder |
+| Q10 | 2.0, derived from UC Davis respiration rates for mature-green tomato: 8-14 mL CO2/kg.h at 15 C, 18-26 at 25 C (https://postharvest.ucdavis.edu/produce-facts-sheets/tomato; page read through a search excerpt, verify) | 2.4, derived from UC Davis whole dry onion: 3-4 mL CO2/kg.h at 0-5 C, 27-29 at 25-27 C (search excerpt, verify) | placeholder | placeholder |
+| alpha | 0.31, placeholder: calibrated so a 14 h trip (6 h since harvest + 2 h drive + 6 h wait) at 25 C gives 3.25% loss, the market-stage tomato loss in Section 3.2 | 0.31, placeholder: mean total loss after 4 months ambient storage (26.66% and 35.87%, same Gorrepati et al. trial) | placeholder | placeholder |
 | Storable (hold option) | no | yes | yes | limited |
-| Water footprint | 184 L/kg world average, tropical production 200-900 L/kg (Hoekstra, cited in Nederhoff and Stanghellini 2010, https://edepot.wur.nl/156932) | placeholder | placeholder | placeholder |
-| Harvest cost per kg | ~Rs 4.7 (Kolar) | placeholder | placeholder | placeholder |
+| Water footprint | 184 L/kg world average, tropical production 200-900 L/kg (Hoekstra, cited in Nederhoff and Stanghellini 2010, https://edepot.wur.nl/156932) | 345 L/kg | 287 L/kg | 790 L/kg (onion, potato, banana: Mekonnen and Hoekstra 2010, Value of Water Report 47, Table 4, global averages) |
+| Harvest cost per kg | ~Rs 4.7 (Kolar) | ~Rs 3.5, placeholder: Rs 300-400/quintal harvest labour plus transport, one Nashik farmer, FreshPlaza 2016 | not found (null: routing off) | not found (null: routing off) |
 | Second life | puree/paste, food bank; Recover: biogas, compost | dehydration, food bank; Recover: biogas, compost | processing, food bank; Recover: biogas, compost | ripening/retail, chips, food bank; Recover: feed, biogas, compost |
 
 Sources: ASHRAE vegetables chapter (https://handbook.ashrae.org/Handbooks/R26/IP/r26_ch37/r26_ch37_ip.aspx), Indian tomato supply chain study (https://www.mdpi.com/2071-1050/15/2/1331), USDA Handbook 66, ICAR-NRCB (https://nrcb.org.in/Pages/achievements_pht). Present these in the app as "reference post-harvest parameters" and state that spoilage is estimated from outside temperature and travel time.
@@ -427,6 +430,8 @@ All JSON via API Gateway. The app never calls AWS services directly.
 | POST /recommend | One load (Prevent) or unsold stock (Rescue) | crop, quantity_kg, origin {lat, lon, place}, harvest, language, plan_id?, source? ("farm" default, or "mandi_unsold"); for mandi_unsold: hours_since_harvest, edible_kg?, spoiled_kg? (both or neither; omitted = engine proposes the split) | ranked outlets, default outlet, impact, explanation, data freshness, assumptions_used; for mandi_unsold also split {edible_kg, spoiled_kg, source: estimate or trader} and recover (outlet for the spoiled part) |
 | POST /plan | All loads together | loads[], language | allocation per load, dA per market, total impact |
 | POST /speak | Spoken reply | text, language (hi or en) | presigned MP3 URL |
+| GET /crops?crop= | Crop catalogue (D24) | optional crop | crops [{crop_id, name, category, markets, preload, routing}]; with crop also status (ready, fetching, available) |
+| POST /crops/fetch | Load one crop's data (D24) | crop | crop, status; asynchronous: SQS -> ingest -> MarketRisk; poll GET /crops?crop= |
 | GET /impact?plan_id= | Impact Ledger | plan_id | kept_out_of_landfill_kg range, waste_avoided_kg range (Prevented), rescued_kg, recovered_kg, biogas_energy (estimate or null), redirected_kg, extra_km, diesel_l, co2_kg, water_l |
 
 Example `/recommend` response (illustrative values):
@@ -564,6 +569,7 @@ Rescue and Recover keys (unsold_stock, hours_since_harvest, edible, spoiled, kep
 | Polly | SynthesizeSpeech | Hindi and Indian English voices, MP3 |
 | Bedrock | Converse (InvokeModel permission) | one small model: Amazon Nova Lite (D23) |
 | Location Service | place index, route calculator | geocode markets once; routes cached |
+| SQS | fetch queue + dead-letter queue (D24) | one message per crop to load: daily preload fan-out and POST /crops/fetch; ingest consumes (batch 1); alarm on the dead-letter queue |
 | SSM Parameter Store | /annasetu/datagov_key | SecureString |
 | CloudWatch | logs, alarm | alarm on ingest failure |
 
@@ -573,8 +579,8 @@ If ingest exceeds Lambda limits nationally, split by state with a Step Functions
 
 | Role | Allowed |
 | --- | --- |
-| ingest-role | S3 put/get data bucket; DynamoDB write MarketDay, MarketRisk; SSM get key |
-| advisor-role | DynamoDB read all, write Plans; Bedrock InvokeModel (one model); Location CalculateRoute |
+| ingest-role | S3 put/get data bucket; DynamoDB write MarketDay, MarketRisk; SQS send to the fetch queue (and receive, as its consumer); SSM get key |
+| advisor-role | DynamoDB read all, write Plans, put MarketRisk "#status" rows; SQS send to the fetch queue; Bedrock InvokeModel (one model); Location CalculateRoute |
 | voice-role | S3 put/get audio bucket; Transcribe start/get; Polly SynthesizeSpeech; Bedrock InvokeModel (one model) |
 
 No AWS credentials in the app or the repo.
@@ -623,7 +629,7 @@ annasetu/
 ├── analysis/
 │   ├── backtest.py           deterministic CLI: lead-lag, thresholds, price gaps; writes results JSON and charts
 │   └── backtest.ipynb        viewer only: loads backtest.py outputs, video charts
-├── scripts/                  build_snapshot.py  geocode_markets.py  seed.py
+├── scripts/                  build_idp.py  build_idp_config.py  build_snapshot.py  cache_routes.py  geocode_markets.py  seed.py
 ├── app/                      Expo app
 │   ├── app/                  screens (expo-router)
 │   ├── components/           RecommendationCard, RiskList, MicButton, CompareSheet
@@ -755,6 +761,7 @@ Seeded Second Life outlets (Kolar region, from desk research): SNR Foods (proces
 | D20 | Rescue city outlets | **Open, for the team.** For each of Bengaluru, Delhi, Mumbai: the city mandi to use (name; candidates to confirm: Bengaluru district market in `config/markets.json`, Delhi Azadpur, Mumbai Vashi APMC), and real processors, food banks, and biogas or compost units with a source URL each. Bengaluru already has Bangalore Food Bank seeded. Nothing is seeded without a source. |
 | D21 | Biogas yield | **Open, for the team.** A sourced yield per kg of fruit and vegetable waste (or the partner unit's figure) and its unit, for `biogas_yield` in `config/assumptions.json`. Until then energy renders "not yet estimated". |
 | D22 | Video beat 1 | **Open, for the team.** Footage or a documented news source of produce dumped at a city mandi (Bengaluru, Delhi or Mumbai). |
+| D24 | All crops, pan-India, market level (October 10) | Data: India Data Portal AGMARKNET bulk CSVs (market level, every commodity, 2021-01 to 2026-05, ODC-By) replace the CEDA district snapshot; `scripts/build_idp.py` writes one file per commodity to `s3://annasetu-data-<suffix>/idp/`. Engine: ingest computes each market's risk and price fit (b, resid_sd) from that file and writes MarketRisk; the advisor reads MarketRisk instead of querying history per market (scales to ~4,000 markets). Crops: Glut Radar for every commodity; top 20 fruits and vegetables by reporting markets preloaded daily (schedule fans out over SQS, one invocation per crop); any other on request via POST /crops/fetch (SQS, retries, dead-letter alarm). Routing still needs a complete profile: tomato and onion now; potato and banana stay radar-only until a harvest cost is sourced. Ranking by arrival tonnage was rejected: some commodities report counts as tonnes (live poultry shows 149 Mt). Backtest, mode (D13) and replay figures (D14, D18) are re-run on market-level data. |
 | D23 | Bedrock model (October 9) | The account was refused Anthropic model access ("Your account is not authorized" on the use-case form). The adapter now uses the Converse API, so the model is a deploy parameter: Amazon Nova Lite in ap-south-1 (model or APAC inference profile ID confirmed in the console at deploy). Claude Haiku can replace it with no code change if a support case grants access. Without any model, templates and the rule parser run as before. |
 
 Known risk: one FPO's volume may barely move Kolar's ratio or price, so load spreading may come mostly from price impact at smaller markets. Report what the data shows; never tune the model to force a split.
@@ -781,7 +788,7 @@ Risks: AGMARKNET blocks cloud IPs (use snapshot + data.gov.in); placeholders dri
 
 ## 21. Out of scope
 
-Cold storage booking, photo quality grading, sensors, payments, real user accounts, App Store or TestFlight submission, retail and household waste, crops without a complete profile.
+Cold storage booking, photo quality grading, sensors, payments, real user accounts, App Store or TestFlight submission, retail and household waste, routing for crops without a complete profile (they get the Glut Radar only, D24).
 
 ---
 

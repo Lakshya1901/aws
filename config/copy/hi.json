@@ -20,7 +20,7 @@
       "err_network", "err_generic", "plan_empty", "added_per_market", "market_capped", "total_impact",
       "diesel", "co2", "water", "litres_value", "kg_value", "km_value", "impact_title", "no_plan", "rs_range",
       "type_hold", "hold_title", "hold_body", "waste_none_load", "waste_none_total", "waste_spoilage", "waste_range_loss", "water_lost", "shorter_km_value", "diesel_saved_value", "coords", "coords_invalid", "err_origin_unknown", "err_drive_time", "err_temperature", "err_plan_not_found", "err_bad_request",
-      "unsold_stock", "hours_since_harvest", "edible", "spoiled", "kept_out_of_landfill", "prevented", "rescued", "recovered", "biogas_energy", "type_feed", "type_biogas", "type_compost", "no_recover_outlet", "err_split_required", "split_hint", "split_sum"
+      "unsold_stock", "hours_since_harvest", "edible", "spoiled", "kept_out_of_landfill", "prevented", "rescued", "recovered", "biogas_energy", "type_feed", "type_biogas", "type_compost", "no_recover_outlet", "err_split_required", "split_hint", "split_sum", "other_crop", "search_crop", "get_data", "fetching_data", "data_ready", "radar_only"
     ]
   },
 
@@ -175,5 +175,11 @@
   "no_recover_outlet": "आपके पास अभी कोई बायोगैस या खाद इकाई नहीं है",
   "err_split_required": "यहाँ खराबी का अनुमान लगाने के लिए मौसम की जानकारी नहीं है। बताएँ कितना अभी खाने लायक है और कितना खराब है।",
   "split_hint": "अनुमान के लिए दोनों खाली छोड़ें",
-  "split_sum": "खाने लायक + खराब, कुल मात्रा के बराबर होना चाहिए"
+  "split_sum": "खाने लायक + खराब, कुल मात्रा के बराबर होना चाहिए",
+  "other_crop": "दूसरी फसल",
+  "search_crop": "फसल खोजें",
+  "get_data": "इस फसल का डेटा लाएं",
+  "fetching_data": "डेटा लाया जा रहा है। आप बाद में देख सकते हैं।",
+  "data_ready": "डेटा तैयार है",
+  "radar_only": "केवल आवक रडार; इस फसल के लिए सलाह अभी उपलब्ध नहीं है"
 }

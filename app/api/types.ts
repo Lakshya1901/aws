@@ -4,6 +4,9 @@
 export type Lang = 'en' | 'hi' | 'kn';
 export type CropId = 'tomato' | 'onion' | 'potato' | 'banana';
 export const CROPS: CropId[] = ['tomato', 'onion', 'potato', 'banana']; // MVP crops (Section 6)
+/** Any AGMARKNET commodity id from GET /crops (config/commodities.json); the Glut Radar takes any (D24). */
+export type RadarCropId = string;
+export const isRouterCrop = (c: string | null): c is CropId => c !== null && (CROPS as string[]).includes(c);
 export type RiskLevel = 'safe' | 'watch' | 'glut';
 export type Mode = 'predictive' | 'same_day';
 export type Harvest = 'today' | 'tomorrow' | 'harvested';
@@ -36,7 +39,7 @@ interface Envelope {
 // ---------- GET /risk?crop=&state=&lat=&lon= ----------
 
 export interface RiskQuery {
-  crop: CropId;
+  crop: RadarCropId;
   state?: string;
   lat?: number;
   lon?: number;
@@ -59,7 +62,7 @@ export interface RiskMarket {
 }
 
 export interface RiskResponse extends Envelope, FixtureMark {
-  crop: CropId;
+  crop: RadarCropId;
   mode: Mode;
   unit_box_kg: number | null;
   data: Freshness;
@@ -315,4 +318,28 @@ export type ApiErrorCode =
 export interface ApiErrorBody {
   error: ApiErrorCode;
   message?: string;
+}
+
+// ---------- GET /crops, POST /crops/fetch (D24) ----------
+
+/** ready: data loaded for the radar; fetching: queued, check back later; available: not loaded yet. */
+export type CropStatus = 'ready' | 'fetching' | 'available';
+
+export interface CropInfo {
+  crop_id: RadarCropId;
+  name: string; // AGMARKNET commodity name (English)
+  category: string | null;
+  markets: number; // markets that reported it in the source data
+  preload: boolean; // loaded daily (top fruits and vegetables)
+  routing: boolean; // full crop profile: recommendations work
+  status?: CropStatus; // only with ?crop=
+}
+
+export interface CropsResponse extends FixtureMark {
+  crops: CropInfo[];
+}
+
+export interface FetchResponse extends FixtureMark {
+  crop: RadarCropId;
+  status: CropStatus;
 }

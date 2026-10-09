@@ -35,7 +35,7 @@
      "stale": false,
      "data_complete": true,
      "lead_days": null,
-     "distance_km": 6.89,
+     "distance_km": 7.12,
      "distance_approx": false
     },
     {
@@ -50,7 +50,7 @@
      "stale": false,
      "data_complete": true,
      "lead_days": null,
-     "distance_km": 44.03,
+     "distance_km": 43.68,
      "distance_approx": false
     },
     {
@@ -65,22 +65,7 @@
      "stale": false,
      "data_complete": true,
      "lead_days": null,
-     "distance_km": 76.01,
-     "distance_approx": false
-    },
-    {
-     "market_id": "doddaballapura",
-     "name": "Doddaballapura",
-     "state": "KA",
-     "risk_level": null,
-     "arrival_ratio": null,
-     "modal_price_rs_per_kg": null,
-     "price_change_3d": null,
-     "as_of_date": null,
-     "stale": false,
-     "data_complete": null,
-     "lead_days": null,
-     "distance_km": 83.97,
+     "distance_km": 73.98,
      "distance_approx": false
     },
     {
@@ -95,37 +80,7 @@
      "stale": false,
      "data_complete": true,
      "lead_days": null,
-     "distance_km": 86.31,
-     "distance_approx": false
-    },
-    {
-     "market_id": "mandya",
-     "name": "Mandya",
-     "state": "KA",
-     "risk_level": null,
-     "arrival_ratio": null,
-     "modal_price_rs_per_kg": null,
-     "price_change_3d": null,
-     "as_of_date": null,
-     "stale": false,
-     "data_complete": null,
-     "lead_days": null,
-     "distance_km": 189.0,
-     "distance_approx": false
-    },
-    {
-     "market_id": "mysuru",
-     "name": "Mysuru",
-     "state": "KA",
-     "risk_level": null,
-     "arrival_ratio": null,
-     "modal_price_rs_per_kg": null,
-     "price_change_3d": null,
-     "as_of_date": null,
-     "stale": false,
-     "data_complete": null,
-     "lead_days": null,
-     "distance_km": 233.83,
+     "distance_km": 86.78,
      "distance_approx": false
     }
    ]

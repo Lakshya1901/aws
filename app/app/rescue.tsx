@@ -5,7 +5,7 @@
 import { useState } from 'react';
 import { TextInput, View } from 'react-native';
 import { ApiError, api } from '../api/client';
-import { CROPS, type CropId, type OutletOption, type RescueResponse } from '../api/types';
+import { CROPS, isRouterCrop, type CropId, type OutletOption, type RescueResponse } from '../api/types';
 import { ImpactRows } from '../components/ImpactRows';
 import { parseCoords } from '../components/LoadForm';
 import { useOutletLabels } from '../components/RecommendationCard';
@@ -24,7 +24,7 @@ export default function RescueScreen() {
   const { t, lang, crop: radarCrop, coords, setCoords, planId, setPlanId } = useSession();
   const L = useOutletLabels();
   const errorText = useErrorText();
-  const [crop, setCrop] = useState<CropId>(radarCrop);
+  const [crop, setCrop] = useState<CropId>(isRouterCrop(radarCrop) ? radarCrop : 'tomato');
   const [qty, setQty] = useState('');
   const [hours, setHours] = useState('');
   const [edible, setEdible] = useState('');

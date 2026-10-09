@@ -2,9 +2,12 @@
 import { ApiError } from './errors';
 import type {
   ApiErrorBody,
+  CropsResponse,
+  FetchResponse,
   ImpactResponse,
   PlanRequest,
   PlanResponse,
+  RadarCropId,
   RecommendRequest,
   RecommendResponse,
   RescueRequest,
@@ -69,6 +72,17 @@ function qs(params: Record<string, string | number | undefined>): string {
 }
 
 export const api = {
+  crops(crop?: RadarCropId): Promise<CropsResponse> {
+    if (mock) return mock.crops(crop);
+    return request('GET', `/crops${qs({ crop })}`);
+  },
+
+  /** Queue loading one crop's data; poll crops(crop) until status is ready. */
+  fetchCrop(crop: RadarCropId): Promise<FetchResponse> {
+    if (mock) return mock.fetchCrop(crop);
+    return request('POST', '/crops/fetch', { crop });
+  },
+
   risk(q: RiskQuery): Promise<RiskResponse> {
     if (mock) return mock.risk(q);
     return request('GET', `/risk${qs({ crop: q.crop, state: q.state, lat: q.lat, lon: q.lon })}`);

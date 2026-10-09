@@ -27,8 +27,8 @@ def test_box_without_box_size_is_rejected(configs):
 
 def test_null_crop_field_rejected():
     c = load_configs(CONFIG_DIR)
-    assert "tomato" in c["crops"]
-    for crop in ("onion", "potato", "banana"):
+    assert {"tomato", "onion"} <= set(c["crops"])
+    for crop in ("potato", "banana"):
         assert crop not in c["crops"]
         assert "sl_ref_hours" in c["crop_errors"][crop]
     with pytest.raises(CoreError) as e:
@@ -38,7 +38,7 @@ def test_null_crop_field_rejected():
 
 def test_recommend_with_incomplete_crop_raises_422_code(configs):
     with pytest.raises(CoreError) as e:
-        recommend(load(crop="onion"), normal_week(), MARKETS, OUTLETS, configs, AS_OF)
+        recommend(load(crop="banana"), normal_week(), MARKETS, OUTLETS, configs, AS_OF)
     assert e.value.code == "crop_profile_incomplete"
 
 

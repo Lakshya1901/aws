@@ -155,26 +155,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 18.6414,
-       "mid": 19.931,
-       "high": 21.2163
+       "low": 18.6462,
+       "mid": 19.9355,
+       "high": 21.2207
       },
       "price_rs_per_kg": {
        "low": 21.0736,
        "mid": 22.2774,
        "high": 23.55
       },
-      "distance_km": 44.03,
+      "distance_km": 43.68,
       "distance_approx": false,
-      "drive_hours": 1.101,
+      "drive_hours": 1.092,
       "spoilage_share": 0.0236,
       "spoilage_range": {
        "low": 0.0185,
        "mid": 0.0236,
        "high": 0.0324
       },
-      "freight_rs_per_kg": 0.4843,
-      "freight_rs_load": 1452.99,
+      "freight_rs_per_kg": 0.4805,
+      "freight_rs_load": 1441.44,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -194,26 +194,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.0457,
-       "mid": 12.8795,
-       "high": 13.7204
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
       },
       "price_rs_per_kg": {
        "low": 13.2939,
        "mid": 14.0895,
        "high": 14.9327
       },
-      "distance_km": 6.89,
+      "distance_km": 7.12,
       "distance_approx": false,
-      "drive_hours": 0.172,
+      "drive_hours": 0.178,
       "spoilage_share": 0.0205,
       "spoilage_range": {
        "low": 0.0161,
        "mid": 0.0205,
        "high": 0.0282
       },
-      "freight_rs_per_kg": 0.0758,
-      "freight_rs_load": 227.37,
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 234.96,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -230,9 +230,9 @@
      "advice": null,
      "impact": {
       "kept_out_of_landfill_kg": {
-       "low": 101.0335,
-       "mid": 590.7437,
-       "high": 1228.9661
+       "low": 101.2038,
+       "mid": 590.8931,
+       "high": 1229.1188
       },
       "rescued_kg": 0,
       "recovered_kg": 0,
@@ -241,14 +241,14 @@
       "biogas_energy_unit": null,
       "redirected_kg": 3000,
       "waste_avoided_kg": {
-       "low": 101.0335,
-       "mid": 590.7437,
-       "high": 1228.9661
+       "low": 101.2038,
+       "mid": 590.8931,
+       "high": 1229.1188
       },
-      "extra_km": 37.14,
-      "diesel_l": 5.1996,
-      "co2_kg": 13.9349,
-      "water_l": 108696.8318
+      "extra_km": 36.56,
+      "diesel_l": 5.1184,
+      "co2_kg": 13.7173,
+      "water_l": 108724.3318
      }
     },
     {
@@ -261,26 +261,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 18.2128,
-       "mid": 19.5201,
-       "high": 20.8154
+       "low": 18.2399,
+       "mid": 19.5462,
+       "high": 20.8408
       },
       "price_rs_per_kg": {
        "low": 21.0736,
        "mid": 22.2774,
        "high": 23.55
       },
-      "distance_km": 76.01,
+      "distance_km": 73.98,
       "distance_approx": false,
-      "drive_hours": 1.9,
-      "spoilage_share": 0.0262,
+      "drive_hours": 1.85,
+      "spoilage_share": 0.0261,
       "spoilage_range": {
-       "low": 0.0206,
-       "mid": 0.0262,
-       "high": 0.0361
+       "low": 0.0205,
+       "mid": 0.0261,
+       "high": 0.0358
       },
-      "freight_rs_per_kg": 0.8361,
-      "freight_rs_load": 2090.275,
+      "freight_rs_per_kg": 0.8138,
+      "freight_rs_load": 2034.45,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -300,26 +300,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.0457,
-       "mid": 12.8795,
-       "high": 13.7204
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
       },
       "price_rs_per_kg": {
        "low": 13.2939,
        "mid": 14.0895,
        "high": 14.9327
       },
-      "distance_km": 6.89,
+      "distance_km": 7.12,
       "distance_approx": false,
-      "drive_hours": 0.172,
+      "drive_hours": 0.178,
       "spoilage_share": 0.0205,
       "spoilage_range": {
        "low": 0.0161,
        "mid": 0.0205,
        "high": 0.0282
       },
-      "freight_rs_per_kg": 0.0758,
-      "freight_rs_load": 189.475,
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 195.8,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -336,9 +336,9 @@
      "advice": null,
      "impact": {
       "kept_out_of_landfill_kg": {
-       "low": 75.0726,
-       "mid": 485.6522,
-       "high": 1018.9258
+       "low": 75.6826,
+       "mid": 486.1171,
+       "high": 1019.3205
       },
       "rescued_kg": 0,
       "recovered_kg": 0,
@@ -347,14 +347,14 @@
       "biogas_energy_unit": null,
       "redirected_kg": 2500,
       "waste_avoided_kg": {
-       "low": 75.0726,
-       "mid": 485.6522,
-       "high": 1018.9258
+       "low": 75.6826,
+       "mid": 486.1171,
+       "high": 1019.3205
       },
-      "extra_km": 69.12,
-      "diesel_l": 9.6768,
-      "co2_kg": 25.9338,
-      "water_l": 89359.9975
+      "extra_km": 66.86,
+      "diesel_l": 9.3604,
+      "co2_kg": 25.0859,
+      "water_l": 89445.5532
      }
     },
     {
@@ -367,26 +367,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 18.1155,
-       "mid": 19.4161,
-       "high": 20.7048
+       "low": 18.1426,
+       "mid": 19.4422,
+       "high": 20.7302
       },
       "price_rs_per_kg": {
        "low": 20.9659,
        "mid": 22.1636,
        "high": 23.4297
       },
-      "distance_km": 76.01,
+      "distance_km": 73.98,
       "distance_approx": false,
-      "drive_hours": 1.9,
-      "spoilage_share": 0.0262,
+      "drive_hours": 1.85,
+      "spoilage_share": 0.0261,
       "spoilage_range": {
-       "low": 0.0206,
-       "mid": 0.0262,
-       "high": 0.0361
+       "low": 0.0205,
+       "mid": 0.0261,
+       "high": 0.0358
       },
-      "freight_rs_per_kg": 0.8361,
-      "freight_rs_load": 1672.22,
+      "freight_rs_per_kg": 0.8138,
+      "freight_rs_load": 1627.56,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -406,26 +406,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.0457,
-       "mid": 12.8795,
-       "high": 13.7204
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
       },
       "price_rs_per_kg": {
        "low": 13.2939,
        "mid": 14.0895,
        "high": 14.9327
       },
-      "distance_km": 6.89,
+      "distance_km": 7.12,
       "distance_approx": false,
-      "drive_hours": 0.172,
+      "drive_hours": 0.178,
       "spoilage_share": 0.0205,
       "spoilage_range": {
        "low": 0.0161,
        "mid": 0.0205,
        "high": 0.0282
       },
-      "freight_rs_per_kg": 0.0758,
-      "freight_rs_load": 151.58,
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 156.64,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -442,9 +442,9 @@
      "advice": null,
      "impact": {
       "kept_out_of_landfill_kg": {
-       "low": 60.0581,
-       "mid": 388.5217,
-       "high": 815.1407
+       "low": 60.5461,
+       "mid": 388.8937,
+       "high": 815.4564
       },
       "rescued_kg": 0,
       "recovered_kg": 0,
@@ -453,14 +453,14 @@
       "biogas_energy_unit": null,
       "redirected_kg": 2000,
       "waste_avoided_kg": {
-       "low": 60.0581,
-       "mid": 388.5217,
-       "high": 815.1407
+       "low": 60.5461,
+       "mid": 388.8937,
+       "high": 815.4564
       },
-      "extra_km": 69.12,
-      "diesel_l": 9.6768,
-      "co2_kg": 25.9338,
-      "water_l": 71487.998
+      "extra_km": 66.86,
+      "diesel_l": 9.3604,
+      "co2_kg": 25.0859,
+      "water_l": 71556.4425
      }
     },
     {
@@ -473,26 +473,26 @@
       "type": "mandi",
       "state": "AP",
       "net_rs_per_kg": {
-       "low": 18.0746,
-       "mid": 19.3877,
-       "high": 20.6862
+       "low": 18.0684,
+       "mid": 19.3818,
+       "high": 20.6804
       },
       "price_rs_per_kg": {
        "low": 21.0736,
        "mid": 22.2774,
        "high": 23.55
       },
-      "distance_km": 86.31,
+      "distance_km": 86.78,
       "distance_approx": false,
-      "drive_hours": 2.158,
+      "drive_hours": 2.169,
       "spoilage_share": 0.0271,
       "spoilage_range": {
        "low": 0.0213,
        "mid": 0.0271,
        "high": 0.0373
       },
-      "freight_rs_per_kg": 0.9494,
-      "freight_rs_load": 1898.82,
+      "freight_rs_per_kg": 0.9546,
+      "freight_rs_load": 1909.16,
       "fee_pct": 0.01,
       "commission_pct": 0.04,
       "handling_pct": 0.01,
@@ -512,26 +512,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.0457,
-       "mid": 12.8795,
-       "high": 13.7204
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
       },
       "price_rs_per_kg": {
        "low": 13.2939,
        "mid": 14.0895,
        "high": 14.9327
       },
-      "distance_km": 6.89,
+      "distance_km": 7.12,
       "distance_approx": false,
-      "drive_hours": 0.172,
+      "drive_hours": 0.178,
       "spoilage_share": 0.0205,
       "spoilage_range": {
        "low": 0.0161,
        "mid": 0.0205,
        "high": 0.0282
       },
-      "freight_rs_per_kg": 0.0758,
-      "freight_rs_load": 151.58,
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 156.64,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -548,9 +548,9 @@
      "advice": null,
      "impact": {
       "kept_out_of_landfill_kg": {
-       "low": 57.7016,
-       "mid": 386.808,
-       "high": 813.7941
+       "low": 57.6325,
+       "mid": 386.7747,
+       "high": 813.7915
       },
       "rescued_kg": 0,
       "recovered_kg": 0,
@@ -559,14 +559,14 @@
       "biogas_energy_unit": null,
       "redirected_kg": 2000,
       "waste_avoided_kg": {
-       "low": 57.7016,
-       "mid": 386.808,
-       "high": 813.7941
+       "low": 57.6325,
+       "mid": 386.7747,
+       "high": 813.7915
       },
-      "extra_km": 79.42,
-      "diesel_l": 11.1188,
-      "co2_kg": 29.7984,
-      "water_l": 71172.6644
+      "extra_km": 79.66,
+      "diesel_l": 11.1524,
+      "co2_kg": 29.8884,
+      "water_l": 71166.5533
      }
     },
     {
@@ -579,26 +579,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 18.0387,
-       "mid": 19.3341,
-       "high": 20.6175
+       "low": 18.0658,
+       "mid": 19.3601,
+       "high": 20.6429
       },
       "price_rs_per_kg": {
        "low": 20.881,
        "mid": 22.0738,
        "high": 23.3348
       },
-      "distance_km": 76.01,
+      "distance_km": 73.98,
       "distance_approx": false,
-      "drive_hours": 1.9,
-      "spoilage_share": 0.0262,
+      "drive_hours": 1.85,
+      "spoilage_share": 0.0261,
       "spoilage_range": {
-       "low": 0.0206,
-       "mid": 0.0262,
-       "high": 0.0361
+       "low": 0.0205,
+       "mid": 0.0261,
+       "high": 0.0358
       },
-      "freight_rs_per_kg": 0.8361,
-      "freight_rs_load": 1254.165,
+      "freight_rs_per_kg": 0.8138,
+      "freight_rs_load": 1220.67,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -618,26 +618,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.0457,
-       "mid": 12.8795,
-       "high": 13.7204
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
       },
       "price_rs_per_kg": {
        "low": 13.2939,
        "mid": 14.0895,
        "high": 14.9327
       },
-      "distance_km": 6.89,
+      "distance_km": 7.12,
       "distance_approx": false,
-      "drive_hours": 0.172,
+      "drive_hours": 0.178,
       "spoilage_share": 0.0205,
       "spoilage_range": {
        "low": 0.0161,
        "mid": 0.0205,
        "high": 0.0282
       },
-      "freight_rs_per_kg": 0.0758,
-      "freight_rs_load": 113.685,
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 117.48,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -654,9 +654,9 @@
      "advice": null,
      "impact": {
       "kept_out_of_landfill_kg": {
-       "low": 45.0435,
-       "mid": 291.3913,
-       "high": 611.3555
+       "low": 45.4095,
+       "mid": 291.6703,
+       "high": 611.5923
       },
       "rescued_kg": 0,
       "recovered_kg": 0,
@@ -665,14 +665,14 @@
       "biogas_energy_unit": null,
       "redirected_kg": 1500,
       "waste_avoided_kg": {
-       "low": 45.0435,
-       "mid": 291.3913,
-       "high": 611.3555
+       "low": 45.4095,
+       "mid": 291.6703,
+       "high": 611.5923
       },
-      "extra_km": 69.12,
-      "diesel_l": 9.6768,
-      "co2_kg": 25.9338,
-      "water_l": 53615.9985
+      "extra_km": 66.86,
+      "diesel_l": 9.3604,
+      "co2_kg": 25.0859,
+      "water_l": 53667.3319
      }
     },
     {
@@ -685,26 +685,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 17.9817,
-       "mid": 19.2732,
-       "high": 20.5527
+       "low": 18.0088,
+       "mid": 19.2992,
+       "high": 20.5781
       },
       "price_rs_per_kg": {
        "low": 20.8179,
        "mid": 22.0072,
        "high": 23.2643
       },
-      "distance_km": 76.01,
+      "distance_km": 73.98,
       "distance_approx": false,
-      "drive_hours": 1.9,
-      "spoilage_share": 0.0262,
+      "drive_hours": 1.85,
+      "spoilage_share": 0.0261,
       "spoilage_range": {
-       "low": 0.0206,
-       "mid": 0.0262,
-       "high": 0.0361
+       "low": 0.0205,
+       "mid": 0.0261,
+       "high": 0.0358
       },
-      "freight_rs_per_kg": 0.8361,
-      "freight_rs_load": 1254.165,
+      "freight_rs_per_kg": 0.8138,
+      "freight_rs_load": 1220.67,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -724,26 +724,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.0457,
-       "mid": 12.8795,
-       "high": 13.7204
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
       },
       "price_rs_per_kg": {
        "low": 13.2939,
        "mid": 14.0895,
        "high": 14.9327
       },
-      "distance_km": 6.89,
+      "distance_km": 7.12,
       "distance_approx": false,
-      "drive_hours": 0.172,
+      "drive_hours": 0.178,
       "spoilage_share": 0.0205,
       "spoilage_range": {
        "low": 0.0161,
        "mid": 0.0205,
        "high": 0.0282
       },
-      "freight_rs_per_kg": 0.0758,
-      "freight_rs_load": 113.685,
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 117.48,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -760,9 +760,9 @@
      "advice": null,
      "impact": {
       "kept_out_of_landfill_kg": {
-       "low": 45.0435,
-       "mid": 291.3913,
-       "high": 611.3555
+       "low": 45.4095,
+       "mid": 291.6703,
+       "high": 611.5923
       },
       "rescued_kg": 0,
       "recovered_kg": 0,
@@ -771,14 +771,14 @@
       "biogas_energy_unit": null,
       "redirected_kg": 1500,
       "waste_avoided_kg": {
-       "low": 45.0435,
-       "mid": 291.3913,
-       "high": 611.3555
+       "low": 45.4095,
+       "mid": 291.6703,
+       "high": 611.5923
       },
-      "extra_km": 69.12,
-      "diesel_l": 9.6768,
-      "co2_kg": 25.9338,
-      "water_l": 53615.9985
+      "extra_km": 66.86,
+      "diesel_l": 9.3604,
+      "co2_kg": 25.0859,
+      "water_l": 53667.3319
      }
     },
     {
@@ -791,26 +791,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 17.9252,
-       "mid": 19.2129,
-       "high": 20.4886
+       "low": 17.9523,
+       "mid": 19.2388,
+       "high": 20.5139
       },
       "price_rs_per_kg": {
        "low": 20.7555,
        "mid": 21.9411,
        "high": 23.1945
       },
-      "distance_km": 76.01,
+      "distance_km": 73.98,
       "distance_approx": false,
-      "drive_hours": 1.9,
-      "spoilage_share": 0.0262,
+      "drive_hours": 1.85,
+      "spoilage_share": 0.0261,
       "spoilage_range": {
-       "low": 0.0206,
-       "mid": 0.0262,
-       "high": 0.0361
+       "low": 0.0205,
+       "mid": 0.0261,
+       "high": 0.0358
       },
-      "freight_rs_per_kg": 0.8361,
-      "freight_rs_load": 1003.332,
+      "freight_rs_per_kg": 0.8138,
+      "freight_rs_load": 976.536,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -830,26 +830,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.0457,
-       "mid": 12.8795,
-       "high": 13.7204
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
       },
       "price_rs_per_kg": {
        "low": 13.2939,
        "mid": 14.0895,
        "high": 14.9327
       },
-      "distance_km": 6.89,
+      "distance_km": 7.12,
       "distance_approx": false,
-      "drive_hours": 0.172,
+      "drive_hours": 0.178,
       "spoilage_share": 0.0205,
       "spoilage_range": {
        "low": 0.0161,
        "mid": 0.0205,
        "high": 0.0282
       },
-      "freight_rs_per_kg": 0.0758,
-      "freight_rs_load": 90.948,
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 93.984,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -866,9 +866,9 @@
      "advice": null,
      "impact": {
       "kept_out_of_landfill_kg": {
-       "low": 36.0348,
-       "mid": 233.113,
-       "high": 489.0844
+       "low": 36.3276,
+       "mid": 233.3362,
+       "high": 489.2739
       },
       "rescued_kg": 0,
       "recovered_kg": 0,
@@ -877,14 +877,14 @@
       "biogas_energy_unit": null,
       "redirected_kg": 1200,
       "waste_avoided_kg": {
-       "low": 36.0348,
-       "mid": 233.113,
-       "high": 489.0844
+       "low": 36.3276,
+       "mid": 233.3362,
+       "high": 489.2739
       },
-      "extra_km": 69.12,
-      "diesel_l": 9.6768,
-      "co2_kg": 25.9338,
-      "water_l": 42892.7988
+      "extra_km": 66.86,
+      "diesel_l": 9.3604,
+      "co2_kg": 25.0859,
+      "water_l": 42933.8655
      }
     },
     {
@@ -897,26 +897,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 17.8804,
-       "mid": 19.165,
-       "high": 20.4376
+       "low": 17.9075,
+       "mid": 19.1909,
+       "high": 20.463
       },
       "price_rs_per_kg": {
        "low": 20.7059,
        "mid": 21.8887,
        "high": 23.1391
       },
-      "distance_km": 76.01,
+      "distance_km": 73.98,
       "distance_approx": false,
-      "drive_hours": 1.9,
-      "spoilage_share": 0.0262,
+      "drive_hours": 1.85,
+      "spoilage_share": 0.0261,
       "spoilage_range": {
-       "low": 0.0206,
-       "mid": 0.0262,
-       "high": 0.0361
+       "low": 0.0205,
+       "mid": 0.0261,
+       "high": 0.0358
       },
-      "freight_rs_per_kg": 0.8361,
-      "freight_rs_load": 836.11,
+      "freight_rs_per_kg": 0.8138,
+      "freight_rs_load": 813.78,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -936,26 +936,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.0457,
-       "mid": 12.8795,
-       "high": 13.7204
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
       },
       "price_rs_per_kg": {
        "low": 13.2939,
        "mid": 14.0895,
        "high": 14.9327
       },
-      "distance_km": 6.89,
+      "distance_km": 7.12,
       "distance_approx": false,
-      "drive_hours": 0.172,
+      "drive_hours": 0.178,
       "spoilage_share": 0.0205,
       "spoilage_range": {
        "low": 0.0161,
        "mid": 0.0205,
        "high": 0.0282
       },
-      "freight_rs_per_kg": 0.0758,
-      "freight_rs_load": 75.79,
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 78.32,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -972,9 +972,9 @@
      "advice": null,
      "impact": {
       "kept_out_of_landfill_kg": {
-       "low": 30.029,
-       "mid": 194.2609,
-       "high": 407.5703
+       "low": 30.273,
+       "mid": 194.4469,
+       "high": 407.7282
       },
       "rescued_kg": 0,
       "recovered_kg": 0,
@@ -983,14 +983,14 @@
       "biogas_energy_unit": null,
       "redirected_kg": 1000,
       "waste_avoided_kg": {
-       "low": 30.029,
-       "mid": 194.2609,
-       "high": 407.5703
+       "low": 30.273,
+       "mid": 194.4469,
+       "high": 407.7282
       },
-      "extra_km": 69.12,
-      "diesel_l": 9.6768,
-      "co2_kg": 25.9338,
-      "water_l": 35743.999
+      "extra_km": 66.86,
+      "diesel_l": 9.3604,
+      "co2_kg": 25.0859,
+      "water_l": 35778.2213
      }
     },
     {
@@ -1003,26 +1003,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 17.8433,
-       "mid": 19.1253,
-       "high": 20.3955
+       "low": 17.8704,
+       "mid": 19.1513,
+       "high": 20.4208
       },
       "price_rs_per_kg": {
        "low": 20.6649,
        "mid": 21.8453,
        "high": 23.0933
       },
-      "distance_km": 76.01,
+      "distance_km": 73.98,
       "distance_approx": false,
-      "drive_hours": 1.9,
-      "spoilage_share": 0.0262,
+      "drive_hours": 1.85,
+      "spoilage_share": 0.0261,
       "spoilage_range": {
-       "low": 0.0206,
-       "mid": 0.0262,
-       "high": 0.0361
+       "low": 0.0205,
+       "mid": 0.0261,
+       "high": 0.0358
       },
-      "freight_rs_per_kg": 0.8361,
-      "freight_rs_load": 668.888,
+      "freight_rs_per_kg": 0.8138,
+      "freight_rs_load": 651.024,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -1042,26 +1042,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.0457,
-       "mid": 12.8795,
-       "high": 13.7204
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
       },
       "price_rs_per_kg": {
        "low": 13.2939,
        "mid": 14.0895,
        "high": 14.9327
       },
-      "distance_km": 6.89,
+      "distance_km": 7.12,
       "distance_approx": false,
-      "drive_hours": 0.172,
+      "drive_hours": 0.178,
       "spoilage_share": 0.0205,
       "spoilage_range": {
        "low": 0.0161,
        "mid": 0.0205,
        "high": 0.0282
       },
-      "freight_rs_per_kg": 0.0758,
-      "freight_rs_load": 60.632,
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 62.656,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -1078,9 +1078,9 @@
      "advice": null,
      "impact": {
       "kept_out_of_landfill_kg": {
-       "low": 24.0232,
-       "mid": 155.4087,
-       "high": 326.0563
+       "low": 24.2184,
+       "mid": 155.5575,
+       "high": 326.1826
       },
       "rescued_kg": 0,
       "recovered_kg": 0,
@@ -1089,14 +1089,14 @@
       "biogas_energy_unit": null,
       "redirected_kg": 800,
       "waste_avoided_kg": {
-       "low": 24.0232,
-       "mid": 155.4087,
-       "high": 326.0563
+       "low": 24.2184,
+       "mid": 155.5575,
+       "high": 326.1826
       },
-      "extra_km": 69.12,
-      "diesel_l": 9.6768,
-      "co2_kg": 25.9338,
-      "water_l": 28595.1992
+      "extra_km": 66.86,
+      "diesel_l": 9.3604,
+      "co2_kg": 25.0859,
+      "water_l": 28622.577
      }
     },
     {
@@ -1109,26 +1109,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 17.8138,
-       "mid": 19.0938,
-       "high": 20.3619
+       "low": 17.8409,
+       "mid": 19.1197,
+       "high": 20.3873
       },
       "price_rs_per_kg": {
        "low": 20.6322,
        "mid": 21.8108,
        "high": 23.0568
       },
-      "distance_km": 76.01,
+      "distance_km": 73.98,
       "distance_approx": false,
-      "drive_hours": 1.9,
-      "spoilage_share": 0.0262,
+      "drive_hours": 1.85,
+      "spoilage_share": 0.0261,
       "spoilage_range": {
-       "low": 0.0206,
-       "mid": 0.0262,
-       "high": 0.0361
+       "low": 0.0205,
+       "mid": 0.0261,
+       "high": 0.0358
       },
-      "freight_rs_per_kg": 0.8361,
-      "freight_rs_load": 418.055,
+      "freight_rs_per_kg": 0.8138,
+      "freight_rs_load": 406.89,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -1148,26 +1148,26 @@
       "type": "mandi",
       "state": "KA",
       "net_rs_per_kg": {
-       "low": 12.0457,
-       "mid": 12.8795,
-       "high": 13.7204
+       "low": 12.0429,
+       "mid": 12.8767,
+       "high": 13.7176
       },
       "price_rs_per_kg": {
        "low": 13.2939,
        "mid": 14.0895,
        "high": 14.9327
       },
-      "distance_km": 6.89,
+      "distance_km": 7.12,
       "distance_approx": false,
-      "drive_hours": 0.172,
+      "drive_hours": 0.178,
       "spoilage_share": 0.0205,
       "spoilage_range": {
        "low": 0.0161,
        "mid": 0.0205,
        "high": 0.0282
       },
-      "freight_rs_per_kg": 0.0758,
-      "freight_rs_load": 37.895,
+      "freight_rs_per_kg": 0.0783,
+      "freight_rs_load": 39.16,
       "fee_pct": 0.0,
       "commission_pct": 0.05,
       "handling_pct": 0.01,
@@ -1184,9 +1184,9 @@
      "advice": null,
      "impact": {
       "kept_out_of_landfill_kg": {
-       "low": 15.0145,
-       "mid": 97.1304,
-       "high": 203.7852
+       "low": 15.1365,
+       "mid": 97.2234,
+       "high": 203.8641
       },
       "rescued_kg": 0,
       "recovered_kg": 0,
@@ -1195,14 +1195,14 @@
       "biogas_energy_unit": null,
       "redirected_kg": 500,
       "waste_avoided_kg": {
-       "low": 15.0145,
-       "mid": 97.1304,
-       "high": 203.7852
+       "low": 15.1365,
+       "mid": 97.2234,
+       "high": 203.8641
       },
-      "extra_km": 69.12,
-      "diesel_l": 9.6768,
-      "co2_kg": 25.9338,
-      "water_l": 17871.9995
+      "extra_km": 66.86,
+      "diesel_l": 9.3604,
+      "co2_kg": 25.0859,
+      "water_l": 17889.1106
      }
     }
    ],
@@ -1231,9 +1231,9 @@
    ],
    "impact": {
     "kept_out_of_landfill_kg": {
-     "low": 489.0545,
-     "mid": 3114.4211,
-     "high": 6526.034
+     "low": 491.8396,
+     "mid": 3116.5833,
+     "high": 6527.9207
     },
     "rescued_kg": 0,
     "recovered_kg": 0,
@@ -1242,14 +1242,14 @@
     "biogas_energy_unit": null,
     "redirected_kg": 16000,
     "waste_avoided_kg": {
-     "low": 489.0545,
-     "mid": 3114.4211,
-     "high": 6526.034
+     "low": 491.8396,
+     "mid": 3116.5833,
+     "high": 6527.9207
     },
-    "extra_km": 669.52,
-    "diesel_l": 93.7328,
-    "co2_kg": 251.2039,
-    "water_l": 573053.4854
+    "extra_km": 651.1,
+    "diesel_l": 91.154,
+    "co2_kg": 244.2927,
+    "water_l": 573451.3191
    },
    "assumptions_used": [
     "co2_kg_per_l_diesel",

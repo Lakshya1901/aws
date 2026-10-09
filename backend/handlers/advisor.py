@@ -14,7 +14,7 @@ from functools import lru_cache
 
 from backend.adapters import location, store
 from backend.core.allocate import SECOND_LIFE_ORDER
-from backend.core.config import CoreError, assumption, crop_mode, get_crop
+from backend.core.config import CoreError, assumption, crop_mode, get_crop, radar_crop
 from backend.core.impact import total_impact
 from backend.core.netvalue import haversine_km
 from backend.core.recommend import glut_radar, plan, recommend, rescue
@@ -242,8 +242,8 @@ def get_risk(q):
     crop_id = q.get("crop")
     if not crop_id:
         raise ApiError(400, "bad_request", "crop is required")
-    crop = get_crop(cfg, crop_id)
-    out = glut_radar(crop_id, store.market_days(crop_id, day), cfg["markets"], cfg, day)
+    crop = radar_crop(cfg, crop_id)
+    out = glut_radar(crop_id, [], cfg["markets"], cfg, day, ctx=store.contexts(crop_id, day))
     by_id = {m["market_id"]: m for m in out["markets"]}
     origin = None
     if q.get("lat") not in (None, "") and q.get("lon") not in (None, ""):
@@ -251,7 +251,9 @@ def get_risk(q):
         routes = location.routes_for(origin, _destinations(cfg, []))
     a = cfg["assumptions"]
     rows = []
-    for m in cfg["markets"]:
+    # Without an origin or a state, only markets reporting this crop (the national list is long).
+    candidates = cfg["markets"] if origin or q.get("state") else [m for m in cfg["markets"] if m["market_id"] in by_id]
+    for m in candidates:
         if m.get("lat") is None or m.get("coord_confidence") == "low" or (q.get("state") and m["state"] != q["state"]):
             continue
         dist, approx = None, False
@@ -330,7 +332,7 @@ def post_recommend(body):
     cfg, day = store.configs(), as_of_date()
     lang, outlets = _language(body), store.outlets()
     load = core_load(body, cfg, outlets, day)
-    r = recommend(load, store.market_days(load["crop"], day), cfg["markets"], outlets, cfg, day)
+    r = recommend(load, [], cfg["markets"], outlets, cfg, day, ctx={load["crop"]: store.contexts(load["crop"], day)})
     crop = get_crop(cfg, load["crop"])
     facts = explanation_facts(r, crop, lang, cfg)
     expl = explain(facts, lang)
@@ -368,8 +370,8 @@ def post_plan(body):
         raise ApiError(400, "bad_request", "/plan takes farm loads only; send unsold stock to /recommend")
     core_loads = [core_load(dict(l, load_id=l.get("load_id") or f"L{i + 1}"), cfg, outlets, day)
                   for i, l in enumerate(loads)]
-    rows = [r for c in sorted({l["crop"] for l in core_loads}) for r in store.market_days(c, day)]
-    p = plan(core_loads, rows, cfg["markets"], outlets, cfg, day)
+    ctx = {c: store.contexts(c, day) for c in sorted({l["crop"] for l in core_loads})}
+    p = plan(core_loads, [], cfg["markets"], outlets, cfg, day, ctx=ctx)
     names = {m["market_id"]: m["name"] for m in cfg["markets"]}
     capped = _capped(p["allocations"])
     markets = [{"market_id": m, "name": names.get(m), "crop": c, "added_kg": kg, "capped": m in capped}
@@ -406,7 +408,36 @@ def get_impact(q):
     return {"plan_id": plan_id, **rec["impact"]}
 
 
-ROUTES = {("GET", "/risk"): get_risk, ("POST", "/recommend"): post_recommend,
+def get_crops(q):
+    """Every commodity in config/commodities.json: name, category, markets, whether routing is set up
+    (full profile) and its data status (ready | fetching | available, D24)."""
+    cfg = store.configs()
+    rows = [{"crop_id": c["crop_id"], "name": c["name"], "category": c.get("category"), "markets": c["markets"],
+             "preload": bool(c.get("preload")), "routing": c["crop_id"] in cfg["crops"]}
+            for c in cfg["commodities"].values()]
+    if q.get("crop"):
+        rows = [r for r in rows if r["crop_id"] == q["crop"]]
+        if not rows:
+            raise ApiError(404, "crop_not_found", f"No commodity {q['crop']}")
+        rows[0]["status"] = store.crop_status(q["crop"], as_of_date())
+    return {"crops": rows}
+
+
+def post_fetch(body):
+    """Load one commodity's data for the radar (and routing, if it has a full profile). Asynchronous: poll
+    GET /crops?crop=<id> until status is ready."""
+    crop = body.get("crop")
+    if crop not in store.configs()["commodities"]:
+        raise ApiError(404, "crop_not_found", f"No commodity {crop}")
+    status = store.crop_status(crop, as_of_date())
+    if status == "available":
+        if os.environ.get("DATA_SOURCE") != "dynamodb":
+            raise ApiError(422, "fetch_unavailable", "Fetching needs the deployed API (snapshot mode has no queue)")
+        status = store.request_fetch(crop, as_of_date())
+    return {"crop": crop, "status": status}
+
+
+ROUTES = {("GET", "/crops"): get_crops, ("POST", "/fetch"): post_fetch, ("GET", "/risk"): get_risk, ("POST", "/recommend"): post_recommend,
           ("POST", "/plan"): post_plan, ("GET", "/impact"): get_impact}
 
 

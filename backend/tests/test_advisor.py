@@ -7,6 +7,7 @@ import csv
 import json
 import os
 import pathlib
+import shutil
 import sys
 import types
 
@@ -15,7 +16,7 @@ import pytest
 from backend.adapters import store
 from backend.core.netvalue import haversine_km
 from backend.handlers import advisor
-from backend.tests.fixtures import AS_OF, ORIGIN, glut_day, history, normal_week
+from backend.tests.fixtures import AS_OF, MARKETS, ORIGIN, glut_day, history, normal_week
 
 FIXTURES = pathlib.Path(__file__).parent / "api_fixtures"
 REPO = pathlib.Path(__file__).resolve().parents[2]
@@ -43,9 +44,10 @@ DATASETS = {"normal_week": normal_week, "glut_day": glut_day, "stale_week": stal
             "price_crash": price_crash, "ten_loads": ten_loads}
 
 
-def synthetic_routes_test_only(origins):
-    """TEST ONLY routes cache: haversine x 1.3 and TEST_SPEED_KMPH, for every configured market and outlet."""
-    dests = (json.loads((REPO / "config/markets.json").read_text())["markets"]
+def synthetic_routes_test_only(origins, markets=None):
+    """TEST ONLY routes cache: haversine x 1.3 and TEST_SPEED_KMPH, for the given (default: configured) markets and
+    every configured outlet."""
+    dests = ((markets if markets is not None else json.loads((REPO / "config/markets.json").read_text())["markets"])
              + json.loads((REPO / "config/outlets.json").read_text())["outlets"])
     cache = {"_note": "TEST ONLY synthetic routes, not Amazon Location"}
     for lat, lon in origins:
@@ -65,15 +67,20 @@ def synthetic_weather_test_only(day, temp_c=30.0):
 
 @pytest.fixture
 def api(tmp_path, monkeypatch):
-    """Point the advisor at a tmp snapshot; returns setup(dataset) and call(method, path, query, body)."""
-    for k in ("PLANS_FILE", "BEDROCK_ENABLED", "CONFIG_DIR"):
+    """Point the advisor at a tmp snapshot and a tmp config whose markets are the synthetic test MARKETS;
+    returns setup(dataset) and call(method, path, query, body)."""
+    for k in ("PLANS_FILE", "BEDROCK_ENABLED"):
         monkeypatch.delenv(k, raising=False)
+    cfg = tmp_path / "config"
+    shutil.copytree(REPO / "config", cfg)
+    (cfg / "markets.json").write_text(json.dumps({"_note": "TEST ONLY", "markets": MARKETS}))
+    monkeypatch.setenv("CONFIG_DIR", str(cfg))
     monkeypatch.setenv("DATA_SOURCE", "snapshot")
     monkeypatch.setenv("REPLAY_DATE", AS_OF)
     monkeypatch.setenv("PLAN_ID_DETERMINISTIC", "1")
     monkeypatch.setattr(store, "_plans", {})
     routes = tmp_path / "routes.json"
-    routes.write_text(json.dumps(synthetic_routes_test_only([(ORIGIN["lat"], ORIGIN["lon"])])))
+    routes.write_text(json.dumps(synthetic_routes_test_only([(ORIGIN["lat"], ORIGIN["lon"])], MARKETS)))
     monkeypatch.setenv("ROUTES_CACHE", str(routes))
 
     def setup(dataset):
@@ -119,7 +126,7 @@ CASES = {
     "recommend_stale": ("stale_week", "POST", "/recommend", None, _recommend_body()),
     "recommend_422_no_markets": ("normal_week", "POST", "/recommend", None,
                                  _recommend_body(origin={"lat": 28.61, "lon": 77.21, "place": "Delhi"})),
-    "recommend_422_crop_not_configured": ("normal_week", "POST", "/recommend", None, _recommend_body(crop="onion")),
+    "recommend_422_crop_not_configured": ("normal_week", "POST", "/recommend", None, _recommend_body(crop="banana")),
     "recommend_422_drive_time": ("normal_week", "POST", "/recommend", None,
                                  _recommend_body(origin={"lat": 13.2, "lon": 78.2, "place": "no cached route"})),
     "recommend_422_origin_unknown": ("normal_week", "POST", "/recommend", None,
@@ -322,3 +329,52 @@ def test_market_days_dynamodb_queries_table_key(monkeypatch):
     monkeypatch.setattr(store, "_table", lambda env: Table())
     store.market_days("tomato", AS_OF)
     assert seen and set(seen) == {"market_crop"}
+
+
+def test_radar_only_crop_and_crops_routes(api, tmp_path, monkeypatch):
+    """A commodity without a full profile gets the Glut Radar but not routing (D24); /crops lists it."""
+    setup, call = api
+    setup("glut_day")
+    cfg = pathlib.Path(os.environ["CONFIG_DIR"])
+    (cfg / "commodities.json").write_text(json.dumps({"commodities": [
+        {"crop_id": "brinjal", "name": "Brinjal", "category": "Vegetables", "markets": 4, "preload": True},
+        {"crop_id": "tomato", "name": "Tomato", "category": "Vegetables", "markets": 4, "preload": True}]}))
+    snap = pathlib.Path(os.environ["SNAPSHOT_DIR"])
+    with open(snap / "test_brinjal_synthetic.csv", "w", newline="") as fh:
+        w = csv.DictWriter(fh, ["date", "market_id", "crop", "arrivals_t", "modal_price_kg"])
+        w.writeheader()
+        w.writerows(dict(r, crop="brinjal") for r in glut_day())
+    s, risk = call("GET", "/risk", {"crop": "brinjal"})
+    assert s == 200 and risk["unit_box_kg"] is None
+    assert {m["market_id"]: m["risk_level"] for m in risk["markets"]}["kolar"] == "glut"
+    assert call("POST", "/recommend", body=_recommend_body(crop="brinjal"))[1]["error"] == "crop_not_configured"
+    s, crops = call("GET", "/crops")
+    assert s == 200 and {c["crop_id"]: c["routing"] for c in crops["crops"]} == {"brinjal": False, "tomato": True}
+    assert call("GET", "/crops", {"crop": "brinjal"})[1]["crops"][0]["status"] == "ready"
+    assert call("GET", "/crops", {"crop": "okra"})[0] == 404
+    assert call("POST", "/crops/fetch", body={"crop": "brinjal"})[1] == {"crop": "brinjal", "status": "ready"}
+
+
+def test_contexts_dynamodb_reads_market_risk(monkeypatch):
+    """DATA_SOURCE=dynamodb: contexts come from MarketRisk rows for the as-of date; the #status row and rows from
+    another as-of date are skipped (D24)."""
+    from decimal import Decimal
+    cfg = {"markets": MARKETS}
+    risk = {k: None for k in store.RISK_FIELDS}
+
+    def item(mid, day):
+        return dict(risk, market_id=mid, crop="tomato", as_of_date=day, price_kg=Decimal("20.5"), arrivals_t=Decimal(100),
+                    elasticity_b=Decimal("-0.5"), resid_sd=Decimal("0.1"))
+    items = [item("kolar", AS_OF), item("bengaluru", "2020-01-01"), item("unknown", AS_OF),
+             {"crop": "tomato", "market_id": store.STATUS_KEY, "status": "ready", "as_of_date": AS_OF}]
+
+    class Table:
+        def query(self, **kw):
+            return {"Items": items}
+
+    monkeypatch.setenv("DATA_SOURCE", "dynamodb")
+    monkeypatch.setattr(store, "_table", lambda env: Table())
+    monkeypatch.setattr(store, "configs", lambda: cfg)
+    ctx = store.contexts("tomato", AS_OF)
+    assert [c["market"]["market_id"] for c in ctx] == ["kolar"]
+    assert ctx[0]["risk"]["price_kg"] == 20.5 and ctx[0]["fit"] == {"b": -0.5, "resid_sd": 0.1}

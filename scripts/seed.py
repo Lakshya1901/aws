@@ -3,9 +3,10 @@
 - Outlets table <- config/outlets.json
 - MarketDay table <- data/snapshot/*.csv (PK market_crop = "<market_id>#<crop>", SK date)
 - S3 data bucket snapshot/ <- the snapshot CSVs and manifests
+- S3 data bucket idp/ <- per-commodity market-level files from scripts/build_idp.py (--idp DIR; D24), read by ingest
 Markets stay in config/markets.json (Section 8.5: config lives in versioned JSON, not the database).
 
-Usage: python scripts/seed.py --stack annasetu   (reads table and bucket names from the stack outputs)
+Usage: python scripts/seed.py --stack annasetu [--idp DIR]   (reads table and bucket names from the stack outputs)
 """
 import argparse
 import csv
@@ -22,7 +23,7 @@ def _num(v):
     return None if v in ("", None) else Decimal(v)
 
 
-def main(stack):
+def main(stack, idp=None):
     import boto3
     outputs = {o["OutputKey"]: o["OutputValue"] for o in boto3.client("cloudformation", region_name=REGION)
                .describe_stacks(StackName=stack)["Stacks"][0].get("Outputs", [])}
@@ -52,7 +53,18 @@ def main(stack):
                 print(f"s3://{outputs['DataBucket']}/snapshot/{f.name}")
 
 
+    if idp:
+        files = sorted(pathlib.Path(idp).glob("*.csv.gz"))
+        for f in files:
+            s3.upload_file(str(f), outputs["DataBucket"], f"idp/{f.name}")
+        for name in ("manifest.json", "commodities.json"):
+            s3.upload_file(str(pathlib.Path(idp) / name), outputs["DataBucket"], f"idp/{name}")
+        print(f"s3://{outputs['DataBucket']}/idp/: {len(files)} commodity files")
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--stack", default="annasetu")
-    main(ap.parse_args().stack)
+    ap.add_argument("--idp", help="scripts/build_idp.py output directory to upload to s3://<DataBucket>/idp/")
+    a = ap.parse_args()
+    main(a.stack, a.idp)
