@@ -44,6 +44,8 @@ TODO.md as they are done and commit TODO.md with the work.
 - [ ] 3.1 Put the API URL and key in `app/.env` (from `app/.env.example`); never commit it.
 - [ ] 3.2 Android: `app/eas.json` has a `preview` profile that builds an APK (EAS environment `preview`). Needs an Expo account (`eas login`). EAS does not upload the git-ignored `app/.env`, so set `EXPO_PUBLIC_API_URL` and `EXPO_PUBLIC_API_KEY` with `eas env:create --environment preview` (key as a secret). Then `eas build -p android --profile preview`; install the APK; one typed and one voice recommendation end to end (target under 15 s from release to card).
 - [ ] 3.3 iPhone: run through Expo Go (no App Store / TestFlight). Same two flows.
+- [ ] 3.5 Build the APK file (steps in `app/README.md`, Build): `eas build -p android --profile preview`, download the `.apk`, attach it to a GitHub Release (not committed; large binary) and use that link for README "Android APK".
+- [ ] 3.6 iOS build (steps in `app/README.md`, Build): Expo Go on a real iPhone; optional simulator build `eas build -p ios --profile preview` on a Mac. No `.ipa` for real devices without a paid Apple Developer account.
 - [ ] 3.4 Check Listen (Hindi and English only; Kannada shows the note), Second Life screen, stale banner, 422 messages.
 
 ### 4. Suggestions, improvements, re-iterations

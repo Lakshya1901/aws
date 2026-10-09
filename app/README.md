@@ -86,7 +86,37 @@ npx tsc --noEmit
 npx expo export --platform android
 ```
 
-The Android APK is built with EAS (`eas build -p android --profile preview`), see the root README.
+## Build
+
+Both builds run on Expo's EAS servers (free Expo account). `app/.env.local` is git-ignored and EAS does not upload it,
+so set the API URL and key once as EAS environment variables:
+
+```bash
+npm i -g eas-cli
+eas login
+eas init                       # links the project to your Expo account (writes the project ID into app.json)
+eas env:create --environment preview --name EXPO_PUBLIC_API_URL --value https://<api-id>.execute-api.ap-south-1.amazonaws.com --visibility plaintext
+eas env:create --environment preview --name EXPO_PUBLIC_API_KEY --value <demo api key> --visibility sensitive
+```
+
+### Android APK
+
+```bash
+eas build -p android --profile preview
+```
+
+EAS prints a download link for the `.apk`. Install it on a phone (allow installs from unknown sources), then attach it
+to a GitHub Release and put that link in the root README. The APK is not committed: it is a large binary.
+
+### iOS
+
+Installing on a real iPhone outside Expo Go needs a paid Apple Developer account, which this project does not use.
+
+- **Real iPhone:** Expo Go. Install Expo Go from the App Store, run `npx expo start --clear` with `.env.local` set,
+  scan the QR code with the Camera app (phone and computer on the same Wi-Fi, or `npx expo start --tunnel`).
+- **Simulator build (Mac with Xcode):** `eas build -p ios --profile preview` makes a simulator `.app`
+  (`ios.simulator: true` in `eas.json`, no Apple account needed). Download and unpack the `.tar.gz`, open the iOS
+  Simulator, and drag the `.app` onto it.
 
 ## Voice
 
