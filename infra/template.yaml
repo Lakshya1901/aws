@@ -77,7 +77,7 @@ Resources:
       ContextPath: .   # infra/Makefile; it runs from the repo root (CodeUri)
     Properties:
       Handler: backend/handlers/authorizer.handler
-      MemorySize: 128
+      MemorySize: 256
       Timeout: 5
       Environment:
         Variables:

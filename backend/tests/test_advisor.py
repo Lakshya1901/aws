@@ -307,3 +307,18 @@ def test_impact_adds_rescue_to_plan_total(api):
     assert imp["redirected_kg"] == p["impact"]["redirected_kg"]  # rescue never adds to redirected
     k, w = imp["kept_out_of_landfill_kg"], p["impact"]["waste_avoided_kg"]
     assert k["mid"] == pytest.approx(w["mid"] + 700 + r["impact"]["recovered_kg"])
+
+
+def test_market_days_dynamodb_queries_table_key(monkeypatch):
+    """DATA_SOURCE=dynamodb queries MarketDay by its key schema (market_crop, date; infra/template.yaml)."""
+    seen = []
+
+    class Table:
+        def query(self, **kw):
+            seen.append(kw["KeyConditionExpression"].get_expression()["values"][0].get_expression()["values"][0].name)
+            return {"Items": []}
+
+    monkeypatch.setenv("DATA_SOURCE", "dynamodb")
+    monkeypatch.setattr(store, "_table", lambda env: Table())
+    store.market_days("tomato", AS_OF)
+    assert seen and set(seen) == {"market_crop"}

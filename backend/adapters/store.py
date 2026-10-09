@@ -78,7 +78,7 @@ def market_days(crop, as_of_date):
     from boto3.dynamodb.conditions import Key
     table, rows = _table("MARKET_DAY_TABLE"), []
     for m in configs()["markets"]:
-        kw = {"KeyConditionExpression": Key("pk").eq(f"{m['market_id']}#{crop}") & Key("date").lte(as_of_date)}
+        kw = {"KeyConditionExpression": Key("market_crop").eq(f"{m['market_id']}#{crop}") & Key("date").lte(as_of_date)}
         while True:
             page = table.query(**kw)
             rows += [{"date": i["date"], "market_id": m["market_id"], "crop": crop,
