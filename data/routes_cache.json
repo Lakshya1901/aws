@@ -1,3 +1,135 @@
 {
-  "_note": "Amazon Location routes (D11). Key '<origin_key>|<outlet_id>'; origin_key is 'lat,lon' rounded to 3 dp or a named demo village id. Value {distance_km, drive_hours, source, fetched_at}. Filled only by scripts/cache_routes.py with AWS credentials; never edit by hand."
+ "_note": "Amazon Location routes (D11). Key '<origin_key>|<outlet_id>'; origin_key is 'lat,lon' rounded to 3 dp or a named demo village id. Value {distance_km, drive_hours, source, fetched_at}. Filled only by scripts/cache_routes.py with AWS credentials; never edit by hand.",
+ "13.137,78.134|kolar": {
+  "distance_km": 0.9059086222018491,
+  "drive_hours": 0.06769482397888889,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:29.760059+00:00"
+ },
+ "13.137,78.134|chintamani": {
+  "distance_km": 33.55895539556659,
+  "drive_hours": 0.9176965757930555,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:31.211543+00:00"
+ },
+ "13.137,78.134|bengaluru": {
+  "distance_km": 73.6247142403168,
+  "drive_hours": 1.9717373262833322,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:32.702820+00:00"
+ },
+ "13.137,78.134|doddaballapura": {
+  "distance_km": 89.58594201773914,
+  "drive_hours": 1.5351706624647223,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:34.085005+00:00"
+ },
+ "13.137,78.134|mandya": {
+  "distance_km": 184.5387533336928,
+  "drive_hours": 3.6507405682891667,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:35.741718+00:00"
+ },
+ "13.137,78.134|mysuru": {
+  "distance_km": 228.29374497923615,
+  "drive_hours": 4.516838982674724,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:37.400128+00:00"
+ },
+ "13.137,78.134|madanapalle": {
+  "distance_km": 83.34926860296558,
+  "drive_hours": 2.0008168748469437,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:38.697373+00:00"
+ },
+ "13.137,78.134|snr_foods": {
+  "distance_km": 25.74980779591388,
+  "drive_hours": 0.7042092858444443,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:40.131052+00:00"
+ },
+ "13.137,78.134|feel_fresh_foods": {
+  "distance_km": 114.92658863764628,
+  "drive_hours": 2.1344944032355553,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:41.567478+00:00"
+ },
+ "13.137,78.134|kolar_food_bank": {
+  "distance_km": 0.22195414954018017,
+  "drive_hours": 0.01894632568527778,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:42.487795+00:00"
+ },
+ "13.137,78.134|bangalore_food_bank": {
+  "distance_km": 73.29651649993546,
+  "drive_hours": 1.9128769932549987,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:43.906481+00:00"
+ },
+ "12.977,77.575|kolar": {
+  "distance_km": 94.72023511151843,
+  "drive_hours": 1.8762721455530558,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:46.015554+00:00"
+ },
+ "12.977,77.575|chintamani": {
+  "distance_km": 82.83848571777344,
+  "drive_hours": 2.0255644310824996,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:47.611592+00:00"
+ },
+ "12.977,77.575|bengaluru": {
+  "distance_km": 0.18904986037522,
+  "drive_hours": 0.021417747698888892,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:48.860986+00:00"
+ },
+ "12.977,77.575|doddaballapura": {
+  "distance_km": 53.427407764750676,
+  "drive_hours": 1.2706962271205555,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:50.185192+00:00"
+ },
+ "12.977,77.575|mandya": {
+  "distance_km": 101.98506222035277,
+  "drive_hours": 1.9459298576008335,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:51.404728+00:00"
+ },
+ "12.977,77.575|mysuru": {
+  "distance_km": 145.74008438347425,
+  "drive_hours": 2.812028271986668,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:52.890509+00:00"
+ },
+ "12.977,77.575|madanapalle": {
+  "distance_km": 138.78041127990568,
+  "drive_hours": 3.7025164459705566,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:54.479684+00:00"
+ },
+ "12.977,77.575|snr_foods": {
+  "distance_km": 101.47158360151917,
+  "drive_hours": 2.350206973083056,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:55.933293+00:00"
+ },
+ "12.977,77.575|feel_fresh_foods": {
+  "distance_km": 220.70250262684533,
+  "drive_hours": 3.6246101830038904,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:57.397439+00:00"
+ },
+ "12.977,77.575|kolar_food_bank": {
+  "distance_km": 94.72874013762797,
+  "drive_hours": 1.8859833836686113,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:56:58.862990+00:00"
+ },
+ "12.977,77.575|bangalore_food_bank": {
+  "distance_km": 2.743023750853251,
+  "drive_hours": 0.15259851167555555,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-09T19:57:00.046660+00:00"
+ }
 }
