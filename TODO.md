@@ -42,6 +42,7 @@ TODO.md as they are done and commit TODO.md with the work.
 - [ ] 2.2 Re-run both replay days locally (`python -m backend.handlers.local_server`, `REPLAY_DATE=2025-03-19` for the second) and record the real figures (top outlet, net ranges, waste avoided, redirected, extra km, 10-load split).
 - [ ] 2.3 `cd infra && sam build && sam deploy --guided` (confirm first; creates billable resources). Pass `BedrockModelId` / `BedrockModelArns`.
   - Oct 9: `sam build` passes; 99 backend tests pass. Deploy waits for confirmation. Bedrock off (both parameters empty).
+  - Oct 9: first deploy (NameSuffix abcd11, no AlarmEmail) failed: `annasetu-deployer` was denied `iam:CreateRole` (with tags) and `iam:DeleteRolePolicy` on `annasetu-*` roles; stack is `ROLLBACK_FAILED`. Needs the inline IAM policy fixed in the console (CreateRole, TagRole, DeleteRolePolicy and related on `role/annasetu-*`), then delete the stack and redeploy.
 - [ ] 2.4 `python scripts/geocode_markets.py` (review the diff, commit), `python scripts/seed.py`, invoke ingest once with `{"as_of_date": "2023-09-06"}`, confirm MarketRisk rows.
 
 ### 3. iPhone and Android test
