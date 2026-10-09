@@ -264,9 +264,9 @@ def get_risk(q):
         routes = location.routes_for(origin, _destinations(cfg, [], origin), live=False)  # radar: no paid routing
     a = cfg["assumptions"]
     rows = []
-    # Without an origin or a state, only markets reporting this crop (the national list is long).
-    candidates = cfg["markets"] if origin or q.get("state") else [m for m in cfg["markets"] if m["market_id"] in by_id]
-    for m in candidates:
+    # Only markets that have reported this crop (D24: the national list is long); one whose data is old still
+    # shows, as not reported recently.
+    for m in (m for m in cfg["markets"] if m["market_id"] in by_id):
         if m.get("lat") is None or m.get("coord_confidence") == "low" or (q.get("state") and m["state"] != q["state"]):
             continue
         dist, approx = None, False
