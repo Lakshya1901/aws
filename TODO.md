@@ -30,6 +30,7 @@ TODO.md as they are done and commit TODO.md with the work.
 - [x] 1.1 Create an AWS Budget alert (e.g. USD 10) in Billing.
 - [x] 1.2 Create IAM user `annasetu-deployer` (not root): `PowerUserAccess` plus an inline policy allowing `iam:CreateRole`, `iam:PutRolePolicy`, `iam:AttachRolePolicy`, `iam:DetachRolePolicy`, `iam:PassRole`, `iam:GetRole`, `iam:DeleteRole*` on `arn:aws:iam::*:role/annasetu-*`. Create an access key. Delete it after the hackathon.
 - [ ] 1.3 Bedrock console, ap-south-1: enable a small Claude model; note its model ID and whether it needs an APAC inference profile (`infra/README.md`).
+  - Oct 9: blocked. Anthropic use-case form: "Your account is not authorized"; Nova 2 Lite playground: "ValidationException: Operation not allowed", also after upgrading to the Paid plan. Adapter now uses the Converse API (D23), so any model works once allowed. Open a support case (Account and billing); deploy with Bedrock off (rule parser + templates) meanwhile.
 - [ ] 1.4 Environment settings (session title bar, cloud environment menu, Edit): add `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION=ap-south-1`. Never paste keys in chat or commit them.
   - Oct 9: both keys are set, but STS rejects them (`InvalidClientTokenId`: key deleted, inactive, mistyped, or has stray whitespace/quotes). `AWS_DEFAULT_REGION` is not set. Re-enter the key pair, then start a new session. Blocks 1.5, 2.1, 2.3, 2.4.
 - [ ] 1.5 Create SSM SecureStrings `/annasetu/datagov_key` and `/annasetu/app_api_key` (`infra/README.md`).
