@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { api } from '../api/client';
+import { isRouterCrop } from '../api/types';
 import { LoadForm } from '../components/LoadForm';
 import { MicButton } from '../components/MicButton';
 import { Banner, Btn, DataBanners, Loading, Screen, T, useErrorText } from '../components/ui';
@@ -22,7 +23,7 @@ export default function NewLoadScreen() {
 
   // Fresh draft each time the screen opens.
   useEffect(() => {
-    setDraft({ ...EMPTY_DRAFT, crop, lat: coords?.lat ?? null, lon: coords?.lon ?? null });
+    setDraft({ ...EMPTY_DRAFT, crop: isRouterCrop(crop) ? crop : null, lat: coords?.lat ?? null, lon: coords?.lon ?? null });
     setReady(true);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

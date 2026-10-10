@@ -1,27 +1,36 @@
 {
   "crop_id": "onion",
-  "names": {"en": "Onion"},
+  "names": {"en": "Onion", "hi": "प्याज", "kn": "ಈರುಳ್ಳಿ"},
   "agmarknet_commodity": "Onion",
   "t_ref_c": 25,
-  "sl_ref_hours": null,
-  "sl_ref_hours_range": null,
-  "q10": null,
-  "alpha": null,
+  "sl_ref_hours": 2880,
+  "sl_ref_hours_range": [2490, 3350],
+  "q10": 2.4,
+  "alpha": 0.31,
   "storable": true,
-  "harvest_cost_rs_per_kg": null,
+  "harvest_cost_rs_per_kg": 3.5,
   "unit_box_kg": null,
-  "water_l_per_kg": null,
-  "second_life": ["processor", "food_bank"],
+  "water_l_per_kg": 345,
+  "second_life": ["processor", "food_bank", "biogas", "compost"],
   "status": {
     "t_ref_c": "sourced",
     "storable": "sourced",
     "sl_ref_hours": "placeholder",
+    "sl_ref_hours_range": "placeholder",
     "q10": "placeholder",
     "alpha": "placeholder",
-    "harvest_cost_rs_per_kg": "placeholder"
+    "harvest_cost_rs_per_kg": "placeholder",
+    "water_l_per_kg": "sourced"
   },
   "sources": {
+    "t_ref_c": "CLAUDE.md Section 11 reference temperature",
     "storable": "CLAUDE.md Section 11: ~0 C, 70-75% RH, ~6-8 months good-condition storage",
-    "second_life": "CLAUDE.md Section 11: dehydration (processor), food bank"
+    "sl_ref_hours": "4 months (2,880 h) of ambient storage in a ventilated structure, the period over which the losses used for alpha were measured: Gorrepati et al., Post-harvest losses in different varieties of onion, Indian Journal of Horticulture (DOGR, rabi 2013-14 and 2014-15), https://journal.iahs.org.in/index.php/ijh/article/view/321",
+    "sl_ref_hours_range": "Shelf lives that give the trial's two total losses (35.87% Bhima Shakti, 26.66% Bhima Kiran) at alpha 0.31: 0.31 x 2880 / loss",
+    "q10": "Derived from UC Davis respiration rates for whole dry onions, 3-4 mL CO2/kg.h at 0-5 C and 27-29 at 25-27 C (midpoints over 23.5 C), https://postharvest.ucdavis.edu/produce-facts-sheets/onions-dry (read through a search excerpt; verify)",
+    "alpha": "Mean of the trial's total losses after 4 months at ambient (26.66% and 35.87%), Gorrepati et al., same source as sl_ref_hours. Ambient storage loss, not trip loss: calibrate with FPO data",
+    "harvest_cost_rs_per_kg": "Midpoint of Rs 300-400 per quintal for harvest labour plus transport, quoted by a Nashik farmer, FreshPlaza, 3 May 2016, https://www.freshplaza.com/north-america/article/2157335/indian-onion-crisis-farmers-dumping-produce (one farmer, 2016; replace with FPO interview)",
+    "water_l_per_kg": "345 L/kg global average (green 192, blue 88, grey 65), Mekonnen and Hoekstra 2010, Value of Water Report 47 Vol 1, Table 4, https://ayhoekstra.nl/pubs/Report47-WaterFootprintCrops-Vol1.pdf",
+    "second_life": "CLAUDE.md Section 11: dehydration (processor), food bank; Recover: biogas, compost (D19)"
   }
 }

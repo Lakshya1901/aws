@@ -97,6 +97,16 @@
    },
    "advice": null,
    "impact": {
+    "kept_out_of_landfill_kg": {
+     "low": 101.2038,
+     "mid": 590.8931,
+     "high": 1229.1188
+    },
+    "rescued_kg": 0,
+    "recovered_kg": 0,
+    "biogas_kg": 0,
+    "biogas_energy": 0.0,
+    "biogas_energy_unit": null,
     "redirected_kg": 3000,
     "waste_avoided_kg": {
      "low": 101.2038,
@@ -193,6 +203,16 @@
    },
    "advice": null,
    "impact": {
+    "kept_out_of_landfill_kg": {
+     "low": 75.6826,
+     "mid": 486.1171,
+     "high": 1019.3205
+    },
+    "rescued_kg": 0,
+    "recovered_kg": 0,
+    "biogas_kg": 0,
+    "biogas_energy": 0.0,
+    "biogas_energy_unit": null,
     "redirected_kg": 2500,
     "waste_avoided_kg": {
      "low": 75.6826,
@@ -289,6 +309,16 @@
    },
    "advice": null,
    "impact": {
+    "kept_out_of_landfill_kg": {
+     "low": 60.5461,
+     "mid": 388.8937,
+     "high": 815.4564
+    },
+    "rescued_kg": 0,
+    "recovered_kg": 0,
+    "biogas_kg": 0,
+    "biogas_energy": 0.0,
+    "biogas_energy_unit": null,
     "redirected_kg": 2000,
     "waste_avoided_kg": {
      "low": 60.5461,
@@ -385,6 +415,16 @@
    },
    "advice": null,
    "impact": {
+    "kept_out_of_landfill_kg": {
+     "low": 57.6325,
+     "mid": 386.7747,
+     "high": 813.7915
+    },
+    "rescued_kg": 0,
+    "recovered_kg": 0,
+    "biogas_kg": 0,
+    "biogas_energy": 0.0,
+    "biogas_energy_unit": null,
     "redirected_kg": 2000,
     "waste_avoided_kg": {
      "low": 57.6325,
@@ -481,6 +521,16 @@
    },
    "advice": null,
    "impact": {
+    "kept_out_of_landfill_kg": {
+     "low": 45.4095,
+     "mid": 291.6703,
+     "high": 611.5923
+    },
+    "rescued_kg": 0,
+    "recovered_kg": 0,
+    "biogas_kg": 0,
+    "biogas_energy": 0.0,
+    "biogas_energy_unit": null,
     "redirected_kg": 1500,
     "waste_avoided_kg": {
      "low": 45.4095,
@@ -577,6 +627,16 @@
    },
    "advice": null,
    "impact": {
+    "kept_out_of_landfill_kg": {
+     "low": 45.4095,
+     "mid": 291.6703,
+     "high": 611.5923
+    },
+    "rescued_kg": 0,
+    "recovered_kg": 0,
+    "biogas_kg": 0,
+    "biogas_energy": 0.0,
+    "biogas_energy_unit": null,
     "redirected_kg": 1500,
     "waste_avoided_kg": {
      "low": 45.4095,
@@ -673,6 +733,16 @@
    },
    "advice": null,
    "impact": {
+    "kept_out_of_landfill_kg": {
+     "low": 36.3276,
+     "mid": 233.3362,
+     "high": 489.2739
+    },
+    "rescued_kg": 0,
+    "recovered_kg": 0,
+    "biogas_kg": 0,
+    "biogas_energy": 0.0,
+    "biogas_energy_unit": null,
     "redirected_kg": 1200,
     "waste_avoided_kg": {
      "low": 36.3276,
@@ -769,6 +839,16 @@
    },
    "advice": null,
    "impact": {
+    "kept_out_of_landfill_kg": {
+     "low": 30.273,
+     "mid": 194.4469,
+     "high": 407.7282
+    },
+    "rescued_kg": 0,
+    "recovered_kg": 0,
+    "biogas_kg": 0,
+    "biogas_energy": 0.0,
+    "biogas_energy_unit": null,
     "redirected_kg": 1000,
     "waste_avoided_kg": {
      "low": 30.273,
@@ -865,6 +945,16 @@
    },
    "advice": null,
    "impact": {
+    "kept_out_of_landfill_kg": {
+     "low": 24.2184,
+     "mid": 155.5575,
+     "high": 326.1826
+    },
+    "rescued_kg": 0,
+    "recovered_kg": 0,
+    "biogas_kg": 0,
+    "biogas_energy": 0.0,
+    "biogas_energy_unit": null,
     "redirected_kg": 800,
     "waste_avoided_kg": {
      "low": 24.2184,
@@ -961,6 +1051,16 @@
    },
    "advice": null,
    "impact": {
+    "kept_out_of_landfill_kg": {
+     "low": 15.1365,
+     "mid": 97.2234,
+     "high": 203.8641
+    },
+    "rescued_kg": 0,
+    "recovered_kg": 0,
+    "biogas_kg": 0,
+    "biogas_energy": 0.0,
+    "biogas_energy_unit": null,
     "redirected_kg": 500,
     "waste_avoided_kg": {
      "low": 15.1365,
@@ -998,6 +1098,16 @@
   }
  ],
  "impact": {
+  "kept_out_of_landfill_kg": {
+   "low": 491.8396,
+   "mid": 3116.5833,
+   "high": 6527.9207
+  },
+  "rescued_kg": 0,
+  "recovered_kg": 0,
+  "biogas_kg": 0,
+  "biogas_energy": 0.0,
+  "biogas_energy_unit": null,
   "redirected_kg": 16000,
   "waste_avoided_kg": {
    "low": 491.8396,

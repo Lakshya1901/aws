@@ -7,6 +7,7 @@ import csv
 import json
 import os
 import pathlib
+import shutil
 import sys
 import types
 
@@ -15,7 +16,7 @@ import pytest
 from backend.adapters import store
 from backend.core.netvalue import haversine_km
 from backend.handlers import advisor
-from backend.tests.fixtures import AS_OF, ORIGIN, glut_day, history, normal_week
+from backend.tests.fixtures import AS_OF, MARKETS, ORIGIN, glut_day, history, normal_week
 
 FIXTURES = pathlib.Path(__file__).parent / "api_fixtures"
 REPO = pathlib.Path(__file__).resolve().parents[2]
@@ -43,13 +44,16 @@ DATASETS = {"normal_week": normal_week, "glut_day": glut_day, "stale_week": stal
             "price_crash": price_crash, "ten_loads": ten_loads}
 
 
-def synthetic_routes_test_only(origins):
-    """TEST ONLY routes cache: haversine x 1.3 and TEST_SPEED_KMPH, for every configured market and outlet."""
-    dests = (json.loads((REPO / "config/markets.json").read_text())["markets"]
+def synthetic_routes_test_only(origins, markets=None):
+    """TEST ONLY routes cache: haversine x 1.3 and TEST_SPEED_KMPH, for the given (default: configured) markets and
+    every configured outlet."""
+    dests = ((markets if markets is not None else json.loads((REPO / "config/markets.json").read_text())["markets"])
              + json.loads((REPO / "config/outlets.json").read_text())["outlets"])
     cache = {"_note": "TEST ONLY synthetic routes, not Amazon Location"}
     for lat, lon in origins:
         for d in dests:
+            if d.get("lat") is None:
+                continue
             km = haversine_km(lat, lon, d["lat"], d["lon"]) * 1.3
             cache[f"{lat:.3f},{lon:.3f}|{d.get('market_id') or d['outlet_id']}"] = {
                 "distance_km": round(km, 2), "drive_hours": round(km / TEST_SPEED_KMPH, 3), "source": "test_only"}
@@ -65,15 +69,20 @@ def synthetic_weather_test_only(day, temp_c=30.0):
 
 @pytest.fixture
 def api(tmp_path, monkeypatch):
-    """Point the advisor at a tmp snapshot; returns setup(dataset) and call(method, path, query, body)."""
-    for k in ("PLANS_FILE", "BEDROCK_ENABLED", "CONFIG_DIR"):
+    """Point the advisor at a tmp snapshot and a tmp config whose markets are the synthetic test MARKETS;
+    returns setup(dataset) and call(method, path, query, body)."""
+    for k in ("PLANS_FILE", "BEDROCK_ENABLED"):
         monkeypatch.delenv(k, raising=False)
+    cfg = tmp_path / "config"
+    shutil.copytree(REPO / "config", cfg)
+    (cfg / "markets.json").write_text(json.dumps({"_note": "TEST ONLY", "markets": MARKETS}))
+    monkeypatch.setenv("CONFIG_DIR", str(cfg))
     monkeypatch.setenv("DATA_SOURCE", "snapshot")
     monkeypatch.setenv("REPLAY_DATE", AS_OF)
     monkeypatch.setenv("PLAN_ID_DETERMINISTIC", "1")
     monkeypatch.setattr(store, "_plans", {})
     routes = tmp_path / "routes.json"
-    routes.write_text(json.dumps(synthetic_routes_test_only([(ORIGIN["lat"], ORIGIN["lon"])])))
+    routes.write_text(json.dumps(synthetic_routes_test_only([(ORIGIN["lat"], ORIGIN["lon"])], MARKETS)))
     monkeypatch.setenv("ROUTES_CACHE", str(routes))
 
     def setup(dataset):
@@ -104,6 +113,13 @@ def _plan_body():
     return {"language": "en", "loads": [dict(_recommend_body(quantity_kg=q), load_id=f"L{i}") for i, q in enumerate(qs)]}
 
 
+def _rescue_body(**kw):
+    return dict({"source": "mandi_unsold", "crop": "tomato", "quantity_kg": 1000, "origin": dict(ORIGIN),
+                 "hours_since_harvest": 48, "language": "en"}, **kw)
+
+
+DELHI = {"lat": 28.61, "lon": 77.21, "place": "Delhi"}
+
 CASES = {
     "risk_normal_week": ("normal_week", "GET", "/risk", {"crop": "tomato", "lat": "13.10", "lon": "78.10"}, None),
     "recommend_normal_week": ("normal_week", "POST", "/recommend", None, _recommend_body()),
@@ -112,12 +128,18 @@ CASES = {
     "recommend_stale": ("stale_week", "POST", "/recommend", None, _recommend_body()),
     "recommend_422_no_markets": ("normal_week", "POST", "/recommend", None,
                                  _recommend_body(origin={"lat": 28.61, "lon": 77.21, "place": "Delhi"})),
-    "recommend_422_crop_not_configured": ("normal_week", "POST", "/recommend", None, _recommend_body(crop="onion")),
+    "recommend_422_crop_not_configured": ("normal_week", "POST", "/recommend", None, _recommend_body(crop="banana")),
     "recommend_422_drive_time": ("normal_week", "POST", "/recommend", None,
                                  _recommend_body(origin={"lat": 13.2, "lon": 78.2, "place": "no cached route"})),
     "recommend_422_origin_unknown": ("normal_week", "POST", "/recommend", None,
                                      _recommend_body(origin={"lat": None, "lon": None, "place": "Holur"})),
     "plan_ten_loads": ("ten_loads", "POST", "/plan", None, _plan_body()),
+    "recommend_rescue_estimate": ("normal_week", "POST", "/recommend", None, _rescue_body()),
+    "recommend_rescue_trader_split_kn": ("normal_week", "POST", "/recommend", None,
+                                         _rescue_body(edible_kg=700, spoiled_kg=300, language="kn")),
+    "recommend_422_split_required": ("normal_week", "POST", "/recommend", None, _rescue_body(origin=DELHI)),
+    "recommend_rescue_delhi_trader_split": ("normal_week", "POST", "/recommend", None,
+                                            _rescue_body(origin=DELHI, edible_kg=700, spoiled_kg=300)),
 }
 
 
@@ -236,10 +258,10 @@ def test_plans_file_persists_between_processes(api, tmp_path, monkeypatch):
 
 @pytest.mark.parametrize("day", ["2023-09-06", "2025-03-19"])  # demo replay days (D18)
 def test_smoke_real_snapshot_replay_day(day, tmp_path, monkeypatch):
-    """Real CEDA snapshot on a replay day with TEST ONLY routes and weather. Structure only, no numbers."""
+    """Real market-level snapshot (D24) on a replay day with TEST ONLY routes and weather. Structure only, no numbers."""
     snap = tmp_path / "snap"
     snap.mkdir()
-    for f in (REPO / "data/snapshot").glob("*.csv"):
+    for f in (REPO / "data/snapshot").glob("*.csv*"):
         (snap / f.name).symlink_to(f)
     (snap / "weather_test.json").write_text(json.dumps(synthetic_weather_test_only(day)))
     (tmp_path / "routes.json").write_text(json.dumps(synthetic_routes_test_only([(ORIGIN["lat"], ORIGIN["lon"])])))
@@ -265,8 +287,109 @@ def test_smoke_real_snapshot_replay_day(day, tmp_path, monkeypatch):
         assert s == 200 and r["explanation"]["language"] == lang and r["explanation"]["text"]
         assert {"plan_id", "mode", "replay_date", "demo_loads", "data", "top", "default", "alternatives", "impact",
                 "advice", "harvest_cost_rs_per_kg", "assumptions_used"} <= set(r)
-        assert r["default"]["outlet_id"] == "kolar"
+        assert r["default"]["outlet_id"] == "29-kolar"  # nearest market to the Kolar origin (D24 market ids)
     s, p = call("POST", "/plan", body=_plan_body())
     assert s == 200 and len(p["allocations"]) == 10 and p["markets"]
     assert call("GET", "/impact", {"plan_id": p["plan_id"]})[0] == 200
 
+
+
+def test_rescue_bad_requests_and_plan_rejects_unsold(api):
+    setup, call = api
+    setup("normal_week")
+    assert call("POST", "/recommend", body=_rescue_body(source="shop"))[0] == 400
+    assert call("POST", "/recommend", body=_rescue_body(hours_since_harvest=None))[0] == 400
+    assert call("POST", "/recommend", body=_rescue_body(edible_kg=700))[0] == 400  # both or neither
+    assert call("POST", "/recommend", body=_rescue_body(edible_kg=700, spoiled_kg=200))[0] == 400  # sum != qty
+    body = _plan_body()
+    body["loads"][0]["source"] = "mandi_unsold"
+    assert call("POST", "/plan", body=body)[0] == 400
+
+
+def test_impact_adds_rescue_to_plan_total(api):
+    setup, call = api
+    setup("ten_loads")
+    _, p = call("POST", "/plan", body=_plan_body())
+    _, r = call("POST", "/recommend", body=_rescue_body(plan_id=p["plan_id"], edible_kg=700, spoiled_kg=300))
+    _, imp = call("GET", "/impact", {"plan_id": p["plan_id"]})
+    assert imp["rescued_kg"] == r["impact"]["rescued_kg"] == 700
+    assert imp["redirected_kg"] == p["impact"]["redirected_kg"]  # rescue never adds to redirected
+    k, w = imp["kept_out_of_landfill_kg"], p["impact"]["waste_avoided_kg"]
+    assert k["mid"] == pytest.approx(w["mid"] + 700 + r["impact"]["recovered_kg"])
+
+
+def test_market_days_dynamodb_queries_table_key(monkeypatch):
+    """DATA_SOURCE=dynamodb queries MarketDay by its key schema (market_crop, date; infra/template.yaml)."""
+    seen = []
+
+    class Table:
+        def query(self, **kw):
+            seen.append(kw["KeyConditionExpression"].get_expression()["values"][0].get_expression()["values"][0].name)
+            return {"Items": []}
+
+    monkeypatch.setenv("DATA_SOURCE", "dynamodb")
+    monkeypatch.setattr(store, "_table", lambda env: Table())
+    store.market_days("tomato", AS_OF)
+    assert seen and set(seen) == {"market_crop"}
+
+
+def test_radar_only_crop_and_crops_routes(api, tmp_path, monkeypatch):
+    """A commodity without a full profile gets the Glut Radar but not routing (D24); /crops lists it."""
+    setup, call = api
+    setup("glut_day")
+    cfg = pathlib.Path(os.environ["CONFIG_DIR"])
+    (cfg / "commodities.json").write_text(json.dumps({"commodities": [
+        {"crop_id": "brinjal", "name": "Brinjal", "category": "Vegetables", "markets": 4, "preload": True},
+        {"crop_id": "tomato", "name": "Tomato", "category": "Vegetables", "markets": 4, "preload": True}]}))
+    snap = pathlib.Path(os.environ["SNAPSHOT_DIR"])
+    with open(snap / "test_brinjal_synthetic.csv", "w", newline="") as fh:
+        w = csv.DictWriter(fh, ["date", "market_id", "crop", "arrivals_t", "modal_price_kg"])
+        w.writeheader()
+        w.writerows(dict(r, crop="brinjal") for r in glut_day())
+    s, risk = call("GET", "/risk", {"crop": "brinjal"})
+    assert s == 200 and risk["unit_box_kg"] is None
+    assert {m["market_id"]: m["risk_level"] for m in risk["markets"]}["kolar"] == "glut"
+    assert call("POST", "/recommend", body=_recommend_body(crop="brinjal"))[1]["error"] == "crop_not_configured"
+    s, crops = call("GET", "/crops")
+    assert s == 200 and {c["crop_id"]: c["routing"] for c in crops["crops"]} == {"brinjal": False, "tomato": True}
+    assert call("GET", "/crops", {"crop": "brinjal"})[1]["crops"][0]["status"] == "ready"
+    assert call("GET", "/crops", {"crop": "okra"})[0] == 404
+    assert call("POST", "/crops/fetch", body={"crop": "brinjal"})[1] == {"crop": "brinjal", "status": "ready"}
+
+
+def test_contexts_dynamodb_reads_market_risk(monkeypatch):
+    """DATA_SOURCE=dynamodb: contexts come from MarketRisk rows for the as-of date; the #status row and rows from
+    another as-of date are skipped (D24)."""
+    from decimal import Decimal
+    cfg = {"markets": MARKETS}
+    risk = {k: None for k in store.RISK_FIELDS}
+
+    def item(mid, day):
+        return dict(risk, market_id=mid, crop="tomato", as_of_date=day, price_kg=Decimal("20.5"), arrivals_t=Decimal(100),
+                    elasticity_b=Decimal("-0.5"), resid_sd=Decimal("0.1"))
+    items = [item("kolar", AS_OF), item("bengaluru", "2020-01-01"), item("unknown", AS_OF),
+             {"crop": "tomato", "market_id": store.STATUS_KEY, "status": "ready", "as_of_date": AS_OF}]
+
+    class Table:
+        def query(self, **kw):
+            return {"Items": items}
+
+    monkeypatch.setenv("DATA_SOURCE", "dynamodb")
+    monkeypatch.setattr(store, "_table", lambda env: Table())
+    monkeypatch.setattr(store, "configs", lambda: cfg)
+    ctx = store.contexts("tomato", AS_OF)
+    assert [c["market"]["market_id"] for c in ctx] == ["kolar"]
+    assert ctx[0]["risk"]["price_kg"] == 20.5 and ctx[0]["fit"] == {"b": -0.5, "resid_sd": 0.1}
+
+
+def test_destinations_limited_to_nearest_reporting_markets_in_radius():
+    """Routing (paid Amazon Location calls) is limited to what allocation considers: the crop's nearest
+    nearest_markets reporting markets within max_radius_km, plus outlets in radius (D24)."""
+    cfg = dict(store.configs(), markets=[{"market_id": f"m{i}", "lat": 13.0 + i * 0.1, "lon": 78.0} for i in range(40)]
+               + [{"market_id": "far", "lat": 28.6, "lon": 77.2}, {"market_id": "nocoords", "lat": None, "lon": None}])
+    origin = {"lat": 13.0, "lon": 78.0}
+    ctx = [{"market": m} for m in cfg["markets"]]
+    ids = [d["id"] for d in advisor._destinations(cfg, [], origin, ctx)]
+    assert ids == [f"m{i}" for i in range(cfg["model"]["nearest_markets"])]
+    all_in_radius = [d["id"] for d in advisor._destinations(cfg, [], origin)]
+    assert "far" not in all_in_radius and "nocoords" not in all_in_radius and len(all_in_radius) == 27  # 0.1 deg lat = 11.1 km: m0..m26

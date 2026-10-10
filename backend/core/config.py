@@ -39,7 +39,7 @@ def load_configs(config_dir):
     """Read config/ into one dict.
 
     Returns {"model", "assumptions", "crops": {crop_id: profile}, "crop_errors": {crop_id: message},
-    "outlets": [...], "markets": [...]} . Incomplete crop profiles land in crop_errors, never in crops.
+    "outlets": [...], "markets": [...], "commodities": {crop_id: entry}} . Incomplete crop profiles land in crop_errors, never in crops.
     """
     crops, crop_errors = {}, {}
     crop_dir = os.path.join(config_dir, "crops")
@@ -54,6 +54,8 @@ def load_configs(config_dir):
             crop_errors[crop_id] = e.message
     markets_path = os.path.join(config_dir, "markets.json")
     markets = _read(markets_path)["markets"] if os.path.exists(markets_path) else []
+    commodities_path = os.path.join(config_dir, "commodities.json")
+    commodities = _read(commodities_path)["commodities"] if os.path.exists(commodities_path) else []
     return {
         "model": _read(os.path.join(config_dir, "model.json")),
         "assumptions": _read(os.path.join(config_dir, "assumptions.json")),
@@ -61,6 +63,7 @@ def load_configs(config_dir):
         "crop_errors": crop_errors,
         "outlets": _read(os.path.join(config_dir, "outlets.json"))["outlets"],
         "markets": markets,
+        "commodities": {c["crop_id"]: c for c in commodities},
     }
 
 
@@ -70,6 +73,17 @@ def get_crop(configs, crop_id):
         return configs["crops"][crop_id]
     msg = configs.get("crop_errors", {}).get(crop_id, f"No crop profile for '{crop_id}'")
     raise CoreError("crop_profile_incomplete", msg)
+
+
+def radar_crop(configs, crop_id):
+    """Profile for the Glut Radar: the full crop profile, else a radar-only entry from config/commodities.json
+    (D24: risk needs only prices and arrivals; routing still needs a complete profile)."""
+    if crop_id in configs["crops"]:
+        return configs["crops"][crop_id]
+    c = configs.get("commodities", {}).get(crop_id)
+    if c is None:
+        return get_crop(configs, crop_id)
+    return {"crop_id": crop_id, "names": {"en": c["name"]}, "unit_box_kg": None, "radar_only": True}
 
 
 def assumption_entry(assumptions, key, state=None):

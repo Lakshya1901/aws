@@ -10,7 +10,7 @@ Parameters:
   BedrockModelId:
     Type: String
     Default: ""
-    Description: Model ID or inference profile ID passed to InvokeModel. Empty = Bedrock disabled (templates and fallback parser).
+    Description: Model ID or inference profile ID passed to the Bedrock Converse API. Empty = Bedrock disabled (templates and fallback parser).
   BedrockModelArns:
     Type: CommaDelimitedList
     Default: ""
@@ -47,6 +47,7 @@ Globals:
         DATA_BUCKET: !Ref DataBucket
         AUDIO_BUCKET: !Ref AudioBucket
         LOCATION_ROUTE_CALCULATOR: !Ref RouteCalculator
+        FETCH_QUEUE_URL: !Ref FetchQueue
         BEDROCK_ENABLED: !If [HasBedrock, "true", "false"]
         BEDROCK_MODEL_ID: !Ref BedrockModelId
 
@@ -77,7 +78,7 @@ Resources:
       ContextPath: .   # infra/Makefile; it runs from the repo root (CodeUri)
     Properties:
       Handler: backend/handlers/authorizer.handler
-      MemorySize: 128
+      MemorySize: 256
       Timeout: 5
       Environment:
         Variables:
@@ -110,6 +111,12 @@ Resources:
               Action: [dynamodb:PutItem, dynamodb:UpdateItem]
               Resource: !GetAtt PlansTable.Arn
             - Effect: Allow
+              Action: dynamodb:PutItem   # the crop's "#status" row when a fetch is queued (D24)
+              Resource: !GetAtt MarketRiskTable.Arn
+            - Effect: Allow
+              Action: sqs:SendMessage
+              Resource: !GetAtt FetchQueue.Arn
+            - Effect: Allow
               Action: geo:CalculateRoute
               Resource: !GetAtt RouteCalculator.Arn
             - !If
@@ -131,6 +138,12 @@ Resources:
         Impact:
           Type: HttpApi
           Properties: {ApiId: !Ref Api, Method: GET, Path: /impact}
+        Crops:
+          Type: HttpApi
+          Properties: {ApiId: !Ref Api, Method: GET, Path: /crops}
+        Fetch:
+          Type: HttpApi
+          Properties: {ApiId: !Ref Api, Method: POST, Path: /crops/fetch}
 
   VoiceFunction:
     Type: AWS::Serverless::Function
@@ -194,6 +207,9 @@ Resources:
               Action: [dynamodb:PutItem, dynamodb:BatchWriteItem]
               Resource: !GetAtt MarketRiskTable.Arn
             - Effect: Allow
+              Action: sqs:SendMessage
+              Resource: !GetAtt FetchQueue.Arn
+            - Effect: Allow
               Action: ssm:GetParameter
               Resource: !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${DataGovKeyParam}
       Events:
@@ -205,6 +221,42 @@ Resources:
             ScheduleExpressionTimezone: Asia/Kolkata
             RetryPolicy:
               MaximumRetryAttempts: 0
+        Fetch:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt FetchQueue.Arn
+            BatchSize: 1
+
+  # One message per crop to load into MarketRisk (daily preload fan-out and POST /crops/fetch, D24).
+  FetchQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      VisibilityTimeout: 960   # > ingest timeout (900 s)
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt FetchDeadLetterQueue.Arn
+        maxReceiveCount: 3
+
+  FetchDeadLetterQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      MessageRetentionPeriod: 1209600
+
+  FetchDeadLetterAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: A crop fetch failed three times and is in the dead-letter queue.
+      Namespace: AWS/SQS
+      MetricName: ApproximateNumberOfMessagesVisible
+      Dimensions:
+        - Name: QueueName
+          Value: !GetAtt FetchDeadLetterQueue.QueueName
+      Statistic: Maximum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: !If [HasAlarmEmail, [!Ref IngestAlarmTopic], !Ref AWS::NoValue]
 
   IngestAlarmTopic:
     Type: AWS::SNS::Topic

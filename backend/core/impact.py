@@ -1,6 +1,9 @@
 """Step 6: waste avoided and resource accounting (CLAUDE.md Section 9). Null means 'not yet estimated', never 0."""
 from .config import assumption
 
+EDIBLE_TYPES = ("processor", "food_bank")  # Second Life: food still eaten
+RECOVER_TYPES = ("feed", "biogas", "compost")  # Recover rung, in food recovery hierarchy order (D19)
+
 
 def dump_share_band(ratio, table):
     """Index of the u(R) band R falls in (r_below is the exclusive upper bound)."""
@@ -14,12 +17,12 @@ def _loss_parts(option, table):
     """(spoilage range, u low/mid/high) for an outlet, or None when it can't be estimated.
 
     Mandi: u from the u(R) band of its projected ratio (low/high = band below/above).
-    Processor and food bank: u = 0 (food still eaten). Feed/compost: loss 1 (no food recovered for people).
+    Processor and food bank: u = 0 (food still eaten). Feed, biogas, compost: loss 1 (no food recovered for people).
     """
     t = option["type"]
-    if t == "feed_compost":
+    if t in RECOVER_TYPES:
         return {"low": 1.0, "mid": 1.0, "high": 1.0}, {"low": 0.0, "mid": 0.0, "high": 0.0}
-    if t in ("processor", "food_bank"):
+    if t in EDIBLE_TYPES:
         return option["spoilage_range"], {"low": 0.0, "mid": 0.0, "high": 0.0}
     if t != "mandi" or option.get("projected_arrival_ratio") is None:
         return None
@@ -63,15 +66,37 @@ def waste_avoided(quantity_kg, default, advised, assumptions, harvest_cost_rs_pe
     }
 
 
+def _ledger(prevented, rescued_kg, recovered_kg, biogas_kg, assumptions):
+    """Impact Ledger lines (CLAUDE.md Section 9 Step 6). Kept out of landfill = Prevented + Rescued + Recovered;
+    redirected is never added. Biogas energy is 0 with no biogas, null while biogas_yield is unsourced."""
+    y = assumption(assumptions, "biogas_yield")
+    return {
+        "kept_out_of_landfill_kg": None if prevented is None else
+        {k: prevented[k] + rescued_kg + recovered_kg for k in ("low", "mid", "high")},
+        "rescued_kg": rescued_kg,
+        "recovered_kg": recovered_kg,
+        "biogas_kg": biogas_kg,
+        "biogas_energy": 0.0 if biogas_kg == 0 else (None if y is None else biogas_kg * y),
+        "biogas_energy_unit": assumptions["biogas_yield"].get("energy_unit"),
+    }
+
+
+def _routed(option):
+    """True when the option is a real outlet (not the no-outlet fallback or hold)."""
+    return option is not None and option.get("outlet_id") is not None
+
+
 def impact(quantity_kg, default, advised, crop, assumptions):
-    """Impact Ledger entry for one load. waste_avoided_kg and redirected_kg are separate keys, always."""
+    """Impact Ledger entry for one Prevent load. waste_avoided_kg and redirected_kg are separate keys, always."""
     w = waste_avoided(quantity_kg, default, advised, assumptions, crop.get("harvest_cost_rs_per_kg"))
     moved = not (advised["outlet_id"] == default["outlet_id"] and advised["type"] == default["type"])
     extra_km = None if advised.get("distance_km") is None else advised["distance_km"] - default["distance_km"]
     diesel = None if extra_km is None else extra_km * assumption(assumptions, "diesel_l_per_km")
     co2 = None if diesel is None else diesel * assumption(assumptions, "co2_kg_per_l_diesel")
     water = crop.get("water_l_per_kg")
+    recovered = quantity_kg if advised["type"] in RECOVER_TYPES and _routed(advised) else 0
     return {
+        **_ledger(w, 0, recovered, recovered if advised["type"] == "biogas" else 0, assumptions),
         "redirected_kg": quantity_kg if moved else 0,
         "waste_avoided_kg": w,
         "extra_km": extra_km,
@@ -81,12 +106,38 @@ def impact(quantity_kg, default, advised, crop, assumptions):
     }
 
 
+def rescue_impact(split, edible_outlet, recover_outlet, assumptions):
+    """Impact Ledger entry for Rescue (Step 5b). Edible kg with no processor or food bank go to the Recover rung.
+
+    Nothing here is prevented or redirected; kg with no outlet in radius are neither rescued nor recovered.
+    Rescue has no default market, so extra km, diesel, CO2 and water are 0 (not applicable), not unknown.
+    """
+    rescued = split["edible_kg"] if _routed(edible_outlet) else 0
+    to_recover = split["spoiled_kg"] + split["edible_kg"] - rescued
+    recovered = to_recover if _routed(recover_outlet) else 0
+    zero = {"low": 0.0, "mid": 0.0, "high": 0.0}
+    return {
+        **_ledger(zero, rescued, recovered, recovered if recovered and recover_outlet["type"] == "biogas" else 0,
+                  assumptions),
+        "redirected_kg": 0, "waste_avoided_kg": zero,
+        # No default market to compare with, so no extra distance; 0 keeps session totals summable.
+        "extra_km": 0.0, "diesel_l": 0.0, "co2_kg": 0.0, "water_l": 0.0,
+    }
+
+
 def total_impact(impacts):
     """Sum per-load impacts. A total is null if any load's value is null (never treated as 0)."""
     def total(key):
         vals = [i[key] for i in impacts]
         return None if any(v is None for v in vals) else sum(vals)
-    ws = [i["waste_avoided_kg"] for i in impacts]
-    w = None if any(x is None for x in ws) else {k: sum(x[k] for x in ws) for k in ("low", "mid", "high")}
-    return {"redirected_kg": total("redirected_kg"), "waste_avoided_kg": w, "extra_km": total("extra_km"),
+    def total_range(key):
+        xs = [i[key] for i in impacts]
+        return None if any(x is None for x in xs) else {k: sum(x[k] for x in xs) for k in ("low", "mid", "high")}
+    units = {i["biogas_energy_unit"] for i in impacts}
+    return {"kept_out_of_landfill_kg": total_range("kept_out_of_landfill_kg"),
+            "rescued_kg": total("rescued_kg"), "recovered_kg": total("recovered_kg"),
+            "biogas_kg": total("biogas_kg"), "biogas_energy": total("biogas_energy"),
+            "biogas_energy_unit": units.pop() if len(units) == 1 else None,
+            "redirected_kg": total("redirected_kg"), "waste_avoided_kg": total_range("waste_avoided_kg"),
+            "extra_km": total("extra_km"),
             "diesel_l": total("diesel_l"), "co2_kg": total("co2_kg"), "water_l": total("water_l")}

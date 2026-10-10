@@ -11,7 +11,7 @@ import { cacheRisk, readCachedRisk, useSession } from '../lib/session';
 import { SIZE } from '../lib/theme';
 
 export default function TodayScreen() {
-  const { t, crop, setCrop, coords, setCoords, setUnitBoxKg } = useSession();
+  const { t, crop, setCrop, crops, setCrops, cropLabel, coords, setCoords, setUnitBoxKg } = useSession();
   const errorText = useErrorText();
   const [data, setData] = useState<RiskResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -32,6 +32,14 @@ export default function TodayScreen() {
       } catch {}
     })();
   }, [coords, setCoords]);
+
+  // Crop catalogue once (top crops for the chips; every commodity on the Other crop screen).
+  useEffect(() => {
+    if (crops.length) return;
+    api.crops().then((r) => setCrops(r.crops), () => {});
+  }, [crops.length, setCrops]);
+  const top = crops.length ? crops.filter((c) => c.preload).map((c) => c.crop_id) : [...CROPS];
+  const chips = top.includes(crop) ? top : [...top, crop];
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -67,6 +75,7 @@ export default function TodayScreen() {
   return (
     <Screen>
       <Btn label={t('new_load')} onPress={() => router.push('/new-load')} style={{ minHeight: 64 }} />
+      <Btn kind="secondary" label={t('unsold_stock')} onPress={() => router.push('/rescue')} />
       <View style={s.row}>
         <Btn kind="secondary" label={t('todays_plan')} onPress={() => router.push('/plan')} />
         <Btn kind="secondary" label={t('impact')} onPress={() => router.push('/impact')} />
@@ -77,9 +86,10 @@ export default function TodayScreen() {
         {t('crop')}
       </T>
       <View style={s.row}>
-        {CROPS.map((c) => (
-          <Chip key={c} label={t(`crop_${c}`)} selected={crop === c} onPress={() => setCrop(c)} />
+        {chips.map((c) => (
+          <Chip key={c} label={cropLabel(c)} selected={crop === c} onPress={() => setCrop(c)} />
         ))}
+        <Chip label={t('other_crop')} selected={false} onPress={() => router.push('/crops')} />
       </View>
 
       {loading && <Loading />}

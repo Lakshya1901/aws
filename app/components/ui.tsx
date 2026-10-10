@@ -196,6 +196,7 @@ export function useErrorText() {
       if (e.code === 'origin_unknown') return t('err_origin_unknown');
       if (e.code === 'drive_time_unavailable') return t('err_drive_time');
       if (e.code === 'temperature_unavailable') return t('err_temperature');
+      if (e.code === 'split_required') return t('err_split_required');
       if (e.code === 'plan_not_found') return t('err_plan_not_found');
       if (e.code === 'bad_request' || e.status === 400) return t('err_bad_request');
       if (e.code === 'network') return t('err_network');

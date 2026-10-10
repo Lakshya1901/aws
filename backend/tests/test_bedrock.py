@@ -1,5 +1,4 @@
 """Bedrock adapter with a stubbed client (no network, no AWS). CLAUDE.md Sections 12 and 17.3."""
-import io
 import json
 
 import pytest
@@ -16,12 +15,12 @@ class StubClient:
     def __init__(self, reply=None, exc=None):
         self.reply, self.exc, self.calls = reply, exc, []
 
-    def invoke_model(self, **kw):
+    def converse(self, **kw):
         self.calls.append(kw)
         if self.exc:
             raise self.exc
         text = self.reply if isinstance(self.reply, str) else json.dumps(self.reply, ensure_ascii=False)
-        return {"body": io.BytesIO(json.dumps({"content": [{"type": "text", "text": text}]}).encode())}
+        return {"output": {"message": {"role": "assistant", "content": [{"text": text}]}}}
 
 
 @pytest.fixture
@@ -63,8 +62,8 @@ def test_bedrock_parse_high_confidence(enabled):
     p = bedrock.parse_load("Holur-inda eradu ton tomato, ivattu koyilu", "kn", CROPS)
     assert p == {"crop": "tomato", "quantity_kg": 2000, "origin_place": "Holur", "harvest": "today",
                  "confidence": "high", "source": "bedrock"}
-    body = json.loads(stub.calls[0]["body"])
-    assert body["temperature"] == 0 and body["system"] == bedrock.PARSE_SYSTEM
+    call = stub.calls[0]
+    assert call["inferenceConfig"]["temperature"] == 0 and call["system"] == [{"text": bedrock.PARSE_SYSTEM}]
 
 
 def test_bedrock_parse_guards(enabled):

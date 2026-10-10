@@ -1,15 +1,23 @@
-"""Daily ingest (CLAUDE.md Sections 8.5, 15.1): CEDA/AGMARKNET -> S3 raw, MarketDay, MarketRisk.
+"""Ingest (CLAUDE.md Sections 8.5, 15.1, D24): per-commodity market-level history in S3 -> MarketRisk.
 
-Run by EventBridge Scheduler at 21:00 IST. Any market that fails is logged; the run then raises so the
-CloudWatch alarm on Lambda errors fires. Markets that succeeded are still written.
+Triggers: EventBridge Scheduler at 21:00 IST queues every preload crop in config/commodities.json on the SQS fetch
+queue (one invocation per crop keeps each run far inside the Lambda limit); the queue also carries crops users ask
+for (POST /crops/fetch). A direct invoke with {"crops": [...], "as_of_date": ...} processes those crops inline.
+Each crop: reads s3://<DATA_BUCKET>/idp/<crop>.csv.gz (scripts/build_idp.py: rows sorted by market, then date), computes each market's risk and price fit for the
+as-of date one market at a time, and writes MarketRisk plus the crop's "#status" row (ready). Any crop that
+fails is logged and the run raises, so the CloudWatch alarm fires and SQS retries, then dead-letters.
 """
+import csv
+import gzip
+import io
 import json
 import logging
 import os
-from datetime import date, datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
+from itertools import groupby
 
-from backend.adapters import ceda
+from backend.adapters.store import STATUS_KEY, risk_item
 from backend.core.config import crop_mode, load_configs
 from backend.core.recommend import market_context
 
@@ -18,8 +26,6 @@ log.setLevel(logging.INFO)
 
 CONFIG_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "config")
 IST = timezone(timedelta(hours=5, minutes=30))
-FETCH_DAYS = 14          # re-pull the last two weeks each day (CEDA back-fills)
-HISTORY_DAYS = 4 * 366   # prior years for the seasonal baseline B
 
 
 def _ddb():
@@ -37,63 +43,65 @@ def _dec(obj):
     return json.loads(json.dumps(obj, default=str), parse_float=Decimal)
 
 
-def _undec(obj):
-    return json.loads(json.dumps(obj, default=lambda d: float(d) if d % 1 else int(d)))
+def _num(v):
+    return float(v) if v not in ("", None) else None
 
 
-def _history(table, market_id, crop, start, end):
-    from boto3.dynamodb.conditions import Key
-    cond = Key("market_crop").eq(f"{market_id}#{crop}") & Key("date").between(start, end)
-    rows, kwargs = [], {"KeyConditionExpression": cond}
-    while True:
-        page = table.query(**kwargs)
-        rows += page["Items"]
-        if "LastEvaluatedKey" not in page:
-            return [dict(_undec(r), market_id=market_id, crop=crop) for r in rows]
-        kwargs["ExclusiveStartKey"] = page["LastEvaluatedKey"]
+def crop_contexts(lines, crop, configs, as_of):
+    """market_context entries for one crop from its CSV lines (sorted by market_id), one market at a time."""
+    markets = {m["market_id"]: m for m in configs["markets"]}
+    out = []
+    for market_id, rows in groupby(csv.DictReader(lines), key=lambda r: r["market_id"]):
+        m = markets.get(market_id)
+        if m is None:
+            continue
+        rows = [{"date": r["date"], "market_id": market_id, "crop": crop, "arrivals_t": _num(r["arrivals_t"]),
+                 "modal_price_kg": _num(r["modal_price_kg"])} for r in rows if r["date"] <= as_of]
+        out += market_context(crop, rows, [m], configs, as_of)
+    return out
+
+
+def ingest_crop(crop, as_of, configs, s3, table, bucket):
+    body = s3.get_object(Bucket=bucket, Key=f"idp/{crop}.csv.gz")["Body"]
+    with io.TextIOWrapper(gzip.GzipFile(fileobj=body), encoding="utf-8", newline="") as lines:
+        ctx = crop_contexts(lines, crop, configs, as_of)
+    mode = crop_mode(configs["model"], crop)
+    with table.batch_writer(overwrite_by_pkeys=["crop", "market_id"]) as bw:
+        for c in ctx:
+            bw.put_item(Item=_dec(risk_item(crop, as_of, mode, c)))
+        bw.put_item(Item=_dec({"crop": crop, "market_id": STATUS_KEY, "status": "ready", "as_of_date": as_of,
+                               "markets": len(ctx), "ingested_at": datetime.now(timezone.utc).isoformat()}))
+    return len(ctx)
 
 
 def handler(event, context):
     configs = load_configs(CONFIG_DIR)
-    as_of = (event or {}).get("as_of_date") or configs["model"].get("replay_date") \
-        or datetime.now(IST).date().isoformat()
-    start = (date.fromisoformat(as_of) - timedelta(days=FETCH_DAYS)).isoformat()
-    ddb, s3, bucket = _ddb(), _s3(), os.environ["DATA_BUCKET"]
-    day_table = ddb.Table(os.environ["MARKET_DAY_TABLE"])
-    risk_table = ddb.Table(os.environ["MARKET_RISK_TABLE"])
-    markets = [m for m in configs["markets"] if m.get("ceda")]
-    failed, summary = [], {}
-    for crop in [c for c in configs["crops"] if c in ceda.COMMODITY_IDS]:
-        raw_all, written = {}, 0
-        for m in markets:
-            try:
-                raw = ceda.fetch_raw(crop, m["ceda"]["state_id"], m["ceda"]["district_id"], start, as_of)
-                raw_all[m["market_id"]] = raw
-                ingested_at = datetime.now(timezone.utc).isoformat()
-                with day_table.batch_writer(overwrite_by_pkeys=["market_crop", "date"]) as bw:
-                    for r in ceda.normalise(raw, m["market_id"], crop):
-                        item = {k: v for k, v in r.items() if k not in ("market_id", "crop")}
-                        bw.put_item(Item=_dec({**item, "market_crop": f"{m['market_id']}#{crop}",
-                                               "ingested_at": ingested_at}))
-                        written += 1
-            except Exception:
-                log.exception("ingest failed for %s/%s", crop, m["market_id"])
-                failed.append(f"{crop}/{m['market_id']}")
-        s3.put_object(Bucket=bucket, Key=f"raw/agmarknet/{crop}/{as_of}.json", ContentType="application/json",
-                      Body=json.dumps({"source": ceda.BASE, "as_of_date": as_of, "markets": raw_all}).encode())
-
-        hist_start = (date.fromisoformat(as_of) - timedelta(days=HISTORY_DAYS)).isoformat()
-        rows = [r for m in markets for r in _history(day_table, m["market_id"], crop, hist_start, as_of)]
-        ctx = market_context(crop, rows, configs["markets"], configs, as_of)
-        mode = crop_mode(configs["model"], crop)
-        with risk_table.batch_writer(overwrite_by_pkeys=["crop", "market_id"]) as bw:
-            for c in ctx:
-                m, risk = c["market"], c["risk"]
-                bw.put_item(Item=_dec({**risk, "crop": crop, "as_of_date": as_of, "mode": mode,
-                                       "lead_days": None, "elasticity_b": c["fit"]["b"],
-                                       "state": m["state"], "lat": m["lat"], "lon": m["lon"]}))
-        summary[crop] = {"market_day_rows": written, "market_risk_rows": len(ctx)}
-    log.info(json.dumps({"ingest": summary, "as_of_date": as_of, "failed": failed}))
+    event = event or {}
+    default_as_of = configs["model"].get("replay_date") or datetime.now(IST).date().isoformat()
+    if "Records" in event:  # SQS fetch queue, batch size 1
+        jobs = [json.loads(r["body"]) for r in event["Records"]]
+    elif event.get("crops"):
+        jobs = [{"crop": c, "as_of_date": event.get("as_of_date")} for c in event["crops"]]
+    else:  # daily schedule: fan out the preload crops over the queue
+        import boto3
+        sqs = boto3.client("sqs")
+        crops = [c for c, v in configs["commodities"].items() if v.get("preload")]
+        for c in crops:
+            sqs.send_message(QueueUrl=os.environ["FETCH_QUEUE_URL"],
+                             MessageBody=json.dumps({"crop": c, "as_of_date": event.get("as_of_date") or default_as_of}))
+        log.info(json.dumps({"queued": crops}))
+        return {"queued": crops}
+    s3, bucket = _s3(), os.environ["DATA_BUCKET"]
+    table = _ddb().Table(os.environ["MARKET_RISK_TABLE"])
+    summary, failed = {}, []
+    for job in jobs:
+        crop, as_of = job["crop"], job.get("as_of_date") or default_as_of
+        try:
+            summary[crop] = ingest_crop(crop, as_of, configs, s3, table, bucket)
+        except Exception:
+            log.exception("ingest failed for %s", crop)
+            failed.append(crop)
+    log.info(json.dumps({"ingest": summary, "failed": failed}))
     if failed:
         raise RuntimeError(f"ingest failed for {', '.join(failed)}")
     return summary

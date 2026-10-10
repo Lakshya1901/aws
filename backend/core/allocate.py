@@ -1,9 +1,11 @@
 """Step 5: greedy allocation across outlets, anti-herding (CLAUDE.md Section 9)."""
 from .config import CoreError, assumption
-from .impact import impact
+from .risk import to_date
+from .impact import EDIBLE_TYPES, RECOVER_TYPES, impact, rescue_impact
 from .netvalue import fresh_option, haversine_km, second_life_option
+from .spoilage import spoilage_share
 
-SECOND_LIFE_ORDER = ("processor", "food_bank", "feed_compost")
+SECOND_LIFE_ORDER = EDIBLE_TYPES + RECOVER_TYPES
 
 
 def _nearest(origin, items, radius_km, limit=None):
@@ -26,11 +28,16 @@ def allocate_load(load, crop, market_ctx, outlets, added_kg, configs):
     if not near:
         raise CoreError("no_markets_in_radius", "No reporting markets near you for this crop")
     q = load["quantity_kg"]
+    # D25: a price older than max_data_age_days says nothing about today's market; list it, never choose it.
+    max_age = assumption(a, "max_data_age_days")
+    too_old = {m["market_id"] for m in near
+               if (to_date(m["_ctx"]["risk"]["as_of_date"]) - to_date(m["_ctx"]["risk"]["latest_date"])).days > max_age}
     fresh = [fresh_option(load, m["_ctx"], added_kg.get(m["market_id"], 0), crop, configs) for m in near]
     fresh.sort(key=lambda o: -o["net_rs_per_kg"]["mid"])
     default = min(fresh, key=lambda o: o["distance_km"])
     # D17: only markets whose projected R is known can be checked for glut, so only they can be chosen.
-    paying = [o for o in fresh if o["net_rs_per_kg"]["mid"] > 0 and o["projected_risk_level"] is not None]
+    paying = [o for o in fresh if o["net_rs_per_kg"]["mid"] > 0 and o["projected_risk_level"] is not None
+              and o["outlet_id"] not in too_old]
     # Best paying market whose projected R stays out of glut; if every paying market would be in glut, the best one.
     top = next((o for o in paying if o["projected_risk_level"] != "glut"), paying[0] if paying else None)
 
@@ -45,7 +52,7 @@ def allocate_load(load, crop, market_ctx, outlets, added_kg, configs):
     elif second:
         top = second[0]
     else:
-        top = {"outlet_id": None, "type": "feed_compost", "net_rs_per_kg": None,
+        top = {"outlet_id": None, "type": "compost", "net_rs_per_kg": None,
                "net_note": "not yet estimated", "note": "No seeded second-life outlet in radius"}
 
     best_net = fresh[0]["net_rs_per_kg"]["mid"]
@@ -59,6 +66,40 @@ def allocate_load(load, crop, market_ctx, outlets, added_kg, configs):
         "alternatives": [o for o in fresh + second if o is not top],
         "impact": impact(q, default, top, crop, a),
         "advice": advice,
+    }
+
+
+def rescue_load(load, crop, outlets, configs):
+    """Step 5b: unsold stock at a city mandi. Edible part -> processor, then food bank; spoiled part (and the edible
+    part when no processor or food bank is in radius) -> feed, then biogas, then compost. Fresh mandis are not ranked.
+
+    load["split"] = {"edible_kg", "spoiled_kg"} from the trader, or None: the engine proposes the spoiled share
+    s = min(1, alpha * hours_since_harvest / SL(T)) (Step 3, mid), which needs load["temp_c"].
+    """
+    q = load["quantity_kg"]
+    if load.get("split") is not None:
+        split = dict(load["split"], source="trader")
+    elif load.get("temp_c") is None:
+        raise CoreError("split_required", "No weather data here to estimate spoilage; enter edible and spoiled kg")
+    else:
+        s = spoilage_share(load["hours_since_harvest"], load["temp_c"], crop)["mid"]
+        split = {"edible_kg": q * (1 - s), "spoiled_kg": q * s, "source": "estimate"}
+    eligible = [o for o in outlets if crop["crop_id"] in o.get("crops", []) and o["type"] in crop["second_life"]]
+    near = _nearest(load["origin"], eligible, assumption(configs["assumptions"], "max_radius_km"))
+
+    def options(types, kg):
+        opts = [second_life_option(dict(load, quantity_kg=kg), o, crop, configs) for o in near if o["type"] in types]
+        return sorted(opts, key=lambda o: SECOND_LIFE_ORDER.index(o["type"]))  # stable: nearest first within a type
+    edible = options(EDIBLE_TYPES, split["edible_kg"]) if split["edible_kg"] > 0 else []
+    top = edible[0] if edible else None
+    to_recover = split["spoiled_kg"] + (0 if top else split["edible_kg"])
+    recover_opts = options(RECOVER_TYPES, to_recover) if to_recover > 0 else []
+    recover = recover_opts[0] if recover_opts else None
+    return {
+        "load_id": load.get("load_id"), "crop": crop["crop_id"], "quantity_kg": q, "split": split,
+        "top": top, "recover": recover,
+        "alternatives": [o for o in edible + recover_opts if o is not top and o is not recover],
+        "impact": rescue_impact(split, top, recover, configs["assumptions"]),
     }
 
 

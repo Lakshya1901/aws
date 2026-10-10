@@ -33,7 +33,7 @@ def calculate_route(origin, dest, calculator=None):
             "source": f"amazon_location:{calculator}", "fetched_at": datetime.now(timezone.utc).isoformat()}
 
 
-def routes_for(origin, destinations):
+def routes_for(origin, destinations, live=True):
     """{dest_id: {distance_km, drive_hours}} for destinations [{id, lat, lon}] with a cached or live route.
 
     Destinations without a route are left out; the core then raises drive_time_unavailable.
@@ -41,7 +41,7 @@ def routes_for(origin, destinations):
     with open(cache_path(), encoding="utf-8") as fh:
         known = {**json.load(fh), **_live}
     keys = [origin_key(origin["lat"], origin["lon"])] + ([origin["place"]] if origin.get("place") else [])
-    live = os.environ.get("DATA_SOURCE") == "dynamodb" and os.environ.get("LOCATION_ROUTE_CALCULATOR")
+    live = live and os.environ.get("DATA_SOURCE") == "dynamodb" and os.environ.get("LOCATION_ROUTE_CALCULATOR")
     out = {}
     for d in destinations:
         hit = next((known[f"{k}|{d['id']}"] for k in keys if f"{k}|{d['id']}" in known), None)

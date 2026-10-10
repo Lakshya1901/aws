@@ -1,10 +1,16 @@
 # AnnaSetu
 
-AnnaSetu stops edible fruit and vegetables from becoming waste before the truck leaves the farm. It tells farmer collectives (FPOs) where each load should go (sell fresh, process, donate, feed or compost) using public mandi data, and allocates loads across markets so they don't all crash the same one.
+Every day, a city's mandis turn good food into garbage. AnnaSetu stops the glut before the truck leaves, rescues what's left before it's dumped, and turns the rest into energy, not landfill.
+
+One surplus router, three entry points, centred on the city mandi:
+
+- **Prevent (built):** tells farmer collectives (FPOs) where each load should go (sell fresh, process, donate, feed or compost) using public mandi data, and allocates loads across markets so they don't all crash the same one.
+- **Rescue (built; real city outlets pending, D20):** a trader at a city mandi logs unsold end-of-day stock; the router sends the edible part to food banks or processors before it is dumped.
+- **Recover (built; no biogas or compost unit seeded yet, D20):** what can't be eaten goes to animal feed, biogas or compost instead of landfill. Biogas energy is shown only as a labelled estimate.
 
 The core question it answers: **"Where should this load go today, and what will it actually earn after costs?"**
 
-- Track: Waste and Energy (food waste prevention), WeMakeDevs x AWS Environmental Hacks
+- Track: Waste and Energy, WeMakeDevs x AWS Environmental Hacks: close the loop on what a city throws away (Rescue, Recover), make the city lighter (Prevent), power it cleaner (Recover: biogas)
 - Platform: Android/iOS app (Expo), serverless backend on AWS in ap-south-1, built and deployed with the AWS SAM CLI
 - Demo video: TBD
 - Android APK: TBD
@@ -37,7 +43,7 @@ Root causes software can address: blind dispatch (old local price, hearsay) and 
 
 ## 2. What it does
 
-Four parts around one decision: where should this load go?
+Four parts around one decision: where should this load go? Rescue and Recover (CLAUDE.md Sections 5 and 9, D19) reuse the same engine with a different entry point: `POST /recommend` with `source: "mandi_unsold"` and the "I have unsold stock at the market" screen. The Impact Ledger headline is kg kept out of landfill = Prevented + Rescued + Recovered; redirected stays separate. Biogas energy shows "not yet estimated" until a yield is sourced (D21).
 
 1. **Glut Radar.** Daily glut risk per reporting market and crop: safe, watch or glut, always as colour + word + icon, with the arrival ratio and price. Tomato runs in `same_day` mode (Section 5), so the radar shows today's risk only and makes no "days early" claims.
 2. **Dispatch Advisor (the core).** For one load (crop, quantity, origin, harvest timing) it ranks every reachable outlet by net value per kg after freight, market fee, commission, handling and trip spoilage, with low/mid/high ranges. For a day's loads (`/plan`) it allocates largest first and adds each assignment to that market's expected extra arrivals, so AnnaSetu never pushes a market into glut itself. A market whose risk cannot be checked is listed but never chosen (D17). If harvesting does not pay, it advises harvesting only what has a buyer.

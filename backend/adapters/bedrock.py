@@ -58,12 +58,11 @@ def _client(timeout_s):
 
 
 def _invoke(system, user, s):
-    """One InvokeModel call (Anthropic messages body); returns the first JSON object in the reply."""
-    body = {"anthropic_version": "bedrock-2023-05-31", "max_tokens": 300, "temperature": s["temperature"],
-            "system": system, "messages": [{"role": "user", "content": user}]}
-    resp = _client(s["timeout_s"]).invoke_model(modelId=s["model_id"], body=json.dumps(body),
-                                                contentType="application/json", accept="application/json")
-    text = json.loads(resp["body"].read())["content"][0]["text"]
+    """One Converse call (model-agnostic: Amazon Nova or Claude, D23); returns the first JSON object in the reply."""
+    resp = _client(s["timeout_s"]).converse(
+        modelId=s["model_id"], system=[{"text": system}], messages=[{"role": "user", "content": [{"text": user}]}],
+        inferenceConfig={"maxTokens": 300, "temperature": s["temperature"]})
+    text = resp["output"]["message"]["content"][0]["text"]
     match = re.search(r"\{.*\}", text, re.S)
     if not match:
         raise ValueError("no JSON in model output")

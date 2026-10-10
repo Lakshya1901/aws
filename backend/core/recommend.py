@@ -2,8 +2,8 @@
 
 The API layer adds plan_id and explanation, and maps CoreError codes to 422.
 """
-from .allocate import allocate
-from .config import assumption_entry, crop_mode, get_crop
+from .allocate import allocate, rescue_load
+from .config import assumption_entry, crop_mode, get_crop, radar_crop
 from .impact import below_cost, total_impact
 from .pricing import fit_elasticity
 from .risk import market_risk, to_date
@@ -34,10 +34,14 @@ def market_context(crop_id, market_days, markets, configs, as_of_date):
     return ctx
 
 
-def glut_radar(crop_id, market_days, markets, configs, as_of_date):
-    """/risk payload: {"mode", "data", "markets": [risk dict + name, state, lat, lon, elasticity_b]}."""
-    get_crop(configs, crop_id)
-    ctx = market_context(crop_id, market_days, markets, configs, as_of_date)
+def glut_radar(crop_id, market_days, markets, configs, as_of_date, ctx=None):
+    """/risk payload: {"mode", "data", "markets": [risk dict + name, state, lat, lon, elasticity_b]}.
+
+    ctx: precomputed market_context for the crop (MarketRisk, D24); else computed from market_days.
+    """
+    radar_crop(configs, crop_id)
+    if ctx is None:
+        ctx = market_context(crop_id, market_days, markets, configs, as_of_date)
     rows = [dict(c["risk"], name=c["market"].get("name"), state=c["market"]["state"],
                  lat=c["market"]["lat"], lon=c["market"]["lon"], elasticity_b=c["fit"]["b"]) for c in ctx]
     return {"mode": crop_mode(configs["model"], crop_id),
@@ -77,11 +81,15 @@ def _stale(result):
     return any(o.get("stale") for o in [result["top"], result["default"]] + result["alternatives"])
 
 
-def plan(loads, market_days, markets, outlets, configs, as_of_date):
-    """/plan: allocate all loads together (largest first). See README.md for shapes."""
+def plan(loads, market_days, markets, outlets, configs, as_of_date, ctx=None):
+    """/plan: allocate all loads together (largest first). See README.md for shapes.
+
+    ctx: {crop_id: precomputed market_context} (MarketRisk, D24); else computed from market_days.
+    """
     crop_ids = sorted({l["crop"] for l in loads})
     crops = {c: get_crop(configs, c) for c in crop_ids}
-    ctx = {c: market_context(c, market_days, markets, configs, as_of_date) for c in crop_ids}
+    if ctx is None:
+        ctx = {c: market_context(c, market_days, markets, configs, as_of_date) for c in crop_ids}
     results, added = allocate(loads, crops, ctx, outlets, configs)
     return _round({
         "mode": {c: crop_mode(configs["model"], c) for c in crop_ids},
@@ -93,13 +101,34 @@ def plan(loads, market_days, markets, outlets, configs, as_of_date):
     })
 
 
-def recommend(load, market_days, markets, outlets, configs, as_of_date):
+def recommend(load, market_days, markets, outlets, configs, as_of_date, ctx=None):
     """/recommend for one load (without plan_id and explanation)."""
-    p = plan([load], market_days, markets, outlets, configs, as_of_date)
+    p = plan([load], market_days, markets, outlets, configs, as_of_date, ctx)
     r = p["allocations"][0]
     return {"mode": p["mode"][load["crop"]], "data": p["data"], "crop": r["crop"], "quantity_kg": r["quantity_kg"],
             "top": r["top"], "default": r["default"], "alternatives": r["alternatives"],
             "impact": r["impact"], "advice": r["advice"], "assumptions_used": p["assumptions_used"]}
+
+
+def rescue(load, outlets, configs, as_of_date):
+    """/recommend with source mandi_unsold (Step 5b), without plan_id and explanation."""
+    crop = get_crop(configs, load["crop"])
+    r = rescue_load(load, crop, outlets, configs)
+    a = configs["assumptions"]
+    keys = {"max_radius_km"}
+    for o in (r["top"], r["recover"]):
+        if o is not None:
+            keys.add("freight_rs_per_tonne_km")
+            if o["distance_approx"]:
+                keys.add("road_factor")
+    if r["impact"]["biogas_kg"]:
+        keys.add("biogas_yield")
+    used = {k for k in keys if a[k]["status"] != "sourced"}
+    if r["split"]["source"] == "estimate":
+        used.update(f"{crop['crop_id']}.{f}" for f in ("sl_ref_hours", "q10", "alpha")
+                    if crop.get("status", {}).get(f, "sourced") != "sourced")
+    return _round(dict(r, source="mandi_unsold", data={"as_of_date": to_date(as_of_date).isoformat(), "stale": False},
+                       assumptions_used=sorted(used)))
 
 
 def _round(x, nd=4):

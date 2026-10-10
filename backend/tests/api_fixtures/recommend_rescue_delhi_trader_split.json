@@ -1,0 +1,75 @@
+{
+ "dataset": "normal_week",
+ "request": {
+  "method": "POST",
+  "path": "/recommend",
+  "query": null,
+  "body": {
+   "source": "mandi_unsold",
+   "crop": "tomato",
+   "quantity_kg": 1000,
+   "origin": {
+    "lat": 28.61,
+    "lon": 77.21,
+    "place": "Delhi"
+   },
+   "hours_since_harvest": 48,
+   "language": "en",
+   "edible_kg": 700,
+   "spoiled_kg": 300
+  }
+ },
+ "response": {
+  "status": 200,
+  "body": {
+   "plan_id": "p_20250404_a927af9844",
+   "source": "mandi_unsold",
+   "replay_date": "2025-04-04",
+   "demo_loads": true,
+   "data": {
+    "as_of_date": "2025-04-04",
+    "stale": false
+   },
+   "crop": "tomato",
+   "quantity_kg": 1000,
+   "split": {
+    "edible_kg": 700,
+    "spoiled_kg": 300,
+    "source": "trader"
+   },
+   "top": null,
+   "recover": null,
+   "alternatives": [],
+   "impact": {
+    "kept_out_of_landfill_kg": {
+     "low": 0.0,
+     "mid": 0.0,
+     "high": 0.0
+    },
+    "rescued_kg": 0,
+    "recovered_kg": 0,
+    "biogas_kg": 0,
+    "biogas_energy": 0.0,
+    "biogas_energy_unit": null,
+    "redirected_kg": 0,
+    "waste_avoided_kg": {
+     "low": 0.0,
+     "mid": 0.0,
+     "high": 0.0
+    },
+    "extra_km": 0.0,
+    "diesel_l": 0.0,
+    "co2_kg": 0.0,
+    "water_l": 0.0
+   },
+   "explanation": {
+    "language": "en",
+    "text": "Still good to eat: 700 kg. Spoiled: 300 kg. No biogas or compost unit near you yet.",
+    "source": "template"
+   },
+   "assumptions_used": [
+    "max_radius_km"
+   ]
+  }
+ }
+}
