@@ -1,9 +1,10 @@
 // Impact Ledger: session totals from GET /impact.
+import { router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { api } from '../api/client';
 import type { ImpactResponse } from '../api/types';
-import { ImpactRows } from '../components/ImpactRows';
-import { Banner, Btn, DataBanners, Loading, Screen, T, useErrorText } from '../components/ui';
+import { ImpactHeadline, ImpactRows } from '../components/ImpactRows';
+import { Banner, Btn, DataBanners, Loading, Screen, SectionTitle, T, useErrorText } from '../components/ui';
 import { useSession } from '../lib/session';
 import { SIZE } from '../lib/theme';
 
@@ -33,11 +34,13 @@ export default function ImpactScreen() {
   }, [load]);
 
   return (
-    <Screen>
-      <T bold size={SIZE.title}>
-        {t('impact_title')}
-      </T>
-      {!planId && <T size={SIZE.large}>{t('no_plan')}</T>}
+    <Screen nav>
+      {!planId && (
+        <>
+          <T size={SIZE.large}>{t('no_plan')}</T>
+          <Btn label={t('new_load')} onPress={() => router.push('/new-load')} />
+        </>
+      )}
       {loading && <Loading />}
       {error && (
         <>
@@ -48,7 +51,11 @@ export default function ImpactScreen() {
       {data && !loading && (
         <>
           <DataBanners fixture={data._fixture} />
-          <ImpactRows impact={data} />
+          <ImpactHeadline impact={data} />
+          <SectionTitle>{t('impact_from')}</SectionTitle>
+          <ImpactRows impact={data} lines="from" />
+          <SectionTitle>{t('trip_costs')}</SectionTitle>
+          <ImpactRows impact={data} lines="trip" />
         </>
       )}
     </Screen>

@@ -5,7 +5,7 @@ import { fmtNum, fmtRs } from '../i18n';
 import { useSession } from '../lib/session';
 import { C, SIZE } from '../lib/theme';
 import { Icon } from './Icon';
-import { ListRow, RiskDot, Surface, T, isPredictive } from './ui';
+import { ListRow, RiskDot, Surface, T, fmtDate, isPredictive } from './ui';
 
 export function RiskList({ markets, mode }: { markets: RiskMarket[]; mode: Mode }) {
   const { t } = useSession();
@@ -54,17 +54,13 @@ export function RiskList({ markets, mode }: { markets: RiskMarket[]; mode: Mode 
               )}
               {m.stale && m.as_of_date && (
                 <T bold size={SIZE.label} color={C.warnText} style={{ backgroundColor: C.warnBg, paddingHorizontal: 6, borderRadius: 6, alignSelf: 'flex-start' }}>
-                  {t('as_of', { date: m.as_of_date })} · {t('stale')}
+                  {t('as_of', { date: fmtDate(m.as_of_date) })} · {t('stale')}
                 </T>
               )}
             </View>
             {m.modal_price_rs_per_kg !== null && (
-              <T bold>
-                Rs {fmtRs(m.modal_price_rs_per_kg)}
-                <T size={SIZE.label} color={C.muted}>
-                  {' '}
-                  /kg
-                </T>
+              <T bold style={{ textAlign: 'right', maxWidth: 104 }}>
+                {t('price_per_kg', { price: fmtRs(m.modal_price_rs_per_kg) })}
               </T>
             )}
           </ListRow>
