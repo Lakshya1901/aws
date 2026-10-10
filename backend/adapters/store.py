@@ -153,14 +153,20 @@ def _reporting(crop):
         if "LastEvaluatedKey" not in page:
             break
         kw["ExclusiveStartKey"] = page["LastEvaluatedKey"]
-    return {i["market_id"]: i.get("resid_sd") for i in _plain(items) if i["market_id"] != STATUS_KEY}
+    return {i["market_id"]: i.get("resid_sd") for i in _plain(items)
+            if i["market_id"] != STATUS_KEY and not i["market_id"].startswith(LIVE_PREFIX)}
+
+
+LIVE_PREFIX = "live#"  # MarketRisk rows caching one market's live prices for a day (D34)
+_live_cache = {}
 
 
 def live_contexts(crop, as_of_date, origins):
-    """market_context entries from live Agmarknet prices (D34) for the markets with this crop's history nearest
-    each origin (2 x nearest_markets, within max_radius_km). Prices only: risk from the 3-day price change,
-    range from the week's day-to-day price changes (else the market's historical one). A market that doesn't
-    answer or reported nothing this week is left out."""
+    """market_context entries from live Agmarknet prices (D34) for the nearest_markets with this crop's history
+    nearest each origin (within max_radius_km). Prices only: risk from the 3-day price change, range from the
+    week's day-to-day price changes (else the market's historical one). A market that doesn't answer or reported
+    nothing this week is left out. Agmarknet answers 429 after about 60 calls in a few minutes, so each market's
+    prices are fetched once a day (cached in MarketRisk, and in memory), and a 429 stops further calls."""
     from concurrent.futures import ThreadPoolExecutor
     from backend.adapters import agmarknet
     from backend.core.pricing import price_change_sd
@@ -176,15 +182,35 @@ def live_contexts(crop, as_of_date, origins):
     pick = {}
     for o in origins:
         near = sorted((haversine_km(o["lat"], o["lon"], m["lat"], m["lon"]), m["market_id"], m) for m in ms)
-        pick.update((m["market_id"], m) for d, _, m in near[:2 * n] if d <= radius)
+        pick.update((m["market_id"], m) for d, _, m in near[:n] if d <= radius)
+
+    errors, dynamo = [], _source() == "dynamodb"
+    table = _table("MARKET_RISK_TABLE") if dynamo else None
 
     def fetch(m):
-        try:
-            return m, agmarknet.last_week(m["agmarknet"]["market_id"], m["agmarknet"]["state_id"], cid)
-        except Exception:  # site down or slow: this market has no live price
+        key = (crop, LIVE_PREFIX + m["market_id"], as_of_date)
+        if key in _live_cache:
+            return m, _live_cache[key]
+        if dynamo:
+            item = table.get_item(Key={"crop": crop, "market_id": key[1]}).get("Item")
+            if item and item.get("as_of_date") == as_of_date:
+                _live_cache[key] = [tuple(x) for x in _plain(item["prices"])]
+                return m, _live_cache[key]
+        if any("429" in e for e in errors):  # rate-limited: don't make it worse
             return m, []
-    with ThreadPoolExecutor(max_workers=16) as ex:
+        try:
+            prices = agmarknet.last_week(m["agmarknet"]["market_id"], m["agmarknet"]["state_id"], cid)
+        except Exception as e:  # site down, slow or refusing: this market has no live price
+            errors.append(repr(e)[:160])
+            return m, []
+        _live_cache[key] = prices
+        if dynamo:
+            table.put_item(Item={"crop": crop, "market_id": key[1], "as_of_date": as_of_date,
+                                 "prices": [[d, Decimal(str(round(p, 4)))] for d, p in prices]})
+        return m, prices
+    with ThreadPoolExecutor(max_workers=4) as ex:  # few at a time: a public government site
         fetched = list(ex.map(fetch, pick.values()))
+    print(f"live prices {crop}: {len(pick)} markets asked, {len(errors)} failed{', first: ' + errors[0] if errors else ''}")
     out = []
     for m, prices in fetched:
         rows = [{"date": d, "market_id": m["market_id"], "crop": crop, "arrivals_t": None, "modal_price_kg": p}

@@ -113,7 +113,7 @@ Resources:
               Action: [dynamodb:PutItem, dynamodb:UpdateItem]
               Resource: !GetAtt PlansTable.Arn
             - Effect: Allow
-              Action: dynamodb:PutItem   # the crop's "#status" row when a fetch is queued (D24)
+              Action: dynamodb:PutItem   # the crop's "#status" row when a fetch is queued (D24); "live#" price cache rows (D34)
               Resource: !GetAtt MarketRiskTable.Arn
             - Effect: Allow
               Action: sqs:SendMessage
