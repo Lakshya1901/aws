@@ -35,7 +35,7 @@ in TODO.md as they are done and commit TODO.md with the work.
 - [x] A3 UI design approach (Oct 10: canvases first): recommended, design the Today radar and Recommendation card first as design canvases here, then apply to the Expo screens.
 
 ### B. UI and UX design, then APK (user asked: design first, then export the APK)
-- [ ] B1 Design pass on Today (radar, crop chips, Other crop), Recommendation card (Section 14.3 rules), then the remaining screens. Keep Section 14.6 rules (16 pt base, 24 pt card numbers, 48 dp targets, colour + word + icon).
+- [ ] B1 (Oct 10: Today and Recommendation canvases drafted with real 2023-09-29 replay figures, awaiting review; remaining screens after) Design pass on Today (radar, crop chips, Other crop), Recommendation card (Section 14.3 rules), then the remaining screens. Keep Section 14.6 rules (16 pt base, 24 pt card numbers, 48 dp targets, colour + word + icon).
 - [ ] B2 Apply to `app/`; `npx tsc --noEmit`; Android export builds.
 - [ ] B3 `app/.env` (git-ignored) with `EXPO_PUBLIC_API_URL` and `EXPO_PUBLIC_API_KEY`; `eas env:create --environment preview` for both (key as secret); `eas build -p android --profile preview`; attach the APK to a GitHub Release (TODO 3.5).
 
