@@ -1,8 +1,10 @@
+// Language: English plus India's 20 most spoken languages, each in its own script with its English name.
 import { router } from 'expo-router';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import type { Lang } from '../api/types';
-import { Btn, Screen, T } from '../components/ui';
-import { LANGS, translate } from '../i18n';
+import { Icon } from '../components/Icon';
+import { ListRow, Screen, Surface, T } from '../components/ui';
+import { LANG_INFO, LANGS, translate } from '../i18n';
 import { useSession } from '../lib/session';
 import { C, SIZE } from '../lib/theme';
 
@@ -16,29 +18,40 @@ export default function LanguageScreen() {
     else router.back();
   }
 
+  const shown: Lang[] = lang && lang !== 'en' ? ['en', lang] : ['en', 'hi'];
+
   return (
     <Screen>
-      {LANGS.map((l) => (
-        <T key={l} forLang={l} bold size={SIZE.large}>
-          {translate(l, 'choose_language')}
-        </T>
-      ))}
-      <View style={{ gap: 16, marginTop: 8 }}>
-        {LANGS.map((l) => (
-          <Btn
-            key={l}
-            forLang={l}
-            label={translate(l, `lang_${l}`)}
-            onPress={() => pick(l)}
-            kind={lang === l ? 'primary' : 'secondary'}
-            style={{ minHeight: 72 }}
-          />
+      <View style={{ gap: 4 }}>
+        {shown.map((l) => (
+          <T key={l} forLang={l} bold size={SIZE.large}>
+            {translate(l, 'choose_language')}
+          </T>
         ))}
       </View>
+      <Surface>
+        {LANGS.map((l, i) => (
+          <Pressable key={l} accessibilityRole="button" accessibilityState={{ selected: lang === l }} onPress={() => pick(l)}>
+            <ListRow first={i === 0} style={{ minHeight: 64, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+              <View style={{ flexShrink: 1 }}>
+                <T forLang={l} bold size={SIZE.large}>
+                  {LANG_INFO[l].name}
+                </T>
+                {l !== 'en' && (
+                  <T forLang="en" size={SIZE.label} color={C.muted}>
+                    {LANG_INFO[l].english}
+                  </T>
+                )}
+              </View>
+              {lang === l && <Icon name="check" size={24} color={C.primary} strokeWidth={2.6} />}
+            </ListRow>
+          </Pressable>
+        ))}
+      </Surface>
       {/* Settings note: Polly offers Hindi and Indian English voices only. */}
-      <View style={{ marginTop: 16, gap: 6 }}>
-        {LANGS.map((l) => (
-          <T key={l} forLang={l} color={C.muted}>
+      <View style={{ gap: 6 }}>
+        {shown.map((l) => (
+          <T key={l} forLang={l} color={C.muted} size={SIZE.small}>
             {translate(l, 'voice_note')}
           </T>
         ))}

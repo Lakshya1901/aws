@@ -6,16 +6,15 @@ import { View } from 'react-native';
 import { api } from '../api/client';
 import type { PlanResponse } from '../api/types';
 import { useOutletLabels } from '../components/RecommendationCard';
-import { Banner, Btn, DataBanners, Loading, RiskBadge, Screen, T, s, useErrorText } from '../components/ui';
+import { Banner, Btn, DataBanners, ListRow, Loading, RiskDot, Screen, SectionTitle, Surface, T, Tag, useErrorText } from '../components/ui';
 import { fmtNum } from '../i18n';
 import { useSession } from '../lib/session';
 import { C, SIZE } from '../lib/theme';
-import { ImpactRows, useWasteText } from '../components/ImpactRows';
+import { ImpactRows } from '../components/ImpactRows';
 
 export default function PlanScreen() {
-  const { t, lang, loads, planId, setPlanId } = useSession();
+  const { t, lang, loads, planId, setPlanId, cropLabel } = useSession();
   const L = useOutletLabels();
-  const wasteText = useWasteText();
   const errorText = useErrorText();
   const [data, setData] = useState<PlanResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -44,15 +43,20 @@ export default function PlanScreen() {
 
   if (loads.length === 0) {
     return (
-      <Screen>
+      <Screen nav>
         <T size={SIZE.large}>{t('plan_empty')}</T>
         <Btn label={t('new_load')} onPress={() => router.push('/new-load')} />
       </Screen>
     );
   }
 
+  const totalKg = data ? data.allocations.reduce((a, x) => a + x.quantity_kg, 0) : 0;
+  const addedTotal = data ? data.markets.reduce((a, m) => a + Math.max(0, m.added_kg), 0) : 0;
+  const loadsIn = (marketId: string) =>
+    data ? data.allocations.filter((a) => a.outlet.outlet_id === marketId).length : 0;
+
   return (
-    <Screen>
+    <Screen nav>
       {loading && <Loading />}
       {error && (
         <>
@@ -68,58 +72,94 @@ export default function PlanScreen() {
             stale={data.data.stale}
             demoLoads={data.demo_loads}
           />
-          {data.allocations.map((a) => {
-            const hold = a.outlet.type === 'hold';
-            const waste = wasteText(a.impact.waste_avoided_kg, 'load');
-            return (
-              <View key={a.load_id} style={s.card}>
-                <T bold size={SIZE.large}>
-                  {t('load_line', { qty: fmtNum(a.quantity_kg), crop: t(`crop_${a.crop}`) })}
-                </T>
-                <T bold size={SIZE.number}>
-                  {hold ? t('hold_title') : t('send_to', { outlet: L.name(a.outlet) })}
-                </T>
-                <View style={s.row}>
-                  {a.outlet.type === 'mandi' ? (
-                    <RiskBadge level={a.outlet.risk_level} />
-                  ) : (
-                    <T bold>{L.typeLabel(a.outlet)}</T>
+          <View style={{ gap: 4 }}>
+            <T bold size={SIZE.title}>
+              {t('plan_headline', { n: String(data.allocations.length), kg: fmtNum(totalKg) })}
+            </T>
+            <T size={SIZE.small} color={C.muted}>
+              {t('plan_spread')}
+            </T>
+          </View>
+
+          <SectionTitle>{t('added_per_market')}</SectionTitle>
+          <Surface style={{ paddingTop: 16 }}>
+            {addedTotal > 0 && (
+              <View
+                style={{
+                  height: 12,
+                  borderRadius: 6,
+                  backgroundColor: C.track,
+                  overflow: 'hidden',
+                  flexDirection: 'row',
+                  marginHorizontal: 16,
+                  marginBottom: 8,
+                }}
+              >
+                {data.markets.map((m, i) =>
+                  m.added_kg > 0 ? (
+                    <View
+                      key={m.market_id}
+                      style={{ flex: m.added_kg, backgroundColor: i === 0 ? C.primary : i === 1 ? C.tonal : C.outline }}
+                    />
+                  ) : null,
+                )}
+              </View>
+            )}
+            {data.markets.map((m, i) => (
+              <ListRow key={m.market_id} first={i === 0 && addedTotal === 0} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+                <View style={{ flex: 1, flexShrink: 1, gap: 4 }}>
+                  <T bold>{m.name ?? m.market_id}</T>
+                  <T size={SIZE.small} color={C.muted}>
+                    {loadsIn(m.market_id) === 1 ? t('load_one') : t('loads_count', { n: String(loadsIn(m.market_id)) })}
+                  </T>
+                  {m.capped && (
+                    <View style={{ flexDirection: 'row' }}>
+                      <Banner kind="warn" text={t('market_capped')} />
+                    </View>
                   )}
-                  {a.outlet.partnered === false && <Banner kind="warn" text={t('not_partnered')} />}
                 </View>
-                <T>{a.outlet.net_rs_per_kg ? `${L.earn(a.outlet)} (${t('estimate')})` : L.earn(a.outlet)}</T>
-                {!hold && <T color={C.muted}>{L.km(a.outlet)}</T>}
-                <T>{`${t('waste_avoided')}: ${waste.value}`}</T>
-                {waste.sub ? <T color={C.muted}>{waste.sub}</T> : null}
-              </View>
-            );
-          })}
-
-          <T bold size={SIZE.title}>
-            {t('added_per_market')}
-          </T>
-          {data.markets.map((m) => (
-            <View key={m.market_id} style={[s.card, { flexDirection: 'row', justifyContent: 'space-between' }]}>
-              <View style={{ flexShrink: 1, gap: 4 }}>
-                <T bold size={SIZE.large}>
-                  {m.name ?? m.market_id}
+                <T bold size={SIZE.section}>
+                  {`+${t('kg_value', { v: fmtNum(m.added_kg) })}`}
                 </T>
-                {m.capped && <Banner kind="warn" text={t('market_capped')} />}
-              </View>
-              <T bold size={SIZE.number}>
-                {`+${t('kg_value', { v: fmtNum(m.added_kg) })}`}
-              </T>
-            </View>
-          ))}
+              </ListRow>
+            ))}
+          </Surface>
 
-          <T bold size={SIZE.title}>
-            {t('total_impact')}
-          </T>
-          <ImpactRows impact={data.impact} />
+          <SectionTitle>{t('total_impact')}</SectionTitle>
+          <ImpactRows impact={data.impact} lines="plan" />
+
+          <SectionTitle>{t('loads')}</SectionTitle>
+          <Surface>
+            {data.allocations.map((a, i) => {
+              const hold = a.outlet.type === 'hold';
+              return (
+                <ListRow key={a.load_id} first={i === 0} style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                  <View style={{ minWidth: 88 }}>
+                    <T bold>{t('kg_value', { v: fmtNum(a.quantity_kg) })}</T>
+                    <T size={SIZE.small} color={C.muted}>
+                      {cropLabel(a.crop)}
+                    </T>
+                  </View>
+                  <View style={{ flex: 1, flexShrink: 1, gap: 2 }}>
+                    <T bold>{hold ? t('hold_title') : L.name(a.outlet)}</T>
+                    <T size={SIZE.small} color={C.muted}>
+                      {L.earn(a.outlet)}
+                    </T>
+                    {a.outlet.type !== 'mandi' ? <T size={SIZE.label}>{L.typeLabel(a.outlet)}</T> : null}
+                    {a.outlet.partnered === false && (
+                      <View style={{ flexDirection: 'row' }}>
+                        <Tag text={t('not_partnered')} dashed />
+                      </View>
+                    )}
+                  </View>
+                  {a.outlet.type === 'mandi' ? <RiskDot level={a.outlet.risk_level} /> : null}
+                </ListRow>
+              );
+            })}
+          </Surface>
         </>
       )}
-      <Btn kind="secondary" label={t('new_load')} onPress={() => router.push('/new-load')} />
-      <Btn kind="secondary" label={t('impact')} onPress={() => router.push('/impact')} />
+      {!loading && <Btn label={t('new_load')} onPress={() => router.push('/new-load')} />}
     </Screen>
   );
 }

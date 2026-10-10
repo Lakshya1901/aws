@@ -7,6 +7,7 @@ import hashlib
 import importlib
 import json
 import os
+import re
 import traceback
 import uuid
 from datetime import datetime, timedelta, timezone
@@ -19,7 +20,8 @@ from backend.core.impact import total_impact
 from backend.core.netvalue import haversine_km
 from backend.core.recommend import glut_radar, plan, recommend, rescue
 
-LANGS = ("en", "hi", "kn")
+# English plus India's 20 most spoken languages (CLAUDE.md D27); one config/copy/<code>.json each.
+LANGS = ("en", "hi", "bn", "mr", "te", "ta", "gu", "ur", "kn", "or", "ml", "pa", "as", "mai", "sat", "ks", "ne", "sd", "doi", "kok", "mni")
 HARVEST = ("today", "tomorrow", "harvested")
 SOURCES = ("farm", "mandi_unsold")
 ERROR_CODES = {"crop_profile_incomplete": "crop_not_configured"}
@@ -38,6 +40,35 @@ def replay_date():
 def as_of_date():
     """Replay date when set, else today in IST."""
     return replay_date() or (datetime.now(timezone.utc) + timedelta(hours=5, minutes=30)).date().isoformat()
+
+
+_PLACE_SUFFIX = re.compile(r"\s+(mandi|market|apmc|city)$")
+
+
+def _place_key(s):
+    return _PLACE_SUFFIX.sub("", " ".join(str(s).lower().replace(",", " ").split()))
+
+
+def resolve_origin(o, cfg):
+    """Origin lat/lon from the request; else the typed city, town or village matched exactly (case, spacing and a
+    trailing "mandi"/"market" ignored) to a market name, then a district name, in config/markets.json, then any place
+    in India by Amazon Location place search (D31). A district or a searched place is marked place_approx. A name in
+    two states is not taken from markets.json. No match: 422."""
+    if o.get("lat") is not None and o.get("lon") is not None:
+        return {"lat": _float(o["lat"], "origin.lat"), "lon": _float(o["lon"], "origin.lon"), "place": o.get("place")}
+    key = _place_key(o.get("place") or "")
+    if key:
+        ms = [m for m in cfg["markets"] if m.get("lat") is not None and m.get("coord_confidence") != "low"]
+        for field, approx in (("name", False), ("district", True)):
+            hit = [m for m in ms if _place_key(m.get(field) or "") == key]
+            if hit and len({m["state"] for m in hit}) == 1:
+                lat = round(sum(m["lat"] for m in hit) / len(hit), 5)
+                lon = round(sum(m["lon"] for m in hit) / len(hit), 5)
+                return {"lat": lat, "lon": lon, "place": o["place"], "place_approx": approx or len(hit) > 1}
+        g = location.geocode_place(key, o["place"])
+        if g:
+            return {"lat": g["lat"], "lon": g["lon"], "place": o["place"], "place_approx": True}
+    raise ApiError(422, "origin_unknown", "Origin needs lat and lon, or a city, town or village in India we can find.")
 
 
 # ---------- explanation ----------
@@ -78,7 +109,7 @@ def explanation_facts(r, crop, lang, cfg):
                         **({"arrival_ratio": d["arrival_ratio"]} if _ratio_driven(d, cfg) else {})),
         "best_fresh_net_rs_per_kg": best["net_rs_per_kg"] if best else None,
         "waste_avoided_kg": r["impact"]["waste_avoided_kg"], "redirected_kg": r["impact"]["redirected_kg"],
-        "advice": (r["advice"] or {}).get("code"), "harvest_cost_rs_per_kg": crop["harvest_cost_rs_per_kg"],
+        "advice": (r["advice"] or {}).get("code"), "harvest_cost_rs_per_kg": crop.get("harvest_cost_rs_per_kg"),
         "data_stale": r["data"]["stale"],
     }
 
@@ -166,10 +197,10 @@ def _float(v, name):
         raise ApiError(400, "bad_request", f"{name} must be a number") from None
 
 
-def _destinations(cfg, outlets, origin, market_ctx=None):
-    """Destinations to route from origin (Section 8.4): markets and outlets within max_radius_km straight-line; with
+def _destinations(cfg, outlets, origin, market_ctx=None, radius_key="max_radius_km"):
+    """Destinations to route from origin (Section 8.4): markets and outlets within radius_key (rescue_radius_km for Rescue, D31) straight-line; with
     market_ctx (a crop's reporting markets), only its nearest `nearest_markets`, the set allocation considers."""
-    radius = assumption(cfg["assumptions"], "max_radius_km")
+    radius = assumption(cfg["assumptions"], radius_key)
 
     def near(items):
         scored = sorted((haversine_km(origin["lat"], origin["lon"], x["lat"], x["lon"]), x["id"], x) for x in items
@@ -193,11 +224,7 @@ def core_load(l, cfg, outlets, day, ctx=None):
     if l.get("harvest") not in HARVEST:
         raise ApiError(400, "bad_request", f"harvest must be one of {', '.join(HARVEST)}")
     get_crop(cfg, l["crop"])
-    o = l.get("origin") or {}
-    if o.get("lat") is None or o.get("lon") is None:
-        raise ApiError(422, "origin_unknown",
-                       "Origin needs lat and lon; place names are not geocoded. Send the device location.")
-    origin = {"lat": _float(o["lat"], "origin.lat"), "lon": _float(o["lon"], "origin.lon"), "place": o.get("place")}
+    origin = resolve_origin(l.get("origin") or {}, cfg)
     radius = assumption(cfg["assumptions"], "max_radius_km")
     if not any(haversine_km(origin["lat"], origin["lon"], m["lat"], m["lon"]) <= radius
                for m in cfg["markets"] if m.get("lat") is not None):
@@ -309,13 +336,10 @@ def rescue_request(b, cfg, outlets, day):
         split = {"edible_kg": e, "spoiled_kg": sp}
     get_crop(cfg, b["crop"])
     o = b.get("origin") or {}
-    if o.get("lat") is None or o.get("lon") is None:
-        raise ApiError(422, "origin_unknown",
-                       "Origin needs lat and lon; place names are not geocoded. Send the device location.")
-    origin = {"lat": _float(o["lat"], "origin.lat"), "lon": _float(o["lon"], "origin.lon"), "place": o.get("place")}
+    origin = resolve_origin(o, cfg)
     return {"crop": b["crop"], "quantity_kg": q, "origin": origin, "hours_since_harvest": h, "split": split,
             "temp_c": store.temperature_c(origin["lat"], origin["lon"], day),
-            "routes": location.routes_for(origin, _destinations(dict(cfg, markets=[]), outlets, origin))}
+            "routes": location.routes_for(origin, _destinations(dict(cfg, markets=[]), outlets, origin, radius_key="rescue_radius_km"))}
 
 
 def post_rescue(body):
@@ -360,7 +384,7 @@ def post_recommend(body):
             "top": _outlet(r["top"]), "default": _outlet(r["default"]),
             "alternatives": [_outlet(o) for o in r["alternatives"]],
             "impact": r["impact"], "explanation": expl,
-            "advice": (r["advice"] or {}).get("code"), "harvest_cost_rs_per_kg": crop["harvest_cost_rs_per_kg"],
+            "advice": (r["advice"] or {}).get("code"), "harvest_cost_rs_per_kg": crop.get("harvest_cost_rs_per_kg"),
             "assumptions_used": r["assumptions_used"]}
 
 
@@ -428,7 +452,8 @@ def get_crops(q):
     (full profile) and its data status (ready | fetching | available, D24)."""
     cfg = store.configs()
     rows = [{"crop_id": c["crop_id"], "name": c["name"], "category": c.get("category"), "markets": c["markets"],
-             "preload": bool(c.get("preload")), "routing": c["crop_id"] in cfg["crops"]}
+             "preload": bool(c.get("preload")), "routing": c["crop_id"] in cfg["crops"],
+             **({"names": cfg["crops"][c["crop_id"]]["names"]} if c["crop_id"] in cfg["crops"] else {})}
             for c in cfg["commodities"].values()]
     if q.get("crop"):
         rows = [r for r in rows if r["crop_id"] == q["crop"]]

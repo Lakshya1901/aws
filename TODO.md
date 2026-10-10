@@ -29,14 +29,35 @@ in TODO.md as they are done and commit TODO.md with the work.
 ## Next session (October 10)
 
 ### A. Three decisions to ask the user first
-- [ ] A1 Headline replay day (D18). Market-level results with 10 demo loads from Kolar: 2023-09-06 waste avoided about -8 kg, no split; 2023-09-15 and 2023-09-29 split the loads (Binny Mill + Punganur / Vayalapadu) with waste avoided mid about 500-730 kg; 2025-03-19 (second replay) 365-812 kg per 2 t load. After choosing: set `replay_date` in `config/model.json`, record in CLAUDE.md D18, redeploy (confirm first), invoke ingest with `{"crops": [...preload], "as_of_date": "<day>"}` or the plain `{}` fan-out, check the weather snapshot covers the day (`data/snapshot/weather_power_*`).
-- [ ] A2 Expo account for the EAS project: `lakshya1901` or `lakshya1901-team` (`eas init` writes the project id into `app/app.json`).
-- [ ] A3 UI design approach: recommended, design the Today radar and Recommendation card first as design canvases here, then apply to the Expo screens.
+- [x] A1 Headline replay day (D18). Oct 10: user chose the strongest figures: 2023-09-29 (10 loads: Binny Mill 11.2 t + Vayalapadu 4.8 t, waste avoided mid 732 kg, range -216 to 3,269; 2023-09-15 mid 499). `replay_date` set, D18 updated, replay test updated. Redeploy + ingest pending confirmation.
+  - Was: Market-level results with 10 demo loads from Kolar: 2023-09-06 waste avoided about -8 kg, no split; 2023-09-15 and 2023-09-29 split the loads (Binny Mill + Punganur / Vayalapadu) with waste avoided mid about 500-730 kg; 2025-03-19 (second replay) 365-812 kg per 2 t load. After choosing: set `replay_date` in `config/model.json`, record in CLAUDE.md D18, redeploy (confirm first), invoke ingest with `{"crops": [...preload], "as_of_date": "<day>"}` or the plain `{}` fan-out, check the weather snapshot covers the day (`data/snapshot/weather_power_*`).
+- [x] A2 Expo account for the EAS project (Oct 10: `lakshya1901-team`): `lakshya1901` or `lakshya1901-team` (`eas init` writes the project id into `app/app.json`).
+- [x] A3 UI design approach (Oct 10: canvases first): recommended, design the Today radar and Recommendation card first as design canvases here, then apply to the Expo screens.
 
 ### B. UI and UX design, then APK (user asked: design first, then export the APK)
-- [ ] B1 Design pass on Today (radar, crop chips, Other crop), Recommendation card (Section 14.3 rules), then the remaining screens. Keep Section 14.6 rules (16 pt base, 24 pt card numbers, 48 dp targets, colour + word + icon).
-- [ ] B2 Apply to `app/`; `npx tsc --noEmit`; Android export builds.
-- [ ] B3 `app/.env` (git-ignored) with `EXPO_PUBLIC_API_URL` and `EXPO_PUBLIC_API_KEY`; `eas env:create --environment preview` for both (key as secret); `eas build -p android --profile preview`; attach the APK to a GitHub Release (TODO 3.5).
+- [x] B1 (Oct 10: impeccable init wrote PRODUCT.md (FPO manager primary, farmer-level wording, reads short text, Android first); CLAUDE.md 14.3 now earnings first; Today, Recommendation and Foundations canvases rebuilt (Material 3, sourcebook palette, spec copy words), real 2023-09-29 figures; polish pass then light beige page #FAF6EE with Material 3 tonal surfaces and one soft elevation shadow (user choice), consistent market-row fields, Material type scale, contrast all >= 4.5:1; Today and Recommendation approved; New load, Confirm, Unsold stock, Today's plan, Impact drafted on the same system; awaiting review) Design pass on Today (radar, crop chips, Other crop), Recommendation card (Section 14.3 rules), then the remaining screens. Keep Section 14.6 rules (16 pt base, 24 pt card numbers, 48 dp targets, colour + word + icon).
+- [x] B2 Apply to `app/`; `npx tsc --noEmit`; Android export builds.
+  - Oct 10: all screens rebuilt (Material 3 on light beige, react-native-svg icons, Noto Sans in all three scripts, bottom navigation bar for Today / Today's plan / Impact). tsc clean, Android export bundles, 105 backend tests pass. Checked in a browser (react-native-web, mock data), not yet on a phone or emulator. New copy keys await native review (listed under `_review`). Unsold stock has no "Use this" (it logged nothing).
+- [x] B3 `app/.env` written; `eas init` (lakshya1901-team/annasetu); EAS preview env: EXPO_PUBLIC_API_URL (plaintext), EXPO_PUBLIC_API_KEY (sensitive; EAS does not allow secret for EXPO_PUBLIC_ vars, and it ships inside the APK anyway); build 2377f6c6 finished, APK 107 MB with the live API URL and the new strings in the bundle; README links https://expo.dev/artifacts/eas/BygXbwO-2GY_xedOPQo8k5jfkWs5yDkbset9HNDhyO8.apk. GitHub Release: no release tool in this session, team attaches it (3.5).
+
+### C. Delhi, languages, crops (user request, October 10; D26-D28)
+- [x] C1 21 languages (English + 20 most spoken): copy files, Noto fonts per script, RTL text for Urdu/Kashmiri/Sindhi, voice input only where Transcribe supports it (12). All new text machine-drafted, pending native review (Kashmiri, Santali, Manipuri, Dogri need a rewrite).
+- [x] C2 Typed "City, town or village" resolves to a market or district in config/markets.json (API); the app no longer replaces a typed place with GPS. Unsold stock has a place field.
+- [x] C3 Glut Radar preload top 50 fruits and vegetables (config/commodities.json); routing stays tomato and onion (no other crop has a full sourced profile, D28).
+- [x] C4 Delhi outlet: India FoodBanking Network seeded in config/outlets.json (only Delhi outlet with a fetched source). No Delhi biogas/compost/feed/processor found with a source.
+- [x] C5 Routes cached from Azadpur (534 routes, data/routes_cache.json). Delhi Rescue checked locally: typed "Azadpur" resolves; no split -> 422 split_required (no Delhi weather, D19); trader split 420/80 kg -> India FoodBanking Network 5.5 km, kept out of landfill 420 kg; spoiled part "No biogas or compost unit near you yet"; Urdu template explanation works.
+- [x] C5b Weather (D29): NOAA GHCN-Daily via AWS Open Data for Delhi replay windows; live Open-Meteo forecast / GHCN on the Lambda (WEATHER_LIVE=1). Delhi Rescue now estimates the split. 108 tests pass.
+- [x] C5c Lifetime dashboard on the phone (D30): Impact tab "Since you started": kg kept out of landfill, % of produce saved, Total money saved, composition bar; 9 new strings in 21 languages (pending review). Checked in a browser with mock data.
+- [x] C5d Pan-India outlets (D31): 15 real biogas, compost and processor units in 7 more states seeded from desk research (sources re-fetched, Amazon Location coordinates); Rescue radius 100 km. 112 tests pass. Food banks outside Bengaluru/Delhi: none with a fresh-produce source (team: ask IFBN for its hub list).
+- [x] C5e Any typed place in India (D31): Amazon Location place search when the name is not a market or district (live on the Lambda, cached offline for 9 cities); Rescue routes cached for Chennai, Hyderabad, Surat, Indore, Ujjain, Kochi, Gwalior, Agra, Bengaluru. Checked locally: all 10 cities (with Azadpur) return a Rescue route. 113 tests pass.
+- [x] C6 Redeploy (confirmed by the user, Oct 10): reviewed change set (9 resources modified, none replaced or deleted) executed, stack UPDATE_COMPLETE; `scripts/seed.py` wrote 20 outlets; ingest for 2023-09-29 queued 50 crops, queue and dead-letter queue drained to 0. Live smoke test: Rescue with an estimated split (live weather) at Azadpur -> IFBN, Chennai -> Chetpet, Hyderabad -> Bowenpally, Agra -> Raj Nagar, Gurugram (live place search) -> IFBN, Thanjavur -> no outlet in radius; Kolar 2 t farm load -> Binny Mill Rs 7.5-11.5/kg (stale banner); onion radar near Azadpur 291 markets.
+- [x] C9 Icon (bridge + sprout) in app, README, PRODUCT.md; APK limited to arm64-v8a and armeabi-v7a (next build); merge conflict with main resolved (main was a squash of 57ac772).
+- [x] C10 Backtest result JSON moved to S3 backtest/ (52k lines out of git); README tech stack table with AWS per layer; one "All numbers are estimates" line per screen (D32); Mumbai weather (8 nearest NOAA stations).
+- [x] C11 Advice for all 50 preloaded crops (D33); harvest cost optional; Settings screen with My crops; crop chips from the API; typed place clears stale coordinates. 115 tests, tsc and Android export pass; not yet checked on a simulator or phone.
+- [ ] C12 Settings: Live / Demo data switch (needs MarketRisk rows for the replay day and the latest day side by side).
+- [ ] C13 Redeploy (confirm first): weather fix, 48 crop profiles, /crops names. Then the iOS simulator pass on the Mac, then the APK build.
+- [ ] C7 Voice parse in languages other than en/hi/kn needs Bedrock (D23, still blocked); until then those transcripts land on Confirm with fields highlighted.
+- [ ] C8 Video beat 1 (D22): no recent Delhi dumping report found; best fetched: INPECS 2012 (Azadpur "approximately 2 000 tons of waste ... daily"), Tribune 2025-05-17 (CM: "garbage dump"). Team to choose.
 
 ## Today (October 9)
 
@@ -71,7 +92,7 @@ in TODO.md as they are done and commit TODO.md with the work.
 - [x] Market-level AGMARKNET data for every commodity from the India Data Portal; `config/markets.json` (4,142 markets) and `config/commodities.json` (400); offline snapshot for tomato and onion near Kolar.
 - [x] Glut Radar for any crop; top 20 fruits and vegetables preloaded; any other fetched on request (SQS). App: crop chips from `/crops`, Other crop screen with fetch-later.
 - [x] Onion profile sourced (routing on). Potato and banana: no sourced harvest cost; radar only until one is supplied.
-- [ ] Headline replay day (D18): on market-level data 2023-09-06 gives waste avoided about -8 kg and no load split; 2023-09-15 and 2023-09-29 split the ten loads with positive waste avoided. Team to choose; then set `replay_date` and re-run ingest.
+- [x] Headline replay day (D18), chosen Oct 10: 2023-09-29 (see A1). On market-level data 2023-09-06 gives waste avoided about -8 kg and no load split; 2023-09-15 and 2023-09-29 split the ten loads with positive waste avoided. Team to choose; then set `replay_date` and re-run ingest.
 
 ### 3. iPhone and Android test
 - [ ] 3.1 Put the API URL and key in `app/.env` (from `app/.env.example`); never commit it.
@@ -116,7 +137,7 @@ in TODO.md as they are done and commit TODO.md with the work.
 ## Tomorrow (October 10)
 
 - [x] 10. Commit history check: clear messages, no secrets, no model identifiers, no `node_modules` or build output. Oct 9: no keys, `.env`, `samconfig.toml`, `node_modules`, build output or model IDs in any commit. Early messages (`v1`, `merge (#1)`) are terse; left as is (rewriting `main` is not worth it). Re-check before 9.3.
-- [ ] 11. Demo video, 3 minutes or less: the live app on a phone, the 2025 Kolar price crash (2025-03-19), and the second case study (2023-09-06 arrival glut, ten loads split). Show "Replaying <date> data", label counterfactuals as modelled, waste avoided separate from redirected. Then fill the video link in README.md (replace "TBD").
+- [ ] 11. Demo video, 3 minutes or less: the live app on a phone, the 2025 Kolar price crash (2025-03-19), and the second case study (2023-09-29, documented Sept 2023 arrival glut, ten loads split; D18). Show "Replaying <date> data", label counterfactuals as modelled, waste avoided separate from redirected. Then fill the video link in README.md (replace "TBD").
 - [ ] 12. Short writeup (submission form): problem, build, AWS usage (name the SAM CLI and every AWS service; CLAUDE.md Section 22.1).
   List the AI coding tools used (Claude Code), as the rules require: "You can use AI coding tools. List the ones you used in your writeup." (https://www.wemakedevs.org/aws/env/rules). Add the same line to README.md.
 

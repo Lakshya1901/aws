@@ -32,7 +32,7 @@ export const mock = {
       category: c === 'banana' ? 'Fruits' : 'Vegetables',
       markets: 0,
       preload: true,
-      routing: c === 'tomato' || c === 'onion',
+      routing: true, // D33: every preloaded crop has a profile
       status: 'ready' as const,
     }));
     return { _fixture: true, crops: crop ? all.filter((c) => c.crop_id === crop) : all };
@@ -72,7 +72,7 @@ export const mock = {
   async rescue(req: RescueRequest): Promise<RescueResponse> {
     await delay(600);
     if (req.edible_kg != null) return require('./fixtures/rescue_trader.fixture.json') as RescueResponse;
-    if (req.origin.lat > 20) throw new ApiError(422, 'split_required');
+    if ((req.origin.lat ?? 0) > 20) throw new ApiError(422, 'split_required');
     return require('./fixtures/rescue.fixture.json') as RescueResponse;
   },
   // The stored ten-load plan from the backend tests, whatever loads are sent.

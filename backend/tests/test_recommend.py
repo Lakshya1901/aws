@@ -124,6 +124,17 @@ def test_harvest_cost_above_best_net_gives_advice(configs):
     assert harvested["advice"] is None
 
 
+def test_crop_without_harvest_cost_routes_without_advice(configs):
+    # D33: harvest cost is optional; without it the load is still routed, with no harvest advice and no D12 dump rule.
+    rows = (history("kolar", 100, 4) + history("chintamani", 50, 4) + history("bengaluru", 300, 4)
+            + history("madanapalle", 80, 4))
+    c = copy.deepcopy(configs)
+    c["crops"]["tomato"]["harvest_cost_rs_per_kg"] = None
+    r = recommend(load(), rows, MARKETS, OUTLETS, c, AS_OF)
+    assert r["top"]["type"] == "mandi" and r["advice"] is None
+    assert "below_cost_dump_share" not in r["assumptions_used"]
+
+
 def test_stale_data_sets_flag_and_widens_ranges(configs):
     fresh = recommend(load(), normal_week(), MARKETS, OUTLETS, configs, AS_OF)
     stale_rows = [r for r in normal_week() if r["market_id"] != "kolar"] + history("kolar", 100, 20, end="2025-04-01")
@@ -317,3 +328,25 @@ def test_market_with_old_data_is_listed_but_never_chosen(configs):
     listed = {o["outlet_id"]: o for o in [r["top"], r["default"]] + r["alternatives"]}
     assert "madanapalle" in listed and r["top"]["outlet_id"] != "madanapalle"
     assert listed["madanapalle"]["net_rs_per_kg"]["mid"] > r["top"]["net_rs_per_kg"]["mid"]
+
+
+def test_rescue_uses_rescue_radius_not_market_radius(configs):
+    # D31: a processor 150 km away is inside max_radius_km (300) but outside rescue_radius_km (100).
+    lot = unsold(split={"edible_kg": 700, "spoiled_kg": 300})
+    o = lot["origin"]
+    far = [dict(OUTLETS[0], outlet_id="far_proc", type="processor", lat=o["lat"] + 150 / 111.2, lon=o["lon"])]
+    assert rescue(lot, far, configs, AS_OF)["top"] is None
+    c = copy.deepcopy(configs)
+    c["assumptions"]["rescue_radius_km"]["value"] = 300
+    assert rescue(lot, far, c, AS_OF)["top"]["outlet_id"] == "far_proc"
+
+
+@pytest.mark.parametrize("lat,lon,recover_id", [
+    (13.0694, 80.1948, "chennai_chetpet_biocng"),  # Koyambedu, Chennai
+    (17.4694, 78.4945, "hyderabad_bowenpally_biogas"),  # Bowenpally, Hyderabad
+    (27.2079, 77.9772, "agra_transport_nagar_compost"),  # Transport Nagar, Agra
+])
+def test_rescue_outside_demo_regions_uses_seeded_outlets(configs, lat, lon, recover_id):
+    # D31: seeded outlets in config/outlets.json reach cities beyond Kolar and Delhi.
+    lot = unsold(split={"edible_kg": 700, "spoiled_kg": 300}, origin={"lat": lat, "lon": lon})
+    assert rescue(lot, configs["outlets"], configs, AS_OF)["recover"]["outlet_id"] == recover_id

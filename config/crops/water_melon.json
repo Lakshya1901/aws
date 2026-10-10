@@ -1,0 +1,47 @@
+{
+  "crop_id": "water_melon",
+  "names": {
+    "en": "Watermelon",
+    "hi": "तरबूज",
+    "kn": "ಕಲ್ಲಂಗಡಿ ಹಣ್ಣು"
+  },
+  "agmarknet_commodity": "Water Melon",
+  "t_ref_c": 25,
+  "sl_ref_hours": 148,
+  "sl_ref_hours_range": [
+    148,
+    148
+  ],
+  "q10": 2.67,
+  "alpha": 0.65,
+  "storable": false,
+  "harvest_cost_rs_per_kg": null,
+  "unit_box_kg": null,
+  "water_l_per_kg": 235.0,
+  "second_life": [
+    "processor",
+    "food_bank",
+    "biogas",
+    "compost"
+  ],
+  "status": {
+    "t_ref_c": "sourced",
+    "q10": "placeholder",
+    "sl_ref_hours": "placeholder",
+    "alpha": "assumption",
+    "storable": "sourced",
+    "water_l_per_kg": "placeholder",
+    "sl_ref_hours_range": "placeholder"
+  },
+  "sources": {
+    "t_ref_c": "CLAUDE.md Section 11 reference temperature",
+    "q10": "Derived from respiration rates, USDA Agriculture Handbook 66 or cited study (https://www.ars.usda.gov/arsuserfiles/oc/np/commercialstorage/commercialstorage.pdf)",
+    "sl_ref_hours": "Cold-storage life 504-504 h at 12.5 C (10-15 C), converted to 25 C with Q10; https://www.ars.usda.gov/arsuserfiles/oc/np/commercialstorage/commercialstorage.pdf",
+    "alpha": "Median alpha of the fruits calibrated on NABCONS 2022; no loss row for this crop",
+    "storable": "https://www.ars.usda.gov/arsuserfiles/oc/np/commercialstorage/commercialstorage.pdf",
+    "second_life": "Processing: rind candy (60 kg candy per 100 kg rind), rind pickle (https://www.iihr.res.in/node/1845); Recover: biogas, compost (D19)",
+    "water_l_per_kg": "Mekonnen and Hoekstra 2010, Report 47, global average, row 'Watermelons', https://www.waterfootprint.org/resources/Report47-WaterFootprintCrops-Vol1.pdf",
+    "sl_ref_hours_range": "Same basis as sl_ref_hours",
+    "names": "hi/kn pending native review (D33)"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "crop_id": "cluster_beans",
+  "names": {
+    "en": "Cluster beans",
+    "hi": "ग्वार फली",
+    "kn": "ಗೋರಿಕಾಯಿ"
+  },
+  "agmarknet_commodity": "Cluster Beans",
+  "t_ref_c": 25,
+  "sl_ref_hours": 108,
+  "sl_ref_hours_range": [
+    81,
+    135
+  ],
+  "q10": 2.27,
+  "alpha": 0.26,
+  "storable": false,
+  "harvest_cost_rs_per_kg": null,
+  "unit_box_kg": null,
+  "water_l_per_kg": 561.0,
+  "second_life": [
+    "food_bank",
+    "biogas",
+    "compost"
+  ],
+  "status": {
+    "t_ref_c": "sourced",
+    "q10": "assumption",
+    "sl_ref_hours": "assumption",
+    "alpha": "placeholder",
+    "storable": "assumption",
+    "water_l_per_kg": "placeholder",
+    "sl_ref_hours_range": "assumption"
+  },
+  "sources": {
+    "t_ref_c": "CLAUDE.md Section 11 reference temperature",
+    "q10": "Median Q10 of the vegetables with derived values (no usable respiration data)",
+    "sl_ref_hours": "Median 25 C shelf life of the vegetables with a usable value (+/-25% range); no usable value for this crop",
+    "alpha": "Calibrated like tomato: a 14 h trip at 25 C gives the NABCONS 2022 market-level loss 3.43% (row 'Beans (broader row)'), https://www.pib.gov.in/PressReleasePage.aspx?PRID=2151371&reg=48&lang=2",
+    "storable": "No source; not storable assumed",
+    "second_life": "Recover: biogas, compost (D19)",
+    "water_l_per_kg": "Mekonnen and Hoekstra 2010, Report 47, global average, row 'Beans, green (broader row)', https://www.waterfootprint.org/resources/Report47-WaterFootprintCrops-Vol1.pdf",
+    "sl_ref_hours_range": "Same basis as sl_ref_hours",
+    "names": "hi/kn pending native review (D33)"
+  }
+}

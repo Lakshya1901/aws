@@ -82,7 +82,8 @@ def api(tmp_path, monkeypatch):
     monkeypatch.setenv("PLAN_ID_DETERMINISTIC", "1")
     monkeypatch.setattr(store, "_plans", {})
     routes = tmp_path / "routes.json"
-    routes.write_text(json.dumps(synthetic_routes_test_only([(ORIGIN["lat"], ORIGIN["lon"])], MARKETS)))
+    routes.write_text(json.dumps(synthetic_routes_test_only([(ORIGIN["lat"], ORIGIN["lon"]), (DELHI["lat"], DELHI["lon"])],
+                                                            MARKETS)))
     monkeypatch.setenv("ROUTES_CACHE", str(routes))
 
     def setup(dataset):
@@ -128,7 +129,7 @@ CASES = {
     "recommend_stale": ("stale_week", "POST", "/recommend", None, _recommend_body()),
     "recommend_422_no_markets": ("normal_week", "POST", "/recommend", None,
                                  _recommend_body(origin={"lat": 28.61, "lon": 77.21, "place": "Delhi"})),
-    "recommend_422_crop_not_configured": ("normal_week", "POST", "/recommend", None, _recommend_body(crop="banana")),
+    "recommend_422_crop_not_configured": ("normal_week", "POST", "/recommend", None, _recommend_body(crop="jack_fruit")),
     "recommend_422_drive_time": ("normal_week", "POST", "/recommend", None,
                                  _recommend_body(origin={"lat": 13.2, "lon": 78.2, "place": "no cached route"})),
     "recommend_422_origin_unknown": ("normal_week", "POST", "/recommend", None,
@@ -256,7 +257,7 @@ def test_plans_file_persists_between_processes(api, tmp_path, monkeypatch):
     assert call("GET", "/impact", {"plan_id": r["plan_id"]})[0] == 200
 
 
-@pytest.mark.parametrize("day", ["2023-09-06", "2025-03-19"])  # demo replay days (D18)
+@pytest.mark.parametrize("day", ["2023-09-29", "2025-03-19"])  # demo replay days (D18)
 def test_smoke_real_snapshot_replay_day(day, tmp_path, monkeypatch):
     """Real market-level snapshot (D24) on a replay day with TEST ONLY routes and weather. Structure only, no numbers."""
     snap = tmp_path / "snap"
@@ -339,22 +340,22 @@ def test_radar_only_crop_and_crops_routes(api, tmp_path, monkeypatch):
     setup("glut_day")
     cfg = pathlib.Path(os.environ["CONFIG_DIR"])
     (cfg / "commodities.json").write_text(json.dumps({"commodities": [
-        {"crop_id": "brinjal", "name": "Brinjal", "category": "Vegetables", "markets": 4, "preload": True},
+        {"crop_id": "jack_fruit", "name": "Jack Fruit", "category": "Fruits", "markets": 4, "preload": True},
         {"crop_id": "tomato", "name": "Tomato", "category": "Vegetables", "markets": 4, "preload": True}]}))
     snap = pathlib.Path(os.environ["SNAPSHOT_DIR"])
-    with open(snap / "test_brinjal_synthetic.csv", "w", newline="") as fh:
+    with open(snap / "test_jack_fruit_synthetic.csv", "w", newline="") as fh:
         w = csv.DictWriter(fh, ["date", "market_id", "crop", "arrivals_t", "modal_price_kg"])
         w.writeheader()
-        w.writerows(dict(r, crop="brinjal") for r in glut_day())
-    s, risk = call("GET", "/risk", {"crop": "brinjal"})
+        w.writerows(dict(r, crop="jack_fruit") for r in glut_day())
+    s, risk = call("GET", "/risk", {"crop": "jack_fruit"})
     assert s == 200 and risk["unit_box_kg"] is None
     assert {m["market_id"]: m["risk_level"] for m in risk["markets"]}["kolar"] == "glut"
-    assert call("POST", "/recommend", body=_recommend_body(crop="brinjal"))[1]["error"] == "crop_not_configured"
+    assert call("POST", "/recommend", body=_recommend_body(crop="jack_fruit"))[1]["error"] == "crop_not_configured"
     s, crops = call("GET", "/crops")
-    assert s == 200 and {c["crop_id"]: c["routing"] for c in crops["crops"]} == {"brinjal": False, "tomato": True}
-    assert call("GET", "/crops", {"crop": "brinjal"})[1]["crops"][0]["status"] == "ready"
+    assert s == 200 and {c["crop_id"]: c["routing"] for c in crops["crops"]} == {"jack_fruit": False, "tomato": True}
+    assert call("GET", "/crops", {"crop": "jack_fruit"})[1]["crops"][0]["status"] == "ready"
     assert call("GET", "/crops", {"crop": "okra"})[0] == 404
-    assert call("POST", "/crops/fetch", body={"crop": "brinjal"})[1] == {"crop": "brinjal", "status": "ready"}
+    assert call("POST", "/crops/fetch", body={"crop": "jack_fruit"})[1] == {"crop": "jack_fruit", "status": "ready"}
 
 
 def test_contexts_dynamodb_reads_market_risk(monkeypatch):
@@ -393,3 +394,36 @@ def test_destinations_limited_to_nearest_reporting_markets_in_radius():
     assert ids == [f"m{i}" for i in range(cfg["model"]["nearest_markets"])]
     all_in_radius = [d["id"] for d in advisor._destinations(cfg, [], origin)]
     assert "far" not in all_in_radius and "nocoords" not in all_in_radius and len(all_in_radius) == 27  # 0.1 deg lat = 11.1 km: m0..m26
+
+
+def test_resolve_origin_typed_place():
+    """A typed city, town or village resolves to a market or district in config/markets.json (D26)."""
+    cfg = {"markets": [
+        {"market_id": "7-azadpur", "name": "Azadpur", "district": "Delhi", "state": "DL", "lat": 28.72, "lon": 77.16},
+        {"market_id": "7-keshopur", "name": "Keshopur", "district": "Delhi", "state": "DL", "lat": 28.65, "lon": 77.09},
+        {"market_id": "x-low", "name": "Lowtown", "district": "Low", "state": "XX", "lat": 1.0, "lon": 1.0,
+         "coord_confidence": "low"},
+        {"market_id": "a-1", "name": "Twin", "district": "A", "state": "AA", "lat": 10.0, "lon": 10.0},
+        {"market_id": "b-1", "name": "Twin", "district": "B", "state": "BB", "lat": 20.0, "lon": 20.0},
+    ]}
+    o = advisor.resolve_origin({"place": "  azadpur MANDI "}, cfg)
+    assert (o["lat"], o["lon"], o["place_approx"]) == (28.72, 77.16, False)
+    o = advisor.resolve_origin({"place": "Delhi"}, cfg)  # district: mean of its markets, approximate
+    assert (o["lat"], o["lon"], o["place_approx"]) == (28.685, 77.125, True)
+    assert advisor.resolve_origin({"lat": 1, "lon": 2, "place": "Delhi"}, cfg)["lat"] == 1.0  # coordinates win
+    for bad in ({"place": "Holur"}, {"place": "Lowtown"}, {"place": "Twin"}, {}):  # unknown, low confidence, two states
+        with pytest.raises(advisor.ApiError) as e:
+            advisor.resolve_origin(bad, cfg)
+        assert e.value.code == "origin_unknown"
+
+
+def test_resolve_origin_falls_back_to_place_search(tmp_path, monkeypatch):
+    """A place not in config/markets.json comes from the Amazon Location place cache (D31); never live in tests."""
+    places = tmp_path / "places.json"
+    places.write_text(json.dumps({"chennai": {"lat": 13.08, "lon": 80.27, "label": "TEST ONLY"}}))
+    monkeypatch.setenv("PLACES_CACHE", str(places))
+    o = advisor.resolve_origin({"place": "Chennai"}, {"markets": []})
+    assert (o["lat"], o["lon"], o["place_approx"]) == (13.08, 80.27, True)
+    with pytest.raises(advisor.ApiError) as e:
+        advisor.resolve_origin({"place": "Holur"}, {"markets": []})
+    assert e.value.code == "origin_unknown"

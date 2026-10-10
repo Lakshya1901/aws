@@ -57,7 +57,8 @@ def allocate_load(load, crop, market_ctx, outlets, added_kg, configs):
 
     best_net = fresh[0]["net_rs_per_kg"]["mid"]
     advice = None
-    if load.get("harvest") != "harvested" and best_net < crop["harvest_cost_rs_per_kg"]:
+    cost = crop.get("harvest_cost_rs_per_kg")  # optional (D33): without it there is no harvest advice
+    if load.get("harvest") != "harvested" and cost is not None and best_net < cost:
         advice = {"code": "delay_harvest" if crop["storable"] else "harvest_to_order",
                   "best_net_rs_per_kg": best_net, "harvest_cost_rs_per_kg": crop["harvest_cost_rs_per_kg"]}
     return {
@@ -85,7 +86,7 @@ def rescue_load(load, crop, outlets, configs):
         s = spoilage_share(load["hours_since_harvest"], load["temp_c"], crop)["mid"]
         split = {"edible_kg": q * (1 - s), "spoiled_kg": q * s, "source": "estimate"}
     eligible = [o for o in outlets if crop["crop_id"] in o.get("crops", []) and o["type"] in crop["second_life"]]
-    near = _nearest(load["origin"], eligible, assumption(configs["assumptions"], "max_radius_km"))
+    near = _nearest(load["origin"], eligible, assumption(configs["assumptions"], "rescue_radius_km"))
 
     def options(types, kg):
         opts = [second_life_option(dict(load, quantity_kg=kg), o, crop, configs) for o in near if o["type"] in types]

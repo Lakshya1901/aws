@@ -11,7 +11,7 @@ Commodities: every commodity, with preload = the top N fruits and vegetables by 
 Snapshot (--snapshot-crops): data/snapshot/idp_<crop>_<from>_<to>.csv.gz for the markets within --snapshot-radius km
 of --snapshot-origin, so the demo replays run offline (CLAUDE.md Section 20).
 
-Usage: python scripts/build_idp_config.py --idp <dir> --index <PlaceIndexName> [--top 20] [--dry-run]
+Usage: python scripts/build_idp_config.py --idp <dir> --index <PlaceIndexName> [--top 50] [--dry-run]
          [--snapshot-crops tomato,onion --snapshot-origin 13.137,78.134 --snapshot-radius 350]
 """
 import argparse
@@ -156,7 +156,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--idp", required=True)
     ap.add_argument("--index", required=True, help="Amazon Location place index (stack output PlaceIndexName)")
-    ap.add_argument("--top", type=int, default=20)
+    ap.add_argument("--top", type=int, default=50)  # D28
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--snapshot-crops", help="comma-separated crop ids for data/snapshot/")
     ap.add_argument("--snapshot-origin", default="13.137,78.134", help="lat,lon (default: Kolar demo origin)")

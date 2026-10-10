@@ -1,27 +1,49 @@
 {
   "crop_id": "potato",
-  "names": {"en": "Potato"},
+  "names": {
+    "en": "Potato",
+    "hi": "आलू",
+    "kn": "ಆಲೂಗಡ್ಡೆ"
+  },
   "agmarknet_commodity": "Potato",
   "t_ref_c": 25,
-  "sl_ref_hours": null,
-  "sl_ref_hours_range": null,
-  "q10": null,
-  "alpha": null,
+  "sl_ref_hours": 1440,
+  "sl_ref_hours_range": [
+    720,
+    2160
+  ],
+  "q10": 2.27,
+  "alpha": 0.88,
   "storable": true,
   "harvest_cost_rs_per_kg": null,
-  "unit_box_kg": null,
-  "water_l_per_kg": null,
-  "second_life": ["processor", "food_bank", "biogas", "compost"],
+  "unit_box_kg": 50,
+  "water_l_per_kg": 287.0,
+  "second_life": [
+    "food_bank",
+    "feed",
+    "biogas",
+    "compost"
+  ],
   "status": {
     "t_ref_c": "sourced",
-    "storable": "sourced",
+    "q10": "assumption",
     "sl_ref_hours": "placeholder",
-    "q10": "placeholder",
     "alpha": "placeholder",
-    "harvest_cost_rs_per_kg": "placeholder"
+    "storable": "sourced",
+    "water_l_per_kg": "placeholder",
+    "unit_box_kg": "sourced",
+    "sl_ref_hours_range": "placeholder"
   },
   "sources": {
-    "storable": "CLAUDE.md Section 11: months in cold store",
-    "second_life": "CLAUDE.md Section 11: processing, food bank; Recover: biogas, compost (D19)"
+    "t_ref_c": "CLAUDE.md Section 11 reference temperature",
+    "q10": "Median Q10 of the vegetables with derived values (no usable respiration data)",
+    "sl_ref_hours": "Ambient life 720-2160 h at 25 C (20-30 C), converted to 25 C with Q10; https://ecommons.cornell.edu/bitstream/handle/1813/10556/Invited%20Overview%20Eltawill%2010May2006.pdf",
+    "alpha": "Calibrated like tomato: a 14 h trip at 25 C gives the NABCONS 2022 market-level loss 0.86% (row 'Potato'), https://www.pib.gov.in/PressReleasePage.aspx?PRID=2151371&reg=48&lang=2",
+    "storable": "https://www.ars.usda.gov/arsuserfiles/oc/np/commercialstorage/commercialstorage.pdf",
+    "second_life": "Recover: biogas, compost (D19)",
+    "water_l_per_kg": "Mekonnen and Hoekstra 2010, Report 47, global average, row 'Potatoes', https://www.waterfootprint.org/resources/Report47-WaterFootprintCrops-Vol1.pdf",
+    "unit_box_kg": "https://www.indianpotato.com/packaging",
+    "sl_ref_hours_range": "Same basis as sl_ref_hours",
+    "names": "hi/kn pending native review (D33)"
   }
 }

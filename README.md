@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/brand/icon-256.png" width="128" alt="AnnaSetu icon: an arch bridge with a sprout"></p>
+
 # AnnaSetu
 
 Every day, a city's mandis turn good food into garbage. AnnaSetu stops the glut before the truck leaves, rescues what's left before it's dumped, and turns the rest into energy, not landfill.
@@ -5,15 +7,27 @@ Every day, a city's mandis turn good food into garbage. AnnaSetu stops the glut 
 One surplus router, three entry points, centred on the city mandi:
 
 - **Prevent (built):** tells farmer collectives (FPOs) where each load should go (sell fresh, process, donate, feed or compost) using public mandi data, and allocates loads across markets so they don't all crash the same one.
-- **Rescue (built; real city outlets pending, D20):** a trader at a city mandi logs unsold end-of-day stock; the router sends the edible part to food banks or processors before it is dumped.
-- **Recover (built; no biogas or compost unit seeded yet, D20):** what can't be eaten goes to animal feed, biogas or compost instead of landfill. Biogas energy is shown only as a labelled estimate.
+- **Rescue (built; outlets seeded where a real organisation was found, D31):** a trader at a city mandi logs unsold end-of-day stock; the router sends the edible part to food banks or processors before it is dumped.
+- **Recover (built; biogas and compost units in 7 states, D31):** what can't be eaten goes to animal feed, biogas or compost instead of landfill. Biogas energy is shown only as a labelled estimate.
 
 The core question it answers: **"Where should this load go today, and what will it actually earn after costs?"**
 
 - Track: Waste and Energy, WeMakeDevs x AWS Environmental Hacks: close the loop on what a city throws away (Rescue, Recover), make the city lighter (Prevent), power it cleaner (Recover: biogas)
 - Platform: Android/iOS app (Expo), serverless backend on AWS in ap-south-1, built and deployed with the AWS SAM CLI
 - Demo video: TBD
-- Android APK: TBD
+- Android APK: [annasetu.apk](https://expo.dev/artifacts/eas/BygXbwO-2GY_xedOPQo8k5jfkWs5yDkbset9HNDhyO8.apk) (EAS preview build, October 10; talks to the live API)
+
+## Brand
+
+Anna (food) + Setu (bridge): the icon is an arch bridge with a sprout growing from its deck, food carried to where it is needed. The app and the icon share one palette:
+
+| Role | Colour |
+| --- | --- |
+| Primary (icon background, buttons) | `#215C3B` deep green |
+| Surface (icon mark, app background) | `#FAF6EE` light beige |
+| Accent (leaves, selected chips) | `#CFE3D4` light green |
+
+Files: `docs/brand/icon.svg` (app icon), `docs/brand/mark.svg` (mark on a transparent background), `docs/brand/icon-256.png`; the app's icon set is in `app/assets/` (iOS icon, Android adaptive foreground, background and monochrome, splash, favicon). Colours match `app/lib/theme.ts`.
 
 | Problem | Decision | Intervention | Impact (shown per load) |
 | --- | --- | --- | --- |
@@ -65,7 +79,7 @@ On 2023-09-06 the demo compares the nearest-mandi default with AnnaSetu's alloca
 
 ## 4. Backtest: what the data showed
 
-Snapshot: tomato, 2022-01-01 to 2025-06-30, seven district aggregates (`data/snapshot/ceda_tomato_2022-01-01_2025-06-30.csv`, sha256 `11890d38...f415`). Results: `analysis/out/results_78dc0a403b99.json` (run 78dc0a403b99, after the ISO-week baseline fix) and `analysis/out/second_replay.json`. Each file separates observed values from model output.
+Snapshot: tomato, 2022-01-01 to 2025-06-30, seven district aggregates (`data/snapshot/ceda_tomato_2022-01-01_2025-06-30.csv`, sha256 `11890d38...f415`). Results JSON (each file separates observed values from model output) is not kept in git: the latest runs (market-level run 937fb04f9baf, D13, and `second_replay.json`) are stored in the project's S3 data bucket under `backtest/` (CLAUDE.md Section 8.5), and the commands below regenerate them into `analysis/out/`. The figures in this section are from the earlier district-level run 78dc0a403b99.
 
 **Observed (prices, arrivals, gaps; no model involved)**
 
@@ -88,8 +102,9 @@ Reproduce (deterministic; run ids are content hashes):
 
 ```bash
 python scripts/build_snapshot.py tomato 2022-01-01 2025-06-30   # re-pull from CEDA (optional; snapshot is committed)
-python analysis/backtest.py --crop tomato                         # writes analysis/out/results_<run_id>.json and charts
-python analysis/second_replay.py                                  # writes analysis/out/second_replay.json
+python analysis/backtest.py --crop tomato                         # writes analysis/out/results_<run_id>.json (git-ignored) and charts
+python analysis/second_replay.py                                  # writes analysis/out/second_replay.json (git-ignored)
+aws s3 cp s3://annasetu-data-<suffix>/backtest/ analysis/out/ --recursive   # or fetch the stored runs (team AWS account)
 ```
 
 `analysis/backtest.ipynb` is a viewer for these outputs only.
@@ -182,11 +197,27 @@ Onion, potato and banana profiles exist but have placeholder fields; a profile w
 | Users | No usability test run yet; planned with volunteers before the demo video | Update this row once it happens |
 | Spoilage | Estimated, not measured | On the card and here |
 
-Seeded Second Life outlets (Kolar region, desk research, all "Not yet partnered"): [SNR Foods](https://snrfoods.in/about) (processor, Srinivaspura), [Feel Fresh Foods](https://www.feelfreshfoods.com/about-us.html) (processor, Chittoor belt), [Kolar Food Bank](https://kolarfoodbank.1ngo.in/), [Bangalore Food Bank](https://bangalorefoodbank.com/) fresh produce recovery.
+Seeded Second Life outlets (Kolar region, desk research, all "Not yet partnered"): [SNR Foods](https://snrfoods.in/about) (processor, Srinivaspura), [Feel Fresh Foods](https://www.feelfreshfoods.com/about-us.html) (processor, Chittoor belt), [Kolar Food Bank](https://kolarfoodbank.1ngo.in/), [Bangalore Food Bank](https://bangalorefoodbank.com/) fresh produce recovery. Delhi: India FoodBanking Network. Other states (D31): biogas units in Indore, Surat, Hyderabad, Ujjain, Chennai, Kochi and Gwalior; compost units in Agra; onion dehydration plants in Mahuva and tomato processors in Shimla and Krishnagiri. Sources in `config/outlets.json`. Rescue looks within 100 km of the trader (assumption).
 
 ## 7. Architecture and AWS usage
 
 Everything runs in **ap-south-1** and is defined in `infra/template.yaml`, built and deployed with the **AWS SAM CLI** (open source: `sam build`, `sam deploy`, `sam local start-api`). This meets the prize-eligibility rule both ways: deployed on AWS, and built with an AWS open-source tool.
+
+### Tech stack
+
+| Layer | Technology | AWS used |
+| --- | --- | --- |
+| Mobile app | React Native 0.86 + Expo SDK 57, TypeScript, expo-router; Noto fonts for 21 languages; built with EAS | Talks only to API Gateway |
+| API | HTTP JSON (Section 13 of CLAUDE.md) | API Gateway HTTP API, Lambda authorizer, SSM Parameter Store (API key) |
+| Decision engine | Python 3.13, pure functions in `backend/core/` (no ML, no AWS imports) | AWS Lambda (`advisor`) |
+| Data pipeline | India Data Portal AGMARKNET bulk files, split per crop | S3 (per-crop history), EventBridge Scheduler, SQS + dead-letter queue, Lambda (`ingest`), DynamoDB (MarketRisk) |
+| Storage | Outlets, plans, overrides, risk | DynamoDB (on-demand), S3 |
+| Maps and routing | Market and place geocoding, truck routes and drive time | Amazon Location Service (place index, route calculator) |
+| Weather | Daily station temperature, live forecast | NOAA GHCN-Daily on the AWS Registry of Open Data (S3); Open-Meteo for the forecast |
+| Voice and language | Speech in 12 Indian languages, spoken replies, plain-language explanations | Amazon Transcribe, Amazon Polly, Amazon Bedrock (Converse API) |
+| Infrastructure as code | `infra/template.yaml`, Makefile build | AWS SAM CLI, CloudFormation, IAM (one least-privilege role per function) |
+| Monitoring | Logs, ingest failure and dead-letter alarms | CloudWatch |
+| Analysis | `analysis/backtest.py` (Python, pandas, NumPy, matplotlib; deterministic) | Results stored in S3 (`backtest/`) |
 
 ```mermaid
 flowchart LR
@@ -214,14 +245,15 @@ flowchart LR
 | API Gateway (HTTP API) + Lambda authorizer | The only entry point; the app never calls AWS services directly and holds no AWS credentials |
 | Lambda `advisor` | Runs the deterministic engine (`backend/core/`) for the radar, recommendations, plans and the impact ledger |
 | Lambda `voice` | Presigned audio upload, Transcribe job, Bedrock parse, Polly reply |
-| Lambda `ingest` + EventBridge Scheduler | Daily pull of recent prices and arrivals, writes MarketDay and recomputes MarketRisk |
+| Lambda `ingest` + EventBridge Scheduler + SQS | Daily fan-out of the 50 preloaded crops over SQS (one invocation per crop, retries, dead-letter queue); each run reads the crop's market-level history from S3 and recomputes MarketRisk. Other crops load on request (POST /crops/fetch) |
 | DynamoDB (on-demand) | MarketDay, MarketRisk, Outlets, Plans (every recommendation, explanation input/output and override) |
 | S3 | Private data bucket (raw pulls, snapshot) and audio bucket (deleted after 1 day) |
-| Amazon Location Service | Market geocoding (once) and route distance and drive time (cached) |
+| Amazon Location Service | Market geocoding (once), any typed city, town or village in India, and route distance and drive time (cached) |
 | Amazon Bedrock | One small model, temperature 0, 3 s timeout: parses a spoken load into fields, and explains a computed recommendation in two sentences. It never calculates or chooses an outlet; any number not in its input triggers a per-language template |
-| Amazon Transcribe | Batch speech-to-text in Hindi, Kannada, Indian English |
+| Amazon Transcribe | Batch speech-to-text in 12 Indian languages (English, Hindi, Bengali, Gujarati, Kannada, Malayalam, Marathi, Odia, Punjabi, Tamil, Telugu, Nepali) |
 | Amazon Polly | Spoken replies in Hindi and Indian English (no Kannada voice exists) |
 | SSM Parameter Store | App API key and data.gov.in key (SecureString) |
+| NOAA GHCN-Daily (AWS Registry of Open Data) | Station temperatures for past days (spoilage estimate), read from the public S3 bucket |
 | CloudWatch | Logs; alarm on ingest failure |
 
 Each function has its own least-privilege IAM role. No credentials, account IDs or model IDs are committed.

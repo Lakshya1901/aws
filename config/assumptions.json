@@ -46,6 +46,10 @@
     "value": 300, "unit": "km", "status": "assumption",
     "source": "CLAUDE.md Sections 8.4 and 10"
   },
+  "rescue_radius_km": {
+    "value": 100, "unit": "km", "status": "assumption",
+    "source": "CLAUDE.md D31: unsold stock at a city mandi goes to outlets in and around that city, not 300 km away"
+  },
   "road_factor": {
     "value": 1.3, "unit": "road km per straight-line km", "status": "assumption",
     "source": "CLAUDE.md Section 8.1 (fallback when routing fails; distance marked approx.)"

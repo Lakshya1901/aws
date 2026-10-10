@@ -2,9 +2,10 @@
 max_radius_km straight-line (D11; the advisor never routes beyond it).
 
 Run with AWS credentials and LOCATION_ROUTE_CALCULATOR set (region ap-south-1):
-  python scripts/cache_routes.py 13.137,78.134 <village_id>=<lat>,<lon> [--refresh]
+  python scripts/cache_routes.py 13.137,78.134 <village_id>=<lat>,<lon> [--refresh] [--rescue]
 An origin "lat,lon" is keyed by lat,lon rounded to 3 dp; "<village_id>=lat,lon" is keyed by village_id,
-which the API matches exactly against origin.place. Existing entries are kept unless --refresh.
+which the API matches exactly against origin.place. Existing entries are kept unless --refresh. --rescue routes only
+to outlets within rescue_radius_km (Rescue, D31).
 """
 import json
 import pathlib
@@ -24,15 +25,17 @@ def parse_origin(arg):
 
 
 def main(argv):
-    refresh = "--refresh" in argv
-    origins = [parse_origin(a) for a in argv if a != "--refresh"]
+    refresh, rescue = "--refresh" in argv, "--rescue" in argv
+    origins = [parse_origin(a) for a in argv if a not in ("--refresh", "--rescue")]
     if not origins:
         sys.exit(__doc__)
     markets = json.loads((ROOT / "config/markets.json").read_text())["markets"]
     outlets = json.loads((ROOT / "config/outlets.json").read_text())["outlets"]
-    dests = [(m["market_id"], m) for m in markets if m.get("lat") is not None and m.get("coord_confidence") != "low"]
+    dests = [] if rescue else [(m["market_id"], m) for m in markets
+                               if m.get("lat") is not None and m.get("coord_confidence") != "low"]
     dests += [(o["outlet_id"], o) for o in outlets]
-    radius = assumption(json.loads((ROOT / "config/assumptions.json").read_text()), "max_radius_km")
+    radius = assumption(json.loads((ROOT / "config/assumptions.json").read_text()),
+                        "rescue_radius_km" if rescue else "max_radius_km")
     path = pathlib.Path(location.cache_path())
     cache = json.loads(path.read_text())
     for key, origin in origins:

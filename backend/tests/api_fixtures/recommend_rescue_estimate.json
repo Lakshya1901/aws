@@ -61,26 +61,26 @@
    "recover": null,
    "alternatives": [
     {
-     "outlet_id": "feel_fresh_foods",
-     "name": "Feel Fresh Foods",
+     "outlet_id": "abc_fruits",
+     "name": "ABC Fruits (tomato paste)",
      "type": "processor",
-     "state": "AP",
+     "state": "TN",
      "net_rs_per_kg": null,
      "net_note": "not yet estimated",
-     "distance_km": 141.38,
+     "distance_km": 84.35,
      "distance_approx": false,
-     "drive_hours": 3.534,
-     "spoilage_share": 0.1712,
+     "drive_hours": 2.109,
+     "spoilage_share": 0.1664,
      "spoilage_range": {
-      "low": 0.1345,
-      "mid": 0.1712,
-      "high": 0.2353
+      "low": 0.1308,
+      "mid": 0.1664,
+      "high": 0.2288
      },
-     "freight_rs_per_kg": 1.5552,
-     "freight_rs_load": 1307.2525,
-     "contact": "https://www.feelfreshfoods.com/about-us.html",
+     "freight_rs_per_kg": 0.9278,
+     "freight_rs_load": 779.9317,
+     "contact": "https://abcfruits.com/products/tomato-paste/",
      "verified": false,
-     "note": "Not yet partnered",
+     "note": "Not yet partnered. 'Aseptic Tomato Paste is extracted from ripe Tomatoes'; Ankinayanapalli, near Barugur, Krishnagiri (listed address, not stated to be the factory). D31",
      "partnered": false
     },
     {
@@ -167,7 +167,7 @@
    },
    "assumptions_used": [
     "freight_rs_per_tonne_km",
-    "max_radius_km",
+    "rescue_radius_km",
     "tomato.alpha",
     "tomato.q10",
     "tomato.sl_ref_hours"

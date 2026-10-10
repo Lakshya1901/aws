@@ -1,7 +1,8 @@
 """Amazon Transcribe (voice in) and Amazon Polly (voice out), via the private audio bucket (CLAUDE.md Sections 10, 14.4).
 
 Transcribe batch languages (checked 2026-10-08, https://docs.aws.amazon.com/transcribe/latest/dg/supported-languages.html):
-hi-IN, kn-IN and en-IN support batch. Batch accepts M4A, WAV, MP3, FLAC, Ogg, WebM, AMR, MP4
+hi-IN, kn-IN and en-IN support batch; so do bn-IN, gu-IN, ml-IN, mr-IN, or-IN, pa-IN, ta-IN, te-IN and ne-NP
+(checked 2026-10-10). Urdu, Assamese, Maithili, Santali, Kashmiri, Sindhi, Dogri, Konkani and Manipuri are not supported. Batch accepts M4A, WAV, MP3, FLAC, Ogg, WebM, AMR, MP4
 (https://docs.aws.amazon.com/transcribe/latest/dg/how-input.html).
 
 Polly voices (checked 2026-10-08, https://docs.aws.amazon.com/polly/latest/dg/available-voices.html):
@@ -14,7 +15,8 @@ import time
 import uuid
 
 REGION = os.environ.get("AWS_REGION", "ap-south-1")
-TRANSCRIBE_LANG = {"hi": "hi-IN", "kn": "kn-IN", "en": "en-IN"}
+TRANSCRIBE_LANG = {"hi": "hi-IN", "kn": "kn-IN", "en": "en-IN", "bn": "bn-IN", "gu": "gu-IN", "ml": "ml-IN",
+                   "mr": "mr-IN", "or": "or-IN", "pa": "pa-IN", "ta": "ta-IN", "te": "te-IN", "ne": "ne-NP"}
 POLLY = {"hi": {"VoiceId": "Kajal", "LanguageCode": "hi-IN", "Engine": "neural"},
          "en": {"VoiceId": "Kajal", "LanguageCode": "en-IN", "Engine": "neural"}}
 URL_TTL_S = 900

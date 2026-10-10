@@ -67,7 +67,7 @@ def _assumptions_used(results, crops, configs):
         i = r["impact"]
         if i["waste_avoided_kg"] is not None and i["redirected_kg"]:
             keys.add("dump_share_table")
-            if below_cost(r["default"], crops[r["crop"]]["harvest_cost_rs_per_kg"]):
+            if below_cost(r["default"], crops[r["crop"]].get("harvest_cost_rs_per_kg")):
                 keys.add("below_cost_dump_share")
         if i["diesel_l"] is not None:
             keys.update(("diesel_l_per_km", "co2_kg_per_l_diesel"))
@@ -115,7 +115,7 @@ def rescue(load, outlets, configs, as_of_date):
     crop = get_crop(configs, load["crop"])
     r = rescue_load(load, crop, outlets, configs)
     a = configs["assumptions"]
-    keys = {"max_radius_km"}
+    keys = {"rescue_radius_km"}
     for o in (r["top"], r["recover"]):
         if o is not None:
             keys.add("freight_rs_per_tonne_km")

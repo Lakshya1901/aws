@@ -1,0 +1,47 @@
+{
+  "crop_id": "ashgourd",
+  "names": {
+    "en": "Ash gourd",
+    "hi": "पेठा",
+    "kn": "ಬೂದುಗುಂಬಳ"
+  },
+  "agmarknet_commodity": "Ashgourd",
+  "t_ref_c": 25,
+  "sl_ref_hours": 1920,
+  "sl_ref_hours_range": [
+    1920,
+    1920
+  ],
+  "q10": 2.27,
+  "alpha": 0.18,
+  "storable": true,
+  "harvest_cost_rs_per_kg": null,
+  "unit_box_kg": null,
+  "water_l_per_kg": 336.0,
+  "second_life": [
+    "processor",
+    "food_bank",
+    "biogas",
+    "compost"
+  ],
+  "status": {
+    "t_ref_c": "sourced",
+    "q10": "assumption",
+    "sl_ref_hours": "placeholder",
+    "alpha": "assumption",
+    "storable": "sourced",
+    "water_l_per_kg": "placeholder",
+    "sl_ref_hours_range": "placeholder"
+  },
+  "sources": {
+    "t_ref_c": "CLAUDE.md Section 11 reference temperature",
+    "q10": "Median Q10 of the vegetables with derived values (no usable respiration data)",
+    "sl_ref_hours": "Ambient life 1920-1920 h at unstated temperature (taken as 25 C), converted to 25 C with Q10; https://phtnet.agri.cmu.ac.th/research/download/pdf/mc510.pdf",
+    "alpha": "Median alpha of the vegetables calibrated on NABCONS 2022; no loss row for this crop",
+    "storable": "https://krishikosh.egranth.ac.in/server/api/core/bitstreams/6b9d8274-954d-430b-967f-9858453db11b/content",
+    "second_life": "Processing: petha (sugar-syrup sweet), sandige (dehydrated product), ready-to-serve beverage/juice, halwa, tutti-frutti, soup (https://krishikosh.egranth.ac.in/server/api/core/bitstreams/6b9d8274-954d-430b-967f-9858453db11b/content); Recover: biogas, compost (D19)",
+    "water_l_per_kg": "Mekonnen and Hoekstra 2010, Report 47, global average, row 'Pumpkins, squash and gourds (broader row)', https://www.waterfootprint.org/resources/Report47-WaterFootprintCrops-Vol1.pdf",
+    "sl_ref_hours_range": "Same basis as sl_ref_hours",
+    "names": "hi/kn pending native review (D33)"
+  }
+}

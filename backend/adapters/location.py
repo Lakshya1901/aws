@@ -1,4 +1,5 @@
-"""Road distance and drive time from Amazon Location Service, cached in data/routes_cache.json (D11).
+"""Road distance and drive time from Amazon Location Service, cached in data/routes_cache.json (D11), and typed
+places geocoded with Amazon Location place search, cached in data/places_cache.json (D31).
 
 Cache key "<origin_key>|<outlet_id>": origin_key is "lat,lon" rounded to 3 dp, or a named demo village id
 (matched exactly against origin["place"]). Live calls happen only when DATA_SOURCE=dynamodb and
@@ -50,3 +51,56 @@ def routes_for(origin, destinations, live=True):
         if hit is not None:
             out[d["id"]] = {"distance_km": hit["distance_km"], "drive_hours": hit["drive_hours"]}
     return out
+
+
+MIN_PLACE_RELEVANCE = 0.9  # below this the match is too loose to route from (assumption)
+_live_places = {}
+
+
+def places_path():
+    return os.environ.get("PLACES_CACHE") or os.path.join(ROOT, "data", "places_cache.json")
+
+
+def search_place(text, index):
+    """{lat, lon, label, relevance, source, fetched_at} for the best match in India, or None below
+    MIN_PLACE_RELEVANCE."""
+    import boto3  # lazy: tests and snapshot mode never need it
+    res = boto3.client("location", region_name=REGION).search_place_index_for_text(
+        IndexName=index, Text=text, FilterCountries=["IND"], MaxResults=1)["Results"]
+    if not res or res[0].get("Relevance", 0) < MIN_PLACE_RELEVANCE:
+        return None
+    lon, lat = res[0]["Place"]["Geometry"]["Point"]
+    return {"lat": round(lat, 5), "lon": round(lon, 5), "label": res[0]["Place"].get("Label"),
+            "relevance": res[0]["Relevance"], "source": f"amazon_location:{index}",
+            "fetched_at": datetime.now(timezone.utc).isoformat()}
+
+
+def geocode_place(key, text):
+    """A typed city, town or village (key = its normalised form) from the cache, else live when DATA_SOURCE=dynamodb
+    and LOCATION_PLACE_INDEX are set. None when not found."""
+    try:
+        with open(places_path(), encoding="utf-8") as fh:
+            known = {**json.load(fh), **_live_places}
+    except FileNotFoundError:
+        known = dict(_live_places)
+    if key in known:
+        return known[key]
+    index = os.environ.get("LOCATION_PLACE_INDEX")
+    if os.environ.get("DATA_SOURCE") == "dynamodb" and index:
+        _live_places[key] = search_place(text, index)
+        return _live_places[key]
+    return None
+
+
+if __name__ == "__main__":
+    # python backend/adapters/location.py <place-index> <place>...: add places to data/places_cache.json
+    import sys
+    sys.path.insert(0, os.path.join(ROOT))
+    from backend.handlers.advisor import _place_key
+    path = places_path()
+    cache = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {}
+    for name in sys.argv[2:]:
+        cache[_place_key(name)] = hit = search_place(name, sys.argv[1])
+        print(name, hit)
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write(json.dumps(cache, indent=1, ensure_ascii=False) + "\n")

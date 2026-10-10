@@ -5,9 +5,11 @@ import { useEffect, useState } from 'react';
 import { TextInput, View } from 'react-native';
 import { api } from '../api/client';
 import type { CropInfo, CropStatus } from '../api/types';
-import { Banner, Btn, Loading, Screen, T, s, useErrorText } from '../components/ui';
+import { Pressable } from 'react-native';
+import { Icon } from '../components/Icon';
+import { Banner, Btn, ListRow, Loading, Screen, Surface, T, useErrorText } from '../components/ui';
 import { useSession } from '../lib/session';
-import { C, SIZE } from '../lib/theme';
+import { C, RADIUS, SIZE } from '../lib/theme';
 
 const POLL_MS = 10_000;
 
@@ -66,46 +68,56 @@ export default function CropsScreen() {
 
   return (
     <Screen>
-      <TextInput
-        value={query}
-        onChangeText={setQuery}
-        placeholder={t('search_crop')}
-        accessibilityLabel={t('search_crop')}
-        style={{
-          minHeight: SIZE.touch,
-          borderWidth: 2,
-          borderColor: C.border,
-          borderRadius: 8,
-          paddingHorizontal: 12,
-          fontSize: SIZE.large,
-          color: C.text,
-          backgroundColor: C.bg,
-        }}
-      />
+      <View style={{ gap: 6 }}>
+        <T bold size={SIZE.small}>
+          {t('search_crop')}
+        </T>
+        <TextInput
+          value={query}
+          onChangeText={setQuery}
+          accessibilityLabel={t('search_crop')}
+          style={{
+            minHeight: SIZE.touch,
+            borderWidth: 1,
+            borderColor: C.outline,
+            borderRadius: RADIUS.field,
+            paddingHorizontal: 12,
+            fontSize: SIZE.base,
+            color: C.text,
+            backgroundColor: C.surface,
+          }}
+        />
+      </View>
       {error && <Banner kind="error" text={error} />}
 
       {picked && (
-        <View style={s.card}>
-          <T bold size={SIZE.title}>
+        <Surface style={{ padding: 16, gap: 8 }}>
+          <T bold size={SIZE.large}>
             {picked.name}
           </T>
-          {!picked.routing && <T>{t('radar_only')}</T>}
+          {!picked.routing && <Banner kind="info" text={t('radar_only')} />}
           {status === null && !error && <Loading />}
           {status === 'ready' && <Btn label={t('data_ready')} onPress={show} />}
           {status === 'available' && <Btn label={t('get_data')} onPress={() => void fetchData()} />}
           {status === 'fetching' && <Banner kind="info" text={t('fetching_data')} />}
-        </View>
+        </Surface>
       )}
 
       {!crops.length && !error && <Loading />}
-      {list.map((c) => (
-        <Btn
-          key={c.crop_id}
-          kind={picked?.crop_id === c.crop_id ? 'primary' : 'secondary'}
-          label={c.name}
-          onPress={() => void pick(c)}
-        />
-      ))}
+      {list.length > 0 && (
+        <Surface>
+          {list.map((c, i) => (
+            <Pressable key={c.crop_id} accessibilityRole="button" onPress={() => void pick(c)}>
+              <ListRow first={i === 0} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+                <T bold={picked?.crop_id === c.crop_id} style={{ flexShrink: 1 }}>
+                  {c.name}
+                </T>
+                {picked?.crop_id === c.crop_id && <Icon name="check" size={22} color={C.primary} strokeWidth={2.6} />}
+              </ListRow>
+            </Pressable>
+          ))}
+        </Surface>
+      )}
     </Screen>
   );
 }

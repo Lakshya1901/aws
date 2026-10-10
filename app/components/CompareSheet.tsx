@@ -5,7 +5,7 @@ import { fmtNum } from '../i18n';
 import { useSession } from '../lib/session';
 import { C, SIZE } from '../lib/theme';
 import { useOutletLabels } from './RecommendationCard';
-import { Btn, RiskBadge, T, s } from './ui';
+import { Btn, EstNote, RiskBadge, T } from './ui';
 
 export function CompareSheet({
   visible,
@@ -24,7 +24,6 @@ export function CompareSheet({
 }) {
   const { t } = useSession();
   const L = useOutletLabels();
-  const est = `(${t('estimate')})`;
 
   const cell = (o: OutletOption, row: string) => {
     switch (row) {
@@ -37,7 +36,7 @@ export function CompareSheet({
       case 'spoilage':
         return (
           <T bold>
-            {o.spoilage_share != null ? `${Math.round(o.spoilage_share * 100)}% ${est}` : t('not_estimated')}
+            {o.spoilage_share != null ? `${Math.round(o.spoilage_share * 100)}%` : t('not_estimated')}
           </T>
         );
       case 'earn_kg':
@@ -53,7 +52,7 @@ export function CompareSheet({
               ? `${t('rs_range', {
                   low: fmtNum(o.net_rs_per_kg.low * quantityKg),
                   high: fmtNum(o.net_rs_per_kg.high * quantityKg),
-                })} ${est}`
+                })}`
               : t('not_estimated')}
           </T>
         );
@@ -71,35 +70,53 @@ export function CompareSheet({
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose} transparent>
-      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' }}>
-        <View style={{ backgroundColor: C.bg, borderTopLeftRadius: 16, borderTopRightRadius: 16, maxHeight: '90%' }}>
-          <ScrollView contentContainerStyle={{ padding: 16, gap: 12 }}>
-            <T bold size={SIZE.title}>
+      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' }}>
+        <View style={{ backgroundColor: C.surface, borderTopLeftRadius: 28, borderTopRightRadius: 28, maxHeight: '90%' }}>
+          <View
+            style={{ alignSelf: 'center', width: 32, height: 4, borderRadius: 2, backgroundColor: C.outline, marginTop: 12 }}
+          />
+          <ScrollView contentContainerStyle={{ padding: 20, gap: 12 }}>
+            <T bold size={SIZE.large}>
               {t('compare_title', { default: L.name(dflt), top: L.name(top) })}
             </T>
-            <T>{t('load_line', { qty: fmtNum(quantityKg), crop: '' }).trim()}</T>
+            <T color={C.muted}>{t('load_line', { qty: fmtNum(quantityKg), crop: '' }).trim()}</T>
             <View style={{ flexDirection: 'row', gap: 8 }}>
               <View style={{ flex: 1 }} />
               <View style={{ flex: 1 }}>
                 <T bold>{t('col_default')}</T>
-                <T>{L.name(dflt)}</T>
+                <T size={SIZE.small} color={C.muted}>
+                  {L.name(dflt)}
+                </T>
               </View>
               <View style={{ flex: 1 }}>
                 <T bold color={C.primary}>
                   {t('col_recommended')}
                 </T>
-                <T>{L.name(top)}</T>
+                <T size={SIZE.small} color={C.muted}>
+                  {L.name(top)}
+                </T>
               </View>
             </View>
-            {rows.map(([key, label]) => (
-              <View key={key} style={[s.card, { flexDirection: 'row', gap: 8, padding: 10 }]}>
-                <View style={{ flex: 1 }}>
-                  <T color={C.muted}>{label}</T>
+            <View>
+              {rows.map(([key, label], i) => (
+                <View
+                  key={key}
+                  style={[
+                    { flexDirection: 'row', gap: 8, paddingVertical: 12, alignItems: 'center' },
+                    i > 0 && { borderTopWidth: 1, borderTopColor: C.divider },
+                  ]}
+                >
+                  <View style={{ flex: 1 }}>
+                    <T size={SIZE.small} color={C.muted}>
+                      {label}
+                    </T>
+                  </View>
+                  <View style={{ flex: 1 }}>{cell(dflt, key)}</View>
+                  <View style={{ flex: 1 }}>{cell(top, key)}</View>
                 </View>
-                <View style={{ flex: 1 }}>{cell(dflt, key)}</View>
-                <View style={{ flex: 1 }}>{cell(top, key)}</View>
-              </View>
-            ))}
+              ))}
+            </View>
+            <EstNote />
             <Btn label={t('close')} onPress={onClose} />
             <Btn kind="secondary" label={`${t('send_here')}: ${L.name(dflt)}`} onPress={onUseDefault} />
           </ScrollView>

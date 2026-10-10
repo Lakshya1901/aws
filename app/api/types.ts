@@ -1,12 +1,33 @@
 // Request/response types for the AnnaSetu API (CLAUDE.md Section 13).
 // Shapes match backend/handlers/advisor.py and voice.py and the stored responses in backend/tests/api_fixtures/.
 
-export type Lang = 'en' | 'hi' | 'kn';
-export type CropId = 'tomato' | 'onion' | 'potato' | 'banana';
-export const CROPS: CropId[] = ['tomato', 'onion', 'potato', 'banana']; // MVP crops (Section 6)
+export type Lang =
+  | 'en'
+  | 'hi'
+  | 'bn'
+  | 'mr'
+  | 'te'
+  | 'ta'
+  | 'gu'
+  | 'ur'
+  | 'kn'
+  | 'or'
+  | 'ml'
+  | 'pa'
+  | 'as'
+  | 'mai'
+  | 'sat'
+  | 'ks'
+  | 'ne'
+  | 'sd'
+  | 'doi'
+  | 'kok'
+  | 'mni';
+/** A crop with a routing profile (GET /crops routing: true); all 50 preloaded fruits and vegetables (D33). */
+export type CropId = string;
+export const DEFAULT_MY_CROPS: CropId[] = ['tomato', 'onion', 'potato']; // until the farmer picks theirs in Settings
 /** Any AGMARKNET commodity id from GET /crops (config/commodities.json); the Glut Radar takes any (D24). */
 export type RadarCropId = string;
-export const isRouterCrop = (c: string | null): c is CropId => c !== null && (CROPS as string[]).includes(c);
 export type RiskLevel = 'safe' | 'watch' | 'glut';
 export type Mode = 'predictive' | 'same_day';
 export type Harvest = 'today' | 'tomorrow' | 'harvested';
@@ -103,10 +124,13 @@ export interface VoiceParseResponse extends FixtureMark {
 
 // ---------- POST /recommend ----------
 
-/** lat and lon are required: the API answers 422 origin_unknown without them (place names are not geocoded). */
+/**
+ * lat and lon, or a typed city, town or village (lat/lon null) that the API matches to a market or district name;
+ * 422 origin_unknown when neither works.
+ */
 export interface Origin {
-  lat: number;
-  lon: number;
+  lat: number | null;
+  lon: number | null;
   place?: string | null;
 }
 
@@ -332,6 +356,7 @@ export interface CropInfo {
   markets: number; // markets that reported it in the source data
   preload: boolean; // loaded daily (top fruits and vegetables)
   routing: boolean; // full crop profile: recommendations work
+  names?: Partial<Record<Lang, string>>; // routable crops: names from the crop profile (en, hi, kn)
   status?: CropStatus; // only with ?crop=
 }
 

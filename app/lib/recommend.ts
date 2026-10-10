@@ -39,14 +39,16 @@ export async function deviceCoords(): Promise<{ lat: number; lon: number } | nul
 
 /**
  * POST /recommend for a complete draft, store it, open the Recommendation screen. Throws on failure.
- * The API needs origin lat/lon (422 origin_unknown otherwise): use the draft's, else the device location;
- * without either, throw origin_unknown so the screen asks for location access or coordinates.
+ * Origin: the draft's coordinates, else the typed place (resolved by the API), else the device location;
+ * without any, throw origin_unknown so the screen asks for location access or a place.
  */
 export function useRecommend() {
   const { lang, planId, setPlanId, setCurrent, coords, setCoords } = useSession();
   return async (d: LoadDraft) => {
     if (!d.crop || !d.quantity_kg || !d.harvest) throw new Error('incomplete');
-    let at = d.lat !== null && d.lon !== null ? { lat: d.lat, lon: d.lon } : coords;
+    // Coordinates from "Use my location" win; else the typed city, town or village; else the device location.
+    const typed = d.origin_place?.trim() ? { lat: null, lon: null } : null;
+    let at = d.lat !== null && d.lon !== null ? { lat: d.lat, lon: d.lon } : (typed ?? coords);
     if (!at) {
       at = await deviceCoords();
       if (at) setCoords(at);

@@ -1,0 +1,45 @@
+{
+  "crop_id": "elephant_yam_suran",
+  "names": {
+    "en": "Elephant yam (suran)",
+    "hi": "सूरन (जिमीकंद)",
+    "kn": "ಸುವರ್ಣಗೆಡ್ಡೆ"
+  },
+  "agmarknet_commodity": "Elephant Yam (Suran)",
+  "t_ref_c": 25,
+  "sl_ref_hours": 108,
+  "sl_ref_hours_range": [
+    81,
+    135
+  ],
+  "q10": 2.27,
+  "alpha": 0.18,
+  "storable": true,
+  "harvest_cost_rs_per_kg": null,
+  "unit_box_kg": null,
+  "water_l_per_kg": null,
+  "second_life": [
+    "processor",
+    "food_bank",
+    "biogas",
+    "compost"
+  ],
+  "status": {
+    "t_ref_c": "sourced",
+    "q10": "assumption",
+    "sl_ref_hours": "assumption",
+    "alpha": "assumption",
+    "storable": "sourced",
+    "sl_ref_hours_range": "assumption"
+  },
+  "sources": {
+    "t_ref_c": "CLAUDE.md Section 11 reference temperature",
+    "q10": "Median Q10 of the vegetables with derived values (no usable respiration data)",
+    "sl_ref_hours": "Median 25 C shelf life of the vegetables with a usable value (+/-25% range); no usable value for this crop",
+    "alpha": "Median alpha of the vegetables calibrated on NABCONS 2022; no loss row for this crop",
+    "storable": "https://journal.isrc.in/index.php/jrc/article/download/642/493/2050",
+    "second_life": "Processing: quick-cooking dehydrated tubers, flour (https://ctcri.org/public/publications/2025-03/04_3-a-s-crop-utilization-compressed.pdf); Recover: biogas, compost (D19)",
+    "sl_ref_hours_range": "Same basis as sl_ref_hours",
+    "names": "hi/kn pending native review (D33)"
+  }
+}

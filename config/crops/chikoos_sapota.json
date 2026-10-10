@@ -1,0 +1,47 @@
+{
+  "crop_id": "chikoos_sapota",
+  "names": {
+    "en": "Sapota (chikoo)",
+    "hi": "चीकू",
+    "kn": "ಸಪೋಟ"
+  },
+  "agmarknet_commodity": "Chikoos(Sapota)",
+  "t_ref_c": 25,
+  "sl_ref_hours": 312,
+  "sl_ref_hours_range": [
+    312,
+    312
+  ],
+  "q10": 2.17,
+  "alpha": 0.74,
+  "storable": false,
+  "harvest_cost_rs_per_kg": null,
+  "unit_box_kg": 10,
+  "water_l_per_kg": null,
+  "second_life": [
+    "processor",
+    "food_bank",
+    "biogas",
+    "compost"
+  ],
+  "status": {
+    "t_ref_c": "sourced",
+    "q10": "assumption",
+    "sl_ref_hours": "placeholder",
+    "alpha": "placeholder",
+    "storable": "sourced",
+    "unit_box_kg": "sourced",
+    "sl_ref_hours_range": "placeholder"
+  },
+  "sources": {
+    "t_ref_c": "CLAUDE.md Section 11 reference temperature",
+    "q10": "Median Q10 of the fruits with derived values (no usable respiration data)",
+    "sl_ref_hours": "Ambient life 312-312 h at 25 C, converted to 25 C with Q10; https://www.ars.usda.gov/arsuserfiles/oc/np/commercialstorage/commercialstorage.pdf",
+    "alpha": "Calibrated like tomato: a 14 h trip at 25 C gives the NABCONS 2022 market-level loss 3.32% (row 'Sapota'), https://www.pib.gov.in/PressReleasePage.aspx?PRID=2151371&reg=48&lang=2",
+    "storable": "https://www.ars.usda.gov/arsuserfiles/oc/np/commercialstorage/commercialstorage.pdf",
+    "second_life": "Processing: dry segments, flakes, jam, jelly, squash, fruit drinks (https://nhb.gov.in/model-project-reports/Horticulture%20Crops%5CSapota%5CSapota1.htm); Recover: biogas, compost (D19)",
+    "unit_box_kg": "https://nhb.gov.in/model-project-reports/Horticulture%20Crops%5CSapota%5CSapota1.htm",
+    "sl_ref_hours_range": "Same basis as sl_ref_hours",
+    "names": "hi/kn pending native review (D33)"
+  }
+}

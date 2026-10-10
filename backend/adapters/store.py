@@ -184,9 +184,10 @@ def _weather_files(path):
 
 
 def temperature_c(lat, lon, day):
-    """Mean of the hourly temperatures on `day` at the weather point nearest to (lat, lon), or None.
+    """Mean of the temperatures on `day` at the weather point nearest to (lat, lon), or None.
 
-    Points are the markets in a weather snapshot file whose from..to covers the day, within max_radius_km.
+    Points are the markets (or NOAA stations) in a weather snapshot file whose from..to covers the day, within
+    max_radius_km. With no snapshot point and WEATHER_LIVE=1: weather.live_temperature_c.
     """
     best, radius = None, assumption(configs()["assumptions"], "max_radius_km")
     for w in _weather_files(snapshot_dir()):
@@ -197,6 +198,14 @@ def temperature_c(lat, lon, day):
             d = haversine_km(lat, lon, p["lat"], p["lon"])
             if temps and d <= radius and (best is None or d < best[0]):
                 best = (d, sum(temps) / len(temps))
+    if best is None and os.environ.get("WEATHER_LIVE") == "1":  # deployed: live forecast or NOAA GHCN (D29)
+        from datetime import datetime, timedelta, timezone
+        from backend.adapters import weather
+        today = (datetime.now(timezone.utc) + timedelta(hours=5, minutes=30)).date().isoformat()
+        try:
+            return weather.live_temperature_c(lat, lon, day, today)
+        except Exception:  # network or data failure: the caller's 422 / split_required path, as without weather
+            return None
     return None if best is None else best[1]
 
 
