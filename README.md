@@ -13,7 +13,7 @@ The core question it answers: **"Where should this load go today, and what will 
 - Track: Waste and Energy, WeMakeDevs x AWS Environmental Hacks: close the loop on what a city throws away (Rescue, Recover), make the city lighter (Prevent), power it cleaner (Recover: biogas)
 - Platform: Android/iOS app (Expo), serverless backend on AWS in ap-south-1, built and deployed with the AWS SAM CLI
 - Demo video: TBD
-- Android APK: TBD
+- Android APK: [annasetu.apk](https://expo.dev/artifacts/eas/BygXbwO-2GY_xedOPQo8k5jfkWs5yDkbset9HNDhyO8.apk) (EAS preview build, October 10; talks to the live API)
 
 | Problem | Decision | Intervention | Impact (shown per load) |
 | --- | --- | --- | --- |
