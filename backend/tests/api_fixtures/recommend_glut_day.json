@@ -249,6 +249,29 @@
      "partnered": false
     },
     {
+     "outlet_id": "abc_fruits",
+     "name": "ABC Fruits (tomato paste)",
+     "type": "processor",
+     "state": "TN",
+     "net_rs_per_kg": null,
+     "net_note": "not yet estimated",
+     "distance_km": 84.35,
+     "distance_approx": false,
+     "drive_hours": 2.109,
+     "spoilage_share": 0.007,
+     "spoilage_range": {
+      "low": 0.0055,
+      "mid": 0.007,
+      "high": 0.0096
+     },
+     "freight_rs_per_kg": 0.9278,
+     "freight_rs_load": 1855.7,
+     "contact": "https://abcfruits.com/products/tomato-paste/",
+     "verified": false,
+     "note": "Not yet partnered. 'Aseptic Tomato Paste is extracted from ripe Tomatoes'; Ankinayanapalli, near Barugur, Krishnagiri (listed address, not stated to be the factory). D31",
+     "partnered": false
+    },
+    {
      "outlet_id": "feel_fresh_foods",
      "name": "Feel Fresh Foods",
      "type": "processor",
@@ -323,6 +346,33 @@
      "contact": "https://bangalorefoodbank.com/",
      "verified": false,
      "note": "Not yet partnered",
+     "partnered": false
+    },
+    {
+     "outlet_id": "chennai_chetpet_biocng",
+     "name": "Chetpet bio-CNG plant (Greater Chennai Corporation)",
+     "type": "biogas",
+     "state": "TN",
+     "net_rs_per_kg": {
+      "low": -3.3319,
+      "mid": -3.3319,
+      "high": -3.3319
+     },
+     "net_note": null,
+     "distance_km": 302.9,
+     "distance_approx": false,
+     "drive_hours": 7.573,
+     "spoilage_share": 0.0252,
+     "spoilage_range": {
+      "low": 0.0198,
+      "mid": 0.0252,
+      "high": 0.0346
+     },
+     "freight_rs_per_kg": 3.3319,
+     "freight_rs_load": 6663.8,
+     "contact": "https://citizenmatters.in/chennai-waste-management-segregation-bio-cng-plants-coc-66998",
+     "verified": false,
+     "note": "Not yet partnered. about 100 t a day of 'vegetable and food waste from Koyambedu market and hotels' (Citizen Matters, 2023-03-07). D31",
      "partnered": false
     }
    ],

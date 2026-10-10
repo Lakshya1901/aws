@@ -115,7 +115,7 @@ def rescue(load, outlets, configs, as_of_date):
     crop = get_crop(configs, load["crop"])
     r = rescue_load(load, crop, outlets, configs)
     a = configs["assumptions"]
-    keys = {"max_radius_km"}
+    keys = {"rescue_radius_km"}
     for o in (r["top"], r["recover"]):
         if o is not None:
             keys.add("freight_rs_per_tonne_km")

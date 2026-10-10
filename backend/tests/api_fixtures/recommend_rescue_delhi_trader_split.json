@@ -87,7 +87,7 @@
    },
    "assumptions_used": [
     "freight_rs_per_tonne_km",
-    "max_radius_km"
+    "rescue_radius_km"
    ]
   }
  }

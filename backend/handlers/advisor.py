@@ -194,10 +194,10 @@ def _float(v, name):
         raise ApiError(400, "bad_request", f"{name} must be a number") from None
 
 
-def _destinations(cfg, outlets, origin, market_ctx=None):
-    """Destinations to route from origin (Section 8.4): markets and outlets within max_radius_km straight-line; with
+def _destinations(cfg, outlets, origin, market_ctx=None, radius_key="max_radius_km"):
+    """Destinations to route from origin (Section 8.4): markets and outlets within radius_key (rescue_radius_km for Rescue, D31) straight-line; with
     market_ctx (a crop's reporting markets), only its nearest `nearest_markets`, the set allocation considers."""
-    radius = assumption(cfg["assumptions"], "max_radius_km")
+    radius = assumption(cfg["assumptions"], radius_key)
 
     def near(items):
         scored = sorted((haversine_km(origin["lat"], origin["lon"], x["lat"], x["lon"]), x["id"], x) for x in items
@@ -336,7 +336,7 @@ def rescue_request(b, cfg, outlets, day):
     origin = resolve_origin(o, cfg)
     return {"crop": b["crop"], "quantity_kg": q, "origin": origin, "hours_since_harvest": h, "split": split,
             "temp_c": store.temperature_c(origin["lat"], origin["lon"], day),
-            "routes": location.routes_for(origin, _destinations(dict(cfg, markets=[]), outlets, origin))}
+            "routes": location.routes_for(origin, _destinations(dict(cfg, markets=[]), outlets, origin, radius_key="rescue_radius_km"))}
 
 
 def post_rescue(body):

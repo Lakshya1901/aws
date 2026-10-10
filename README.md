@@ -182,7 +182,7 @@ Onion, potato and banana profiles exist but have placeholder fields; a profile w
 | Users | No usability test run yet; planned with volunteers before the demo video | Update this row once it happens |
 | Spoilage | Estimated, not measured | On the card and here |
 
-Seeded Second Life outlets (Kolar region, desk research, all "Not yet partnered"): [SNR Foods](https://snrfoods.in/about) (processor, Srinivaspura), [Feel Fresh Foods](https://www.feelfreshfoods.com/about-us.html) (processor, Chittoor belt), [Kolar Food Bank](https://kolarfoodbank.1ngo.in/), [Bangalore Food Bank](https://bangalorefoodbank.com/) fresh produce recovery.
+Seeded Second Life outlets (Kolar region, desk research, all "Not yet partnered"): [SNR Foods](https://snrfoods.in/about) (processor, Srinivaspura), [Feel Fresh Foods](https://www.feelfreshfoods.com/about-us.html) (processor, Chittoor belt), [Kolar Food Bank](https://kolarfoodbank.1ngo.in/), [Bangalore Food Bank](https://bangalorefoodbank.com/) fresh produce recovery. Delhi: India FoodBanking Network. Other states (D31): biogas units in Indore, Surat, Hyderabad, Ujjain, Chennai, Kochi and Gwalior; compost units in Agra; onion dehydration plants in Mahuva and tomato processors in Shimla and Krishnagiri. Sources in `config/outlets.json`. Rescue looks within 100 km of the trader (assumption).
 
 ## 7. Architecture and AWS usage
 

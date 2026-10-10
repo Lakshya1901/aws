@@ -317,3 +317,25 @@ def test_market_with_old_data_is_listed_but_never_chosen(configs):
     listed = {o["outlet_id"]: o for o in [r["top"], r["default"]] + r["alternatives"]}
     assert "madanapalle" in listed and r["top"]["outlet_id"] != "madanapalle"
     assert listed["madanapalle"]["net_rs_per_kg"]["mid"] > r["top"]["net_rs_per_kg"]["mid"]
+
+
+def test_rescue_uses_rescue_radius_not_market_radius(configs):
+    # D31: a processor 150 km away is inside max_radius_km (300) but outside rescue_radius_km (100).
+    lot = unsold(split={"edible_kg": 700, "spoiled_kg": 300})
+    o = lot["origin"]
+    far = [dict(OUTLETS[0], outlet_id="far_proc", type="processor", lat=o["lat"] + 150 / 111.2, lon=o["lon"])]
+    assert rescue(lot, far, configs, AS_OF)["top"] is None
+    c = copy.deepcopy(configs)
+    c["assumptions"]["rescue_radius_km"]["value"] = 300
+    assert rescue(lot, far, c, AS_OF)["top"]["outlet_id"] == "far_proc"
+
+
+@pytest.mark.parametrize("lat,lon,recover_id", [
+    (13.0694, 80.1948, "chennai_chetpet_biocng"),  # Koyambedu, Chennai
+    (17.4694, 78.4945, "hyderabad_bowenpally_biogas"),  # Bowenpally, Hyderabad
+    (27.2079, 77.9772, "agra_transport_nagar_compost"),  # Transport Nagar, Agra
+])
+def test_rescue_outside_demo_regions_uses_seeded_outlets(configs, lat, lon, recover_id):
+    # D31: seeded outlets in config/outlets.json reach cities beyond Kolar and Delhi.
+    lot = unsold(split={"edible_kg": 700, "spoiled_kg": 300}, origin={"lat": lat, "lon": lon})
+    assert rescue(lot, configs["outlets"], configs, AS_OF)["recover"]["outlet_id"] == recover_id
