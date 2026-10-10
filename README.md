@@ -203,6 +203,22 @@ Seeded Second Life outlets (Kolar region, desk research, all "Not yet partnered"
 
 Everything runs in **ap-south-1** and is defined in `infra/template.yaml`, built and deployed with the **AWS SAM CLI** (open source: `sam build`, `sam deploy`, `sam local start-api`). This meets the prize-eligibility rule both ways: deployed on AWS, and built with an AWS open-source tool.
 
+### Tech stack
+
+| Layer | Technology | AWS used |
+| --- | --- | --- |
+| Mobile app | React Native 0.86 + Expo SDK 57, TypeScript, expo-router; Noto fonts for 21 languages; built with EAS | Talks only to API Gateway |
+| API | HTTP JSON (Section 13 of CLAUDE.md) | API Gateway HTTP API, Lambda authorizer, SSM Parameter Store (API key) |
+| Decision engine | Python 3.13, pure functions in `backend/core/` (no ML, no AWS imports) | AWS Lambda (`advisor`) |
+| Data pipeline | India Data Portal AGMARKNET bulk files, split per crop | S3 (per-crop history), EventBridge Scheduler, SQS + dead-letter queue, Lambda (`ingest`), DynamoDB (MarketRisk) |
+| Storage | Outlets, plans, overrides, risk | DynamoDB (on-demand), S3 |
+| Maps and routing | Market and place geocoding, truck routes and drive time | Amazon Location Service (place index, route calculator) |
+| Weather | Daily station temperature, live forecast | NOAA GHCN-Daily on the AWS Registry of Open Data (S3); Open-Meteo for the forecast |
+| Voice and language | Speech in 12 Indian languages, spoken replies, plain-language explanations | Amazon Transcribe, Amazon Polly, Amazon Bedrock (Converse API) |
+| Infrastructure as code | `infra/template.yaml`, Makefile build | AWS SAM CLI, CloudFormation, IAM (one least-privilege role per function) |
+| Monitoring | Logs, ingest failure and dead-letter alarms | CloudWatch |
+| Analysis | `analysis/backtest.py` (Python, pandas, NumPy, matplotlib; deterministic) | Results stored in S3 (`backtest/`) |
+
 ```mermaid
 flowchart LR
   App["Mobile app<br/>(Expo, Android/iOS)"] -->|"HTTPS + x-api-key"| APIGW["API Gateway HTTP API<br/>10 rps"]
@@ -229,14 +245,15 @@ flowchart LR
 | API Gateway (HTTP API) + Lambda authorizer | The only entry point; the app never calls AWS services directly and holds no AWS credentials |
 | Lambda `advisor` | Runs the deterministic engine (`backend/core/`) for the radar, recommendations, plans and the impact ledger |
 | Lambda `voice` | Presigned audio upload, Transcribe job, Bedrock parse, Polly reply |
-| Lambda `ingest` + EventBridge Scheduler | Daily pull of recent prices and arrivals, writes MarketDay and recomputes MarketRisk |
+| Lambda `ingest` + EventBridge Scheduler + SQS | Daily fan-out of the 50 preloaded crops over SQS (one invocation per crop, retries, dead-letter queue); each run reads the crop's market-level history from S3 and recomputes MarketRisk. Other crops load on request (POST /crops/fetch) |
 | DynamoDB (on-demand) | MarketDay, MarketRisk, Outlets, Plans (every recommendation, explanation input/output and override) |
 | S3 | Private data bucket (raw pulls, snapshot) and audio bucket (deleted after 1 day) |
-| Amazon Location Service | Market geocoding (once) and route distance and drive time (cached) |
+| Amazon Location Service | Market geocoding (once), any typed city, town or village in India, and route distance and drive time (cached) |
 | Amazon Bedrock | One small model, temperature 0, 3 s timeout: parses a spoken load into fields, and explains a computed recommendation in two sentences. It never calculates or chooses an outlet; any number not in its input triggers a per-language template |
-| Amazon Transcribe | Batch speech-to-text in Hindi, Kannada, Indian English |
+| Amazon Transcribe | Batch speech-to-text in 12 Indian languages (English, Hindi, Bengali, Gujarati, Kannada, Malayalam, Marathi, Odia, Punjabi, Tamil, Telugu, Nepali) |
 | Amazon Polly | Spoken replies in Hindi and Indian English (no Kannada voice exists) |
 | SSM Parameter Store | App API key and data.gov.in key (SecureString) |
+| NOAA GHCN-Daily (AWS Registry of Open Data) | Station temperatures for past days (spoilage estimate), read from the public S3 bucket |
 | CloudWatch | Logs; alarm on ingest failure |
 
 Each function has its own least-privilege IAM role. No credentials, account IDs or model IDs are committed.
