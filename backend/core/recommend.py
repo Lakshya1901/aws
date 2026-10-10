@@ -80,7 +80,15 @@ def _assumptions_used(results, crops, configs):
 
 
 def _stale(result):
-    return any(o.get("stale") for o in [result["top"], result["default"]] + result["alternatives"])
+    """Prices out of date at the recommended or the nearest market (the two the card compares); alternatives
+    further down carry their own stale flag."""
+    return any(o.get("stale") for o in (result["top"], result["default"]))
+
+
+def _prices_date(results):
+    """Oldest latest-report date among the recommended and nearest mandis, or None (shown as "Prices from")."""
+    dates = [o["latest_date"] for r in results for o in (r["top"], r["default"]) if o.get("latest_date")]
+    return min(dates) if dates else None
 
 
 def plan(loads, market_days, markets, outlets, configs, as_of_date, ctx=None):
@@ -95,7 +103,8 @@ def plan(loads, market_days, markets, outlets, configs, as_of_date, ctx=None):
     results, added = allocate(loads, crops, ctx, outlets, configs)
     return _round({
         "mode": {c: crop_mode(configs["model"], c) for c in crop_ids},
-        "data": {"as_of_date": to_date(as_of_date).isoformat(), "stale": any(_stale(r) for r in results)},
+        "data": {"as_of_date": to_date(as_of_date).isoformat(), "stale": any(_stale(r) for r in results),
+                 "prices_date": _prices_date(results)},
         "allocations": results,
         "dA_kg": added,
         "impact": total_impact([r["impact"] for r in results]),

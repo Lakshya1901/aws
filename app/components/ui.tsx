@@ -168,9 +168,11 @@ export function DataBanners({
   stale,
   demoLoads,
   demoLabel,
+  pricesDate,
 }: {
   fixture?: boolean;
   replayDate?: string | null;
+  pricesDate?: string | null; // live data: the date the shown prices are from
   stale?: boolean;
   demoLoads?: boolean;
   demoLabel?: string;
@@ -191,6 +193,10 @@ export function DataBanners({
           ) : null}
           {demoLoads ? <Tag text={demoLabel ?? t('demo_loads')} /> : null}
         </View>
+      ) : pricesDate ? (
+        <T size={SIZE.label} color={C.muted}>
+          {t('prices_from', { date: fmtDate(pricesDate) })}
+        </T>
       ) : null}
       {stale ? <Banner kind="warn" text={t('stale')} /> : null}
     </>

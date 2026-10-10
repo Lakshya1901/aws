@@ -454,13 +454,13 @@ def test_live_prices(api, monkeypatch, tmp_path):
     (cfg / "markets.json").write_text(json.dumps({"_note": "TEST ONLY", "markets": [
         dict(m, agmarknet={"market_id": ids[m["market_id"]], "state_id": 16}) for m in MARKETS]}))
     store._configs.cache_clear()
-    series = {112: [12, 12, 12, 12, 12, 8, 7], 99: [15] * 7, 3001: [11] * 7}
+    series = {112: [12, 12, 12, 12, 12, 8, 7], 99: [15] * 7, 3001: [11, None, 11, None, 11, 11, 11]}  # 3001: no report 3 days back
 
     def last_week(market_id, state_id, commodity_id, timeout=5):
         assert commodity_id == 65
         if market_id not in series:
             raise OSError("TEST ONLY: market did not answer")
-        return [((today - timedelta(days=7 - i)).isoformat(), p) for i, p in enumerate(series[market_id])]
+        return [((today - timedelta(days=7 - i)).isoformat(), p) for i, p in enumerate(series[market_id]) if p]
     monkeypatch.setattr(agmarknet, "last_week", last_week)
 
     def call_live(method, path, query=None, body=None):
@@ -473,6 +473,7 @@ def test_live_prices(api, monkeypatch, tmp_path):
         status, r = call_live("POST", "/recommend", body=_recommend_body())
         assert status == 200, r
         assert r["replay_date"] is None and r["demo_loads"] is False and r["data"]["as_of_date"] == today.isoformat()
+        assert r["data"]["prices_date"] == (today - timedelta(days=1)).isoformat()
         assert r["default"]["outlet_id"] == "kolar" and r["default"]["risk_level"] == "glut"
         assert r["top"]["type"] == "mandi" and r["top"]["outlet_id"] != "kolar" and r["top"]["price_only"] is True
         assert r["impact"]["waste_avoided_kg"] is not None and "price_only_ratio" in r["assumptions_used"]

@@ -71,6 +71,7 @@ export default function PlanScreen() {
             replayDate={data.replay_date}
             stale={data.data.stale}
             demoLoads={data.demo_loads}
+            pricesDate={data.data.prices_date}
           />
           <View style={{ gap: 4 }}>
             <T bold size={SIZE.title}>

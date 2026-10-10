@@ -189,7 +189,11 @@ export function RecommendationCard({
         <Row
           label={t('redirected')}
           value={t('kg_value', { v: fmtNum(impact.redirected_kg) })}
-          sub={impact.redirected_kg > 0 ? t('redirected_value', { qty: fmtNum(impact.redirected_kg) }) : undefined}
+          sub={
+            impact.redirected_kg > 0 && (dflt.risk_level === 'watch' || dflt.risk_level === 'glut')
+              ? t('redirected_value', { qty: fmtNum(impact.redirected_kg) })
+              : t('redirected_note')
+          }
         />
         <Row label={t('extra_km')} value={extraKm} sub={diesel} />
       </Surface>

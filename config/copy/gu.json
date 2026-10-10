@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from"
     ]
   },
   "new_load": "નવો લોડ",
@@ -379,6 +379,7 @@
   "data_live": "લાઇવ: આજના મંડીના ભાવ",
   "data_demo": "ડેમો: વધુ આવકનો સાચો દિવસ",
   "data_hint": "લાઇવમાં તમારી નજીકના બજારોના આજના ભાવ આવે છે. ડેમો 29 સપ્ટેમ્બર 2023ની કોલારની ટમેટાની વધુ આવક ફરી બતાવે છે.",
+  "prices_from": "{date} ના ભાવ",
   "count_since": "{date} થી {n} લોડ",
   "ledger_empty": "હજી કંઈ નથી. તમારો રેકોર્ડ શરૂ કરવા સૂચન પર \"આ જ પસંદ કરો\" દબાવો.",
   "saved_record": "તમારા રેકોર્ડમાં સાચવ્યું",

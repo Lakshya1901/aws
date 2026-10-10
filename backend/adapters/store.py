@@ -170,7 +170,8 @@ def live_contexts(crop, as_of_date, origins):
     from concurrent.futures import ThreadPoolExecutor
     from backend.adapters import agmarknet
     from backend.core.pricing import price_change_sd
-    from backend.core.risk import market_risk, price_only_level
+    from datetime import timedelta
+    from backend.core.risk import market_risk, price_only_level, to_date
     cfg = configs()
     cid = (cfg["commodities"].get(crop) or {}).get("agmarknet_id")
     if cid is None:
@@ -218,9 +219,17 @@ def live_contexts(crop, as_of_date, origins):
         if not rows:
             continue
         risk = market_risk(rows, as_of_date, model, cfg["assumptions"])
+        # Agmarknet reports skip days, so the price 3 days back is often missing: compare with the latest report on
+        # or before that day this week, else the week's first report (no drop seen = safe).
+        latest = risk["latest_date"]
+        back = [r for r in rows if r["date"] <= (to_date(latest) - timedelta(days=3)).isoformat()] or rows[:1]
+        if risk["price_change_3d"] is None:
+            base = back[-1]["modal_price_kg"]
+            risk["price_change_3d"] = (risk["price_kg"] - base) / base
         risk.update(risk_level=price_only_level(risk["price_change_3d"], model["risk"]), price_only=True)
         sd = price_change_sd(rows, as_of_date, model["elasticity"]["range_max_gap_days"])
-        sd = sd if sd is not None else hist[m["market_id"]]
+        if not sd and hist[m["market_id"]] is not None:  # none, or an unchanged week: the market's history
+            sd = hist[m["market_id"]]
         if risk["price_kg"] is None or sd is None:
             continue
         out.append({"market": m, "risk": risk, "fit": {"b": None, "resid_sd": sd}})

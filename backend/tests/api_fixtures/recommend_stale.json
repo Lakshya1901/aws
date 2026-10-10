@@ -25,7 +25,8 @@
    "demo_loads": true,
    "data": {
     "as_of_date": "2025-04-04",
-    "stale": true
+    "stale": true,
+    "prices_date": "2025-04-01"
    },
    "crop": "tomato",
    "quantity_kg": 2000,

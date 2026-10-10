@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from"
     ]
   },
   "new_load": "नव लोड",
@@ -379,6 +379,7 @@
   "data_live": "लाइव: आजुक मंडी भाव",
   "data_demo": "डेमो: बेसी आमदक असली दिन",
   "data_hint": "लाइव मे अहाँक लगक मंडीक आजुक भाव अबैत अछि। डेमो 29 सितंबर 2023 क कोलारक टमाटरक बेसी आमद फेर देखबैत अछि।",
+  "prices_from": "{date} क भाव",
   "count_since": "{date} सँ {n} लोड",
   "ledger_empty": "एखन किछु नहि। अपन रिकॉर्ड शुरू करबा लेल सुझाव पर \"इएह चुनू\" दबाउ।",
   "saved_record": "अहाँक रिकॉर्ड मे सहेजल गेल",

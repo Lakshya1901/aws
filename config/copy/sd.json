@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from"
     ]
   },
   "new_load": "نئون لوڊ",
@@ -379,6 +379,7 @@
   "data_live": "لائيو: اڄ جا منڊي اگهه",
   "data_demo": "ڊيمو: تمام گهڻي آمد جو اصل ڏينهن",
   "data_hint": "لائيو ۾ اوهان جي ويجهن منڊين جا اڄ جا اگهه اچن ٿا. ڊيمو 29 سيپٽمبر 2023 جي ڪولار جي ٽماٽن جي تمام گهڻي آمد ٻيهر ڏيکاري ٿو.",
+  "prices_from": "{date} جا اگهه",
   "count_since": "{date} کان {n} لوڊ",
   "ledger_empty": "اڃا ڪجهه ناهي. پنهنجو رڪارڊ شروع ڪرڻ لاءِ صلاح تي \"اهو چونڊيو\" دٻايو.",
   "saved_record": "توهان جي رڪارڊ ۾ محفوظ ٿيو",

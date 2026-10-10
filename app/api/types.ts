@@ -44,6 +44,7 @@ export interface Range {
 export interface Freshness {
   as_of_date: string;
   stale: boolean;
+  prices_date?: string | null; // oldest latest report of the recommended and nearest markets (D34)
 }
 
 /** Present on every fixture so fixture numbers can never pass as real data. */

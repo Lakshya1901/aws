@@ -142,7 +142,7 @@ export default function RecommendationScreen() {
   return (
     <Screen>
       <Stack.Screen options={{ title: t('load_line', { qty: fmtNum(req.quantity_kg), crop: cropLabel(req.crop) }) }} />
-      <DataBanners fixture={res._fixture} replayDate={res.replay_date} stale={res.data.stale} demoLoads={res.demo_loads} />
+      <DataBanners fixture={res._fixture} replayDate={res.replay_date} stale={res.data.stale} demoLoads={res.demo_loads} pricesDate={res.data.prices_date} />
 
       {advice && bestFresh && (
         <Banner

@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from"
     ]
   },
   "new_load": "புதிய லோடு",
@@ -379,6 +379,7 @@
   "data_live": "நேரலை: இன்றைய மண்டி விலை",
   "data_demo": "டெமோ: அதிக வரத்தின் உண்மையான நாள்",
   "data_hint": "நேரலையில் உங்கள் அருகிலுள்ள சந்தைகளின் இன்றைய விலை வரும். டெமோ 2023 செப்டம்பர் 29 அன்று கோலாரில் தக்காளி அதிக வரத்தை மீண்டும் காட்டுகிறது.",
+  "prices_from": "{date} தேதியின் விலை",
   "count_since": "{date} முதல் {n} லோடு",
   "ledger_empty": "இன்னும் எதுவும் இல்லை. உங்கள் பதிவைத் தொடங்க ஒரு ஆலோசனையில் \"இதை எடுத்துக்கொள்\" என்பதை அழுத்துங்கள்.",
   "saved_record": "உங்கள் பதிவில் சேமிக்கப்பட்டது",

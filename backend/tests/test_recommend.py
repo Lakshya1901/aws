@@ -13,7 +13,7 @@ from backend.tests.fixtures import (AS_OF, MARKETS, OUTLETS, RECOVER_OUTLETS, gl
 def test_normal_week_one_load_goes_to_nearest_mandi(configs):
     r = recommend(load(), normal_week(), MARKETS, OUTLETS, configs, AS_OF)
     assert r["mode"] == "same_day"
-    assert r["data"] == {"as_of_date": AS_OF, "stale": False}
+    assert r["data"] == {"as_of_date": AS_OF, "stale": False, "prices_date": AS_OF}
     assert r["default"]["outlet_id"] == "kolar"
     assert r["top"]["outlet_id"] == "kolar"
     assert r["impact"]["redirected_kg"] == 0
