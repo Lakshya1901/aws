@@ -1,17 +1,17 @@
 // Recommendation: the card, two alternatives, "Why not <default>?", Listen, Use this (overrides allowed).
 import { createAudioPlayer, setAudioModeAsync, type AudioPlayer } from 'expo-audio';
-import { router } from 'expo-router';
+import { Stack, router } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { api } from '../api/client';
 import type { OutletOption } from '../api/types';
 import { CompareSheet } from '../components/CompareSheet';
 import { RecommendationCard, useOutletLabels } from '../components/RecommendationCard';
-import { Banner, Btn, DataBanners, RiskBadge, Screen, T, s } from '../components/ui';
-import { fmtRs, translate } from '../i18n';
+import { Banner, Btn, DataBanners, ListRow, Screen, SectionTitle, Surface, Tag, T } from '../components/ui';
+import { fmtNum, fmtRs, translate } from '../i18n';
 import { ratioDriven } from '../lib/recommend';
 import { useSession } from '../lib/session';
-import { C, SIZE } from '../lib/theme';
+import { C, RISK, SIZE } from '../lib/theme';
 
 export default function RecommendationScreen() {
   const { t, lang, current, addLoad } = useSession();
@@ -116,8 +116,11 @@ export default function RecommendationScreen() {
   }
 
   const advice = res.advice;
-  // Alternatives may repeat the default market; it is reachable through "Why not".
-  const alternatives = res.alternatives.filter((o) => L.key(o) !== L.key(res.default)).slice(0, 2);
+  // Only choosable alternatives: not the default; mandis must be fresh with a known risk. Second Life always.
+  const others = res.alternatives.filter((o) => L.key(o) !== L.key(res.default));
+  const choosable = (o: OutletOption) => o.type !== 'mandi' || (o.stale !== true && o.risk_level != null);
+  const alternatives = others.filter(choosable).slice(0, 2);
+  const filteredOut = others.filter((o) => o.type === 'mandi' && !choosable(o)).length;
   // Advice compares the best fresh market with the harvest cost (top may be hold or Second Life).
   const bestFresh = [res.top, res.default, ...res.alternatives]
     .filter((o) => o.type === 'mandi' && o.net_rs_per_kg)
@@ -126,6 +129,7 @@ export default function RecommendationScreen() {
 
   return (
     <Screen>
+      <Stack.Screen options={{ title: t('load_line', { qty: fmtNum(req.quantity_kg), crop: t(`crop_${req.crop}`) }) }} />
       <DataBanners fixture={res._fixture} replayDate={res.replay_date} stale={res.data.stale} demoLoads={res.demo_loads} />
 
       {advice && bestFresh && (
@@ -150,26 +154,45 @@ export default function RecommendationScreen() {
       />
 
       {alternatives.length > 0 && (
-        <T bold size={SIZE.title}>
-          {t('alternatives')}
-        </T>
-      )}
-      {alternatives.map((o) => (
-        <View key={L.key(o)} style={s.card}>
-          <T bold size={SIZE.large}>
-            {L.name(o)}
-          </T>
-          <View style={s.row}>
-            {o.type === 'mandi' ? <RiskBadge level={o.risk_level} /> : <T bold>{L.typeLabel(o)}</T>}
-            {o.partnered === false && <Banner kind="warn" text={t('not_partnered')} />}
-          </View>
-          <T bold size={SIZE.number}>
-            {o.net_rs_per_kg ? `${L.earn(o)} (${t('estimate')})` : L.earn(o)}
-          </T>
-          <T color={C.muted}>{L.km(o)}</T>
-          <Btn kind="secondary" label={t('send_here')} onPress={() => use(o)} disabled={used === L.key(o)} />
+        <View style={{ gap: 8 }}>
+          <SectionTitle>{t('alternatives')}</SectionTitle>
+          <Surface>
+            {alternatives.map((o, i) => (
+              <ListRow key={L.key(o)} first={i === 0} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <View style={{ flex: 1, gap: 2 }}>
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
+                    <T bold>{L.name(o)}</T>
+                    <T size={SIZE.small} color={C.muted}>
+                      {L.km(o)}
+                    </T>
+                    {o.partnered === false && <Tag dashed text={t('not_partnered')} />}
+                  </View>
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
+                    {o.type === 'mandi' ? (
+                      <T bold size={SIZE.label} color={RISK[o.risk_level ?? 'none'].word}>
+                        {o.risk_level ? t(`risk_${o.risk_level}`) : t('risk_not_reported')}
+                      </T>
+                    ) : (
+                      <T size={SIZE.label} color={C.muted}>
+                        {L.typeLabel(o)}
+                      </T>
+                    )}
+                    <T size={SIZE.label} color={C.muted}>
+                      {`· ${o.net_rs_per_kg ? `${L.earn(o)} (${t('estimate')})` : L.earn(o)}`}
+                    </T>
+                  </View>
+                </View>
+                <Btn kind="text" label={t('send_here')} onPress={() => use(o)} disabled={used === L.key(o)} />
+              </ListRow>
+            ))}
+          </Surface>
+          {filteredOut > 0 && (
+            <T size={SIZE.label} color={C.muted}>
+              {t('not_advised', { n: filteredOut })}
+            </T>
+          )}
         </View>
-      ))}
+      )}
 
       <CompareSheet
         visible={compareOpen}
