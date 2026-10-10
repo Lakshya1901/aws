@@ -15,7 +15,10 @@ log = logging.getLogger(__name__)
 
 CONFIG_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "config")
 REGION = os.environ.get("AWS_REGION", "ap-south-1")
-LANG_NAMES = {"en": "English", "hi": "Hindi", "kn": "Kannada"}
+LANG_NAMES = {"en": "English", "hi": "Hindi", "bn": "Bengali", "mr": "Marathi", "te": "Telugu", "ta": "Tamil",
+              "gu": "Gujarati", "ur": "Urdu", "kn": "Kannada", "or": "Odia", "ml": "Malayalam", "pa": "Punjabi",
+              "as": "Assamese", "mai": "Maithili", "sat": "Santali", "ks": "Kashmiri", "ne": "Nepali", "sd": "Sindhi",
+              "doi": "Dogri", "kok": "Konkani", "mni": "Manipuri"}
 HARVEST = ("today", "tomorrow", "harvested")
 
 PARSE_SYSTEM = """You extract a produce load from a spoken request in Hindi, Kannada or English.

@@ -7,6 +7,7 @@ import hashlib
 import importlib
 import json
 import os
+import re
 import traceback
 import uuid
 from datetime import datetime, timedelta, timezone
@@ -19,7 +20,8 @@ from backend.core.impact import total_impact
 from backend.core.netvalue import haversine_km
 from backend.core.recommend import glut_radar, plan, recommend, rescue
 
-LANGS = ("en", "hi", "kn")
+# English plus India's 20 most spoken languages (CLAUDE.md D27); one config/copy/<code>.json each.
+LANGS = ("en", "hi", "bn", "mr", "te", "ta", "gu", "ur", "kn", "or", "ml", "pa", "as", "mai", "sat", "ks", "ne", "sd", "doi", "kok", "mni")
 HARVEST = ("today", "tomorrow", "harvested")
 SOURCES = ("farm", "mandi_unsold")
 ERROR_CODES = {"crop_profile_incomplete": "crop_not_configured"}
@@ -38,6 +40,32 @@ def replay_date():
 def as_of_date():
     """Replay date when set, else today in IST."""
     return replay_date() or (datetime.now(timezone.utc) + timedelta(hours=5, minutes=30)).date().isoformat()
+
+
+_PLACE_SUFFIX = re.compile(r"\s+(mandi|market|apmc|city)$")
+
+
+def _place_key(s):
+    return _PLACE_SUFFIX.sub("", " ".join(str(s).lower().replace(",", " ").split()))
+
+
+def resolve_origin(o, cfg):
+    """Origin lat/lon from the request; else the typed city, town or village matched exactly (case, spacing and a
+    trailing "mandi"/"market" ignored) to a market name, then a district name, in config/markets.json. A district
+    resolves to the mean of its markets and is marked place_approx. No match, or a name in two states: 422."""
+    if o.get("lat") is not None and o.get("lon") is not None:
+        return {"lat": _float(o["lat"], "origin.lat"), "lon": _float(o["lon"], "origin.lon"), "place": o.get("place")}
+    key = _place_key(o.get("place") or "")
+    if key:
+        ms = [m for m in cfg["markets"] if m.get("lat") is not None and m.get("coord_confidence") != "low"]
+        for field, approx in (("name", False), ("district", True)):
+            hit = [m for m in ms if _place_key(m.get(field) or "") == key]
+            if hit and len({m["state"] for m in hit}) == 1:
+                lat = round(sum(m["lat"] for m in hit) / len(hit), 5)
+                lon = round(sum(m["lon"] for m in hit) / len(hit), 5)
+                return {"lat": lat, "lon": lon, "place": o["place"], "place_approx": approx or len(hit) > 1}
+    raise ApiError(422, "origin_unknown",
+                   "Origin needs lat and lon, or a city, town or village that matches a market or district name.")
 
 
 # ---------- explanation ----------
@@ -193,11 +221,7 @@ def core_load(l, cfg, outlets, day, ctx=None):
     if l.get("harvest") not in HARVEST:
         raise ApiError(400, "bad_request", f"harvest must be one of {', '.join(HARVEST)}")
     get_crop(cfg, l["crop"])
-    o = l.get("origin") or {}
-    if o.get("lat") is None or o.get("lon") is None:
-        raise ApiError(422, "origin_unknown",
-                       "Origin needs lat and lon; place names are not geocoded. Send the device location.")
-    origin = {"lat": _float(o["lat"], "origin.lat"), "lon": _float(o["lon"], "origin.lon"), "place": o.get("place")}
+    origin = resolve_origin(l.get("origin") or {}, cfg)
     radius = assumption(cfg["assumptions"], "max_radius_km")
     if not any(haversine_km(origin["lat"], origin["lon"], m["lat"], m["lon"]) <= radius
                for m in cfg["markets"] if m.get("lat") is not None):
@@ -309,10 +333,7 @@ def rescue_request(b, cfg, outlets, day):
         split = {"edible_kg": e, "spoiled_kg": sp}
     get_crop(cfg, b["crop"])
     o = b.get("origin") or {}
-    if o.get("lat") is None or o.get("lon") is None:
-        raise ApiError(422, "origin_unknown",
-                       "Origin needs lat and lon; place names are not geocoded. Send the device location.")
-    origin = {"lat": _float(o["lat"], "origin.lat"), "lon": _float(o["lon"], "origin.lon"), "place": o.get("place")}
+    origin = resolve_origin(o, cfg)
     return {"crop": b["crop"], "quantity_kg": q, "origin": origin, "hours_since_harvest": h, "split": split,
             "temp_c": store.temperature_c(origin["lat"], origin["lon"], day),
             "routes": location.routes_for(origin, _destinations(dict(cfg, markets=[]), outlets, origin))}

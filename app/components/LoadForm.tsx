@@ -193,7 +193,7 @@ export function LoadForm({
         {label('place')}
         <TextInput
           value={draft.origin_place ?? ''}
-          onChangeText={(v) => onChange({ ...draft, origin_place: v || null })}
+          onChangeText={(v) => onChange({ ...draft, origin_place: v || null, lat: null, lon: null })} // a typed place replaces GPS
           placeholder={showNotHeard && !draft.origin_place ? hint : undefined}
           placeholderTextColor={C.muted}
           accessibilityLabel={t('place')}

@@ -29,6 +29,7 @@ export default function RescueScreen() {
   const [hours, setHours] = useState('');
   const [edible, setEdible] = useState('');
   const [spoiled, setSpoiled] = useState('');
+  const [place, setPlace] = useState('');
   const [coordText, setCoordText] = useState(coords ? `${coords.lat.toFixed(4)}, ${coords.lon.toFixed(4)}` : '');
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -83,7 +84,8 @@ export default function RescueScreen() {
     setMessage(null);
     const q = num(qty);
     const h = num(hours);
-    const at = parseCoords(coordText) ?? coords;
+    // Typed coordinates, else the typed city, town or village (resolved by the API), else the device location.
+    const at = parseCoords(coordText) ?? (place.trim() ? { lat: null, lon: null } : coords);
     if (!q || h === null) return setMessage(t('fill_all'));
     if (!at) return setMessage(t('err_origin_unknown'));
     const e = num(edible);
@@ -98,7 +100,7 @@ export default function RescueScreen() {
         quantity_kg: q,
         hours_since_harvest: h,
         ...(split ? { edible_kg: e!, spoiled_kg: sp! } : {}),
-        origin: { lat: at.lat, lon: at.lon },
+        origin: { lat: at.lat, lon: at.lon, place: place.trim() || null },
         language: lang ?? 'en',
         ...(planId ? { plan_id: planId } : {}),
       });
@@ -162,6 +164,7 @@ export default function RescueScreen() {
         {sumBad ? t('split_sum') : t('split_hint')}
       </T>
 
+      {field(t('place'), place, setPlace, { keyboard: 'default', placeholder: 'Azadpur' })}
       {field(t('coords'), coordText, setCoordText, { keyboard: 'numbers-and-punctuation', placeholder: '12.97, 77.59' })}
       {coordText.trim() !== '' && !parseCoords(coordText) && <T color={C.warnText}>{t('coords_invalid')}</T>}
       <Btn kind="text" icon="pin" label={t('use_location')} onPress={() => void useLocation()} />

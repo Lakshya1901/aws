@@ -22,7 +22,7 @@ One router with three entry points: Prevent (route a load before it leaves the f
 
 ## Operating Context
 
-Used on low-to-mid Android phones, outdoors and in sunlight, on slow connections. The user is mid-task (a truck is waiting), uses WhatsApp and phone calls, not dashboards. Languages: English, Hindi, Kannada; voice input in all three, spoken replies in Hindi and English only (no Kannada voice).
+Used on low-to-mid Android phones, outdoors and in sunlight, on slow connections. The user is mid-task (a truck is waiting), uses WhatsApp and phone calls, not dashboards. Headline city: Delhi (Azadpur mandi, Rescue and Recover); users type their city, town or village. Languages: English plus India's 20 most spoken languages (most machine-drafted, pending native review); voice input in the 12 that Amazon Transcribe supports; spoken replies in Hindi and English only.
 
 ## Capabilities and Constraints
 

@@ -16,6 +16,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ApiError, MOCK } from '../api/client';
 import type { Lang, Mode, RiskLevel } from '../api/types';
+import { isRtl } from '../i18n';
 import { useSession } from '../lib/session';
 import { C, RADIUS, RISK, SHADOW, SIZE, fontFor } from '../lib/theme';
 import { Icon, type IconName } from './Icon';
@@ -40,6 +41,7 @@ export function T({
     <Text
       style={[
         { fontSize: size, color, lineHeight: Math.round(size * 1.45), fontFamily: fontFor(forLang ?? lang, bold) },
+        isRtl(forLang ?? lang) ? { writingDirection: 'rtl', textAlign: 'right' } : null,
         style,
       ]}
     >

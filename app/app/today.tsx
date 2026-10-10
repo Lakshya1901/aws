@@ -8,6 +8,7 @@ import { CROPS, type RiskResponse } from '../api/types';
 import { RiskList } from '../components/RiskList';
 import { Icon } from '../components/Icon';
 import { Banner, Btn, Chip, DataBanners, Loading, Screen, SectionTitle, T, useErrorText } from '../components/ui';
+import { LANG_INFO } from '../i18n';
 import { cacheRisk, readCachedRisk, useSession } from '../lib/session';
 import { C, RADIUS, SIZE } from '../lib/theme';
 
@@ -81,7 +82,7 @@ export default function TodayScreen() {
             <Btn
               kind="text"
               icon="globe"
-              label={t(`lang_${lang ?? 'en'}`)}
+              label={LANG_INFO[lang ?? 'en'].name}
               onPress={() => router.push('/language')}
             />
           ),

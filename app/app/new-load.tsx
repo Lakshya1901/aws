@@ -8,6 +8,7 @@ import { LoadForm } from '../components/LoadForm';
 import { MicButton } from '../components/MicButton';
 import { Banner, Btn, DataBanners, Screen, T, useErrorText } from '../components/ui';
 import { draftComplete, useRecommend } from '../lib/recommend';
+import { LANG_INFO } from '../i18n';
 import { EMPTY_DRAFT, useSession } from '../lib/session';
 import { C, SIZE } from '../lib/theme';
 
@@ -67,14 +68,19 @@ export default function NewLoadScreen() {
     }
   }
 
+  // Voice input only where Amazon Transcribe supports the language; the typed form always works.
+  const voice = LANG_INFO[lang ?? 'en'].voice;
+
   return (
     <Screen>
       <DataBanners />
+      {voice && (
       <MicButton
         disabled={busy}
         onRecorded={(uri) => void onRecorded(uri)}
         onFailed={(r) => setMessage(r === 'denied' ? t('mic_denied') : t('parse_failed'))}
       />
+      )}
       {busy && (
         <View style={{ alignItems: 'center' }}>
           <ActivityIndicator size="large" color={C.primary} />
@@ -85,6 +91,7 @@ export default function NewLoadScreen() {
       )}
       {message && <Banner kind={message === t('fill_all') || message === t('parse_failed') || message === t('mic_denied') ? 'warn' : 'error'} text={message} />}
 
+      {voice && (
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
         <View style={{ flex: 1, height: 1, backgroundColor: C.divider }} />
         <T size={SIZE.small} color={C.muted} style={{ textAlign: 'center', flexShrink: 1 }}>
@@ -92,6 +99,7 @@ export default function NewLoadScreen() {
         </T>
         <View style={{ flex: 1, height: 1, backgroundColor: C.divider }} />
       </View>
+      )}
       {ready && <LoadForm draft={draft} onChange={setDraft} />}
       <Btn label={t('get_recommendation')} onPress={() => void submit()} disabled={busy} />
     </Screen>

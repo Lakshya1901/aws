@@ -1,7 +1,28 @@
 // Request/response types for the AnnaSetu API (CLAUDE.md Section 13).
 // Shapes match backend/handlers/advisor.py and voice.py and the stored responses in backend/tests/api_fixtures/.
 
-export type Lang = 'en' | 'hi' | 'kn';
+export type Lang =
+  | 'en'
+  | 'hi'
+  | 'bn'
+  | 'mr'
+  | 'te'
+  | 'ta'
+  | 'gu'
+  | 'ur'
+  | 'kn'
+  | 'or'
+  | 'ml'
+  | 'pa'
+  | 'as'
+  | 'mai'
+  | 'sat'
+  | 'ks'
+  | 'ne'
+  | 'sd'
+  | 'doi'
+  | 'kok'
+  | 'mni';
 export type CropId = 'tomato' | 'onion' | 'potato' | 'banana';
 export const CROPS: CropId[] = ['tomato', 'onion', 'potato', 'banana']; // MVP crops (Section 6)
 /** Any AGMARKNET commodity id from GET /crops (config/commodities.json); the Glut Radar takes any (D24). */
@@ -103,10 +124,13 @@ export interface VoiceParseResponse extends FixtureMark {
 
 // ---------- POST /recommend ----------
 
-/** lat and lon are required: the API answers 422 origin_unknown without them (place names are not geocoded). */
+/**
+ * lat and lon, or a typed city, town or village (lat/lon null) that the API matches to a market or district name;
+ * 422 origin_unknown when neither works.
+ */
 export interface Origin {
-  lat: number;
-  lon: number;
+  lat: number | null;
+  lon: number | null;
   place?: string | null;
 }
 

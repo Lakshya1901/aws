@@ -14,7 +14,7 @@ import type {
   RiskResponse,
 } from '../api/types';
 import { isRouterCrop } from '../api/types';
-import { translate, type CopyKey } from '../i18n';
+import { LANG_INFO, translate, type CopyKey } from '../i18n';
 
 const LANG_KEY = 'annasetu.lang';
 const riskKey = (crop: RadarCropId) => `annasetu.risk.${crop}`;
@@ -87,7 +87,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     AsyncStorage.getItem(LANG_KEY)
       .then((v) => {
-        if (v === 'en' || v === 'hi' || v === 'kn') setLangState(v);
+        if (v && v in LANG_INFO) setLangState(v as Lang);
       })
       .catch(() => {})
       .finally(() => setReady(true));

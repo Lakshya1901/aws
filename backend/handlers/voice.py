@@ -13,7 +13,8 @@ log = logging.getLogger()
 log.setLevel(logging.INFO)
 
 CROP_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "config", "crops")
-LANGS = ("en", "hi", "kn")
+# Voice input: the app languages Amazon Transcribe batch supports (CLAUDE.md D27).
+LANGS = tuple(speech.TRANSCRIBE_LANG)
 EXT = {"audio/mp4": "m4a", "audio/m4a": "m4a", "audio/x-m4a": "m4a", "audio/wav": "wav", "audio/x-wav": "wav",
        "audio/wave": "wav", "audio/mpeg": "mp3", "audio/webm": "webm", "audio/ogg": "ogg", "audio/flac": "flac"}
 KEY_RE = re.compile(r"^uploads/[0-9a-f]{32}\.(m4a|wav|mp3|webm|ogg|flac)$")

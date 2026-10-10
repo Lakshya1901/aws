@@ -393,3 +393,24 @@ def test_destinations_limited_to_nearest_reporting_markets_in_radius():
     assert ids == [f"m{i}" for i in range(cfg["model"]["nearest_markets"])]
     all_in_radius = [d["id"] for d in advisor._destinations(cfg, [], origin)]
     assert "far" not in all_in_radius and "nocoords" not in all_in_radius and len(all_in_radius) == 27  # 0.1 deg lat = 11.1 km: m0..m26
+
+
+def test_resolve_origin_typed_place():
+    """A typed city, town or village resolves to a market or district in config/markets.json (D26)."""
+    cfg = {"markets": [
+        {"market_id": "7-azadpur", "name": "Azadpur", "district": "Delhi", "state": "DL", "lat": 28.72, "lon": 77.16},
+        {"market_id": "7-keshopur", "name": "Keshopur", "district": "Delhi", "state": "DL", "lat": 28.65, "lon": 77.09},
+        {"market_id": "x-low", "name": "Lowtown", "district": "Low", "state": "XX", "lat": 1.0, "lon": 1.0,
+         "coord_confidence": "low"},
+        {"market_id": "a-1", "name": "Twin", "district": "A", "state": "AA", "lat": 10.0, "lon": 10.0},
+        {"market_id": "b-1", "name": "Twin", "district": "B", "state": "BB", "lat": 20.0, "lon": 20.0},
+    ]}
+    o = advisor.resolve_origin({"place": "  azadpur MANDI "}, cfg)
+    assert (o["lat"], o["lon"], o["place_approx"]) == (28.72, 77.16, False)
+    o = advisor.resolve_origin({"place": "Delhi"}, cfg)  # district: mean of its markets, approximate
+    assert (o["lat"], o["lon"], o["place_approx"]) == (28.685, 77.125, True)
+    assert advisor.resolve_origin({"lat": 1, "lon": 2, "place": "Delhi"}, cfg)["lat"] == 1.0  # coordinates win
+    for bad in ({"place": "Holur"}, {"place": "Lowtown"}, {"place": "Twin"}, {}):  # unknown, low confidence, two states
+        with pytest.raises(advisor.ApiError) as e:
+            advisor.resolve_origin(bad, cfg)
+        assert e.value.code == "origin_unknown"

@@ -65,7 +65,8 @@ def test_upload_shape(aws):
     status, body = call("POST /voice/upload", {"language": "hi", "content_type": "audio/mp4"})
     assert status == 200 and set(body) == {"upload_url", "audio_key"}
     assert voice.KEY_RE.match(body["audio_key"]) and body["audio_key"].endswith(".m4a")
-    assert call("POST /voice/upload", {"language": "ta", "content_type": "audio/mp4"})[0] == 400
+    assert call("POST /voice/upload", {"language": "ta", "content_type": "audio/mp4"})[0] == 200  # Transcribe ta-IN
+    assert call("POST /voice/upload", {"language": "ur", "content_type": "audio/mp4"})[0] == 400  # no Transcribe Urdu
 
 
 def test_parse_shape(aws):

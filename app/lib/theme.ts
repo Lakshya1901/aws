@@ -1,4 +1,5 @@
 import type { Lang, RiskLevel } from '../api/types';
+import { LANG_INFO, type Script } from '../i18n';
 import type { IconName } from '../components/Icon';
 
 // Material 3 palette on a light beige page, readable in sunlight (Section 14.6; canvas "AnnaSetu screens").
@@ -53,8 +54,22 @@ export const RISK: Record<RiskLevel | 'none', { bg: string; fg: string; icon: Ic
 export const SIZE = { label: 14, small: 15, base: 16, section: 18, large: 20, number: 24, title: 28, touch: 48 };
 export const RADIUS = { surface: 16, field: 12, chip: 8, pill: 28 };
 
+const FONTS: Record<Script, [string, string]> = {
+  latn: ['NotoSans_400Regular', 'NotoSans_600SemiBold'],
+  deva: ['NotoSansDevanagari_400Regular', 'NotoSansDevanagari_700Bold'],
+  beng: ['NotoSansBengali_400Regular', 'NotoSansBengali_700Bold'],
+  telu: ['NotoSansTelugu_400Regular', 'NotoSansTelugu_700Bold'],
+  taml: ['NotoSansTamil_400Regular', 'NotoSansTamil_700Bold'],
+  gujr: ['NotoSansGujarati_400Regular', 'NotoSansGujarati_700Bold'],
+  arab: ['NotoNaskhArabic_400Regular', 'NotoNaskhArabic_700Bold'],
+  knda: ['NotoSansKannada_400Regular', 'NotoSansKannada_700Bold'],
+  orya: ['NotoSansOriya_400Regular', 'NotoSansOriya_700Bold'],
+  mlym: ['NotoSansMalayalam_400Regular', 'NotoSansMalayalam_700Bold'],
+  guru: ['NotoSansGurmukhi_400Regular', 'NotoSansGurmukhi_700Bold'],
+  olck: ['NotoSansOlChiki_400Regular', 'NotoSansOlChiki_700Bold'],
+};
+
+/** Noto font for the language's script; Latin text (numbers, Rs) in other scripts falls back per glyph. */
 export function fontFor(lang: Lang | null, bold = false): string {
-  if (lang === 'hi') return bold ? 'NotoSansDevanagari_700Bold' : 'NotoSansDevanagari_400Regular';
-  if (lang === 'kn') return bold ? 'NotoSansKannada_700Bold' : 'NotoSansKannada_400Regular';
-  return bold ? 'NotoSans_600SemiBold' : 'NotoSans_400Regular';
+  return FONTS[LANG_INFO[lang ?? 'en'].script][bold ? 1 : 0];
 }

@@ -148,7 +148,7 @@ export default function RecommendationScreen() {
         res={res}
         onWhyNot={() => setCompareOpen(true)}
         onListen={audioUrl ? () => void listen() : null}
-        listenNote={lang === 'kn' ? t('listen_lang_note') : null}
+        listenNote={lang !== 'hi' && lang !== 'en' ? t('listen_lang_note') : null}
         onUse={() => use(res.top)}
         used={used === L.key(res.top)}
       />

@@ -20,7 +20,7 @@
   "status": 422,
   "body": {
    "error": "origin_unknown",
-   "message": "Origin needs lat and lon; place names are not geocoded. Send the device location."
+   "message": "Origin needs lat and lon, or a city, town or village that matches a market or district name."
   }
  }
 }

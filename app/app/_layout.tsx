@@ -2,6 +2,24 @@ import { NotoSans_400Regular } from '@expo-google-fonts/noto-sans/400Regular';
 import { NotoSans_600SemiBold } from '@expo-google-fonts/noto-sans/600SemiBold';
 import { NotoSansDevanagari_400Regular } from '@expo-google-fonts/noto-sans-devanagari/400Regular';
 import { NotoSansDevanagari_700Bold } from '@expo-google-fonts/noto-sans-devanagari/700Bold';
+import { NotoSansBengali_400Regular } from '@expo-google-fonts/noto-sans-bengali/400Regular';
+import { NotoSansBengali_700Bold } from '@expo-google-fonts/noto-sans-bengali/700Bold';
+import { NotoSansTelugu_400Regular } from '@expo-google-fonts/noto-sans-telugu/400Regular';
+import { NotoSansTelugu_700Bold } from '@expo-google-fonts/noto-sans-telugu/700Bold';
+import { NotoSansTamil_400Regular } from '@expo-google-fonts/noto-sans-tamil/400Regular';
+import { NotoSansTamil_700Bold } from '@expo-google-fonts/noto-sans-tamil/700Bold';
+import { NotoSansGujarati_400Regular } from '@expo-google-fonts/noto-sans-gujarati/400Regular';
+import { NotoSansGujarati_700Bold } from '@expo-google-fonts/noto-sans-gujarati/700Bold';
+import { NotoNaskhArabic_400Regular } from '@expo-google-fonts/noto-naskh-arabic/400Regular';
+import { NotoNaskhArabic_700Bold } from '@expo-google-fonts/noto-naskh-arabic/700Bold';
+import { NotoSansOriya_400Regular } from '@expo-google-fonts/noto-sans-oriya/400Regular';
+import { NotoSansOriya_700Bold } from '@expo-google-fonts/noto-sans-oriya/700Bold';
+import { NotoSansMalayalam_400Regular } from '@expo-google-fonts/noto-sans-malayalam/400Regular';
+import { NotoSansMalayalam_700Bold } from '@expo-google-fonts/noto-sans-malayalam/700Bold';
+import { NotoSansGurmukhi_400Regular } from '@expo-google-fonts/noto-sans-gurmukhi/400Regular';
+import { NotoSansGurmukhi_700Bold } from '@expo-google-fonts/noto-sans-gurmukhi/700Bold';
+import { NotoSansOlChiki_400Regular } from '@expo-google-fonts/noto-sans-ol-chiki/400Regular';
+import { NotoSansOlChiki_700Bold } from '@expo-google-fonts/noto-sans-ol-chiki/700Bold';
 import { NotoSansKannada_400Regular } from '@expo-google-fonts/noto-sans-kannada/400Regular';
 import { NotoSansKannada_700Bold } from '@expo-google-fonts/noto-sans-kannada/700Bold';
 import { useFonts } from 'expo-font';
@@ -52,6 +70,24 @@ export default function RootLayout() {
     NotoSansDevanagari_700Bold,
     NotoSansKannada_400Regular,
     NotoSansKannada_700Bold,
+    NotoSansBengali_400Regular,
+    NotoSansBengali_700Bold,
+    NotoSansTelugu_400Regular,
+    NotoSansTelugu_700Bold,
+    NotoSansTamil_400Regular,
+    NotoSansTamil_700Bold,
+    NotoSansGujarati_400Regular,
+    NotoSansGujarati_700Bold,
+    NotoNaskhArabic_400Regular,
+    NotoNaskhArabic_700Bold,
+    NotoSansOriya_400Regular,
+    NotoSansOriya_700Bold,
+    NotoSansMalayalam_400Regular,
+    NotoSansMalayalam_700Bold,
+    NotoSansGurmukhi_400Regular,
+    NotoSansGurmukhi_700Bold,
+    NotoSansOlChiki_400Regular,
+    NotoSansOlChiki_700Bold,
   });
   return (
     <SafeAreaProvider>
