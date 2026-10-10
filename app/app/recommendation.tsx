@@ -190,7 +190,7 @@ export default function RecommendationScreen() {
                       </T>
                     )}
                     <T size={SIZE.label} color={C.muted}>
-                      {`· ${o.net_rs_per_kg ? `${L.earn(o)} (${t('estimate')})` : L.earn(o)}`}
+                      {`· ${L.earn(o)}`}
                     </T>
                   </View>
                 </View>

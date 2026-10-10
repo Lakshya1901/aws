@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note"
     ]
   },
   "new_load": "ਨਵਾਂ ਲੋਡ",
@@ -370,6 +370,7 @@
   "of_handled": "ਅੰਨਸੇਤੂ ਰਾਹੀਂ ਭੇਜੇ {kg} ਕਿਲੋ ਵਿੱਚੋਂ",
   "total_money_saved": "ਕੁੱਲ ਬਚੇ ਪੈਸੇ",
   "money_note": "ਭਾੜਾ ਤੇ ਫ਼ੀਸ ਕੱਟ ਕੇ ਤੁਹਾਡੇ ਲੋਡ ਦੀ ਕਮਾਈ (ਅੰਦਾਜ਼ਾ)",
+  "est_note": "ਸਾਰੇ ਅੰਕੜੇ ਅੰਦਾਜ਼ੇ ਹਨ।",
   "count_since": "{date} ਤੋਂ {n} ਲੋਡ",
   "ledger_empty": "ਹਾਲੇ ਕੁਝ ਨਹੀਂ। ਆਪਣਾ ਰਿਕਾਰਡ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਸਲਾਹ 'ਤੇ \"ਇਹ ਵਰਤੋ\" ਦਬਾਓ।",
   "saved_record": "ਤੁਹਾਡੇ ਰਿਕਾਰਡ ਵਿੱਚ ਸੰਭਾਲਿਆ ਗਿਆ",

@@ -5,7 +5,7 @@ import { fmtNum } from '../i18n';
 import { useSession } from '../lib/session';
 import { C, SIZE } from '../lib/theme';
 import { useOutletLabels } from './RecommendationCard';
-import { Btn, RiskBadge, T } from './ui';
+import { Btn, EstNote, RiskBadge, T } from './ui';
 
 export function CompareSheet({
   visible,
@@ -24,7 +24,6 @@ export function CompareSheet({
 }) {
   const { t } = useSession();
   const L = useOutletLabels();
-  const est = `(${t('estimate')})`;
 
   const cell = (o: OutletOption, row: string) => {
     switch (row) {
@@ -37,7 +36,7 @@ export function CompareSheet({
       case 'spoilage':
         return (
           <T bold>
-            {o.spoilage_share != null ? `${Math.round(o.spoilage_share * 100)}% ${est}` : t('not_estimated')}
+            {o.spoilage_share != null ? `${Math.round(o.spoilage_share * 100)}%` : t('not_estimated')}
           </T>
         );
       case 'earn_kg':
@@ -53,7 +52,7 @@ export function CompareSheet({
               ? `${t('rs_range', {
                   low: fmtNum(o.net_rs_per_kg.low * quantityKg),
                   high: fmtNum(o.net_rs_per_kg.high * quantityKg),
-                })} ${est}`
+                })}`
               : t('not_estimated')}
           </T>
         );
@@ -117,6 +116,7 @@ export function CompareSheet({
                 </View>
               ))}
             </View>
+            <EstNote />
             <Btn label={t('close')} onPress={onClose} />
             <Btn kind="secondary" label={`${t('send_here')}: ${L.name(dflt)}`} onPress={onUseDefault} />
           </ScrollView>

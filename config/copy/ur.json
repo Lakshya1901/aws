@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note"
     ]
   },
   "new_load": "نیا لوڈ",
@@ -370,6 +370,7 @@
   "of_handled": "اناسیتو سے بھیجے گئے {kg} کلو میں سے",
   "total_money_saved": "کل بچا ہوا پیسہ",
   "money_note": "کرائے اور فیس کے بعد آپ کے لوڈ کی کمائی (اندازہ)",
+  "est_note": "تمام اعداد تخمینے ہیں۔",
   "count_since": "{date} سے {n} لوڈ",
   "ledger_empty": "ابھی کچھ نہیں۔ اپنا ریکارڈ شروع کرنے کے لیے کسی مشورے پر \"یہی چنیں\" دبائیں۔",
   "saved_record": "آپ کے ریکارڈ میں محفوظ ہو گیا",

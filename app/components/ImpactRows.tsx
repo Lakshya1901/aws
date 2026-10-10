@@ -7,24 +7,23 @@ import { fmtNum } from '../i18n';
 import { useSession } from '../lib/session';
 import { C, SIZE } from '../lib/theme';
 import { PART_COLORS } from './Lifetime';
-import { ListRow, Surface, T } from './ui';
+import { EstNote, ListRow, Surface, T } from './ui';
 
 /** Waste avoided as {value, sub}: null -> not yet estimated; mid <= 0 -> "No waste avoided" (+ extra spoilage). */
 export function useWasteText() {
   const { t } = useSession();
-  const est = ` (${t('estimate')})`;
   return (w: Range | null, scope: 'load' | 'total'): { value: string; sub?: string } => {
     if (!w) return { value: t('not_estimated') };
     if (w.mid <= 0) {
       const none = t(scope === 'load' ? 'waste_none_load' : 'waste_none_total');
       const lost = Math.round(-w.mid);
-      return lost > 0 ? { value: none, sub: `${t('waste_spoilage', { kg: fmtNum(lost) })}${est}` } : { value: none };
+      return lost > 0 ? { value: none, sub: t('waste_spoilage', { kg: fmtNum(lost) }) } : { value: none };
     }
     const sub =
       w.low < 0
         ? t('waste_range_loss', { loss: fmtNum(-w.low), high: fmtNum(w.high) })
         : t('waste_range', { low: fmtNum(w.low), high: fmtNum(w.high) });
-    return { value: t('waste_value', { mid: fmtNum(w.mid) }), sub: `${sub}${est}` };
+    return { value: t('waste_value', { mid: fmtNum(w.mid) }), sub };
   };
 }
 
@@ -34,7 +33,7 @@ type RowDef = { label: string; value: string; sub?: string; muted?: boolean };
 function useRangeText() {
   const { t } = useSession();
   return (w: Range): string =>
-    `${w.low < 0 ? t('waste_range_loss', { loss: fmtNum(-w.low), high: fmtNum(w.high) }) : t('waste_range', { low: fmtNum(w.low), high: fmtNum(w.high) })} (${t('estimate')})`;
+    `${w.low < 0 ? t('waste_range_loss', { loss: fmtNum(-w.low), high: fmtNum(w.high) }) : t('waste_range', { low: fmtNum(w.low), high: fmtNum(w.high) })}`;
 }
 
 /** Headline block for the Impact screen: kept out of landfill, range, note, and the Prevented / Rescued / Recovered bar. */
@@ -86,17 +85,16 @@ export function ImpactHeadline({ impact }: { impact: Impact }) {
 export function ImpactRows({ impact, lines }: { impact: Impact; lines: 'plan' | 'from' | 'trip' | 'rescue' }) {
   const { t } = useSession();
   const wasteText = useWasteText();
-  const est = ` (${t('estimate')})`;
-  const val = (v: number | null, key: 'kg_value' | 'km_value' | 'litres_value', decimals = 0, estimate = true) =>
-    v == null ? t('not_estimated') : `${t(key, { v: fmtNum(v, decimals) })}${estimate ? est : ''}`;
+  const val = (v: number | null, key: 'kg_value' | 'km_value' | 'litres_value', decimals = 0) =>
+    v == null ? t('not_estimated') : t(key, { v: fmtNum(v, decimals) });
   const waste = wasteText(impact.waste_avoided_kg, 'total');
   const energy =
     impact.biogas_energy == null
       ? t('not_estimated')
-      : `${fmtNum(impact.biogas_energy, 1)} ${impact.biogas_energy_unit ?? ''}`.trim() + est;
+      : `${fmtNum(impact.biogas_energy, 1)} ${impact.biogas_energy_unit ?? ''}`.trim();
   const water =
     impact.water_l != null && impact.water_l < 0
-      ? `${t('water_lost', { v: fmtNum(-impact.water_l) })}${est}`
+      ? t('water_lost', { v: fmtNum(-impact.water_l) })
       : val(impact.water_l, 'litres_value');
 
   const R: Record<string, RowDef> = {
@@ -105,8 +103,8 @@ export function ImpactRows({ impact, lines }: { impact: Impact; lines: 'plan' | 
     rescued: { label: t('rescued'), value: val(impact.rescued_kg, 'kg_value') },
     recovered: { label: t('recovered'), value: val(impact.recovered_kg, 'kg_value') },
     biogas: { label: t('biogas_energy'), value: energy, muted: impact.biogas_energy == null },
-    redirected: { label: t('redirected'), value: val(impact.redirected_kg, 'kg_value', 0, false) },
-    redirectedNote: { label: t('redirected'), value: val(impact.redirected_kg, 'kg_value', 0, false), sub: t('redirected_note') },
+    redirected: { label: t('redirected'), value: val(impact.redirected_kg, 'kg_value') },
+    redirectedNote: { label: t('redirected'), value: val(impact.redirected_kg, 'kg_value'), sub: t('redirected_note') },
     km: { label: t('extra_km'), value: val(impact.extra_km, 'km_value') },
     diesel: { label: t('diesel'), value: val(impact.diesel_l, 'litres_value', 1) },
     co2: { label: t('co2'), value: val(impact.co2_kg, 'kg_value', 1) },
@@ -119,26 +117,29 @@ export function ImpactRows({ impact, lines }: { impact: Impact; lines: 'plan' | 
     rescue: ['rescued', 'recovered', 'biogas'],
   } as const;
   return (
-    <Surface>
-      {sets[lines].map((k, i) => {
-        const r = R[k]!;
-        const isNull = r.value === t('not_estimated');
-        return (
-          <ListRow key={k} first={i === 0} style={{ gap: 2 }}>
-            <T size={SIZE.small} color={C.muted}>
-              {r.label}
-            </T>
-            <T bold={!isNull} size={isNull ? SIZE.base : SIZE.large} color={isNull || r.muted ? C.muted : C.text}>
-              {r.value}
-            </T>
-            {r.sub ? (
-              <T size={SIZE.label} color={C.muted}>
-                {r.sub}
+    <>
+      <Surface>
+        {sets[lines].map((k, i) => {
+          const r = R[k]!;
+          const isNull = r.value === t('not_estimated');
+          return (
+            <ListRow key={k} first={i === 0} style={{ gap: 2 }}>
+              <T size={SIZE.small} color={C.muted}>
+                {r.label}
               </T>
-            ) : null}
-          </ListRow>
-        );
-      })}
-    </Surface>
+              <T bold={!isNull} size={isNull ? SIZE.base : SIZE.large} color={isNull || r.muted ? C.muted : C.text}>
+                {r.value}
+              </T>
+              {r.sub ? (
+                <T size={SIZE.label} color={C.muted}>
+                  {r.sub}
+                </T>
+              ) : null}
+            </ListRow>
+          );
+        })}
+      </Surface>
+      {lines !== 'from' && <EstNote />}
+    </>
   );
 }

@@ -137,6 +137,16 @@ export function Banner({ text, kind }: { text: string; kind: 'warn' | 'error' | 
   );
 }
 
+/** One line per screen instead of "(estimate)" on every figure (D32): ranges stay, the label moves here. */
+export function EstNote() {
+  const { t } = useSession();
+  return (
+    <T size={SIZE.label} color={C.muted}>
+      {t('est_note')}
+    </T>
+  );
+}
+
 /** Neutral pill for data labels: Demo loads, Demo stock, estimate. dashed = Not yet partnered. */
 export function Tag({ text, dashed }: { text: string; dashed?: boolean }) {
   return (

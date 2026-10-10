@@ -143,7 +143,7 @@ export default function PlanScreen() {
                   <View style={{ flex: 1, flexShrink: 1, gap: 2 }}>
                     <T bold>{hold ? t('hold_title') : L.name(a.outlet)}</T>
                     <T size={SIZE.small} color={C.muted}>
-                      {a.outlet.net_rs_per_kg ? `${L.earn(a.outlet)} (${t('estimate')})` : L.earn(a.outlet)}
+                      {L.earn(a.outlet)}
                     </T>
                     {a.outlet.type !== 'mandi' ? <T size={SIZE.label}>{L.typeLabel(a.outlet)}</T> : null}
                     {a.outlet.partnered === false && (

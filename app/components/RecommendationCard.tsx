@@ -9,7 +9,7 @@ import { ratioDriven } from '../lib/recommend';
 import { useSession } from '../lib/session';
 import { C, RADIUS, SIZE } from '../lib/theme';
 import { useWasteText } from './ImpactRows';
-import { Banner, Btn, RiskBadge, ListRow, Surface, Tag, T } from './ui';
+import { Banner, Btn, EstNote, RiskBadge, ListRow, Surface, Tag, T } from './ui';
 
 export function useOutletLabels() {
   const { t } = useSession();
@@ -73,7 +73,6 @@ export function RecommendationCard({
   const diverted = L.key(dflt) !== L.key(top);
   const hold = top.type === 'hold';
   const secondLife = top.type !== 'mandi' && !hold;
-  const est = `(${t('estimate')})`;
   const cropName = t(`crop_${req.crop}`);
 
   const waste = wasteText(impact.waste_avoided_kg, 'load');
@@ -81,8 +80,8 @@ export function RecommendationCard({
     impact.diesel_l == null
       ? `${t('diesel')}: ${t('not_estimated')}`
       : impact.diesel_l < 0
-        ? `${t('diesel_saved_value', { l: fmtNum(-impact.diesel_l, 1) })} ${est}`
-        : `${t('diesel_value', { l: fmtNum(impact.diesel_l, 1) })} ${est}`;
+        ? `${t('diesel_saved_value', { l: fmtNum(-impact.diesel_l, 1) })}`
+        : `${t('diesel_value', { l: fmtNum(impact.diesel_l, 1) })}`;
   const extraKm =
     impact.extra_km == null
       ? t('not_estimated')
@@ -209,6 +208,7 @@ export function RecommendationCard({
         </T>
       </View>
 
+      <EstNote />
       <T size={SIZE.label} color={C.muted}>
         {t('spoilage_note')}
       </T>

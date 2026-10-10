@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note"
     ]
   },
   "new_load": "புதிய லோடு",
@@ -370,6 +370,7 @@
   "of_handled": "அன்னசேது மூலம் நீங்கள் அனுப்பிய {kg} கிலோவில்",
   "total_money_saved": "மொத்தமாக மிச்சமான பணம்",
   "money_note": "போக்குவரத்து, கட்டணம் போக உங்கள் லோடுகளின் வருமானம் (மதிப்பீடு)",
+  "est_note": "எல்லா எண்களும் மதிப்பீடுகள்.",
   "count_since": "{date} முதல் {n} லோடு",
   "ledger_empty": "இன்னும் எதுவும் இல்லை. உங்கள் பதிவைத் தொடங்க ஒரு ஆலோசனையில் \"இதை எடுத்துக்கொள்\" என்பதை அழுத்துங்கள்.",
   "saved_record": "உங்கள் பதிவில் சேமிக்கப்பட்டது",

@@ -6,7 +6,7 @@ import { fmtNum } from '../i18n';
 import type { LedgerTotals } from '../lib/ledger';
 import { useSession } from '../lib/session';
 import { C, SIZE } from '../lib/theme';
-import { Btn, Surface, T, fmtDate } from './ui';
+import { Btn, EstNote, Surface, T, fmtDate } from './ui';
 
 // Validated categorical order (dataviz validator, light surface): green, blue, amber.
 export const PART_COLORS = { prevented: '#2F855A', rescued: '#2B6CB0', recovered: '#B7791F' } as const;
@@ -24,7 +24,6 @@ function Bar({ parts }: { parts: { key: string; n: number; color: string }[] }) 
 
 export function Lifetime({ totals }: { totals: LedgerTotals }) {
   const { t } = useSession();
-  const est = ` (${t('estimate')})`;
   if (totals.count === 0) {
     return (
       <View style={{ gap: 12 }}>
@@ -64,14 +63,14 @@ export function Lifetime({ totals }: { totals: LedgerTotals }) {
         <T bold size={36} color={C.primary} style={{ lineHeight: 44 }}>
           {t('waste_value', { mid: fmtNum(Math.max(0, k.mid)) })}
         </T>
-        <T size={SIZE.small}>{`${rangeKg}${est}`}</T>
+        <T size={SIZE.small}>{rangeKg}</T>
       </View>
 
       <Surface style={{ padding: 16, gap: 10 }}>
         <T size={SIZE.small} color={C.muted}>
           {t('share_saved')}
         </T>
-        <T bold size={SIZE.number}>{`${share}%${est}`}</T>
+        <T bold size={SIZE.number}>{`${share}%`}</T>
         <View
           accessible
           accessibilityLabel={`${t('share_saved')} ${share}%`}
@@ -90,7 +89,7 @@ export function Lifetime({ totals }: { totals: LedgerTotals }) {
         </T>
         {m ? (
           <>
-            <T bold size={SIZE.number}>{`Rs ${fmtNum(Math.round(m.mid))}${est}`}</T>
+            <T bold size={SIZE.number}>{`Rs ${fmtNum(Math.round(m.mid))}`}</T>
             <T size={SIZE.label}>{t('money_range', { low: fmtNum(Math.round(m.low)), high: fmtNum(Math.round(m.high)) })}</T>
           </>
         ) : (
@@ -118,6 +117,7 @@ export function Lifetime({ totals }: { totals: LedgerTotals }) {
           </View>
         </Surface>
       ) : null}
+      <EstNote />
     </View>
   );
 }

@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note"
     ]
   },
   "new_load": "অশোবা লোড",
@@ -370,6 +370,7 @@
   "of_handled": "অন্নসেতু দা থাদোকপা কিলো {kg} গী মনুংদগি",
   "total_money_saved": "মপুং ওইবা ফংলিবা পৈসা",
   "money_note": "ভাড়া অমসুং ফী কেন্নদুনা লোডশিংগী ফংনবা (অনুমান)",
+  "est_note": "মশিং পুম্নমক খন্নবনি।",
   "count_since": "{date} দগি লোড {n}",
   "ledger_empty": "হৌজিক খন্দ্রে। নহাক্কী রেকর্ড হৌরকপা সুজাবদা \"মসি পাউলু\" ফোঙ্গো।",
   "saved_record": "নহাক্কী রেকর্ডদা শীজিল্লে",

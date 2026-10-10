@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note"
     ]
   },
   "new_load": "नयाँ लोड",
@@ -370,6 +370,7 @@
   "of_handled": "अन्नसेतुबाट पठाएको {kg} किलोमध्ये",
   "total_money_saved": "जम्मा बचेको पैसा",
   "money_note": "ढुवानी र शुल्क कटाएपछि तपाईंका लोडको आम्दानी (अनुमान)",
+  "est_note": "सबै अङ्कहरू अनुमान हुन्।",
   "count_since": "{date} देखि {n} लोड",
   "ledger_empty": "अहिलेसम्म केही छैन। आफ्नो रेकर्ड सुरु गर्न सुझावमा \"यही छान्नुहोस्\" थिच्नुहोस्।",
   "saved_record": "तपाईंको रेकर्डमा सुरक्षित गरियो",
