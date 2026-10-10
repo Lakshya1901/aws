@@ -1,28 +1,42 @@
 # AnnaSetu: to do (handoff for a fresh Claude Code session)
 
 Deadline: Sunday October 11, 2026, 8:00 PM IST.
-Branch: `edit/beautiful-ritchie-ij5zmf` (`edit/festive-darwin-bd1y1i` was merged to `main` on October 9). Spec and every decision so far: `CLAUDE.md` (D1-D18 in Section 19.1).
+Branch: `edit/beautiful-ritchie-ij5zmf` (`edit/festive-darwin-bd1y1i` was merged to `main` on October 9). Spec and every decision so far: `CLAUDE.md` (D1-D25 in Section 19.1; D24 and D25 are the latest).
 
-## How to start the new session
+## How to start the next session
 
-1. Do steps 1.1-1.4 below first (credentials only reach a new session).
-2. Start a new Claude Code cloud session on this repo and branch.
-3. Paste this as the first message:
+1. Environment settings already hold `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION=ap-south-1` and `EXPO_TOKEN` (all verified October 10).
+2. Start a new Claude Code cloud session on this repo and branch and paste:
 
 ```
-Read CLAUDE.md and TODO.md completely. Work through TODO.md in order, starting at
-the first unchecked item. Confirm with me before any `sam deploy`, any change to
-GitHub repo settings (rename, visibility), and any merge to main. Tick items in
-TODO.md as they are done and commit TODO.md with the work.
+Read CLAUDE.md and TODO.md completely. Start at "Next session (October 10)" in TODO.md.
+Ask me the three open decisions first. Confirm with me before any `sam deploy`, any
+change to GitHub repo settings (rename, visibility), and any merge to main. Tick items
+in TODO.md as they are done and commit TODO.md with the work.
 ```
 
-## Current state (October 9)
+3. Container setup the new session needs (tools are not persisted): `pip install --ignore-installed PyYAML boto3 aws-sam-cli awscli pytest matplotlib`; `cd app && npm ci`.
 
-- Backend: 85 tests pass (`python -m pytest backend/tests -q`). App: `npx tsc --noEmit` passes, Android export builds.
-- Data: CEDA tomato snapshot 2022-2025 (7 Kolar-region markets, district level), NASA POWER weather for both replay windows.
-- Demo replays (D18): 2023-09-06 (documented arrival glut at Kolar; headline) and 2025-03-19 (Kolar's 2025 low, below harvest cost).
-- Blocking: `data/routes_cache.json` is empty, so `/recommend` and `/plan` return 422 `drive_time_unavailable` until step 2.1 runs (D11).
-- Not yet done anywhere: AWS deploy, any run on a phone, native-speaker review, usability test.
+## Current state (October 10)
+
+- Deployed: stack `annasetu` in ap-south-1, `UPDATE_COMPLETE`. API `https://udlpm9qppa.execute-api.ap-south-1.amazonaws.com`; key in SSM `/annasetu/app_api_key` (never print or commit it). Bucket suffix `abcd11`. Bedrock off; no alarm email.
+- Data (D24): India Data Portal market-level AGMARKNET, 400 commodities, 4,142 markets, 2021-01 to 2026-05. Per-commodity files in `s3://annasetu-data-abcd11/idp/` (rebuild: download the two CSVs listed in `data/snapshot/idp_manifest.json`, then `scripts/build_idp.py` and `scripts/build_idp_config.py`). MarketRisk holds the 20 preload crops for as-of 2023-09-06 plus guava (fetched on request).
+- Routing crops: tomato, onion. Radar only: everything else (potato and banana lack a sourced harvest cost).
+- Checks: 105 backend tests pass; `tsc` clean; `sam validate --lint` passes; backtest 937fb04f9baf reproducible (still `same_day`).
+- Live smoke test passed on every endpoint (October 10), including `/crops/fetch` for guava.
+- Not yet done anywhere: UI design pass, APK, any run on a phone, native-speaker review (new crop-picker strings too), usability test, README update for D24.
+
+## Next session (October 10)
+
+### A. Three decisions to ask the user first
+- [ ] A1 Headline replay day (D18). Market-level results with 10 demo loads from Kolar: 2023-09-06 waste avoided about -8 kg, no split; 2023-09-15 and 2023-09-29 split the loads (Binny Mill + Punganur / Vayalapadu) with waste avoided mid about 500-730 kg; 2025-03-19 (second replay) 365-812 kg per 2 t load. After choosing: set `replay_date` in `config/model.json`, record in CLAUDE.md D18, redeploy (confirm first), invoke ingest with `{"crops": [...preload], "as_of_date": "<day>"}` or the plain `{}` fan-out, check the weather snapshot covers the day (`data/snapshot/weather_power_*`).
+- [ ] A2 Expo account for the EAS project: `lakshya1901` or `lakshya1901-team` (`eas init` writes the project id into `app/app.json`).
+- [ ] A3 UI design approach: recommended, design the Today radar and Recommendation card first as design canvases here, then apply to the Expo screens.
+
+### B. UI and UX design, then APK (user asked: design first, then export the APK)
+- [ ] B1 Design pass on Today (radar, crop chips, Other crop), Recommendation card (Section 14.3 rules), then the remaining screens. Keep Section 14.6 rules (16 pt base, 24 pt card numbers, 48 dp targets, colour + word + icon).
+- [ ] B2 Apply to `app/`; `npx tsc --noEmit`; Android export builds.
+- [ ] B3 `app/.env` (git-ignored) with `EXPO_PUBLIC_API_URL` and `EXPO_PUBLIC_API_KEY`; `eas env:create --environment preview` for both (key as secret); `eas build -p android --profile preview`; attach the APK to a GitHub Release (TODO 3.5).
 
 ## Today (October 9)
 
