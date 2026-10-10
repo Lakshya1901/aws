@@ -4,7 +4,7 @@ import os
 
 REQUIRED_CROP_FIELDS = (
     "crop_id", "t_ref_c", "sl_ref_hours", "sl_ref_hours_range", "q10", "alpha",
-    "storable", "harvest_cost_rs_per_kg", "second_life",
+    "storable", "second_life",
 )
 
 

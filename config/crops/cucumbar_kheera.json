@@ -1,0 +1,47 @@
+{
+  "crop_id": "cucumbar_kheera",
+  "names": {
+    "en": "Cucumber",
+    "hi": "खीरा",
+    "kn": "ಸೌತೆಕಾಯಿ"
+  },
+  "agmarknet_commodity": "Cucumbar(Kheera)",
+  "t_ref_c": 25,
+  "sl_ref_hours": 96,
+  "sl_ref_hours_range": [
+    72,
+    120
+  ],
+  "q10": 2.27,
+  "alpha": 0.18,
+  "storable": false,
+  "harvest_cost_rs_per_kg": null,
+  "unit_box_kg": null,
+  "water_l_per_kg": 353.0,
+  "second_life": [
+    "processor",
+    "food_bank",
+    "biogas",
+    "compost"
+  ],
+  "status": {
+    "t_ref_c": "sourced",
+    "q10": "assumption",
+    "sl_ref_hours": "placeholder",
+    "alpha": "assumption",
+    "storable": "sourced",
+    "water_l_per_kg": "placeholder",
+    "sl_ref_hours_range": "placeholder"
+  },
+  "sources": {
+    "t_ref_c": "CLAUDE.md Section 11 reference temperature",
+    "q10": "Median Q10 of the vegetables with derived values (no usable respiration data)",
+    "sl_ref_hours": "Ambient life 72-120 h at unstated temperature (taken as 25 C), converted to 25 C with Q10; https://arccjournals.com/journal/agricultural-science-digest/D-5985",
+    "alpha": "Median alpha of the vegetables calibrated on NABCONS 2022; no loss row for this crop",
+    "storable": "https://www.ars.usda.gov/arsuserfiles/oc/np/commercialstorage/commercialstorage.pdf",
+    "second_life": "Processing: pickle (vinegar), minimally processed cucumber (https://niftem-t.ac.in/olapp/pmfme/upload/mt_handbook_0.pdf); Recover: biogas, compost (D19)",
+    "water_l_per_kg": "Mekonnen and Hoekstra 2010, Report 47, global average, row 'Cucumbers and gherkins', https://www.waterfootprint.org/resources/Report47-WaterFootprintCrops-Vol1.pdf",
+    "sl_ref_hours_range": "Same basis as sl_ref_hours",
+    "names": "hi/kn pending native review (D33)"
+  }
+}

@@ -57,7 +57,8 @@ def allocate_load(load, crop, market_ctx, outlets, added_kg, configs):
 
     best_net = fresh[0]["net_rs_per_kg"]["mid"]
     advice = None
-    if load.get("harvest") != "harvested" and best_net < crop["harvest_cost_rs_per_kg"]:
+    cost = crop.get("harvest_cost_rs_per_kg")  # optional (D33): without it there is no harvest advice
+    if load.get("harvest") != "harvested" and cost is not None and best_net < cost:
         advice = {"code": "delay_harvest" if crop["storable"] else "harvest_to_order",
                   "best_net_rs_per_kg": best_net, "harvest_cost_rs_per_kg": crop["harvest_cost_rs_per_kg"]}
     return {

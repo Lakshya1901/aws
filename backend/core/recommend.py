@@ -67,7 +67,7 @@ def _assumptions_used(results, crops, configs):
         i = r["impact"]
         if i["waste_avoided_kg"] is not None and i["redirected_kg"]:
             keys.add("dump_share_table")
-            if below_cost(r["default"], crops[r["crop"]]["harvest_cost_rs_per_kg"]):
+            if below_cost(r["default"], crops[r["crop"]].get("harvest_cost_rs_per_kg")):
                 keys.add("below_cost_dump_share")
         if i["diesel_l"] is not None:
             keys.update(("diesel_l_per_km", "co2_kg_per_l_diesel"))

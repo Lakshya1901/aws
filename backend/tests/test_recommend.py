@@ -124,6 +124,17 @@ def test_harvest_cost_above_best_net_gives_advice(configs):
     assert harvested["advice"] is None
 
 
+def test_crop_without_harvest_cost_routes_without_advice(configs):
+    # D33: harvest cost is optional; without it the load is still routed, with no harvest advice and no D12 dump rule.
+    rows = (history("kolar", 100, 4) + history("chintamani", 50, 4) + history("bengaluru", 300, 4)
+            + history("madanapalle", 80, 4))
+    c = copy.deepcopy(configs)
+    c["crops"]["tomato"]["harvest_cost_rs_per_kg"] = None
+    r = recommend(load(), rows, MARKETS, OUTLETS, c, AS_OF)
+    assert r["top"]["type"] == "mandi" and r["advice"] is None
+    assert "below_cost_dump_share" not in r["assumptions_used"]
+
+
 def test_stale_data_sets_flag_and_widens_ranges(configs):
     fresh = recommend(load(), normal_week(), MARKETS, OUTLETS, configs, AS_OF)
     stale_rows = [r for r in normal_week() if r["market_id"] != "kolar"] + history("kolar", 100, 20, end="2025-04-01")

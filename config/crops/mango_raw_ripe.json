@@ -1,0 +1,47 @@
+{
+  "crop_id": "mango_raw_ripe",
+  "names": {
+    "en": "Raw mango",
+    "hi": "कच्चा आम",
+    "kn": "ಮಾವಿನಕಾಯಿ"
+  },
+  "agmarknet_commodity": "Mango(Raw-Ripe)",
+  "t_ref_c": 25,
+  "sl_ref_hours": 252,
+  "sl_ref_hours_range": [
+    216,
+    288
+  ],
+  "q10": 3.28,
+  "alpha": 0.45,
+  "storable": false,
+  "harvest_cost_rs_per_kg": null,
+  "unit_box_kg": null,
+  "water_l_per_kg": 1800.0,
+  "second_life": [
+    "processor",
+    "food_bank",
+    "biogas",
+    "compost"
+  ],
+  "status": {
+    "t_ref_c": "sourced",
+    "q10": "placeholder",
+    "sl_ref_hours": "placeholder",
+    "alpha": "placeholder",
+    "storable": "sourced",
+    "water_l_per_kg": "placeholder",
+    "sl_ref_hours_range": "placeholder"
+  },
+  "sources": {
+    "t_ref_c": "CLAUDE.md Section 11 reference temperature",
+    "q10": "Derived from respiration rates, USDA Agriculture Handbook 66 or cited study (https://www.ars.usda.gov/arsuserfiles/oc/np/commercialstorage/commercialstorage.pdf)",
+    "sl_ref_hours": "Ambient life 216-288 h at 25 C (time for mature-green fruit to ripen), converted to 25 C with Q10; https://epubs.icar.org.in/index.php/IJAgS/article/download/930/392/1893",
+    "alpha": "Calibrated like tomato: a 14 h trip at 25 C gives the NABCONS 2022 market-level loss 2.5% (row 'Mango'), https://www.pib.gov.in/PressReleasePage.aspx?PRID=2151371&reg=48&lang=2",
+    "storable": "https://www.ars.usda.gov/arsuserfiles/oc/np/commercialstorage/commercialstorage.pdf",
+    "second_life": "Processing: raw slices in brine, amchur, pickle, murabba, chutney, squash, jam, pulp, juice, nectar, slices (https://www.nhb.gov.in/model-project-reports/Horticulture%20Crops/Mango/Mango1.htm); Recover: biogas, compost (D19)",
+    "water_l_per_kg": "Mekonnen and Hoekstra 2010, Report 47, global average, row 'Mangoes, mangosteens, guavas', https://www.waterfootprint.org/resources/Report47-WaterFootprintCrops-Vol1.pdf",
+    "sl_ref_hours_range": "Same basis as sl_ref_hours",
+    "names": "hi/kn pending native review (D33)"
+  }
+}

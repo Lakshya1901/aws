@@ -109,7 +109,7 @@ def explanation_facts(r, crop, lang, cfg):
                         **({"arrival_ratio": d["arrival_ratio"]} if _ratio_driven(d, cfg) else {})),
         "best_fresh_net_rs_per_kg": best["net_rs_per_kg"] if best else None,
         "waste_avoided_kg": r["impact"]["waste_avoided_kg"], "redirected_kg": r["impact"]["redirected_kg"],
-        "advice": (r["advice"] or {}).get("code"), "harvest_cost_rs_per_kg": crop["harvest_cost_rs_per_kg"],
+        "advice": (r["advice"] or {}).get("code"), "harvest_cost_rs_per_kg": crop.get("harvest_cost_rs_per_kg"),
         "data_stale": r["data"]["stale"],
     }
 
@@ -384,7 +384,7 @@ def post_recommend(body):
             "top": _outlet(r["top"]), "default": _outlet(r["default"]),
             "alternatives": [_outlet(o) for o in r["alternatives"]],
             "impact": r["impact"], "explanation": expl,
-            "advice": (r["advice"] or {}).get("code"), "harvest_cost_rs_per_kg": crop["harvest_cost_rs_per_kg"],
+            "advice": (r["advice"] or {}).get("code"), "harvest_cost_rs_per_kg": crop.get("harvest_cost_rs_per_kg"),
             "assumptions_used": r["assumptions_used"]}
 
 

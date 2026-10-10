@@ -129,7 +129,7 @@ CASES = {
     "recommend_stale": ("stale_week", "POST", "/recommend", None, _recommend_body()),
     "recommend_422_no_markets": ("normal_week", "POST", "/recommend", None,
                                  _recommend_body(origin={"lat": 28.61, "lon": 77.21, "place": "Delhi"})),
-    "recommend_422_crop_not_configured": ("normal_week", "POST", "/recommend", None, _recommend_body(crop="banana")),
+    "recommend_422_crop_not_configured": ("normal_week", "POST", "/recommend", None, _recommend_body(crop="jack_fruit")),
     "recommend_422_drive_time": ("normal_week", "POST", "/recommend", None,
                                  _recommend_body(origin={"lat": 13.2, "lon": 78.2, "place": "no cached route"})),
     "recommend_422_origin_unknown": ("normal_week", "POST", "/recommend", None,
@@ -340,22 +340,22 @@ def test_radar_only_crop_and_crops_routes(api, tmp_path, monkeypatch):
     setup("glut_day")
     cfg = pathlib.Path(os.environ["CONFIG_DIR"])
     (cfg / "commodities.json").write_text(json.dumps({"commodities": [
-        {"crop_id": "brinjal", "name": "Brinjal", "category": "Vegetables", "markets": 4, "preload": True},
+        {"crop_id": "jack_fruit", "name": "Jack Fruit", "category": "Fruits", "markets": 4, "preload": True},
         {"crop_id": "tomato", "name": "Tomato", "category": "Vegetables", "markets": 4, "preload": True}]}))
     snap = pathlib.Path(os.environ["SNAPSHOT_DIR"])
-    with open(snap / "test_brinjal_synthetic.csv", "w", newline="") as fh:
+    with open(snap / "test_jack_fruit_synthetic.csv", "w", newline="") as fh:
         w = csv.DictWriter(fh, ["date", "market_id", "crop", "arrivals_t", "modal_price_kg"])
         w.writeheader()
-        w.writerows(dict(r, crop="brinjal") for r in glut_day())
-    s, risk = call("GET", "/risk", {"crop": "brinjal"})
+        w.writerows(dict(r, crop="jack_fruit") for r in glut_day())
+    s, risk = call("GET", "/risk", {"crop": "jack_fruit"})
     assert s == 200 and risk["unit_box_kg"] is None
     assert {m["market_id"]: m["risk_level"] for m in risk["markets"]}["kolar"] == "glut"
-    assert call("POST", "/recommend", body=_recommend_body(crop="brinjal"))[1]["error"] == "crop_not_configured"
+    assert call("POST", "/recommend", body=_recommend_body(crop="jack_fruit"))[1]["error"] == "crop_not_configured"
     s, crops = call("GET", "/crops")
-    assert s == 200 and {c["crop_id"]: c["routing"] for c in crops["crops"]} == {"brinjal": False, "tomato": True}
-    assert call("GET", "/crops", {"crop": "brinjal"})[1]["crops"][0]["status"] == "ready"
+    assert s == 200 and {c["crop_id"]: c["routing"] for c in crops["crops"]} == {"jack_fruit": False, "tomato": True}
+    assert call("GET", "/crops", {"crop": "jack_fruit"})[1]["crops"][0]["status"] == "ready"
     assert call("GET", "/crops", {"crop": "okra"})[0] == 404
-    assert call("POST", "/crops/fetch", body={"crop": "brinjal"})[1] == {"crop": "brinjal", "status": "ready"}
+    assert call("POST", "/crops/fetch", body={"crop": "jack_fruit"})[1] == {"crop": "jack_fruit", "status": "ready"}
 
 
 def test_contexts_dynamodb_reads_market_risk(monkeypatch):

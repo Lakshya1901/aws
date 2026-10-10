@@ -1,0 +1,44 @@
+{
+  "crop_id": "karbuja_musk_melon",
+  "names": {
+    "en": "Muskmelon",
+    "hi": "खरबूजा",
+    "kn": "ಖರ್ಬೂಜ"
+  },
+  "agmarknet_commodity": "Karbuja(Musk Melon)",
+  "t_ref_c": 25,
+  "sl_ref_hours": 89,
+  "sl_ref_hours_range": [
+    74,
+    104
+  ],
+  "q10": 1.77,
+  "alpha": 0.17,
+  "storable": false,
+  "harvest_cost_rs_per_kg": null,
+  "unit_box_kg": null,
+  "water_l_per_kg": null,
+  "second_life": [
+    "food_bank",
+    "biogas",
+    "compost"
+  ],
+  "status": {
+    "t_ref_c": "sourced",
+    "q10": "placeholder",
+    "sl_ref_hours": "placeholder",
+    "alpha": "placeholder",
+    "storable": "sourced",
+    "sl_ref_hours_range": "placeholder"
+  },
+  "sources": {
+    "t_ref_c": "CLAUDE.md Section 11 reference temperature",
+    "q10": "Derived from respiration rates, USDA Agriculture Handbook 66 or cited study (https://www.ars.usda.gov/arsuserfiles/oc/np/commercialstorage/commercialstorage.pdf)",
+    "sl_ref_hours": "Cold-storage life 240-336 h at 4.5 C (2-7 C), converted to 25 C with Q10; https://www.ars.usda.gov/arsuserfiles/oc/np/commercialstorage/commercialstorage.pdf",
+    "alpha": "Calibrated like tomato: a 14 h trip at 25 C gives the NABCONS 2022 market-level loss 2.71% (row 'Muskmelon'), https://www.pib.gov.in/PressReleasePage.aspx?PRID=2151371&reg=48&lang=2",
+    "storable": "https://www.ars.usda.gov/arsuserfiles/oc/np/commercialstorage/commercialstorage.pdf",
+    "second_life": "Recover: biogas, compost (D19)",
+    "sl_ref_hours_range": "Same basis as sl_ref_hours",
+    "names": "hi/kn pending native review (D33)"
+  }
+}

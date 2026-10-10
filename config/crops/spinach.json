@@ -1,0 +1,46 @@
+{
+  "crop_id": "spinach",
+  "names": {
+    "en": "Spinach",
+    "hi": "पालक",
+    "kn": "ಪಾಲಕ್"
+  },
+  "agmarknet_commodity": "Spinach",
+  "t_ref_c": 25,
+  "sl_ref_hours": 53,
+  "sl_ref_hours_range": [
+    53,
+    53
+  ],
+  "q10": 2.09,
+  "alpha": 0.18,
+  "storable": false,
+  "harvest_cost_rs_per_kg": null,
+  "unit_box_kg": null,
+  "water_l_per_kg": 292.0,
+  "second_life": [
+    "food_bank",
+    "biogas",
+    "compost"
+  ],
+  "status": {
+    "t_ref_c": "sourced",
+    "q10": "placeholder",
+    "sl_ref_hours": "placeholder",
+    "alpha": "assumption",
+    "storable": "sourced",
+    "water_l_per_kg": "placeholder",
+    "sl_ref_hours_range": "placeholder"
+  },
+  "sources": {
+    "t_ref_c": "CLAUDE.md Section 11 reference temperature",
+    "q10": "Derived from respiration rates, USDA Agriculture Handbook 66 or cited study (https://www.ars.usda.gov/arsuserfiles/oc/np/commercialstorage/commercialstorage.pdf)",
+    "sl_ref_hours": "Cold-storage life 336-336 h at 0 C, converted to 25 C with Q10; https://www.ars.usda.gov/arsuserfiles/oc/np/commercialstorage/commercialstorage.pdf",
+    "alpha": "Median alpha of the vegetables calibrated on NABCONS 2022; no loss row for this crop",
+    "storable": "https://www.ars.usda.gov/arsuserfiles/oc/np/commercialstorage/commercialstorage.pdf",
+    "second_life": "Recover: biogas, compost (D19)",
+    "water_l_per_kg": "Mekonnen and Hoekstra 2010, Report 47, global average, row 'Spinach', https://www.waterfootprint.org/resources/Report47-WaterFootprintCrops-Vol1.pdf",
+    "sl_ref_hours_range": "Same basis as sl_ref_hours",
+    "names": "hi/kn pending native review (D33)"
+  }
+}

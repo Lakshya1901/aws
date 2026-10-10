@@ -1,0 +1,44 @@
+{
+  "crop_id": "pointed_gourd_parval",
+  "names": {
+    "en": "Pointed gourd (parval)",
+    "hi": "परवल",
+    "kn": "ಪರವಲ್"
+  },
+  "agmarknet_commodity": "Pointed Gourd(Parval)",
+  "t_ref_c": 25,
+  "sl_ref_hours": 72,
+  "sl_ref_hours_range": [
+    72,
+    72
+  ],
+  "q10": 2.27,
+  "alpha": 0.18,
+  "storable": false,
+  "harvest_cost_rs_per_kg": null,
+  "unit_box_kg": null,
+  "water_l_per_kg": null,
+  "second_life": [
+    "food_bank",
+    "biogas",
+    "compost"
+  ],
+  "status": {
+    "t_ref_c": "sourced",
+    "q10": "assumption",
+    "sl_ref_hours": "placeholder",
+    "alpha": "assumption",
+    "storable": "sourced",
+    "sl_ref_hours_range": "placeholder"
+  },
+  "sources": {
+    "t_ref_c": "CLAUDE.md Section 11 reference temperature",
+    "q10": "Median Q10 of the vegetables with derived values (no usable respiration data)",
+    "sl_ref_hours": "Ambient life 48-48 h at 30 C (untreated control), converted to 25 C with Q10; https://pmc.ncbi.nlm.nih.gov/articles/PMC9583917/",
+    "alpha": "Median alpha of the vegetables calibrated on NABCONS 2022; no loss row for this crop",
+    "storable": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9583917/",
+    "second_life": "Recover: biogas, compost (D19)",
+    "sl_ref_hours_range": "Same basis as sl_ref_hours",
+    "names": "hi/kn pending native review (D33)"
+  }
+}

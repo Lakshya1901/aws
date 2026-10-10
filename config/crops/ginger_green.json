@@ -1,0 +1,49 @@
+{
+  "crop_id": "ginger_green",
+  "names": {
+    "en": "Ginger (fresh)",
+    "hi": "अदरक",
+    "kn": "ಶುಂಠಿ"
+  },
+  "agmarknet_commodity": "Ginger(Green)",
+  "t_ref_c": 25,
+  "sl_ref_hours": 673,
+  "sl_ref_hours_range": [
+    538,
+    808
+  ],
+  "q10": 2.27,
+  "alpha": 0.18,
+  "storable": true,
+  "harvest_cost_rs_per_kg": null,
+  "unit_box_kg": 60,
+  "water_l_per_kg": 1657.0,
+  "second_life": [
+    "processor",
+    "food_bank",
+    "biogas",
+    "compost"
+  ],
+  "status": {
+    "t_ref_c": "sourced",
+    "q10": "assumption",
+    "sl_ref_hours": "placeholder",
+    "alpha": "assumption",
+    "storable": "sourced",
+    "water_l_per_kg": "placeholder",
+    "unit_box_kg": "sourced",
+    "sl_ref_hours_range": "placeholder"
+  },
+  "sources": {
+    "t_ref_c": "CLAUDE.md Section 11 reference temperature",
+    "q10": "Median Q10 of the vegetables with derived values (no usable respiration data)",
+    "sl_ref_hours": "Cold-storage life 1440-2160 h at 13 C (12-14 C), converted to 25 C with Q10; https://www.ars.usda.gov/arsuserfiles/oc/np/commercialstorage/commercialstorage.pdf",
+    "alpha": "Median alpha of the vegetables calibrated on NABCONS 2022; no loss row for this crop",
+    "storable": "https://www.ars.usda.gov/arsuserfiles/oc/np/commercialstorage/commercialstorage.pdf",
+    "second_life": "Processing: dry ginger, powder, flakes, salted ginger, candy, squash, pickle, oil/oleoresin (https://epubs.icar.org.in/index.php/IndHort/article/view/170302); Recover: biogas, compost (D19)",
+    "water_l_per_kg": "Mekonnen and Hoekstra 2010, Report 47, global average, row 'Ginger', https://www.waterfootprint.org/resources/Report47-WaterFootprintCrops-Vol1.pdf",
+    "unit_box_kg": "https://www.onmanorama.com/news/kerala/2023/07/05/ginger-prices-soar-wayanad-farmers-despair-agriculture-kerala-updates.html",
+    "sl_ref_hours_range": "Same basis as sl_ref_hours",
+    "names": "hi/kn pending native review (D33)"
+  }
+}

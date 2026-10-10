@@ -1,27 +1,47 @@
 {
   "crop_id": "banana",
-  "names": {"en": "Banana"},
+  "names": {
+    "en": "Banana",
+    "hi": "केला",
+    "kn": "ಬಾಳೆಹಣ್ಣು"
+  },
   "agmarknet_commodity": "Banana",
   "t_ref_c": 25,
-  "sl_ref_hours": null,
-  "sl_ref_hours_range": null,
-  "q10": null,
-  "alpha": null,
-  "storable": null,
+  "sl_ref_hours": 554,
+  "sl_ref_hours_range": [
+    482,
+    627
+  ],
+  "q10": 2.17,
+  "alpha": 0.95,
+  "storable": false,
   "harvest_cost_rs_per_kg": null,
   "unit_box_kg": null,
-  "water_l_per_kg": null,
-  "second_life": ["processor", "food_bank", "feed", "biogas", "compost"],
+  "water_l_per_kg": 790.0,
+  "second_life": [
+    "processor",
+    "food_bank",
+    "biogas",
+    "compost"
+  ],
   "status": {
     "t_ref_c": "sourced",
+    "q10": "assumption",
     "sl_ref_hours": "placeholder",
-    "q10": "placeholder",
     "alpha": "placeholder",
-    "storable": "placeholder",
-    "harvest_cost_rs_per_kg": "placeholder"
+    "storable": "sourced",
+    "water_l_per_kg": "placeholder",
+    "sl_ref_hours_range": "placeholder"
   },
   "sources": {
-    "storable": "CLAUDE.md Section 11 says 'limited' (12-15 C, weeks, ripening-dependent); no hold rule defined, so left null",
-    "second_life": "CLAUDE.md Section 11: ripening/retail, chips (processor), food bank, feed; Recover: feed, biogas, compost (D19)"
+    "t_ref_c": "CLAUDE.md Section 11 reference temperature",
+    "q10": "Median Q10 of the fruits with derived values (no usable respiration data)",
+    "sl_ref_hours": "Ambient life 240-312 h at 34 C, converted to 25 C with Q10; https://journal.iahs.org.in/index.php/ijh/article/download/1311/931",
+    "alpha": "Calibrated like tomato: a 14 h trip at 25 C gives the NABCONS 2022 market-level loss 2.4% (row 'Banana'), https://www.pib.gov.in/PressReleasePage.aspx?PRID=2151371&reg=48&lang=2",
+    "storable": "https://journal.iahs.org.in/index.php/ijh/article/download/1311/931",
+    "second_life": "Processing: chips, banana puree, jam, jelly, juice, wine, halwa, powder (baby food), dehydrated, fibre/rope/paper from banana waste (https://nhb.gov.in/model-project-reports/Horticulture%20Crops/banana/Banana1.htm); Recover: biogas, compost (D19)",
+    "water_l_per_kg": "Mekonnen and Hoekstra 2010, Report 47, global average, row 'Bananas', https://www.waterfootprint.org/resources/Report47-WaterFootprintCrops-Vol1.pdf",
+    "sl_ref_hours_range": "Same basis as sl_ref_hours",
+    "names": "hi/kn pending native review (D33)"
   }
 }
