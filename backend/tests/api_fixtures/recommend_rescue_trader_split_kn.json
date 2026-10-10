@@ -76,7 +76,33 @@
     "latest_date": "2025-04-04",
     "data_complete": true
    },
-   "recover": null,
+   "recover": {
+    "outlet_id": "osm-compost-w287327441",
+    "name": "Karnataka Compost Development Centre - KCDC",
+    "type": "compost",
+    "state": "KA",
+    "net_rs_per_kg": {
+     "low": -0.7704,
+     "mid": -0.7704,
+     "high": -0.7704
+    },
+    "net_note": null,
+    "distance_km": 70.04,
+    "distance_approx": false,
+    "drive_hours": 1.751,
+    "spoilage_share": 0.1652,
+    "spoilage_range": {
+     "low": 0.1298,
+     "mid": 0.1652,
+     "high": 0.2272
+    },
+    "freight_rs_per_kg": 0.7704,
+    "freight_rs_load": 231.132,
+    "contact": null,
+    "verified": false,
+    "note": "Not yet partnered. Mapped in OpenStreetMap; not checked on the ground.",
+    "partnered": false
+   },
    "alternatives": [
     {
      "outlet_id": "chintamani",
@@ -294,16 +320,43 @@
      "verified": false,
      "note": "Not yet partnered",
      "partnered": false
+    },
+    {
+     "outlet_id": "osm-compost-w1354135994",
+     "name": "Leaf Compost",
+     "type": "compost",
+     "state": "KA",
+     "net_rs_per_kg": {
+      "low": -0.7796,
+      "mid": -0.7796,
+      "high": -0.7796
+     },
+     "net_note": null,
+     "distance_km": 70.87,
+     "distance_approx": false,
+     "drive_hours": 1.772,
+     "spoilage_share": 0.1653,
+     "spoilage_range": {
+      "low": 0.1299,
+      "mid": 0.1653,
+      "high": 0.2273
+     },
+     "freight_rs_per_kg": 0.7796,
+     "freight_rs_load": 233.871,
+     "contact": null,
+     "verified": false,
+     "note": "Not yet partnered. Mapped in OpenStreetMap; not checked on the ground.",
+     "partnered": false
     }
    ],
    "impact": {
     "kept_out_of_landfill_kg": {
-     "low": 700.0,
-     "mid": 700.0,
-     "high": 700.0
+     "low": 1000.0,
+     "mid": 1000.0,
+     "high": 1000.0
     },
     "rescued_kg": 700,
-    "recovered_kg": 0,
+    "recovered_kg": 300,
     "biogas_kg": 0,
     "biogas_energy": 0.0,
     "biogas_energy_unit": null,
@@ -320,7 +373,7 @@
    },
    "explanation": {
     "language": "kn",
-    "text": "ಇನ್ನೂ ತಿನ್ನಲು ಯೋಗ್ಯ: 700 ಕೆಜಿ. Kolarಗೆ ಕಳುಹಿಸಿ. ಕೆಟ್ಟುಹೋಗಿದೆ: 300 ಕೆಜಿ. ನಿಮ್ಮ ಹತ್ತಿರ ಇನ್ನೂ ಯಾವುದೇ ಜೈವಿಕ ಅನಿಲ ಅಥವಾ ಗೊಬ್ಬರ ಘಟಕ ಇಲ್ಲ.",
+    "text": "ಇನ್ನೂ ತಿನ್ನಲು ಯೋಗ್ಯ: 700 ಕೆಜಿ. Kolarಗೆ ಕಳುಹಿಸಿ. ಕೆಟ್ಟುಹೋಗಿದೆ: 300 ಕೆಜಿ. Karnataka Compost Development Centre - KCDCಗೆ ಕಳುಹಿಸಿ.",
     "source": "template"
    },
    "assumptions_used": [

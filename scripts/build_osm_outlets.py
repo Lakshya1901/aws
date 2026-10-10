@@ -9,8 +9,9 @@ One query per tag filter over India (area ISO3166-1=IN, admin_level 2), nodes, w
 - food_bank: social_facility=food_bank, amenity=food_bank
 - biogas: plant:source=biogas, generator:source=biogas, man_made=biogas_plant
 - compost: amenity=recycling with recycling:organic, recycling:green_waste or recycling:compost = yes, except
-  recycling_type=container (bins); man_made=composting_plant (any man_made value containing "compost");
-  man_made, landuse or industrial named "compost..." (clearly composting only)
+  recycling_type=container (bins) not named "compost..."; man_made=composting_plant (any man_made value containing
+  "compost"); a waste transfer station, man_made, landuse or industrial feature named "compost..." (clearly
+  composting only: roads, toilets, shops and shelters named "compost..." are skipped)
 Queries run 30 s apart, with one retry each: the mirror answers 504 to back-to-back queries.
 Food processors are not taken: OSM does not say which produce they accept.
 
@@ -47,12 +48,15 @@ QUERIES = {
                 'nwr["amenity"="recycling"]["recycling:green_waste"="yes"](area.in);',
                 'nwr["amenity"="recycling"]["recycling:compost"="yes"](area.in);',
                 'nwr["man_made"~"compost"](area.in);',
-                'nwr["man_made"]["name"~"compost",i](area.in);',
-                'nwr["landuse"]["name"~"compost",i](area.in);',
-                'nwr["industrial"]["name"~"compost",i](area.in);'],
+                'nwr["name"~"compost",i](area.in);'],
 }
 FOOD_BANK_NAME = re.compile(r"food\s*bank|roti\s*bank", re.I)
 PAUSE_S = 30
+# Reviewed October 10 and left out (OSM element -> reason); not deleted from OSM, only not used here.
+EXCLUDE = {
+    "way/283807712": "untagged 'Bio-Gas Plant' near Ghazipur dairy, Delhi: likely cattle dung, no sign it takes vegetable waste",
+    "node/12595635486": "'food bank' near Abu Road tagged operator '#iit bhu': looks like a mapping exercise",
+}
 LIFECYCLE = ("disused", "abandoned", "proposed", "construction", "planned", "demolished", "removed", "razed",
              "destroyed", "was", "dismantled")
 
@@ -92,6 +96,18 @@ def closed(tags):
     return "end_date" in tags
 
 
+def compost_site(tags):
+    """A site that takes a load of organic waste: a recycling centre for organic waste (not a bin), a composting plant,
+    or a waste facility, works, landfill or industrial area named "compost..."."""
+    named = "compost" in tags.get("name", "").lower()
+    if tags.get("amenity") == "recycling":
+        return tags.get("recycling_type") != "container" or named
+    if "compost" in tags.get("man_made", ""):
+        return True
+    return named and (tags.get("amenity") == "waste_transfer_station" or "man_made" in tags
+                      or "landuse" in tags or "industrial" in tags)
+
+
 def haversine_km(a_lat, a_lon, b_lat, b_lon):
     p1, p2 = math.radians(a_lat), math.radians(b_lat)
     h = (math.sin((p2 - p1) / 2) ** 2
@@ -103,13 +119,10 @@ def to_outlet(kind, el, markets, crops):
     tags = el.get("tags", {})
     lat = el.get("lat", (el.get("center") or {}).get("lat"))
     lon = el.get("lon", (el.get("center") or {}).get("lon"))
-    if lat is None or lon is None or closed(tags):
+    if lat is None or lon is None or closed(tags) or f"{el['type']}/{el['id']}" in EXCLUDE:
         return None
-    if (kind == "compost" and tags.get("amenity") != "recycling" and "compost" not in tags.get("man_made", "")
-            and "compost" not in tags.get("name", "").lower()):
+    if kind == "compost" and not compost_site(tags):
         return None
-    if kind == "compost" and tags.get("amenity") == "recycling" and tags.get("recycling_type") == "container":
-        return None  # a bin, not a site that takes a load
     name = tags.get("name") or tags.get("name:en")
     if kind == "food_bank" and not FOOD_BANK_NAME.search(" ".join(
             tags.get(k, "") for k in ("name", "name:en", "operator", "description"))):

@@ -375,6 +375,114 @@
      "verified": false,
      "note": "Not yet partnered. about 100 t a day of 'vegetable and food waste from Koyambedu market and hotels' (Citizen Matters, 2023-03-07). D31",
      "partnered": false
+    },
+    {
+     "outlet_id": "osm-compost-w287327441",
+     "name": "Karnataka Compost Development Centre - KCDC",
+     "type": "compost",
+     "state": "KA",
+     "net_rs_per_kg": {
+      "low": -0.7704,
+      "mid": -0.7704,
+      "high": -0.7704
+     },
+     "net_note": null,
+     "distance_km": 70.04,
+     "distance_approx": false,
+     "drive_hours": 1.751,
+     "spoilage_share": 0.0058,
+     "spoilage_range": {
+      "low": 0.0046,
+      "mid": 0.0058,
+      "high": 0.008
+     },
+     "freight_rs_per_kg": 0.7704,
+     "freight_rs_load": 1540.88,
+     "contact": null,
+     "verified": false,
+     "note": "Not yet partnered. Mapped in OpenStreetMap; not checked on the ground.",
+     "partnered": false
+    },
+    {
+     "outlet_id": "osm-compost-w1354135994",
+     "name": "Leaf Compost",
+     "type": "compost",
+     "state": "KA",
+     "net_rs_per_kg": {
+      "low": -0.7796,
+      "mid": -0.7796,
+      "high": -0.7796
+     },
+     "net_note": null,
+     "distance_km": 70.87,
+     "distance_approx": false,
+     "drive_hours": 1.772,
+     "spoilage_share": 0.0059,
+     "spoilage_range": {
+      "low": 0.0046,
+      "mid": 0.0059,
+      "high": 0.0081
+     },
+     "freight_rs_per_kg": 0.7796,
+     "freight_rs_load": 1559.14,
+     "contact": null,
+     "verified": false,
+     "note": "Not yet partnered. Mapped in OpenStreetMap; not checked on the ground.",
+     "partnered": false
+    },
+    {
+     "outlet_id": "osm-compost-n13955481745",
+     "name": "Sembakkam Zone 3 Micro Compost Centre (MCC)",
+     "type": "compost",
+     "state": "TN",
+     "net_rs_per_kg": {
+      "low": -3.2072,
+      "mid": -3.2072,
+      "high": -3.2072
+     },
+     "net_note": null,
+     "distance_km": 291.56,
+     "distance_approx": false,
+     "drive_hours": 7.289,
+     "spoilage_share": 0.0242,
+     "spoilage_range": {
+      "low": 0.019,
+      "mid": 0.0242,
+      "high": 0.0333
+     },
+     "freight_rs_per_kg": 3.2072,
+     "freight_rs_load": 6414.32,
+     "contact": null,
+     "verified": false,
+     "note": "Not yet partnered. Mapped in OpenStreetMap; not checked on the ground. Operator: Tambaram City Municipal Corporation.",
+     "partnered": false
+    },
+    {
+     "outlet_id": "osm-compost-w497319706",
+     "name": "Compost Yard-Vellalore",
+     "type": "compost",
+     "state": "TN",
+     "net_rs_per_kg": {
+      "low": -3.8108,
+      "mid": -3.8108,
+      "high": -3.8108
+     },
+     "net_note": null,
+     "distance_km": 346.44,
+     "distance_approx": false,
+     "drive_hours": 8.661,
+     "spoilage_share": 0.0288,
+     "spoilage_range": {
+      "low": 0.0226,
+      "mid": 0.0288,
+      "high": 0.0396
+     },
+     "freight_rs_per_kg": 3.8108,
+     "freight_rs_load": 7621.68,
+     "contact": null,
+     "verified": false,
+     "note": "Not yet partnered. Mapped in OpenStreetMap; not checked on the ground.",
+     "partnered": false
     }
    ],
    "impact": {
