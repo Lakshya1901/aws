@@ -488,3 +488,15 @@ def test_live_prices(api, monkeypatch, tmp_path):
     finally:
         advisor._req["live"] = False
         store._configs.cache_clear()
+
+
+def test_harvest_age_in_days():
+    """days_since_harvest x 24 h; 0 days = harvested_today_hours (assumption); hours win when both are sent."""
+    cfg = store.configs()
+    today = cfg["assumptions"]["harvested_today_hours"]["value"]
+    assert advisor._harvest_hours({"days_since_harvest": 2}, cfg) == 48
+    assert advisor._harvest_hours({"days_since_harvest": 0}, cfg) == today
+    assert advisor._harvest_hours({"hours_since_harvest": 5, "days_since_harvest": 3}, cfg) == 5
+    assert advisor._harvest_hours({}, cfg) is None
+    with pytest.raises(advisor.ApiError):
+        advisor._harvest_hours({"days_since_harvest": -1}, cfg)

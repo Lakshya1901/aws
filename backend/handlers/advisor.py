@@ -223,6 +223,19 @@ def _destinations(cfg, outlets, origin, market_ctx=None, radius_key="max_radius_
     return markets + near([{"id": o["outlet_id"], "lat": o["lat"], "lon": o["lon"]} for o in outlets])
 
 
+def _harvest_hours(b, cfg):
+    """Hours since harvest: hours_since_harvest as given, else days_since_harvest x 24, where 0 days (harvested
+    today) is harvested_today_hours (assumption). None when neither is given."""
+    for key, scale in (("hours_since_harvest", 1), ("days_since_harvest", 24)):
+        v = b.get(key)
+        if v is None:
+            continue
+        if isinstance(v, bool) or not isinstance(v, (int, float)) or v < 0:
+            raise ApiError(400, "bad_request", f"{key} must be a number >= 0")
+        return v * scale if v or scale == 1 else assumption(cfg["assumptions"], "harvested_today_hours")
+    return None
+
+
 def _contexts(crop, day, origins):
     """market_context for a crop: MarketRisk for the demo day, or live prices near the origins (D34)."""
     return store.live_contexts(crop, day, origins) if _req["live"] else store.contexts(crop, day)
@@ -247,7 +260,9 @@ def core_load(l, cfg, outlets, day, ctx=None):
     temp = store.temperature_c(origin["lat"], origin["lon"], day)
     if temp is None:
         raise ApiError(422, "temperature_unavailable", f"No weather data near this origin for {day}")
+    hours = _harvest_hours(l, cfg) if l["harvest"] == "harvested" else None
     return {"crop": l["crop"], "quantity_kg": q, "origin": origin, "harvest": l["harvest"], "temp_c": temp,
+            **({"hours_since_harvest": hours} if hours is not None else {}),
             "routes": location.routes_for(origin, _destinations(cfg, outlets, origin, (ctx or {}).get(l["crop"]))),
             "load_id": l.get("load_id")}
 
@@ -334,15 +349,16 @@ def get_risk(q):
 
 
 def rescue_request(b, cfg, outlets, day):
-    """Validate a mandi_unsold request (Step 5b) and add temperature (may be None) and cached routes."""
+    """Validate a mandi_unsold request (Step 5b) and add temperature (may be None) and cached routes.
+    Returns (load, market_context for the crop near the origin)."""
     if not isinstance(b.get("crop"), str):
         raise ApiError(400, "bad_request", "crop is required")
     q = b.get("quantity_kg")
     if isinstance(q, bool) or not isinstance(q, (int, float)) or q <= 0:
         raise ApiError(400, "bad_request", "quantity_kg must be a positive number")
-    h = b.get("hours_since_harvest")
-    if isinstance(h, bool) or not isinstance(h, (int, float)) or h < 0:
-        raise ApiError(400, "bad_request", "hours_since_harvest must be a number >= 0")
+    h = _harvest_hours(b, cfg)
+    if h is None:
+        raise ApiError(400, "bad_request", "hours_since_harvest or days_since_harvest (a number >= 0) is required")
     e, sp = b.get("edible_kg"), b.get("spoiled_kg")
     split = None
     if e is not None or sp is not None:
@@ -354,16 +370,17 @@ def rescue_request(b, cfg, outlets, day):
     get_crop(cfg, b["crop"])
     o = b.get("origin") or {}
     origin = resolve_origin(o, cfg)
+    ctx = _contexts(b["crop"], day, [origin])  # mandis where the edible part could still sell (D36)
     return {"crop": b["crop"], "quantity_kg": q, "origin": origin, "hours_since_harvest": h, "split": split,
             "temp_c": store.temperature_c(origin["lat"], origin["lon"], day),
-            "routes": location.routes_for(origin, _destinations(dict(cfg, markets=[]), outlets, origin, radius_key="rescue_radius_km"))}
+            "routes": location.routes_for(origin, _destinations(cfg, outlets, origin, ctx, radius_key="rescue_radius_km"))}, ctx
 
 
 def post_rescue(body):
     cfg, day = store.configs(), as_of_date()
     lang, outlets = _language(body), store.outlets()
-    load = rescue_request(body, cfg, outlets, day)
-    r = rescue(load, outlets, cfg, day)
+    load, ctx = rescue_request(body, cfg, outlets, day)
+    r = rescue(load, outlets, cfg, day, ctx)
     expl = {"language": lang, "text": rescue_text(r, lang), "source": "template"}
     plan_id = body.get("plan_id") or _plan_id(body, day)
     _save(plan_id, day, lang, lambda rec: rec["recommendations"].append(

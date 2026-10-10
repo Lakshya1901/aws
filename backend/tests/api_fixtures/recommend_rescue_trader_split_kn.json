@@ -38,30 +38,186 @@
     "source": "trader"
    },
    "top": {
-    "outlet_id": "snr_foods",
-    "name": "SNR Foods",
-    "type": "processor",
+    "outlet_id": "kolar",
+    "name": "Kolar",
+    "type": "mandi",
     "state": "KA",
-    "net_rs_per_kg": null,
-    "net_note": "not yet estimated",
-    "distance_km": 38.1,
-    "distance_approx": false,
-    "drive_hours": 0.953,
-    "spoilage_share": 0.1626,
-    "spoilage_range": {
-     "low": 0.1277,
-     "mid": 0.1626,
-     "high": 0.2236
+    "net_rs_per_kg": {
+     "low": 14.5169,
+     "mid": 16.8539,
+     "high": 18.7291
     },
-    "freight_rs_per_kg": 0.4191,
-    "freight_rs_load": 293.37,
-    "contact": "https://snrfoods.in/about",
-    "verified": false,
-    "note": "Not yet partnered",
-    "partnered": false
+    "price_rs_per_kg": {
+     "low": 21.0736,
+     "mid": 22.2774,
+     "high": 23.55
+    },
+    "distance_km": 7.12,
+    "distance_approx": false,
+    "drive_hours": 0.178,
+    "spoilage_share": 0.1799,
+    "spoilage_range": {
+     "low": 0.1414,
+     "mid": 0.1799,
+     "high": 0.2474
+    },
+    "freight_rs_per_kg": 0.0783,
+    "freight_rs_load": 54.824,
+    "fee_pct": 0.0,
+    "commission_pct": 0.05,
+    "handling_pct": 0.01,
+    "risk_level": "safe",
+    "arrival_ratio": 0.9794,
+    "projected_arrival_ratio": 0.9804,
+    "projected_risk_level": "safe",
+    "price_change_3d": 0.163,
+    "elasticity_b": -0.5004,
+    "stale": false,
+    "latest_date": "2025-04-04",
+    "data_complete": true
    },
    "recover": null,
    "alternatives": [
+    {
+     "outlet_id": "chintamani",
+     "name": "Chintamani",
+     "type": "mandi",
+     "state": "KA",
+     "net_rs_per_kg": {
+      "low": 14.0268,
+      "mid": 16.3841,
+      "high": 18.2708
+     },
+     "price_rs_per_kg": {
+      "low": 21.0736,
+      "mid": 22.2774,
+      "high": 23.55
+     },
+     "distance_km": 43.68,
+     "distance_approx": false,
+     "drive_hours": 1.092,
+     "spoilage_share": 0.183,
+     "spoilage_range": {
+      "low": 0.1438,
+      "mid": 0.183,
+      "high": 0.2516
+     },
+     "freight_rs_per_kg": 0.4805,
+     "freight_rs_load": 336.336,
+     "fee_pct": 0.0,
+     "commission_pct": 0.05,
+     "handling_pct": 0.01,
+     "risk_level": "safe",
+     "arrival_ratio": 0.9794,
+     "projected_arrival_ratio": 0.9813,
+     "projected_risk_level": "safe",
+     "price_change_3d": 0.163,
+     "elasticity_b": -0.5004,
+     "stale": false,
+     "latest_date": "2025-04-04",
+     "data_complete": true
+    },
+    {
+     "outlet_id": "bengaluru",
+     "name": "Bengaluru",
+     "type": "mandi",
+     "state": "KA",
+     "net_rs_per_kg": {
+      "low": 13.6205,
+      "mid": 15.9947,
+      "high": 17.8909
+     },
+     "price_rs_per_kg": {
+      "low": 21.0736,
+      "mid": 22.2774,
+      "high": 23.55
+     },
+     "distance_km": 73.98,
+     "distance_approx": false,
+     "drive_hours": 1.85,
+     "spoilage_share": 0.1855,
+     "spoilage_range": {
+      "low": 0.1457,
+      "mid": 0.1855,
+      "high": 0.2551
+     },
+     "freight_rs_per_kg": 0.8138,
+     "freight_rs_load": 569.646,
+     "fee_pct": 0.0,
+     "commission_pct": 0.05,
+     "handling_pct": 0.01,
+     "risk_level": "safe",
+     "arrival_ratio": 0.9794,
+     "projected_arrival_ratio": 0.9797,
+     "projected_risk_level": "safe",
+     "price_change_3d": 0.163,
+     "elasticity_b": -0.5004,
+     "stale": false,
+     "latest_date": "2025-04-04",
+     "data_complete": true
+    },
+    {
+     "outlet_id": "madanapalle",
+     "name": "Madanapalle",
+     "type": "mandi",
+     "state": "AP",
+     "net_rs_per_kg": {
+      "low": 13.449,
+      "mid": 15.8303,
+      "high": 17.7305
+     },
+     "price_rs_per_kg": {
+      "low": 21.0736,
+      "mid": 22.2774,
+      "high": 23.55
+     },
+     "distance_km": 86.78,
+     "distance_approx": false,
+     "drive_hours": 2.169,
+     "spoilage_share": 0.1866,
+     "spoilage_range": {
+      "low": 0.1466,
+      "mid": 0.1866,
+      "high": 0.2565
+     },
+     "freight_rs_per_kg": 0.9546,
+     "freight_rs_load": 668.206,
+     "fee_pct": 0.01,
+     "commission_pct": 0.04,
+     "handling_pct": 0.01,
+     "risk_level": "safe",
+     "arrival_ratio": 0.9794,
+     "projected_arrival_ratio": 0.9806,
+     "projected_risk_level": "safe",
+     "price_change_3d": 0.163,
+     "elasticity_b": -0.5004,
+     "stale": false,
+     "latest_date": "2025-04-04",
+     "data_complete": true
+    },
+    {
+     "outlet_id": "snr_foods",
+     "name": "SNR Foods",
+     "type": "processor",
+     "state": "KA",
+     "net_rs_per_kg": null,
+     "net_note": "not yet estimated",
+     "distance_km": 38.1,
+     "distance_approx": false,
+     "drive_hours": 0.953,
+     "spoilage_share": 0.1626,
+     "spoilage_range": {
+      "low": 0.1277,
+      "mid": 0.1626,
+      "high": 0.2236
+     },
+     "freight_rs_per_kg": 0.4191,
+     "freight_rs_load": 293.37,
+     "contact": "https://snrfoods.in/about",
+     "verified": false,
+     "note": "Not yet partnered",
+     "partnered": false
+    },
     {
      "outlet_id": "abc_fruits",
      "name": "ABC Fruits (tomato paste)",
@@ -164,7 +320,7 @@
    },
    "explanation": {
     "language": "kn",
-    "text": "ಇನ್ನೂ ತಿನ್ನಲು ಯೋಗ್ಯ: 700 ಕೆಜಿ. SNR Foodsಗೆ ಕಳುಹಿಸಿ. ಕೆಟ್ಟುಹೋಗಿದೆ: 300 ಕೆಜಿ. ನಿಮ್ಮ ಹತ್ತಿರ ಇನ್ನೂ ಯಾವುದೇ ಜೈವಿಕ ಅನಿಲ ಅಥವಾ ಗೊಬ್ಬರ ಘಟಕ ಇಲ್ಲ.",
+    "text": "ಇನ್ನೂ ತಿನ್ನಲು ಯೋಗ್ಯ: 700 ಕೆಜಿ. Kolarಗೆ ಕಳುಹಿಸಿ. ಕೆಟ್ಟುಹೋಗಿದೆ: 300 ಕೆಜಿ. ನಿಮ್ಮ ಹತ್ತಿರ ಇನ್ನೂ ಯಾವುದೇ ಜೈವಿಕ ಅನಿಲ ಅಥವಾ ಗೊಬ್ಬರ ಘಟಕ ಇಲ್ಲ.",
     "source": "template"
    },
    "assumptions_used": [

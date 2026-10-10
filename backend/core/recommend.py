@@ -121,10 +121,11 @@ def recommend(load, market_days, markets, outlets, configs, as_of_date, ctx=None
             "impact": r["impact"], "advice": r["advice"], "assumptions_used": p["assumptions_used"]}
 
 
-def rescue(load, outlets, configs, as_of_date):
-    """/recommend with source mandi_unsold (Step 5b), without plan_id and explanation."""
+def rescue(load, outlets, configs, as_of_date, ctx=None):
+    """/recommend with source mandi_unsold (Step 5b), without plan_id and explanation. ctx: the crop's
+    market_context (mandis where the edible part could still sell, D36)."""
     crop = get_crop(configs, load["crop"])
-    r = rescue_load(load, crop, outlets, configs)
+    r = rescue_load(dict(load, as_of_date=to_date(as_of_date).isoformat()), crop, outlets, configs, ctx)
     a = configs["assumptions"]
     keys = {"rescue_radius_km"}
     for o in (r["top"], r["recover"]):

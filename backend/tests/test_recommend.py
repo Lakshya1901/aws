@@ -364,3 +364,15 @@ def test_money_saved_counts_price_and_unsold_share(configs):
     assert m["mid"] == 1000 * (9.0 * (1 - 0.0) - 5.0 * (1 - 0.20))  # R 2.5 at Kolar: 20% unsold (u table)
     assert money_saved(1000, default, default, configs["assumptions"]) == rng(0.0)
     assert money_saved(1000, default, dict(advised, net_rs_per_kg=None), configs["assumptions"]) is None
+
+
+def test_rescue_resells_at_another_mandi_not_its_own(configs):
+    """D36: edible unsold stock goes to another mandi within rescue_radius_km that still pays; the trader's own
+    mandi (within own_mandi_km) is skipped. Without a market context the old order applies (food bank first)."""
+    from backend.core.recommend import market_context
+    ctx = market_context("tomato", normal_week(), MARKETS, configs, AS_OF)
+    at_kolar = {"lat": 13.1367, "lon": 78.1337, "place": "Kolar"}
+    r = rescue(unsold(origin=at_kolar), OUTLETS, configs, AS_OF, ctx)
+    assert r["top"]["type"] == "mandi" and r["top"]["outlet_id"] != "kolar"
+    assert r["top"]["net_rs_per_kg"]["mid"] > 0 and r["impact"]["rescued_kg"] == r["split"]["edible_kg"]
+    assert rescue(unsold(origin=at_kolar), OUTLETS, configs, AS_OF)["top"]["type"] in ("processor", "food_bank")

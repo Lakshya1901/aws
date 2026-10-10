@@ -99,7 +99,7 @@ Resources:
     Properties:
       Handler: backend/handlers/advisor.handler
       MemorySize: 512
-      Timeout: 15
+      Timeout: 29   # under the HTTP API 30 s limit; cold live weather + routes for a new place took 13.8 s
       Policies:
         - Statement:
             - Effect: Allow

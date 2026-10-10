@@ -70,9 +70,28 @@ def allocate_load(load, crop, market_ctx, outlets, added_kg, configs):
     }
 
 
-def rescue_load(load, crop, outlets, configs):
-    """Step 5b: unsold stock at a city mandi. Edible part -> processor, then food bank; spoiled part (and the edible
-    part when no processor or food bank is in radius) -> feed, then biogas, then compost. Fresh mandis are not ranked.
+def _resale(load, crop, market_ctx, kg, configs):
+    """D36: other mandis within rescue_radius_km where the edible part could still sell today, best net first. The
+    trader's own mandi (within own_mandi_km) is skipped: the stock already failed there. Chosen only if it pays after
+    freight, fees and the extra spoilage, is not in glut, and its data is fresh (D25); needs the temperature."""
+    a = configs["assumptions"]
+    if not market_ctx or kg <= 0 or load.get("temp_c") is None:
+        return []
+    near = _nearest(load["origin"], [dict(m["market"], _ctx=m) for m in market_ctx],
+                    assumption(a, "rescue_radius_km"), configs["model"]["nearest_markets"])
+    own = assumption(a, "own_mandi_km")
+    near = [m for m in near if haversine_km(load["origin"]["lat"], load["origin"]["lon"], m["lat"], m["lon"]) > own]
+    opts = [fresh_option(dict(load, quantity_kg=kg), m["_ctx"], 0, crop, configs) for m in near]
+    max_age = assumption(a, "max_data_age_days")
+    ok = [o for o in opts if o["net_rs_per_kg"]["mid"] > 0 and o["risk_level"] not in (None, "glut")
+          and (to_date(load["as_of_date"]) - to_date(o["latest_date"])).days <= max_age]
+    return sorted(ok, key=lambda o: -o["net_rs_per_kg"]["mid"])
+
+
+def rescue_load(load, crop, outlets, configs, market_ctx=None):
+    """Step 5b: unsold stock at a city mandi. Edible part -> another mandi nearby that still pays (D36), else
+    processor, then food bank; spoiled part (and the edible part when none of these is in radius) -> feed, then
+    biogas, then compost.
 
     load["split"] = {"edible_kg", "spoiled_kg"} from the trader, or None: the engine proposes the spoiled share
     s = min(1, alpha * hours_since_harvest / SL(T)) (Step 3, mid), which needs load["temp_c"].
@@ -91,7 +110,8 @@ def rescue_load(load, crop, outlets, configs):
     def options(types, kg):
         opts = [second_life_option(dict(load, quantity_kg=kg), o, crop, configs) for o in near if o["type"] in types]
         return sorted(opts, key=lambda o: SECOND_LIFE_ORDER.index(o["type"]))  # stable: nearest first within a type
-    edible = options(EDIBLE_TYPES, split["edible_kg"]) if split["edible_kg"] > 0 else []
+    edible = (_resale(load, crop, market_ctx, split["edible_kg"], configs)
+              + (options(EDIBLE_TYPES, split["edible_kg"]) if split["edible_kg"] > 0 else []))
     top = edible[0] if edible else None
     to_recover = split["spoiled_kg"] + (0 if top else split["edible_kg"])
     recover_opts = options(RECOVER_TYPES, to_recover) if to_recover > 0 else []

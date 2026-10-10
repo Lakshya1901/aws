@@ -33,6 +33,14 @@
     "source": "CLAUDE.md Section 9, resource accounting",
     "note": "Standard diesel combustion factor; primary source still to cite"
   },
+  "harvested_today_hours": {
+    "value": 6, "unit": "hours since harvest for produce picked today", "status": "assumption",
+    "source": "Same 6 h since harvest as the tomato alpha calibration (CLAUDE.md Section 11); used when the farmer picks 'today' instead of typing hours"
+  },
+  "own_mandi_km": {
+    "value": 2, "unit": "km", "status": "assumption",
+    "source": "CLAUDE.md D36: mandis this close to the trader are the mandi where the stock already failed to sell, so unsold stock is not sent back there"
+  },
   "t_wait_h": {
     "value": 6, "unit": "hours at mandi", "status": "assumption",
     "source": "CLAUDE.md Section 9 Step 3; FPO interviews"
