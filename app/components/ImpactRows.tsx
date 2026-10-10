@@ -123,20 +123,18 @@ export function ImpactRows({ impact, lines }: { impact: Impact; lines: 'plan' | 
         const r = R[k]!;
         const isNull = r.value === t('not_estimated');
         return (
-          <ListRow key={k} first={i === 0} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-            <View style={{ flexShrink: 1, flex: 1, gap: 2 }}>
-              <T bold>{r.label}</T>
-              {r.sub ? (
-                <T size={SIZE.small} color={C.muted}>
-                  {r.sub}
-                </T>
-              ) : null}
-            </View>
-            <View style={{ flexShrink: 1, maxWidth: '50%' }}>
-              <T bold={!isNull} color={isNull || r.muted ? C.muted : C.text} style={{ textAlign: 'right' }}>
-                {r.value}
+          <ListRow key={k} first={i === 0} style={{ gap: 2 }}>
+            <T size={SIZE.small} color={C.muted}>
+              {r.label}
+            </T>
+            <T bold={!isNull} size={isNull ? SIZE.base : SIZE.large} color={isNull || r.muted ? C.muted : C.text}>
+              {r.value}
+            </T>
+            {r.sub ? (
+              <T size={SIZE.label} color={C.muted}>
+                {r.sub}
               </T>
-            </View>
+            ) : null}
           </ListRow>
         );
       })}

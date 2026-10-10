@@ -110,7 +110,7 @@ export default function PlanScreen() {
                 <View style={{ flex: 1, flexShrink: 1, gap: 4 }}>
                   <T bold>{m.name ?? m.market_id}</T>
                   <T size={SIZE.small} color={C.muted}>
-                    {t('loads_count', { n: String(loadsIn(m.market_id)) })}
+                    {loadsIn(m.market_id) === 1 ? t('load_one') : t('loads_count', { n: String(loadsIn(m.market_id)) })}
                   </T>
                   {m.capped && (
                     <View style={{ flexDirection: 'row' }}>

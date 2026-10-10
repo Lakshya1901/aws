@@ -117,8 +117,8 @@ export function RecommendationCard({
           borderRadius: RADIUS.surface,
           padding: 14,
           gap: 4,
-          borderWidth: recommended ? 2 : 0,
-          borderColor: C.primary,
+          borderWidth: 2, // same box size for both; only the recommended one shows its border
+          borderColor: recommended ? C.primary : C.surface,
         }}
       >
         <T bold size={SIZE.small} color={recommended ? C.primary : C.muted}>
