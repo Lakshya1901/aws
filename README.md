@@ -79,7 +79,7 @@ On 2023-09-06 the demo compares the nearest-mandi default with AnnaSetu's alloca
 
 ## 4. Backtest: what the data showed
 
-Snapshot: tomato, 2022-01-01 to 2025-06-30, seven district aggregates (`data/snapshot/ceda_tomato_2022-01-01_2025-06-30.csv`, sha256 `11890d38...f415`). Results: `analysis/out/results_78dc0a403b99.json` (run 78dc0a403b99, after the ISO-week baseline fix) and `analysis/out/second_replay.json`. Each file separates observed values from model output.
+Snapshot: tomato, 2022-01-01 to 2025-06-30, seven district aggregates (`data/snapshot/ceda_tomato_2022-01-01_2025-06-30.csv`, sha256 `11890d38...f415`). Results JSON (each file separates observed values from model output) is not kept in git: the latest runs (market-level run 937fb04f9baf, D13, and `second_replay.json`) are stored in the project's S3 data bucket under `backtest/` (CLAUDE.md Section 8.5), and the commands below regenerate them into `analysis/out/`. The figures in this section are from the earlier district-level run 78dc0a403b99.
 
 **Observed (prices, arrivals, gaps; no model involved)**
 
@@ -102,8 +102,9 @@ Reproduce (deterministic; run ids are content hashes):
 
 ```bash
 python scripts/build_snapshot.py tomato 2022-01-01 2025-06-30   # re-pull from CEDA (optional; snapshot is committed)
-python analysis/backtest.py --crop tomato                         # writes analysis/out/results_<run_id>.json and charts
-python analysis/second_replay.py                                  # writes analysis/out/second_replay.json
+python analysis/backtest.py --crop tomato                         # writes analysis/out/results_<run_id>.json (git-ignored) and charts
+python analysis/second_replay.py                                  # writes analysis/out/second_replay.json (git-ignored)
+aws s3 cp s3://annasetu-data-<suffix>/backtest/ analysis/out/ --recursive   # or fetch the stored runs (team AWS account)
 ```
 
 `analysis/backtest.ipynb` is a viewer for these outputs only.
