@@ -16,6 +16,11 @@
     {"outlet_id": "bangalore_food_bank", "type": "food_bank", "name": "Bangalore Food Bank (fresh produce recovery)", "state": "KA",
       "town": "Bengaluru", "lat": 12.9768, "lon": 77.5901, "coord_source": "nominatim relation 7902476 (Bengaluru)",
       "crops": ["tomato"], "min_qty_kg": null, "offer_price_kg": null,
-      "contact": "https://bangalorefoodbank.com/", "verified": false, "seeded": true, "note": "Not yet partnered"}
+      "contact": "https://bangalorefoodbank.com/", "verified": false, "seeded": true, "note": "Not yet partnered"},
+    {"outlet_id": "india_foodbanking_network_delhi", "type": "food_bank", "name": "India FoodBanking Network (fresh produce recovery)", "state": "DL",
+      "town": "Delhi", "lat": 28.69297, "lon": 77.14872, "coord_source": "Amazon Location place search 2026-10-10: Netaji Subhash Place, Pitampura, Delhi 110034 (office address, relevance 1.0; not a produce drop-off point)",
+      "crops": ["tomato", "onion"], "min_qty_kg": null, "offer_price_kg": null,
+      "contact": "https://www.indiafoodbanking.org", "verified": false, "seeded": true,
+      "note": "Not yet partnered. Fresh Produce Recovery programme (indiafoodbanking.org); 'IFBN has also begun work with wholesale markets like Azadpur Mandi in Delhi' (diplomatist.com). D26"}
   ]
 }

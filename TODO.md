@@ -40,6 +40,16 @@ in TODO.md as they are done and commit TODO.md with the work.
   - Oct 10: all screens rebuilt (Material 3 on light beige, react-native-svg icons, Noto Sans in all three scripts, bottom navigation bar for Today / Today's plan / Impact). tsc clean, Android export bundles, 105 backend tests pass. Checked in a browser (react-native-web, mock data), not yet on a phone or emulator. New copy keys await native review (listed under `_review`). Unsold stock has no "Use this" (it logged nothing).
 - [ ] B3 `app/.env` (git-ignored) with `EXPO_PUBLIC_API_URL` and `EXPO_PUBLIC_API_KEY`; `eas env:create --environment preview` for both (key as secret); `eas build -p android --profile preview`; attach the APK to a GitHub Release (TODO 3.5).
 
+### C. Delhi, languages, crops (user request, October 10; D26-D28)
+- [x] C1 21 languages (English + 20 most spoken): copy files, Noto fonts per script, RTL text for Urdu/Kashmiri/Sindhi, voice input only where Transcribe supports it (12). All new text machine-drafted, pending native review (Kashmiri, Santali, Manipuri, Dogri need a rewrite).
+- [x] C2 Typed "City, town or village" resolves to a market or district in config/markets.json (API); the app no longer replaces a typed place with GPS. Unsold stock has a place field.
+- [x] C3 Glut Radar preload top 50 fruits and vegetables (config/commodities.json); routing stays tomato and onion (no other crop has a full sourced profile, D28).
+- [x] C4 Delhi outlet: India FoodBanking Network seeded in config/outlets.json (only Delhi outlet with a fetched source). No Delhi biogas/compost/feed/processor found with a source.
+- [ ] C5 Routes cached from Azadpur (data/routes_cache.json), Delhi Rescue run checked locally.
+- [ ] C6 Redeploy (confirm first): new languages, place lookup, preload 50, outlets; run `scripts/seed.py` for the Delhi outlet; ingest for the replay date (50 crops).
+- [ ] C7 Voice parse in languages other than en/hi/kn needs Bedrock (D23, still blocked); until then those transcripts land on Confirm with fields highlighted.
+- [ ] C8 Video beat 1 (D22): no recent Delhi dumping report found; best fetched: INPECS 2012 (Azadpur "approximately 2 000 tons of waste ... daily"), Tribune 2025-05-17 (CM: "garbage dump"). Team to choose.
+
 ## Today (October 9)
 
 ### 1. Connect AWS keys and set up the workflow
