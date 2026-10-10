@@ -1,17 +1,18 @@
 // Today (Glut Radar): nearby markets for the chosen crop, risk as colour + word + icon.
 import * as Location from 'expo-location';
-import { router } from 'expo-router';
+import { Stack, router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 import { MOCK, api } from '../api/client';
 import { CROPS, type RiskResponse } from '../api/types';
 import { RiskList } from '../components/RiskList';
-import { Banner, Btn, Chip, DataBanners, Loading, Screen, T, s, useErrorText } from '../components/ui';
+import { Icon } from '../components/Icon';
+import { Banner, Btn, Chip, DataBanners, Loading, Screen, SectionTitle, T, useErrorText } from '../components/ui';
 import { cacheRisk, readCachedRisk, useSession } from '../lib/session';
-import { SIZE } from '../lib/theme';
+import { C, RADIUS, SIZE } from '../lib/theme';
 
 export default function TodayScreen() {
-  const { t, crop, setCrop, crops, setCrops, cropLabel, coords, setCoords, setUnitBoxKg } = useSession();
+  const { t, lang, crop, setCrop, crops, setCrops, cropLabel, coords, setCoords, setUnitBoxKg } = useSession();
   const errorText = useErrorText();
   const [data, setData] = useState<RiskResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -73,24 +74,59 @@ export default function TodayScreen() {
   const anyStale = data?.markets.some((m) => m.stale) ?? false;
 
   return (
-    <Screen>
-      <Btn label={t('new_load')} onPress={() => router.push('/new-load')} style={{ minHeight: 64 }} />
-      <Btn kind="secondary" label={t('unsold_stock')} onPress={() => router.push('/rescue')} />
-      <View style={s.row}>
-        <Btn kind="secondary" label={t('todays_plan')} onPress={() => router.push('/plan')} />
-        <Btn kind="secondary" label={t('impact')} onPress={() => router.push('/impact')} />
-        <Btn kind="secondary" label={t('change_language')} onPress={() => router.push('/language')} />
-      </View>
+    <Screen nav>
+      <Stack.Screen
+        options={{
+          headerRight: () => (
+            <Btn
+              kind="text"
+              icon="globe"
+              label={t(`lang_${lang ?? 'en'}`)}
+              onPress={() => router.push('/language')}
+            />
+          ),
+        }}
+      />
+      {!loading && data && (
+        <DataBanners fixture={data._fixture} replayDate={data.replay_date} stale={anyStale} />
+      )}
 
-      <T bold size={SIZE.title}>
-        {t('crop')}
-      </T>
-      <View style={s.row}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={t('new_load')}
+        onPress={() => router.push('/new-load')}
+        style={({ pressed }) => ({
+          minHeight: 80,
+          borderRadius: RADIUS.surface,
+          backgroundColor: C.primary,
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 16,
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          opacity: pressed ? 0.8 : 1,
+        })}
+      >
+        <View style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center' }}>
+          <Icon name="mic" size={28} color={C.primary} />
+        </View>
+        <View style={{ flex: 1 }}>
+          <T bold size={SIZE.large} color={C.primaryText}>
+            {t('new_load')}
+          </T>
+          <T size={SIZE.small} color={C.primaryText}>
+            {t('speak')}
+          </T>
+        </View>
+      </Pressable>
+      <Btn kind="secondary" label={t('unsold_stock')} onPress={() => router.push('/rescue')} />
+
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }} style={{ flexGrow: 0 }}>
         {chips.map((c) => (
           <Chip key={c} label={cropLabel(c)} selected={crop === c} onPress={() => setCrop(c)} />
         ))}
         <Chip label={t('other_crop')} selected={false} onPress={() => router.push('/crops')} />
-      </View>
+      </ScrollView>
 
       {loading && <Loading />}
       {!loading && error && (
@@ -102,7 +138,7 @@ export default function TodayScreen() {
       )}
       {!loading && data && (
         <>
-          <DataBanners fixture={data._fixture} replayDate={data.replay_date} stale={anyStale} />
+          <SectionTitle>{t('markets_near')}</SectionTitle>
           <RiskList markets={data.markets} mode={data.mode} />
         </>
       )}
