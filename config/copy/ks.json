@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint"
     ]
   },
   "new_load": "نوو لوڈ",
@@ -375,6 +375,10 @@
   "more_crops": "بیٚیہ فصل",
   "my_crops": "میٲنۍ فصل",
   "my_crops_hint": "تِم فصل ژارِو یِم تُہۍ کِنان چھِو۔",
+  "data_source": "ڈیٹا",
+  "data_live": "لائیو: اَزٕچ منڈی قیمت",
+  "data_demo": "ڈیمو: بۄہ زیادہ آمژ ہُند اصل دۄہ",
+  "data_hint": "لائیوس منز چھِ تُہٕنز نزدیک منڈین ہٕنز اَزٕچ قیمتھ۔ ڈیمو چھُ 29 ستمبر 2023 ہُند کولارُک ٹماٹر بۄہ زیادہ آمژ پھیرِ ہاوان۔",
   "count_since": "{date} پیٹھ {n} لوڈ",
   "ledger_empty": "ہیور کانہہ کُن۔ پنُن ریکارڈ شروع کرنہٕ خاطرٕ مشورس پیٹھ \"یہِ ژٲنٹھو\" دبٲو۔",
   "saved_record": "توہہِ سنز ریکارڈس منز محفوظ",

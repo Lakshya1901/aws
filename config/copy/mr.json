@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint"
     ]
   },
   "new_load": "नवीन लोड",
@@ -375,6 +375,10 @@
   "more_crops": "आणखी पिके",
   "my_crops": "माझी पिके",
   "my_crops_hint": "तुम्ही विकता ती पिके निवडा. ती सगळीकडे आधी दिसतील.",
+  "data_source": "डेटा",
+  "data_live": "लाइव्ह: आजचे मंडी भाव",
+  "data_demo": "डेमो: जास्त आवकेचा खरा दिवस",
+  "data_hint": "लाइव्हमध्ये तुमच्या जवळच्या बाजारांचे आजचे भाव येतात. डेमो 29 सप्टेंबर 2023 चा कोलारमधील टोमॅटोच्या जास्त आवकेचा दिवस पुन्हा दाखवतो.",
   "count_since": "{date} पासून {n} लोड",
   "ledger_empty": "अजून काही नाही. तुमची नोंद सुरू करण्यासाठी सल्ल्यावर \"हेच निवडा\" दाबा.",
   "saved_record": "तुमच्या नोंदीत जतन केले",

@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint"
     ]
   },
   "new_load": "نیا لوڈ",
@@ -375,6 +375,10 @@
   "more_crops": "مزید فصلیں",
   "my_crops": "میری فصلیں",
   "my_crops_hint": "وہ فصلیں چنیں جو آپ بیچتے ہیں۔ وہ ہر جگہ پہلے دکھیں گی۔",
+  "data_source": "ڈیٹا",
+  "data_live": "لائیو: آج کے منڈی بھاؤ",
+  "data_demo": "ڈیمو: بہت زیادہ آمد کا اصل دن",
+  "data_hint": "لائیو میں آپ کے قریب کی منڈیوں کے آج کے بھاؤ آتے ہیں۔ ڈیمو 29 ستمبر 2023 کو کولار میں ٹماٹر کی بہت زیادہ آمد کا دن دوبارہ دکھاتا ہے۔",
   "count_since": "{date} سے {n} لوڈ",
   "ledger_empty": "ابھی کچھ نہیں۔ اپنا ریکارڈ شروع کرنے کے لیے کسی مشورے پر \"یہی چنیں\" دبائیں۔",
   "saved_record": "آپ کے ریکارڈ میں محفوظ ہو گیا",

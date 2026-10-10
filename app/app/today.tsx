@@ -12,7 +12,7 @@ import { cacheRisk, readCachedRisk, useSession } from '../lib/session';
 import { C, RADIUS, SIZE } from '../lib/theme';
 
 export default function TodayScreen() {
-  const { t, lang, crop, setCrop, crops, setCrops, cropLabel, coords, setCoords, setUnitBoxKg, myCrops } = useSession();
+  const { t, lang, crop, setCrop, crops, setCrops, cropLabel, coords, setCoords, setUnitBoxKg, myCrops, dataMode } = useSession();
   const errorText = useErrorText();
   const [data, setData] = useState<RiskResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -65,11 +65,11 @@ export default function TodayScreen() {
     } finally {
       setLoading(false);
     }
-  }, [crop, coords, setUnitBoxKg, errorText]);
+  }, [crop, coords, dataMode, setUnitBoxKg, errorText]);
 
   useEffect(() => {
     void load();
-  }, [crop, coords]);
+  }, [crop, coords, dataMode]);
 
   const anyStale = data?.markets.some((m) => m.stale) ?? false;
 

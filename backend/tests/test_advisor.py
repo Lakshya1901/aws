@@ -427,3 +427,63 @@ def test_resolve_origin_falls_back_to_place_search(tmp_path, monkeypatch):
     with pytest.raises(advisor.ApiError) as e:
         advisor.resolve_origin({"place": "Holur"}, {"markets": []})
     assert e.value.code == "origin_unknown"
+
+
+def test_agmarknet_parse():
+    """Last-week response (shape as returned by agmarknet.gov.in on 2026-10-10) -> Rs/kg per reported day."""
+    from backend.adapters import agmarknet
+    body = {"columns": [{"key": "variety"}, {"key": "2026-10-08"}, {"key": "2026-10-07"}, {"key": "unitOfPrice"}],
+            "data": [{"variety": "Tomato - Tomato", "2026-10-08": 1000.0, "2026-10-07": "NR", "unitOfPrice": "Rs./Quintal"},
+                     {"variety": "Tomato - Hybrid", "2026-10-08": 1200.0, "2026-10-07": 900.0, "unitOfPrice": "Rs./Quintal"},
+                     {"variety": "Tomato - Box", "2026-10-08": 300.0, "2026-10-07": 300.0, "unitOfPrice": "Rs./Box"}]}
+    assert agmarknet.parse(body) == [("2026-10-07", 9.0), ("2026-10-08", 11.0)]
+
+
+def test_live_prices(api, monkeypatch, tmp_path):
+    """Header x-annasetu-data: live (D34): today's date, Agmarknet prices near the origin, price-only risk, no replay
+    banner; a market that fails is left out. Prices are TEST ONLY."""
+    from datetime import date, datetime, timedelta, timezone
+    from backend.adapters import agmarknet
+    setup, call = api
+    setup("normal_week")  # history: which markets report tomato
+    today = (datetime.now(timezone.utc) + timedelta(hours=5, minutes=30)).date()
+    snap = pathlib.Path(os.environ["SNAPSHOT_DIR"])
+    (snap / "weather_today.json").write_text(json.dumps(synthetic_weather_test_only(today.isoformat())))
+    cfg = pathlib.Path(os.environ["CONFIG_DIR"])
+    ids = {"kolar": 112, "bengaluru": 99, "chintamani": 3001, "madanapalle": 938}
+    (cfg / "markets.json").write_text(json.dumps({"_note": "TEST ONLY", "markets": [
+        dict(m, agmarknet={"market_id": ids[m["market_id"]], "state_id": 16}) for m in MARKETS]}))
+    store._configs.cache_clear()
+    series = {112: [12, 12, 12, 12, 12, 8, 7], 99: [15] * 7, 3001: [11] * 7}
+
+    def last_week(market_id, state_id, commodity_id, timeout=5):
+        assert commodity_id == 65
+        if market_id not in series:
+            raise OSError("TEST ONLY: market did not answer")
+        return [((today - timedelta(days=7 - i)).isoformat(), p) for i, p in enumerate(series[market_id])]
+    monkeypatch.setattr(agmarknet, "last_week", last_week)
+
+    def call_live(method, path, query=None, body=None):
+        event = {"version": "2.0", "rawPath": path, "requestContext": {"http": {"method": method}},
+                 "headers": {"X-AnnaSetu-Data": "live"}, "queryStringParameters": query,
+                 "body": None if body is None else json.dumps(body)}
+        r = advisor.handler(event, None)
+        return r["statusCode"], json.loads(r["body"])
+    try:
+        status, r = call_live("POST", "/recommend", body=_recommend_body())
+        assert status == 200, r
+        assert r["replay_date"] is None and r["demo_loads"] is False and r["data"]["as_of_date"] == today.isoformat()
+        assert r["default"]["outlet_id"] == "kolar" and r["default"]["risk_level"] == "glut"
+        assert r["top"]["type"] == "mandi" and r["top"]["outlet_id"] != "kolar" and r["top"]["price_only"] is True
+        assert r["impact"]["waste_avoided_kg"] is not None and "price_only_ratio" in r["assumptions_used"]
+        ids_seen = {o["outlet_id"] for o in [r["top"], r["default"]] + r["alternatives"]}
+        assert "madanapalle" not in ids_seen
+        assert call_live("GET", "/risk", {"crop": "tomato"})[0] == 422
+        status, risk = call_live("GET", "/risk", {"crop": "tomato", "lat": "13.10", "lon": "78.10"})
+        assert status == 200 and {m["market_id"]: m["risk_level"] for m in risk["markets"]} == {
+            "kolar": "glut", "bengaluru": "safe", "chintamani": "safe"}
+        status, demo = call("POST", "/recommend", None, _recommend_body())  # no header: the demo day, as before
+        assert status == 200 and demo["replay_date"] == AS_OF
+    finally:
+        advisor._req["live"] = False
+        store._configs.cache_clear()

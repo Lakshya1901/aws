@@ -73,10 +73,13 @@ def fresh_option(load, mkt, added_kg, crop, configs):
         "fee_pct": fee, "commission_pct": comm, "handling_pct": hand,
         "risk_level": risk["risk_level"], "arrival_ratio": risk["arrival_ratio"],
         "projected_arrival_ratio": proj,
-        "projected_risk_level": risk_level(proj, risk["price_change_3d"], configs["model"]["risk"]),
+        # Live prices without arrivals (D34): nothing to project, so the market's price-only level stands.
+        "projected_risk_level": (risk["risk_level"] if risk.get("price_only")
+                                 else risk_level(proj, risk["price_change_3d"], configs["model"]["risk"])),
         "price_change_3d": risk["price_change_3d"],
         "elasticity_b": fit["b"], "stale": risk["stale"], "latest_date": risk["latest_date"],
         "data_complete": risk["data_complete"],
+        **({"price_only": True} if risk.get("price_only") else {}),
     }
 
 

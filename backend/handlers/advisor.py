@@ -33,8 +33,18 @@ class ApiError(Exception):
         self.status, self.code, self.message = status, code, message
 
 
-def replay_date():
+# Per request (Lambda runs one at a time): header x-annasetu-data "live" asks for today's Agmarknet prices (D34);
+# anything else replays the demo day.
+_req = {"live": False}
+
+
+def _demo_date():
     return os.environ.get("REPLAY_DATE") or store.configs()["model"].get("replay_date")
+
+
+def replay_date():
+    """The demo day, unless this request asked for live data."""
+    return None if _req["live"] else _demo_date()
 
 
 def as_of_date():
@@ -213,9 +223,14 @@ def _destinations(cfg, outlets, origin, market_ctx=None, radius_key="max_radius_
     return markets + near([{"id": o["outlet_id"], "lat": o["lat"], "lon": o["lon"]} for o in outlets])
 
 
+def _contexts(crop, day, origins):
+    """market_context for a crop: MarketRisk for the demo day, or live prices near the origins (D34)."""
+    return store.live_contexts(crop, day, origins) if _req["live"] else store.contexts(crop, day)
+
+
 def core_load(l, cfg, outlets, day, ctx=None):
     """Validate one load from the request and add temperature and routes (ctx: {crop: market_context} limits
-    routing to the markets allocation considers)."""
+    routing to the markets allocation considers). l["_origin"]: the origin already resolved (live data)."""
     if not isinstance(l.get("crop"), str):
         raise ApiError(400, "bad_request", "crop is required")
     q = l.get("quantity_kg")
@@ -224,7 +239,7 @@ def core_load(l, cfg, outlets, day, ctx=None):
     if l.get("harvest") not in HARVEST:
         raise ApiError(400, "bad_request", f"harvest must be one of {', '.join(HARVEST)}")
     get_crop(cfg, l["crop"])
-    origin = resolve_origin(l.get("origin") or {}, cfg)
+    origin = l.get("_origin") or resolve_origin(l.get("origin") or {}, cfg)
     radius = assumption(cfg["assumptions"], "max_radius_km")
     if not any(haversine_km(origin["lat"], origin["lon"], m["lat"], m["lon"]) <= radius
                for m in cfg["markets"] if m.get("lat") is not None):
@@ -283,12 +298,14 @@ def get_risk(q):
     if not crop_id:
         raise ApiError(400, "bad_request", "crop is required")
     crop = radar_crop(cfg, crop_id)
-    out = glut_radar(crop_id, [], cfg["markets"], cfg, day, ctx=store.contexts(crop_id, day))
-    by_id = {m["market_id"]: m for m in out["markets"]}
     origin = None
     if q.get("lat") not in (None, "") and q.get("lon") not in (None, ""):
         origin = {"lat": _float(q["lat"], "lat"), "lon": _float(q["lon"], "lon"), "place": q.get("place")}
         routes = location.routes_for(origin, _destinations(cfg, [], origin), live=False)  # radar: no paid routing
+    if _req["live"] and origin is None:
+        raise ApiError(422, "origin_required", "Live prices are fetched for the markets near you: lat and lon are required")
+    out = glut_radar(crop_id, [], cfg["markets"], cfg, day, ctx=_contexts(crop_id, day, [origin] if origin else []))
+    by_id = {m["market_id"]: m for m in out["markets"]}
     a = cfg["assumptions"]
     rows = []
     # Only markets that have reported this crop (D24: the national list is long); one whose data is old still
@@ -369,13 +386,15 @@ def post_recommend(body):
     cfg, day = store.configs(), as_of_date()
     lang, outlets = _language(body), store.outlets()
     crop_id = body.get("crop")
-    ctx = {crop_id: store.contexts(crop_id, day)} if crop_id in cfg["crops"] else {}
+    if _req["live"]:
+        body = dict(body, _origin=resolve_origin(body.get("origin") or {}, cfg))
+    ctx = {crop_id: _contexts(crop_id, day, [body.get("_origin")])} if crop_id in cfg["crops"] else {}
     load = core_load(body, cfg, outlets, day, ctx)
     r = recommend(load, [], cfg["markets"], outlets, cfg, day, ctx=ctx)
     crop = get_crop(cfg, load["crop"])
     facts = explanation_facts(r, crop, lang, cfg)
     expl = explain(facts, lang)
-    plan_id = body.get("plan_id") or _plan_id(body, day)
+    plan_id = body.get("plan_id") or _plan_id({k: v for k, v in body.items() if k != "_origin"}, day)
     _save(plan_id, day, lang, lambda rec: rec["recommendations"].append(
         {"load": load, "top": r["top"]["outlet_id"], "default": r["default"]["outlet_id"],
          "impact": r["impact"], "advice": r["advice"], "explanation_inputs": facts, "explanation": expl}))
@@ -407,7 +426,10 @@ def post_plan(body):
         raise ApiError(400, "bad_request", "loads must be a non-empty list")
     if any(l.get("source", "farm") != "farm" for l in loads):
         raise ApiError(400, "bad_request", "/plan takes farm loads only; send unsold stock to /recommend")
-    ctx = {c: store.contexts(c, day) for c in sorted({l.get("crop") for l in loads if l.get("crop") in cfg["crops"]})}
+    if _req["live"]:
+        loads = [dict(l, _origin=resolve_origin(l.get("origin") or {}, cfg)) for l in loads]
+    ctx = {c: _contexts(c, day, [l.get("_origin") for l in loads if l.get("crop") == c])
+           for c in sorted({l.get("crop") for l in loads if l.get("crop") in cfg["crops"]})}
     core_loads = [core_load(dict(l, load_id=l.get("load_id") or f"L{i + 1}"), cfg, outlets, day, ctx)
                   for i, l in enumerate(loads)]
     p = plan(core_loads, [], cfg["markets"], outlets, cfg, day, ctx=ctx)
@@ -459,7 +481,7 @@ def get_crops(q):
         rows = [r for r in rows if r["crop_id"] == q["crop"]]
         if not rows:
             raise ApiError(404, "crop_not_found", f"No commodity {q['crop']}")
-        rows[0]["status"] = store.crop_status(q["crop"], as_of_date())
+        rows[0]["status"] = store.crop_status(q["crop"], _demo_date() or as_of_date())
     return {"crops": rows}
 
 
@@ -469,11 +491,12 @@ def post_fetch(body):
     crop = body.get("crop")
     if crop not in store.configs()["commodities"]:
         raise ApiError(404, "crop_not_found", f"No commodity {crop}")
-    status = store.crop_status(crop, as_of_date())
+    day = _demo_date() or as_of_date()  # history is loaded for the demo day; live prices build on it (D34)
+    status = store.crop_status(crop, day)
     if status == "available":
         if os.environ.get("DATA_SOURCE") != "dynamodb":
             raise ApiError(422, "fetch_unavailable", "Fetching needs the deployed API (snapshot mode has no queue)")
-        status = store.request_fetch(crop, as_of_date())
+        status = store.request_fetch(crop, day)
     return {"crop": crop, "status": status}
 
 
@@ -490,6 +513,7 @@ def handler(event, context):
     method = event.get("requestContext", {}).get("http", {}).get("method", "GET")
     path = "/" + (event.get("rawPath") or "/").rstrip("/").rsplit("/", 1)[-1]
     fn = ROUTES.get((method, path))
+    _req["live"] = {k.lower(): v for k, v in (event.get("headers") or {}).items()}.get("x-annasetu-data") == "live"
     if fn is None:
         return _response(404, {"error": "not_found", "message": f"{method} {path}"})
     try:

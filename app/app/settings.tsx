@@ -1,5 +1,6 @@
-// Settings: language, and the crops this farmer sells ("My crops", kept on the phone). My crops show first in the
-// crop chips of New load, Unsold stock and Today; every crop with a routing profile can be added (D33).
+// Settings: language, data (live prices for today, or the saved demo glut day, D34), and the crops this farmer sells
+// ("My crops", kept on the phone). My crops show first in the crop chips of New load, Unsold stock and Today; every
+// crop with a routing profile can be added (D33).
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, TextInput, View } from 'react-native';
@@ -10,7 +11,7 @@ import { useSession } from '../lib/session';
 import { C, RADIUS, SIZE } from '../lib/theme';
 
 export default function SettingsScreen() {
-  const { t, lang, crops, myCrops, setMyCrops, cropLabel } = useSession();
+  const { t, lang, crops, myCrops, setMyCrops, cropLabel, dataMode, setDataMode } = useSession();
   const [query, setQuery] = useState('');
 
   const toggle = (c: string) =>
@@ -37,6 +38,26 @@ export default function SettingsScreen() {
             <Icon name="chevron" size={22} color={C.muted} />
           </ListRow>
         </Pressable>
+      </Surface>
+
+      <SectionTitle>{t('data_source')}</SectionTitle>
+      <T color={C.muted}>{t('data_hint')}</T>
+      <Surface>
+        {(['live', 'demo'] as const).map((m, i) => (
+          <Pressable
+            key={m}
+            accessibilityRole="radio"
+            accessibilityState={{ checked: dataMode === m }}
+            onPress={() => setDataMode(m)}
+          >
+            <ListRow first={i === 0} style={{ minHeight: 56, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+              <T bold={dataMode === m} style={{ flexShrink: 1 }}>
+                {t(m === 'live' ? 'data_live' : 'data_demo')}
+              </T>
+              {dataMode === m && <Icon name="check" size={22} color={C.primary} strokeWidth={2.6} />}
+            </ListRow>
+          </Pressable>
+        ))}
       </Surface>
 
       <SectionTitle>{t('my_crops')}</SectionTitle>

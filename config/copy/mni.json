@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint"
     ]
   },
   "new_load": "অশোবা লোড",
@@ -375,6 +375,10 @@
   "more_crops": "অহেনবা লৌথোক",
   "my_crops": "ঐগী লৌথোক",
   "my_crops_hint": "নখোয়না য়োনবা লৌথোকশিং খল্লু।",
+  "data_source": "ডেটা",
+  "data_live": "লাইভ: ঙসিগী মান্ডী মমল",
+  "data_demo": "ডেমো: অচৌবা মালগী অশেংবা নুমিৎ",
+  "data_hint": "লাইভদা নখোয়গী মনাক্তা লৈবা কৈথেলগী ঙসিগী মমল উৎই। ডেমোনা ২৯ সেপ্টেম্বর ২০২৩গী কোলারগী খমেন অচৌবা মাল অমুক উৎই।",
   "count_since": "{date} দগি লোড {n}",
   "ledger_empty": "হৌজিক খন্দ্রে। নহাক্কী রেকর্ড হৌরকপা সুজাবদা \"মসি পাউলু\" ফোঙ্গো।",
   "saved_record": "নহাক্কী রেকর্ডদা শীজিল্লে",

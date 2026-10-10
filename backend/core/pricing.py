@@ -50,7 +50,8 @@ def price_on_arrival(price_kg, arrivals_t, added_t, b, resid_sd, sd_multiplier=1
     """P_hat = P * ((A + dA) / A) ^ b, with range = P_hat * exp(+/- k * resid_sd) (log space).
 
     sd_multiplier k is 1, or the stale multiplier when the market's data is stale.
+    Live prices without arrivals (D34): arrivals_t None, so P_hat = P (our own loads' effect can't be computed).
     """
-    mid = price_kg * ((arrivals_t + added_t) / arrivals_t) ** b
+    mid = price_kg if arrivals_t is None else price_kg * ((arrivals_t + added_t) / arrivals_t) ** b
     k = sd_multiplier * resid_sd
     return {"low": mid * exp(-k), "mid": mid, "high": mid * exp(k)}

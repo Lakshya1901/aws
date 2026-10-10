@@ -13,14 +13,15 @@ import type {
   RecommendResponse,
   RiskResponse,
 } from '../api/types';
-import { api } from '../api/client';
+import { api, getDataMode, setDataMode as setClientDataMode, type DataMode } from '../api/client';
 import { DEFAULT_MY_CROPS } from '../api/types';
 import { LANG_INFO, translate, type CopyKey } from '../i18n';
 
 const LANG_KEY = 'annasetu.lang';
 const MY_CROPS_KEY = 'annasetu.mycrops.v1';
+const DATA_KEY = 'annasetu.data.v1';
 const ROUTING_FALLBACK = ['tomato', 'onion']; // before the crop catalogue loads
-const riskKey = (crop: RadarCropId) => `annasetu.risk.${crop}`;
+const riskKey = (crop: RadarCropId) => `annasetu.risk.${getDataMode()}.${crop}`;
 
 export interface LoadDraft {
   crop: CropId | null;
@@ -50,6 +51,8 @@ interface Session {
   canRoute: (c: RadarCropId | null) => boolean; // a routing profile exists (GET /crops)
   myCrops: CropId[]; // crops this farmer sells (Settings); shown first in every crop list
   setMyCrops: (c: CropId[]) => void;
+  dataMode: DataMode; // live prices for today (default) or the saved demo glut day (Settings, D34)
+  setDataMode: (m: DataMode) => void;
   unitBoxKg: number | null;
   setUnitBoxKg: (n: number | null) => void;
   coords: { lat: number; lon: number } | null;
@@ -83,6 +86,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [crop, setCrop] = useState<RadarCropId>('tomato');
   const [crops, setCrops] = useState<CropInfo[]>([]);
   const [myCrops, setMyCropsState] = useState<CropId[]>(DEFAULT_MY_CROPS);
+  const [dataMode, setDataModeState] = useState<DataMode>(getDataMode());
   const [unitBoxKg, setUnitBoxKg] = useState<number | null>(null);
   const [coords, setCoords] = useState<{ lat: number; lon: number } | null>(null);
   const [draft, setDraft] = useState<LoadDraft>(EMPTY_DRAFT);
@@ -104,7 +108,25 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         if (Array.isArray(list) && list.length) setMyCropsState(list);
       })
       .catch(() => {});
+    AsyncStorage.getItem(DATA_KEY)
+      .then((v) => {
+        if (v === 'live' || v === 'demo') {
+          setClientDataMode(v);
+          setDataModeState(v);
+        }
+      })
+      .catch(() => {});
     api.crops().then((r) => setCrops(r.crops), () => {});
+  }, []);
+
+  // A plan never mixes live and demo data: switching starts a new one.
+  const setDataMode = useCallback((m: DataMode) => {
+    setClientDataMode(m);
+    setDataModeState(m);
+    setLoads([]);
+    setPlanId(null);
+    setCurrent(null);
+    AsyncStorage.setItem(DATA_KEY, m).catch(() => {});
   }, []);
 
   const setMyCrops = useCallback((list: CropId[]) => {
@@ -146,10 +168,10 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<Session>(
     () => ({
-      ready, lang, setLang, t, crop, setCrop, crops, setCrops, cropLabel, canRoute, myCrops, setMyCrops, unitBoxKg, setUnitBoxKg, coords, setCoords,
+      ready, lang, setLang, t, crop, setCrop, crops, setCrops, cropLabel, canRoute, myCrops, setMyCrops, dataMode, setDataMode, unitBoxKg, setUnitBoxKg, coords, setCoords,
       draft, setDraft, voice, setVoice, current, setCurrent, loads, addLoad, planId, setPlanId,
     }),
-    [ready, lang, setLang, t, crop, crops, cropLabel, canRoute, myCrops, setMyCrops, unitBoxKg, coords, draft, voice, current, loads, addLoad, planId],
+    [ready, lang, setLang, t, crop, crops, cropLabel, canRoute, myCrops, setMyCrops, dataMode, setDataMode, unitBoxKg, coords, draft, voice, current, loads, addLoad, planId],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

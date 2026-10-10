@@ -54,13 +54,12 @@ in TODO.md as they are done and commit TODO.md with the work.
 - [x] C9 Icon (bridge + sprout) in app, README, PRODUCT.md; APK limited to arm64-v8a and armeabi-v7a (next build); merge conflict with main resolved (main was a squash of 57ac772).
 - [x] C10 Backtest result JSON moved to S3 backtest/ (52k lines out of git); README tech stack table with AWS per layer; one "All numbers are estimates" line per screen (D32); Mumbai weather (8 nearest NOAA stations).
 - [x] C11 Advice for all 50 preloaded crops (D33); harvest cost optional; Settings screen with My crops; crop chips from the API; typed place clears stale coordinates. 115 tests, tsc and Android export pass; not yet checked on a simulator or phone.
-- [ ] C12 Settings: Live / Demo data switch (needs MarketRisk rows for the replay day and the latest day side by side).
+- [ ] C12 Settings: Live / Demo data switch (D34). Built: header x-annasetu-data, live Agmarknet prices (price-only risk), Settings Data section in 21 languages, tests pass. Left: redeploy (confirm first), check live answers on the deployed API, publish the Expo Go update.
 - [x] C13 Redeploy: weather fix, 48 crop profiles, /crops names (done October 10; live /crops lists 50 routable crops). Next: simulator pass on the Mac, then the APK build.
 - [ ] C14 iOS simulator pass on the Mac (Expo SDK 57). Oct 10: branch checked out, `npm install` done. Blocked:
   - `app/.env` not written: no AWS CLI or credentials on this Mac, so the key in SSM `/annasetu/app_api_key` can't be read here; the user supplies it.
   - Xcode 27.0 first-launch components missing (CoreSimulator absent, `simctl` fails, `xcodebuild -checkFirstLaunchStatus` exits 69) and no iOS simulator runtime. User runs `sudo xcodebuild -runFirstLaunch`, then `xcodebuild -downloadPlatform iOS`.
   - Then: `npx expo start --ios`, screenshot Language, Today, New load, Unsold stock, Recommendation, Today's plan, Impact, Settings; check first: New load "Crop" label clipped under the header (seen on Android), doubled chip / segmented-button borders (Android; check iOS), long Hindi/Kannada strings, overall polish.
-- [ ] C12 design proposal: Live / Demo switch needs MarketRisk rows for the replay day and the latest day side by side; propose the design to the user before building.
 - [ ] C7 Voice parse in languages other than en/hi/kn needs Bedrock (D23, still blocked); until then those transcripts land on Confirm with fields highlighted.
 - [ ] C8 Video beat 1 (D22): no recent Delhi dumping report found; best fetched: INPECS 2012 (Azadpur "approximately 2 000 tons of waste ... daily"), Tribune 2025-05-17 (CM: "garbage dump"). Team to choose.
 

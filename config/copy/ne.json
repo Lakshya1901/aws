@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint"
     ]
   },
   "new_load": "नयाँ लोड",
@@ -375,6 +375,10 @@
   "more_crops": "थप बाली",
   "my_crops": "मेरा बाली",
   "my_crops_hint": "तपाईंले बेच्ने बाली छान्नुहोस्। ती सबैतिर पहिले देखिन्छन्।",
+  "data_source": "डेटा",
+  "data_live": "लाइभ: आजको मण्डी भाउ",
+  "data_demo": "डेमो: धेरै आवकको वास्तविक दिन",
+  "data_hint": "लाइभमा तपाईंको नजिकका बजारको आजको भाउ आउँछ। डेमोले २९ सेप्टेम्बर २०२३ को कोलारको गोलभेंडाको धेरै आवक फेरि देखाउँछ।",
   "count_since": "{date} देखि {n} लोड",
   "ledger_empty": "अहिलेसम्म केही छैन। आफ्नो रेकर्ड सुरु गर्न सुझावमा \"यही छान्नुहोस्\" थिच्नुहोस्।",
   "saved_record": "तपाईंको रेकर्डमा सुरक्षित गरियो",

@@ -313,7 +313,7 @@ export function useErrorText() {
     if (e instanceof ApiError) {
       if (e.code === 'no_markets_in_radius') return t('err_no_markets');
       if (e.code === 'crop_not_configured') return t('err_crop_not_setup');
-      if (e.code === 'origin_unknown') return t('err_origin_unknown');
+      if (e.code === 'origin_unknown' || e.code === 'origin_required') return t('err_origin_unknown');
       if (e.code === 'drive_time_unavailable') return t('err_drive_time');
       if (e.code === 'temperature_unavailable') return t('err_temperature');
       if (e.code === 'split_required') return t('err_split_required');

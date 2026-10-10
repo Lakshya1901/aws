@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint"
     ]
   },
   "new_load": "కొత్త లోడ్",
@@ -375,6 +375,10 @@
   "more_crops": "మరిన్ని పంటలు",
   "my_crops": "నా పంటలు",
   "my_crops_hint": "మీరు అమ్మే పంటలను ఎంచుకోండి. అవి అన్నిచోట్లా ముందుగా కనిపిస్తాయి.",
+  "data_source": "డేటా",
+  "data_live": "లైవ్: ఈరోజు మండి ధరలు",
+  "data_demo": "డెమో: ఎక్కువ సరుకు వచ్చిన నిజమైన రోజు",
+  "data_hint": "లైవ్‌లో మీ దగ్గరి మార్కెట్ల ఈరోజు ధరలు వస్తాయి. డెమో 2023 సెప్టెంబర్ 29 నాటి కోలార్ టమాటా ఎక్కువ సరుకును మళ్లీ చూపిస్తుంది.",
   "count_since": "{date} నుంచి {n} లోడ్లు",
   "ledger_empty": "ఇంకా ఏమీ లేదు. మీ రికార్డు మొదలుపెట్టడానికి సలహాపై \"ఇది వాడండి\" నొక్కండి.",
   "saved_record": "మీ రికార్డులో భద్రపరిచాం",

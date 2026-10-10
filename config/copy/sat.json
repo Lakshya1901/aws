@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint"
     ]
   },
   "new_load": "ᱱᱟᱣᱟ ᱵᱚᱡᱷᱟ",
@@ -375,6 +375,10 @@
   "more_crops": "ᱟᱨᱦᱚᱸ ᱡᱚᱢᱟᱜ",
   "my_crops": "ᱤᱧᱟᱜ ᱡᱚᱢᱟᱜ",
   "my_crops_hint": "ᱟᱢ ᱟᱠᱤᱨᱤᱧ ᱡᱚᱢᱟᱜ ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾",
+  "data_source": "ᱰᱮᱴᱟ",
+  "data_live": "ᱞᱟᱭᱤᱵ: ᱛᱮᱦᱮᱧᱟᱜ ᱦᱟᱴ ᱫᱟᱢ",
+  "data_demo": "ᱰᱮᱢᱳ: ᱟᱲᱟᱝ ᱵᱷᱟᱨᱤ ᱨᱮᱭᱟᱜ ᱥᱟᱹᱨᱤ ᱫᱤᱱ",
+  "data_hint": "ᱞᱟᱭᱤᱵ ᱨᱮ ᱟᱢᱟᱜ ᱥᱮᱴᱮᱨ ᱦᱟᱴ ᱠᱚᱨᱮᱭᱟᱜ ᱛᱮᱦᱮᱧᱟᱜ ᱫᱟᱢ ᱧᱮᱞᱚᱜᱼᱟ᱾ ᱰᱮᱢᱳ ᱫᱚ 29 ᱥᱮᱯᱴᱮᱢᱵᱚᱨ 2023 ᱨᱮᱭᱟᱜ ᱠᱳᱞᱟᱨ ᱵᱤᱞᱟᱛᱤ ᱵᱮᱝᱜᱟᱹᱲ ᱟᱲᱟᱝ ᱵᱷᱟᱨᱤ ᱫᱩᱦᱲᱟᱹ ᱩᱫᱩᱜᱼᱟ᱾",
   "count_since": "{date} ᱠᱷᱚᱱ {n} ᱵᱚᱡᱷᱟ",
   "ledger_empty": "ᱱᱤᱛᱚᱜ ᱪᱮᱫᱟᱜ ᱵᱟᱝ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱟᱢᱟᱜ ᱨᱮᱠᱚᱰ ᱮᱛᱦᱚᱵ ᱞᱟᱹᱜᱤᱫ ᱥᱚᱡᱷᱮ ᱨᱮ \"ᱱᱚᱶᱟ ᱵᱮᱵᱷᱟᱨ ᱢᱮ\" ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾",
   "saved_record": "ᱟᱢᱟᱜ ᱨᱮᱠᱚᱰ ᱨᱮ ᱥᱟᱵᱟᱦᱟᱨ ᱮᱱᱟ",

@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint"
     ]
   },
   "new_load": "ਨਵਾਂ ਲੋਡ",
@@ -375,6 +375,10 @@
   "more_crops": "ਹੋਰ ਫ਼ਸਲਾਂ",
   "my_crops": "ਮੇਰੀਆਂ ਫ਼ਸਲਾਂ",
   "my_crops_hint": "ਜੋ ਫ਼ਸਲਾਂ ਤੁਸੀਂ ਵੇਚਦੇ ਹੋ ਉਹ ਚੁਣੋ। ਉਹ ਹਰ ਥਾਂ ਪਹਿਲਾਂ ਦਿਖਣਗੀਆਂ।",
+  "data_source": "ਡਾਟਾ",
+  "data_live": "ਲਾਈਵ: ਅੱਜ ਦੇ ਮੰਡੀ ਭਾਅ",
+  "data_demo": "ਡੈਮੋ: ਬਹੁਤ ਜ਼ਿਆਦਾ ਆਮਦ ਦਾ ਅਸਲ ਦਿਨ",
+  "data_hint": "ਲਾਈਵ ਵਿੱਚ ਤੁਹਾਡੇ ਨੇੜੇ ਦੀਆਂ ਮੰਡੀਆਂ ਦੇ ਅੱਜ ਦੇ ਭਾਅ ਆਉਂਦੇ ਹਨ। ਡੈਮੋ 29 ਸਤੰਬਰ 2023 ਦੀ ਕੋਲਾਰ ਦੀ ਟਮਾਟਰ ਦੀ ਬਹੁਤ ਜ਼ਿਆਦਾ ਆਮਦ ਦੁਬਾਰਾ ਦਿਖਾਉਂਦਾ ਹੈ।",
   "count_since": "{date} ਤੋਂ {n} ਲੋਡ",
   "ledger_empty": "ਹਾਲੇ ਕੁਝ ਨਹੀਂ। ਆਪਣਾ ਰਿਕਾਰਡ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਸਲਾਹ 'ਤੇ \"ਇਹ ਵਰਤੋ\" ਦਬਾਓ।",
   "saved_record": "ਤੁਹਾਡੇ ਰਿਕਾਰਡ ਵਿੱਚ ਸੰਭਾਲਿਆ ਗਿਆ",

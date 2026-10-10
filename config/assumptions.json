@@ -66,6 +66,11 @@
     "value": 7, "unit": "days", "status": "assumption",
     "source": "CLAUDE.md D25: a market whose latest report is older than this is listed but never chosen (same rule as D17); 7 = the A7 window"
   },
+  "price_only_ratio": {
+    "value": {"safe": 1.0, "watch": 1.3, "glut": 2.0}, "unit": "arrival ratio R a price-only risk level stands for",
+    "status": "assumption",
+    "source": "CLAUDE.md D34: live prices have no arrivals, so a market's u(R) band comes from its price-only level; each level maps to the lowest R of that level in the Section 9 table (safe: usual arrivals, 1.0)"
+  },
   "dump_share_table": {
     "value": [
       {"r_below": 1.3, "u": 0.0},

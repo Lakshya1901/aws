@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint"
     ]
   },
   "new_load": "नवो लोड",
@@ -375,6 +375,10 @@
   "more_crops": "आनीक पिकां",
   "my_crops": "म्हजीं पिकां",
   "my_crops_hint": "तुमी विकतात तीं पिकां वेंचात. तीं सगळेकडे पयलीं दिसतलीं.",
+  "data_source": "डेटा",
+  "data_live": "लायव: आयचे मंडयेचे दर",
+  "data_demo": "डेमो: चड आवकेचो खरो दीस",
+  "data_hint": "लायवांत तुमच्या लागसारच्या बाजारांचे आयचे दर मेळटात. डेमो 29 सप्टेंबर 2023 चो कोलारांतलो टोमॅटोचो चड आवकेचो दीस परतून दाखयता.",
   "count_since": "{date} थावन {n} लोड",
   "ledger_empty": "अजून कांयच ना. तुमचो रेकॉर्ड सुरू करपाक सुचवणेर \"हेंच वेंचात\" दाबात.",
   "saved_record": "तुमच्या रेकॉर्डांत सांबाळ्ळें",

@@ -13,10 +13,11 @@ def dump_share_band(ratio, table):
     return len(table) - 1
 
 
-def _loss_parts(option, table):
+def _loss_parts(option, table, price_only_ratio=None):
     """(spoilage range, u low/mid/high) for an outlet, or None when it can't be estimated.
 
-    Mandi: u from the u(R) band of its projected ratio (low/high = band below/above).
+    Mandi: u from the u(R) band of its projected ratio (low/high = band below/above); with live prices only
+    (D34), the band of price_only_ratio for its price-only risk level.
     Processor and food bank: u = 0 (food still eaten). Feed, biogas, compost: loss 1 (no food recovered for people).
     """
     t = option["type"]
@@ -24,9 +25,12 @@ def _loss_parts(option, table):
         return {"low": 1.0, "mid": 1.0, "high": 1.0}, {"low": 0.0, "mid": 0.0, "high": 0.0}
     if t in EDIBLE_TYPES:
         return option["spoilage_range"], {"low": 0.0, "mid": 0.0, "high": 0.0}
-    if t != "mandi" or option.get("projected_arrival_ratio") is None:
+    ratio = option.get("projected_arrival_ratio")
+    if t == "mandi" and option.get("price_only"):  # D34: no arrivals; the R band its price-only level stands for
+        ratio = (price_only_ratio or {}).get(option.get("projected_risk_level"))
+    if t != "mandi" or ratio is None:
         return None
-    i = dump_share_band(option["projected_arrival_ratio"], table)
+    i = dump_share_band(ratio, table)
     u = {"low": table[max(i - 1, 0)]["u"], "mid": table[i]["u"], "high": table[min(i + 1, len(table) - 1)]["u"]}
     return option["spoilage_range"], u
 
@@ -49,7 +53,8 @@ def waste_avoided(quantity_kg, default, advised, assumptions, harvest_cost_rs_pe
     if advised["outlet_id"] == default["outlet_id"] and advised["type"] == default["type"]:
         return {"low": 0.0, "mid": 0.0, "high": 0.0}
     table = assumption(assumptions, "dump_share_table")
-    d, a = _loss_parts(default, table), _loss_parts(advised, table)
+    por = assumption(assumptions, "price_only_ratio")
+    d, a = _loss_parts(default, table, por), _loss_parts(advised, table, por)
     if d is None or a is None:
         return None
     (sd, ud), (sa, ua) = d, a

@@ -29,6 +29,14 @@ const BASE_URL = (process.env.EXPO_PUBLIC_API_URL ?? '').replace(/\/+$/, '');
 const API_KEY = process.env.EXPO_PUBLIC_API_KEY ?? '';
 const TIMEOUT_MS = 20000;
 
+/** Today's live mandi prices, or the saved demo glut day (Settings, D34); sent with every request. */
+export type DataMode = 'live' | 'demo';
+let dataMode: DataMode = 'live';
+export const setDataMode = (m: DataMode) => {
+  dataMode = m;
+};
+export const getDataMode = () => dataMode;
+
 // Loaded only in mock mode so real mode never touches fixtures.
 const mock: typeof import('./mock').mock | null = MOCK ? require('./mock').mock : null;
 
@@ -42,6 +50,7 @@ async function request<T>(method: 'GET' | 'POST', path: string, body?: unknown):
       method,
       headers: {
         'Content-Type': 'application/json',
+        'x-annasetu-data': dataMode,
         ...(API_KEY ? { 'x-api-key': API_KEY } : {}),
       },
       body: body === undefined ? undefined : JSON.stringify(body),

@@ -51,6 +51,19 @@ def risk_level(ratio, price_change_3d, thresholds):
     return "safe"
 
 
+def price_only_level(price_change_3d, thresholds):
+    """Live prices without arrivals (D34): safe / watch / glut from the 3-day price change alone, using the
+    Section 9 price thresholds (watch below watch_price_change_3d, glut below glut_combo_price_change_3d)."""
+    dp = price_change_3d
+    if dp is None:
+        return None
+    if dp < thresholds["glut_combo_price_change_3d"]:
+        return "glut"
+    if dp < thresholds["watch_price_change_3d"]:
+        return "watch"
+    return "safe"
+
+
 def market_risk(rows, as_of_date, model, assumptions):
     """Risk for one market from its rows [{date, market_id, arrivals_t, modal_price_kg}].
 

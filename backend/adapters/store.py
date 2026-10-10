@@ -141,6 +141,66 @@ def contexts(crop, as_of_date):
     return out
 
 
+def _reporting(crop):
+    """{market_id: historical resid_sd or None} for markets with this crop's history (MarketRisk, or the snapshot)."""
+    if _source() != "dynamodb":
+        return {r["market_id"]: None for r in _snapshot_rows(snapshot_dir(), crop)}
+    from boto3.dynamodb.conditions import Key
+    table, items, kw = _table("MARKET_RISK_TABLE"), [], {"KeyConditionExpression": Key("crop").eq(crop)}
+    while True:
+        page = table.query(**kw)
+        items += page["Items"]
+        if "LastEvaluatedKey" not in page:
+            break
+        kw["ExclusiveStartKey"] = page["LastEvaluatedKey"]
+    return {i["market_id"]: i.get("resid_sd") for i in _plain(items) if i["market_id"] != STATUS_KEY}
+
+
+def live_contexts(crop, as_of_date, origins):
+    """market_context entries from live Agmarknet prices (D34) for the markets with this crop's history nearest
+    each origin (2 x nearest_markets, within max_radius_km). Prices only: risk from the 3-day price change,
+    range from the week's day-to-day price changes (else the market's historical one). A market that doesn't
+    answer or reported nothing this week is left out."""
+    from concurrent.futures import ThreadPoolExecutor
+    from backend.adapters import agmarknet
+    from backend.core.pricing import price_change_sd
+    from backend.core.risk import market_risk, price_only_level
+    cfg = configs()
+    cid = (cfg["commodities"].get(crop) or {}).get("agmarknet_id")
+    if cid is None:
+        return []
+    hist, model = _reporting(crop), cfg["model"]
+    radius, n = assumption(cfg["assumptions"], "max_radius_km"), model["nearest_markets"]
+    ms = [m for m in cfg["markets"] if m["market_id"] in hist and m.get("agmarknet") and m.get("lat") is not None
+          and m.get("coord_confidence") != "low"]
+    pick = {}
+    for o in origins:
+        near = sorted((haversine_km(o["lat"], o["lon"], m["lat"], m["lon"]), m["market_id"], m) for m in ms)
+        pick.update((m["market_id"], m) for d, _, m in near[:2 * n] if d <= radius)
+
+    def fetch(m):
+        try:
+            return m, agmarknet.last_week(m["agmarknet"]["market_id"], m["agmarknet"]["state_id"], cid)
+        except Exception:  # site down or slow: this market has no live price
+            return m, []
+    with ThreadPoolExecutor(max_workers=16) as ex:
+        fetched = list(ex.map(fetch, pick.values()))
+    out = []
+    for m, prices in fetched:
+        rows = [{"date": d, "market_id": m["market_id"], "crop": crop, "arrivals_t": None, "modal_price_kg": p}
+                for d, p in prices if d <= as_of_date]
+        if not rows:
+            continue
+        risk = market_risk(rows, as_of_date, model, cfg["assumptions"])
+        risk.update(risk_level=price_only_level(risk["price_change_3d"], model["risk"]), price_only=True)
+        sd = price_change_sd(rows, as_of_date, model["elasticity"]["range_max_gap_days"])
+        sd = sd if sd is not None else hist[m["market_id"]]
+        if risk["price_kg"] is None or sd is None:
+            continue
+        out.append({"market": m, "risk": risk, "fit": {"b": None, "resid_sd": sd}})
+    return out
+
+
 def crop_status(crop, as_of_date):
     """"ready" when the crop's risk is loaded for as_of_date, "fetching" while a fetch is queued, else "available"."""
     if _source() != "dynamodb":

@@ -68,7 +68,9 @@ Input is by voice (Hindi, Kannada, Indian English) or a typed form. Bedrock only
 
 ## 3. Demo replays (D18)
 
-The app runs on historical data and says so on every data screen: **"Replaying \<date\> data"**. The loads are **simulated demo loads** (labelled "Demo loads"), and every "what would have happened at the nearest mandi" figure is **model output**, not an observation.
+**Live or Demo (Settings, D34).** Live (the default) uses today's mandi prices from [Agmarknet](https://agmarknet.gov.in), fetched for the markets near you. Agmarknet's public endpoint gives prices only (arrivals need a captcha), so in Live the Glut Radar works from the 3-day price drop and loads are not split across markets. Demo replays the documented Kolar tomato glut of 29 Sep 2023 with the full model.
+
+In Demo the app runs on historical data and says so on every data screen: **"Replaying \<date\> data"**. The loads are **simulated demo loads** (labelled "Demo loads"), and every "what would have happened at the nearest mandi" figure is **model output**, not an observation.
 
 | Replay | Why this day | Observed on that day (CEDA district data) | Documented by |
 | --- | --- | --- | --- |
@@ -186,7 +188,7 @@ Onion, potato and banana profiles exist but have placeholder fields; a profile w
 
 | Element | Status | Disclosure |
 | --- | --- | --- |
-| Mandi prices and arrivals | Real, replayed | "Replaying \<date\> data" |
+| Mandi prices and arrivals | Real: replayed (Demo) or today's Agmarknet prices without arrivals (Live, D34) | Demo: "Replaying \<date\> data" |
 | Glut events | Real, documented | Sources in Section 3 above |
 | Weather, routes | Real (NASA POWER; Amazon Location) | This README |
 | Crop parameters | Published references; some placeholders | "Reference parameters"; placeholders marked |
@@ -302,6 +304,7 @@ Deploy (full steps in [infra/README.md](infra/README.md)):
 - **Second Life outlets are not partnered.** They are real organisations found by desk research and have not been contacted.
 - **One prior year baseline for 2023.** The snapshot starts 2022-01-01, so the 2023-09-06 baseline uses 2022 only; 2022 itself has no baseline.
 - **Same-day only.** Arrivals did not lead price in the backtest, so there is no early warning.
+- **Live mode has prices, not arrivals (D34).** Agmarknet's public endpoint gives each market's last-week prices; arrivals need a captcha. Live risk comes from the price drop alone, and load splitting needs arrivals, so it runs in Demo only.
 - **No live third-party dependency in the demo.** The demo replays committed snapshots (prices, weather) and cached routes; Bedrock and Polly failures fall back to templates and text.
 
 ## 10. Repository layout
