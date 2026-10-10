@@ -55,7 +55,7 @@ in TODO.md as they are done and commit TODO.md with the work.
 - [x] C10 Backtest result JSON moved to S3 backtest/ (52k lines out of git); README tech stack table with AWS per layer; one "All numbers are estimates" line per screen (D32); Mumbai weather (8 nearest NOAA stations).
 - [x] C11 Advice for all 50 preloaded crops (D33); harvest cost optional; Settings screen with My crops; crop chips from the API; typed place clears stale coordinates. 115 tests, tsc and Android export pass; not yet checked on a simulator or phone.
 - [ ] C12 Settings: Live / Demo data switch (needs MarketRisk rows for the replay day and the latest day side by side).
-- [ ] C13 Redeploy (confirm first): weather fix, 48 crop profiles, /crops names. Then the iOS simulator pass on the Mac, then the APK build.
+- [x] C13 Redeploy: weather fix, 48 crop profiles, /crops names (done October 10; live /crops lists 50 routable crops). Next: simulator pass on the Mac, then the APK build.
 - [ ] C7 Voice parse in languages other than en/hi/kn needs Bedrock (D23, still blocked); until then those transcripts land on Confirm with fields highlighted.
 - [ ] C8 Video beat 1 (D22): no recent Delhi dumping report found; best fetched: INPECS 2012 (Azadpur "approximately 2 000 tons of waste ... daily"), Tribune 2025-05-17 (CM: "garbage dump"). Team to choose.
 
