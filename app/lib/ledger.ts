@@ -13,8 +13,9 @@ export interface LedgerEntry {
   prevented_kg: Range | null; // waste avoided; null when the user overrode the recommendation (not computed)
   rescued_kg: number;
   recovered_kg: number;
-  // Extra Rs AnnaSetu made for the whole load: net at the chosen outlet minus net at the nearest mandi (farm), or
-  // the chosen outlet's net, since unsold stock would otherwise be dumped (rescue); null = not yet estimated.
+  // Extra Rs AnnaSetu made for the whole load: the API's money_saved_rs for the recommended outlet (farm), net at
+  // an overriding outlet minus net at the nearest mandi, or the chosen outlet's net, since unsold stock would
+  // otherwise be dumped (rescue); null = not yet estimated.
   extra_rs: Range | null;
 }
 
@@ -48,6 +49,7 @@ export async function recordLedger(e: LedgerEntry): Promise<void> {
 
 const add = (a: Range, b: Range): Range => ({ low: a.low + b.low, mid: a.mid + b.mid, high: a.high + b.high });
 const ZERO: Range = { low: 0, mid: 0, high: 0 };
+const pos = (r: Range): Range => ({ low: Math.max(0, r.low), mid: Math.max(0, r.mid), high: Math.max(0, r.high) });
 
 export function totals(entries: LedgerEntry[]): LedgerTotals {
   let prevented = ZERO;
@@ -56,7 +58,9 @@ export function totals(entries: LedgerEntry[]): LedgerTotals {
   let recovered = 0;
   for (const e of entries) {
     if (e.prevented_kg) prevented = add(prevented, e.prevented_kg);
-    if (e.extra_rs) extra_rs = add(extra_rs ?? ZERO, e.extra_rs); // entries saved before this field count nothing
+    // Only what AnnaSetu gained counts: a load that earned less than the nearest mandi adds 0, never a loss.
+    // Entries saved before this field count nothing.
+    if (e.extra_rs) extra_rs = add(extra_rs ?? ZERO, pos(e.extra_rs));
     rescued += e.rescued_kg;
     recovered += e.recovered_kg;
   }

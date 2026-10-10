@@ -112,7 +112,9 @@ export default function RecommendationScreen() {
       qty_kg: req.quantity_kg,
       ...fromImpact(res.impact, 'farm'),
       prevented_kg: isTop ? res.impact.waste_avoided_kg : null,
-      extra_rs: extraOver(outlet, res.default, req.quantity_kg),
+      // AnnaSetu's figure for the recommended outlet (better price + produce a glut would leave unsold);
+      // an override is compared on price alone.
+      extra_rs: isTop ? (res.impact.money_saved_rs ?? null) : extraOver(outlet, res.default, req.quantity_kg),
     });
     setUsed(L.key(outlet));
     router.push('/plan');

@@ -394,6 +394,11 @@
      "mid": 0.0,
      "high": 0.0
     },
+    "money_saved_rs": {
+     "low": 0.0,
+     "mid": 0.0,
+     "high": 0.0
+    },
     "extra_km": 0.0,
     "diesel_l": 0.0,
     "co2_kg": 0.0,

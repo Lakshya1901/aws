@@ -71,6 +71,27 @@ def waste_avoided(quantity_kg, default, advised, assumptions, harvest_cost_rs_pe
     }
 
 
+def money_saved(quantity_kg, default, advised, assumptions, harvest_cost_rs_per_kg=None):
+    """Rs AnnaSetu adds on one load: expected earnings at the advised outlet minus at the nearest mandi. Expected
+    earnings = net per kg (Step 4: after freight, fees, spoilage) x the share that sells (1 - u, the Step 6 dump
+    share, with the D12 below-cost floor at the default), x quantity. So it counts both the better price and the
+    produce a glutted mandi would leave unsold, without counting spoilage twice. Second Life and Recover outlets
+    pay their offer or 0, so a food bank or biogas trip shows its freight as a cost. {low, mid, high} or None."""
+    if advised["outlet_id"] == default["outlet_id"] and advised["type"] == default["type"]:
+        return {"low": 0.0, "mid": 0.0, "high": 0.0}
+    nd, na = default.get("net_rs_per_kg"), advised.get("net_rs_per_kg")
+    table, por = assumption(assumptions, "dump_share_table"), assumption(assumptions, "price_only_ratio")
+    d, a = _loss_parts(default, table, por), _loss_parts(advised, table, por)
+    if nd is None or na is None or d is None or a is None:
+        return None
+    ud, ua = d[1], a[1]
+    if below_cost(default, harvest_cost_rs_per_kg):
+        floor = assumption(assumptions, "below_cost_dump_share")
+        ud = {k: max(ud[k], floor[k]) for k in ud}
+    v = [quantity_kg * (na[k] * (1 - ua["mid"]) - nd[k] * (1 - ud[k])) for k in ("low", "mid", "high")]
+    return {"low": min(v), "mid": v[1], "high": max(v)}
+
+
 def _ledger(prevented, rescued_kg, recovered_kg, biogas_kg, assumptions):
     """Impact Ledger lines (CLAUDE.md Section 9 Step 6). Kept out of landfill = Prevented + Rescued + Recovered;
     redirected is never added. Biogas energy is 0 with no biogas, null while biogas_yield is unsourced."""
@@ -104,6 +125,7 @@ def impact(quantity_kg, default, advised, crop, assumptions):
         **_ledger(w, 0, recovered, recovered if advised["type"] == "biogas" else 0, assumptions),
         "redirected_kg": quantity_kg if moved else 0,
         "waste_avoided_kg": w,
+        "money_saved_rs": money_saved(quantity_kg, default, advised, assumptions, crop.get("harvest_cost_rs_per_kg")),
         "extra_km": extra_km,
         "diesel_l": diesel,
         "co2_kg": co2,

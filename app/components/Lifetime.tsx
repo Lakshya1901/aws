@@ -36,10 +36,7 @@ export function Lifetime({ totals }: { totals: LedgerTotals }) {
   const handled = totals.handled_kg;
   const pct = (v: number) => Math.round((v / handled) * 100);
   const share = handled > 0 ? Math.max(0, Math.min(100, pct(k.mid))) : 0;
-  const rangeKg =
-    k.low < 0
-      ? t('waste_range_loss', { loss: fmtNum(-k.low), high: fmtNum(k.high) })
-      : t('waste_range', { low: fmtNum(k.low), high: fmtNum(k.high) });
+  const rangeKg = t('waste_range', { low: fmtNum(Math.max(0, k.low)), high: fmtNum(Math.max(0, k.high)) });
   const parts = [
     { key: 'prevented', n: Math.max(0, totals.prevented_kg.mid), color: PART_COLORS.prevented },
     { key: 'rescued', n: totals.rescued_kg, color: PART_COLORS.rescued },

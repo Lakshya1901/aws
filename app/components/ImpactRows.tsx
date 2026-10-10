@@ -9,21 +9,13 @@ import { C, SIZE } from '../lib/theme';
 import { PART_COLORS } from './Lifetime';
 import { EstNote, ListRow, Surface, T } from './ui';
 
-/** Waste avoided as {value, sub}: null -> not yet estimated; mid <= 0 -> "No waste avoided" (+ extra spoilage). */
+/** Waste avoided as {value, sub}: null -> not yet estimated; mid <= 0 -> "No waste avoided". Never shown as a loss. */
 export function useWasteText() {
   const { t } = useSession();
   return (w: Range | null, scope: 'load' | 'total'): { value: string; sub?: string } => {
     if (!w) return { value: t('not_estimated') };
-    if (w.mid <= 0) {
-      const none = t(scope === 'load' ? 'waste_none_load' : 'waste_none_total');
-      const lost = Math.round(-w.mid);
-      return lost > 0 ? { value: none, sub: t('waste_spoilage', { kg: fmtNum(lost) }) } : { value: none };
-    }
-    const sub =
-      w.low < 0
-        ? t('waste_range_loss', { loss: fmtNum(-w.low), high: fmtNum(w.high) })
-        : t('waste_range', { low: fmtNum(w.low), high: fmtNum(w.high) });
-    return { value: t('waste_value', { mid: fmtNum(w.mid) }), sub };
+    if (w.mid <= 0) return { value: t(scope === 'load' ? 'waste_none_load' : 'waste_none_total') };
+    return { value: t('waste_value', { mid: fmtNum(w.mid) }), sub: t('waste_range', { low: fmtNum(Math.max(0, w.low)), high: fmtNum(w.high) }) };
   };
 }
 
@@ -32,8 +24,7 @@ type RowDef = { label: string; value: string; sub?: string; muted?: boolean };
 /** Range line for a kept-out-of-landfill style figure. */
 function useRangeText() {
   const { t } = useSession();
-  return (w: Range): string =>
-    `${w.low < 0 ? t('waste_range_loss', { loss: fmtNum(-w.low), high: fmtNum(w.high) }) : t('waste_range', { low: fmtNum(w.low), high: fmtNum(w.high) })}`;
+  return (w: Range): string => t('waste_range', { low: fmtNum(Math.max(0, w.low)), high: fmtNum(Math.max(0, w.high)) });
 }
 
 /** Headline block for the Impact screen: kept out of landfill, range, note, and the Prevented / Rescued / Recovered bar. */
@@ -53,7 +44,7 @@ export function ImpactHeadline({ impact }: { impact: Impact }) {
         {t('kept_out_of_landfill')}
       </T>
       <T bold size={36} color={kept ? C.primary : C.muted} style={{ lineHeight: 44 }}>
-        {kept ? t('waste_value', { mid: fmtNum(kept.mid) }) : t('not_estimated')}
+        {kept ? t('waste_value', { mid: fmtNum(Math.max(0, kept.mid)) }) : t('not_estimated')}
       </T>
       {kept ? <T size={SIZE.small}>{rangeText(kept)}</T> : null}
       <T style={{ marginTop: 4 }}>{t('kept_note')}</T>
@@ -92,10 +83,7 @@ export function ImpactRows({ impact, lines }: { impact: Impact; lines: 'plan' | 
     impact.biogas_energy == null
       ? t('not_estimated')
       : `${fmtNum(impact.biogas_energy, 1)} ${impact.biogas_energy_unit ?? ''}`.trim();
-  const water =
-    impact.water_l != null && impact.water_l < 0
-      ? t('water_lost', { v: fmtNum(-impact.water_l) })
-      : val(impact.water_l, 'litres_value');
+  const water = val(impact.water_l, 'litres_value');
 
   const R: Record<string, RowDef> = {
     waste: { label: t('waste_avoided'), value: waste.value, sub: waste.sub },
@@ -119,7 +107,7 @@ export function ImpactRows({ impact, lines }: { impact: Impact; lines: 'plan' | 
   return (
     <>
       <Surface>
-        {sets[lines].map((k, i) => {
+        {sets[lines].filter((k) => k !== 'water' || impact.water_l == null || impact.water_l > 0).map((k, i) => {
           const r = R[k]!;
           const isNull = r.value === t('not_estimated');
           return (

@@ -188,6 +188,7 @@ export interface Impact {
   biogas_energy_unit: string | null;
   redirected_kg: number;
   waste_avoided_kg: Range | null;
+  money_saved_rs?: Range | null; // Prevent loads: expected earnings vs the nearest mandi (net x share that sells)
   extra_km: number | null;
   diesel_l: number | null;
   co2_kg: number | null;
