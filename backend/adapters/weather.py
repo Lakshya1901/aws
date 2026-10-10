@@ -21,6 +21,7 @@ ARCHIVE = "https://archive-api.open-meteo.com/v1/archive"
 FORECAST = "https://api.open-meteo.com/v1/forecast"
 NOAA_BUCKET = "noaa-ghcn-pds"  # AWS Registry of Open Data: https://registry.opendata.aws/noaa-ghcn/
 GHCN_MAX_KM = 50
+GHCN_TRY = 8  # nearest stations tried in order; many old Indian stations stopped reporting (Mumbai: 4th nearest)
 POWER = "https://power.larc.nasa.gov/api/temporal/hourly/point"
 
 
@@ -106,12 +107,13 @@ def forecast_mean_c(lat, lon, day):
 
 
 def live_temperature_c(lat, lon, day, today):
-    """Today or later: Open-Meteo forecast. Earlier days: the nearest NOAA GHCN-Daily station within GHCN_MAX_KM."""
+    """Today or later: Open-Meteo forecast. Earlier days: the nearest NOAA GHCN-Daily station within GHCN_MAX_KM
+    that reported that day (up to GHCN_TRY stations)."""
     if day >= today:
         return forecast_mean_c(lat, lon, day)
     from backend.core.netvalue import haversine_km
     near = sorted((haversine_km(lat, lon, s_lat, s_lon), sid) for sid, s_lat, s_lon, _ in ghcn_stations())
-    for km, sid in near[:3]:
+    for km, sid in near[:GHCN_TRY]:
         if km > GHCN_MAX_KM:
             break
         temps = fetch_ghcn_daily(sid, day, day)["temperature_c"]
