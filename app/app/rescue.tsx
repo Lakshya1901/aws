@@ -241,7 +241,7 @@ export default function RescueScreen() {
                   kind: 'rescue',
                   qty_kg: res.quantity_kg,
                   ...fromImpact(res.impact, 'rescue'),
-                  earn_rs: dest ? earnFor(dest, res.split.edible_kg) : null,
+                  extra_rs: dest ? earnFor(dest, res.split.edible_kg) : null, // otherwise dumped: all of it is extra
                 });
                 setSaved(true);
               }}

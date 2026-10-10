@@ -46,7 +46,7 @@ export function Lifetime({ totals }: { totals: LedgerTotals }) {
     { key: 'recovered', n: totals.recovered_kg, color: PART_COLORS.recovered },
   ];
   const partsTotal = parts.reduce((a, p) => a + p.n, 0);
-  const m = totals.earn_rs;
+  const m = totals.extra_rs;
 
   return (
     <View style={{ gap: 16 }}>

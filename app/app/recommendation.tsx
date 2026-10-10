@@ -10,7 +10,7 @@ import { RecommendationCard, useOutletLabels } from '../components/Recommendatio
 import { Banner, Btn, DataBanners, ListRow, Screen, SectionTitle, Surface, Tag, T } from '../components/ui';
 import { fmtNum, fmtRs, translate } from '../i18n';
 import { ratioDriven } from '../lib/recommend';
-import { earnFor, fromImpact, recordLedger } from '../lib/ledger';
+import { extraOver, fromImpact, recordLedger } from '../lib/ledger';
 import { useSession } from '../lib/session';
 import { C, RISK, SIZE } from '../lib/theme';
 
@@ -112,7 +112,7 @@ export default function RecommendationScreen() {
       qty_kg: req.quantity_kg,
       ...fromImpact(res.impact, 'farm'),
       prevented_kg: isTop ? res.impact.waste_avoided_kg : null,
-      earn_rs: earnFor(outlet, req.quantity_kg),
+      extra_rs: extraOver(outlet, res.default, req.quantity_kg),
     });
     setUsed(L.key(outlet));
     router.push('/plan');

@@ -13,7 +13,9 @@ export interface LedgerEntry {
   prevented_kg: Range | null; // waste avoided; null when the user overrode the recommendation (not computed)
   rescued_kg: number;
   recovered_kg: number;
-  earn_rs: Range | null; // net Rs for the whole load at the chosen outlet; null = not yet estimated
+  // Extra Rs AnnaSetu made for the whole load: net at the chosen outlet minus net at the nearest mandi (farm), or
+  // the chosen outlet's net, since unsold stock would otherwise be dumped (rescue); null = not yet estimated.
+  extra_rs: Range | null;
 }
 
 export interface LedgerTotals {
@@ -24,7 +26,7 @@ export interface LedgerTotals {
   prevented_kg: Range;
   rescued_kg: number;
   recovered_kg: number;
-  earn_rs: Range | null; // null when no entry has an estimate
+  extra_rs: Range | null; // null when no entry has an estimate
 }
 
 export async function readLedger(): Promise<LedgerEntry[]> {
@@ -49,12 +51,12 @@ const ZERO: Range = { low: 0, mid: 0, high: 0 };
 
 export function totals(entries: LedgerEntry[]): LedgerTotals {
   let prevented = ZERO;
-  let earn: Range | null = null;
+  let extra_rs: Range | null = null;
   let rescued = 0;
   let recovered = 0;
   for (const e of entries) {
     if (e.prevented_kg) prevented = add(prevented, e.prevented_kg);
-    if (e.earn_rs) earn = add(earn ?? ZERO, e.earn_rs);
+    if (e.extra_rs) extra_rs = add(extra_rs ?? ZERO, e.extra_rs); // entries saved before this field count nothing
     rescued += e.rescued_kg;
     recovered += e.recovered_kg;
   }
@@ -67,7 +69,7 @@ export function totals(entries: LedgerEntry[]): LedgerTotals {
     prevented_kg: prevented,
     rescued_kg: rescued,
     recovered_kg: recovered,
-    earn_rs: earn,
+    extra_rs,
   };
 }
 
@@ -75,6 +77,15 @@ export function totals(entries: LedgerEntry[]): LedgerTotals {
 export function earnFor(o: OutletOption, qtyKg: number): Range | null {
   const n = o.net_rs_per_kg;
   return n ? { low: n.low * qtyKg, mid: n.mid * qtyKg, high: n.high * qtyKg } : null;
+}
+
+/** Extra Rs from choosing `chosen` over the nearest mandi `nearest` for the whole quantity, or null. */
+export function extraOver(chosen: OutletOption, nearest: OutletOption, qtyKg: number): Range | null {
+  const c = earnFor(chosen, qtyKg);
+  const d = earnFor(nearest, qtyKg);
+  if (!c || !d) return null;
+  const v = [c.low - d.low, c.mid - d.mid, c.high - d.high];
+  return { low: Math.min(...v), mid: v[1], high: Math.max(...v) };
 }
 
 /** Ledger lines from one API impact (a rescue lot has no prevented share). */
