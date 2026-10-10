@@ -502,16 +502,16 @@ Example `/recommend` response (illustrative values):
 Send 2,000 kg to Madanapalle
 Kolar is receiving 3.1x its usual tomatoes today.
 
+You'd earn      Rs 9-12 per kg   (Kolar: Rs 0-2)
+
 Waste avoided   about 600 kg   (likely 400-800 kg)
 Redirected      2,000 kg away from a likely glut
 Extra distance  +37 km, about X litres diesel
 
-You'd earn      Rs 9-12 per kg   (Kolar: Rs 0-2)
-
 [Why not Kolar?]  [Listen]  [Use this]
 ```
 
-Rules: waste avoided first, earnings after; never merge waste avoided and redirected; ranges or "(estimate)" on every figure; "Why not X?" opens a before/after comparison of default vs recommended on the same load; "Use this" and overrides are logged.
+Rules: earnings first (what the farmer keeps, compared with the default market), then waste avoided (changed October 10 for farmer-level reading, PRODUCT.md); never merge waste avoided and redirected; ranges or "(estimate)" on every figure; "Why not X?" opens a before/after comparison of default vs recommended on the same load; "Use this" and overrides are logged.
 
 ### 14.4 Voice flow
 
