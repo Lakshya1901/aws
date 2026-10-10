@@ -51,8 +51,9 @@ def _place_key(s):
 
 def resolve_origin(o, cfg):
     """Origin lat/lon from the request; else the typed city, town or village matched exactly (case, spacing and a
-    trailing "mandi"/"market" ignored) to a market name, then a district name, in config/markets.json. A district
-    resolves to the mean of its markets and is marked place_approx. No match, or a name in two states: 422."""
+    trailing "mandi"/"market" ignored) to a market name, then a district name, in config/markets.json, then any place
+    in India by Amazon Location place search (D31). A district or a searched place is marked place_approx. A name in
+    two states is not taken from markets.json. No match: 422."""
     if o.get("lat") is not None and o.get("lon") is not None:
         return {"lat": _float(o["lat"], "origin.lat"), "lon": _float(o["lon"], "origin.lon"), "place": o.get("place")}
     key = _place_key(o.get("place") or "")
@@ -64,8 +65,10 @@ def resolve_origin(o, cfg):
                 lat = round(sum(m["lat"] for m in hit) / len(hit), 5)
                 lon = round(sum(m["lon"] for m in hit) / len(hit), 5)
                 return {"lat": lat, "lon": lon, "place": o["place"], "place_approx": approx or len(hit) > 1}
-    raise ApiError(422, "origin_unknown",
-                   "Origin needs lat and lon, or a city, town or village that matches a market or district name.")
+        g = location.geocode_place(key, o["place"])
+        if g:
+            return {"lat": g["lat"], "lon": g["lon"], "place": o["place"], "place_approx": True}
+    raise ApiError(422, "origin_unknown", "Origin needs lat and lon, or a city, town or village in India we can find.")
 
 
 # ---------- explanation ----------

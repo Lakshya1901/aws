@@ -47,6 +47,7 @@ Globals:
         DATA_BUCKET: !Ref DataBucket
         AUDIO_BUCKET: !Ref AudioBucket
         LOCATION_ROUTE_CALCULATOR: !Ref RouteCalculator
+        LOCATION_PLACE_INDEX: !Ref PlaceIndex  # typed places not in config/markets.json (D31)
         FETCH_QUEUE_URL: !Ref FetchQueue
         BEDROCK_ENABLED: !If [HasBedrock, "true", "false"]
         BEDROCK_MODEL_ID: !Ref BedrockModelId
@@ -120,6 +121,9 @@ Resources:
             - Effect: Allow
               Action: geo:CalculateRoute
               Resource: !GetAtt RouteCalculator.Arn
+            - Effect: Allow
+              Action: geo:SearchPlaceIndexForText
+              Resource: !GetAtt PlaceIndex.Arn
             - !If
               - HasBedrock
               - Effect: Allow

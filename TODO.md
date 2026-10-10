@@ -49,7 +49,8 @@ in TODO.md as they are done and commit TODO.md with the work.
 - [x] C5b Weather (D29): NOAA GHCN-Daily via AWS Open Data for Delhi replay windows; live Open-Meteo forecast / GHCN on the Lambda (WEATHER_LIVE=1). Delhi Rescue now estimates the split. 108 tests pass.
 - [x] C5c Lifetime dashboard on the phone (D30): Impact tab "Since you started": kg kept out of landfill, % of produce saved, Total money saved, composition bar; 9 new strings in 21 languages (pending review). Checked in a browser with mock data.
 - [x] C5d Pan-India outlets (D31): 15 real biogas, compost and processor units in 7 more states seeded from desk research (sources re-fetched, Amazon Location coordinates); Rescue radius 100 km. 112 tests pass. Food banks outside Bengaluru/Delhi: none with a fresh-produce source (team: ask IFBN for its hub list).
-- [ ] C6 Redeploy (confirm first): new languages, place lookup, preload 50, outlets; run `scripts/seed.py` for the Delhi and D31 outlets; ingest for the replay date (50 crops).
+- [x] C5e Any typed place in India (D31): Amazon Location place search when the name is not a market or district (live on the Lambda, cached offline for 9 cities); Rescue routes cached for Chennai, Hyderabad, Surat, Indore, Ujjain, Kochi, Gwalior, Agra, Bengaluru. Checked locally: all 10 cities (with Azadpur) return a Rescue route. 113 tests pass.
+- [ ] C6 Redeploy (confirm first; adds place search env and IAM): new languages, place lookup, preload 50, outlets; run `scripts/seed.py` for the Delhi and D31 outlets; ingest for the replay date (50 crops).
 - [ ] C7 Voice parse in languages other than en/hi/kn needs Bedrock (D23, still blocked); until then those transcripts land on Confirm with fields highlighted.
 - [ ] C8 Video beat 1 (D22): no recent Delhi dumping report found; best fetched: INPECS 2012 (Azadpur "approximately 2 000 tons of waste ... daily"), Tribune 2025-05-17 (CM: "garbage dump"). Team to choose.
 

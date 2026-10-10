@@ -9953,5 +9953,95 @@
   "drive_hours": 0.2460232200991667,
   "source": "amazon_location:annasetu-routes",
   "fetched_at": "2026-10-10T07:13:36.253201+00:00"
+ },
+ "13.072,80.202|chennai_chetpet_biocng": {
+  "distance_km": 6.566166364948474,
+  "drive_hours": 0.30750137092694446,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T08:19:06.618026+00:00"
+ },
+ "17.403,78.486|hyderabad_bowenpally_biogas": {
+  "distance_km": 10.734013176163444,
+  "drive_hours": 0.5017693077880555,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T08:19:07.939626+00:00"
+ },
+ "21.196,72.848|surat_apmc_biogas": {
+  "distance_km": 2.6688596172739403,
+  "drive_hours": 0.15616709067861112,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T08:19:09.315693+00:00"
+ },
+ "22.709,75.871|indore_devguradia_biocng": {
+  "distance_km": 8.785647464942402,
+  "drive_hours": 0.39605221236083327,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T08:19:10.873444+00:00"
+ },
+ "22.709,75.871|ujjain_biomethanation": {
+  "distance_km": 57.98558741349305,
+  "drive_hours": 1.5088919088858332,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T08:19:12.218917+00:00"
+ },
+ "23.195,75.780|indore_devguradia_biocng": {
+  "distance_km": 73.10811520128216,
+  "drive_hours": 1.5289230425466664,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T08:19:13.474079+00:00"
+ },
+ "23.195,75.780|ujjain_biomethanation": {
+  "distance_km": 2.717083569917011,
+  "drive_hours": 0.1637845776872222,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T08:19:14.391317+00:00"
+ },
+ "9.958,76.251|kochi_brahmapuram_cbg": {
+  "distance_km": 24.39215407160747,
+  "drive_hours": 0.8962261450816666,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T08:19:15.726747+00:00"
+ },
+ "26.035,78.227|gwalior_adarsh_gaushala": {
+  "distance_km": 27.151714007261784,
+  "drive_hours": 0.7705396938041666,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T08:19:17.078281+00:00"
+ },
+ "27.210,78.057|agra_transport_nagar_compost": {
+  "distance_km": 8.581974046578177,
+  "drive_hours": 0.27828057165388886,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T08:19:18.395843+00:00"
+ },
+ "27.210,78.057|agra_raj_nagar_compost": {
+  "distance_km": 8.879868747828123,
+  "drive_hours": 0.4217313179136112,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T08:19:19.675550+00:00"
+ },
+ "12.977,77.575|snr_foods": {
+  "distance_km": 101.47158360151917,
+  "drive_hours": 2.350206973083056,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T08:19:20.981541+00:00"
+ },
+ "12.977,77.575|kolar_food_bank": {
+  "distance_km": 94.72874013762797,
+  "drive_hours": 1.8859833836686113,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T08:19:22.301192+00:00"
+ },
+ "12.977,77.575|bangalore_food_bank": {
+  "distance_km": 2.743023750853251,
+  "drive_hours": 0.15259851167555555,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T08:19:23.496001+00:00"
+ },
+ "12.977,77.575|abc_fruits": {
+  "distance_km": 109.90751809870011,
+  "drive_hours": 2.1879177864374997,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T08:19:24.392544+00:00"
  }
 }

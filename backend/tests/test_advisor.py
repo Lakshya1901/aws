@@ -415,3 +415,15 @@ def test_resolve_origin_typed_place():
         with pytest.raises(advisor.ApiError) as e:
             advisor.resolve_origin(bad, cfg)
         assert e.value.code == "origin_unknown"
+
+
+def test_resolve_origin_falls_back_to_place_search(tmp_path, monkeypatch):
+    """A place not in config/markets.json comes from the Amazon Location place cache (D31); never live in tests."""
+    places = tmp_path / "places.json"
+    places.write_text(json.dumps({"chennai": {"lat": 13.08, "lon": 80.27, "label": "TEST ONLY"}}))
+    monkeypatch.setenv("PLACES_CACHE", str(places))
+    o = advisor.resolve_origin({"place": "Chennai"}, {"markets": []})
+    assert (o["lat"], o["lon"], o["place_approx"]) == (13.08, 80.27, True)
+    with pytest.raises(advisor.ApiError) as e:
+        advisor.resolve_origin({"place": "Holur"}, {"markets": []})
+    assert e.value.code == "origin_unknown"

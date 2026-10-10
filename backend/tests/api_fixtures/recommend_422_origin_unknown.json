@@ -20,7 +20,7 @@
   "status": 422,
   "body": {
    "error": "origin_unknown",
-   "message": "Origin needs lat and lon, or a city, town or village that matches a market or district name."
+   "message": "Origin needs lat and lon, or a city, town or village in India we can find."
   }
  }
 }

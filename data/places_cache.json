@@ -1,0 +1,74 @@
+{
+ "bengaluru": {
+  "lat": 12.97675,
+  "lon": 77.57528,
+  "label": "Bengaluru, Bengaluru Urban, Karnataka, IND",
+  "relevance": 1.0,
+  "source": "amazon_location:annasetu-places",
+  "fetched_at": "2026-10-10T08:18:44.611761+00:00"
+ },
+ "chennai": {
+  "lat": 13.07209,
+  "lon": 80.20186,
+  "label": "Chennai, Tamil Nadu, IND",
+  "relevance": 1.0,
+  "source": "amazon_location:annasetu-places",
+  "fetched_at": "2026-10-10T08:18:45.927168+00:00"
+ },
+ "kanpur": {
+  "lat": 26.46523,
+  "lon": 80.34975,
+  "label": "Kanpur, Kānpur, Uttar Pradesh, IND",
+  "relevance": 1.0,
+  "source": "amazon_location:annasetu-places",
+  "fetched_at": "2026-10-10T08:18:47.182800+00:00"
+ },
+ "visakhapatnam": {
+  "lat": 17.72329,
+  "lon": 83.30761,
+  "label": "Visakhapatnam, Andhra Pradesh, IND",
+  "relevance": 1.0,
+  "source": "amazon_location:annasetu-places",
+  "fetched_at": "2026-10-10T08:18:48.461275+00:00"
+ },
+ "kochi": {
+  "lat": 9.95762,
+  "lon": 76.25115,
+  "label": "Kochi, Ernakulam, Keralam, IND",
+  "relevance": 1.0,
+  "source": "amazon_location:annasetu-places",
+  "fetched_at": "2026-10-10T08:18:49.738182+00:00"
+ },
+ "guwahati": {
+  "lat": 26.14316,
+  "lon": 91.65942,
+  "label": "Guwahati, Kamrup Metropolitan, Assam, IND",
+  "relevance": 1.0,
+  "source": "amazon_location:annasetu-places",
+  "fetched_at": "2026-10-10T08:18:50.918438+00:00"
+ },
+ "bhubaneswar": {
+  "lat": 20.27261,
+  "lon": 85.83312,
+  "label": "Bhubaneswar, Khordha, Odisha, IND",
+  "relevance": 1.0,
+  "source": "amazon_location:annasetu-places",
+  "fetched_at": "2026-10-10T08:18:52.133948+00:00"
+ },
+ "ranchi": {
+  "lat": 23.34316,
+  "lon": 85.3094,
+  "label": "Ranchi, Rānchī, Jhārkhand, IND",
+  "relevance": 1.0,
+  "source": "amazon_location:annasetu-places",
+  "fetched_at": "2026-10-10T08:18:53.477460+00:00"
+ },
+ "vijayawada": {
+  "lat": 16.50745,
+  "lon": 80.6466,
+  "label": "Vijayawada, Krishna, Andhra Pradesh, IND",
+  "relevance": 1.0,
+  "source": "amazon_location:annasetu-places",
+  "fetched_at": "2026-10-10T08:18:54.679002+00:00"
+ }
+}
