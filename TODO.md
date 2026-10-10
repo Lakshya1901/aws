@@ -54,7 +54,7 @@ in TODO.md as they are done and commit TODO.md with the work.
 - [x] C9 Icon (bridge + sprout) in app, README, PRODUCT.md; APK limited to arm64-v8a and armeabi-v7a (next build); merge conflict with main resolved (main was a squash of 57ac772).
 - [x] C10 Backtest result JSON moved to S3 backtest/ (52k lines out of git); README tech stack table with AWS per layer; one "All numbers are estimates" line per screen (D32); Mumbai weather (8 nearest NOAA stations).
 - [x] C11 Advice for all 50 preloaded crops (D33); harvest cost optional; Settings screen with My crops; crop chips from the API; typed place clears stale coordinates. 115 tests, tsc and Android export pass; not yet checked on a simulator or phone.
-- [ ] C12 Settings: Live / Demo data switch (D34). Built: header x-annasetu-data, live Agmarknet prices (price-only risk), Settings Data section in 21 languages, tests pass. Left: redeploy (confirm first), check live answers on the deployed API, publish the Expo Go update.
+- [x] C12 Settings: Live / Demo data switch (D34). Deployed and checked October 10: live Agmarknet prices dated 8 Oct for tomato (Kolar), onion (Pune), potato (Agra); demo still replays 29 Sep 2023; Expo Go update published.
 - [x] C13 Redeploy: weather fix, 48 crop profiles, /crops names (done October 10; live /crops lists 50 routable crops). Next: simulator pass on the Mac, then the APK build.
 - [ ] C14 iOS simulator pass on the Mac (Expo SDK 57). Oct 10: branch checked out, `npm install` done. Blocked:
   - `app/.env` not written: no AWS CLI or credentials on this Mac, so the key in SSM `/annasetu/app_api_key` can't be read here; the user supplies it.
