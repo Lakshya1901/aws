@@ -256,7 +256,7 @@ def test_plans_file_persists_between_processes(api, tmp_path, monkeypatch):
     assert call("GET", "/impact", {"plan_id": r["plan_id"]})[0] == 200
 
 
-@pytest.mark.parametrize("day", ["2023-09-06", "2025-03-19"])  # demo replay days (D18)
+@pytest.mark.parametrize("day", ["2023-09-29", "2025-03-19"])  # demo replay days (D18)
 def test_smoke_real_snapshot_replay_day(day, tmp_path, monkeypatch):
     """Real market-level snapshot (D24) on a replay day with TEST ONLY routes and weather. Structure only, no numbers."""
     snap = tmp_path / "snap"

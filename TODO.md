@@ -29,9 +29,10 @@ in TODO.md as they are done and commit TODO.md with the work.
 ## Next session (October 10)
 
 ### A. Three decisions to ask the user first
-- [ ] A1 Headline replay day (D18). Market-level results with 10 demo loads from Kolar: 2023-09-06 waste avoided about -8 kg, no split; 2023-09-15 and 2023-09-29 split the loads (Binny Mill + Punganur / Vayalapadu) with waste avoided mid about 500-730 kg; 2025-03-19 (second replay) 365-812 kg per 2 t load. After choosing: set `replay_date` in `config/model.json`, record in CLAUDE.md D18, redeploy (confirm first), invoke ingest with `{"crops": [...preload], "as_of_date": "<day>"}` or the plain `{}` fan-out, check the weather snapshot covers the day (`data/snapshot/weather_power_*`).
-- [ ] A2 Expo account for the EAS project: `lakshya1901` or `lakshya1901-team` (`eas init` writes the project id into `app/app.json`).
-- [ ] A3 UI design approach: recommended, design the Today radar and Recommendation card first as design canvases here, then apply to the Expo screens.
+- [x] A1 Headline replay day (D18). Oct 10: user chose the strongest figures: 2023-09-29 (10 loads: Binny Mill 11.2 t + Vayalapadu 4.8 t, waste avoided mid 732 kg, range -216 to 3,269; 2023-09-15 mid 499). `replay_date` set, D18 updated, replay test updated. Redeploy + ingest pending confirmation.
+  - Was: Market-level results with 10 demo loads from Kolar: 2023-09-06 waste avoided about -8 kg, no split; 2023-09-15 and 2023-09-29 split the loads (Binny Mill + Punganur / Vayalapadu) with waste avoided mid about 500-730 kg; 2025-03-19 (second replay) 365-812 kg per 2 t load. After choosing: set `replay_date` in `config/model.json`, record in CLAUDE.md D18, redeploy (confirm first), invoke ingest with `{"crops": [...preload], "as_of_date": "<day>"}` or the plain `{}` fan-out, check the weather snapshot covers the day (`data/snapshot/weather_power_*`).
+- [x] A2 Expo account for the EAS project (Oct 10: `lakshya1901-team`): `lakshya1901` or `lakshya1901-team` (`eas init` writes the project id into `app/app.json`).
+- [x] A3 UI design approach (Oct 10: canvases first): recommended, design the Today radar and Recommendation card first as design canvases here, then apply to the Expo screens.
 
 ### B. UI and UX design, then APK (user asked: design first, then export the APK)
 - [ ] B1 Design pass on Today (radar, crop chips, Other crop), Recommendation card (Section 14.3 rules), then the remaining screens. Keep Section 14.6 rules (16 pt base, 24 pt card numbers, 48 dp targets, colour + word + icon).
@@ -71,7 +72,7 @@ in TODO.md as they are done and commit TODO.md with the work.
 - [x] Market-level AGMARKNET data for every commodity from the India Data Portal; `config/markets.json` (4,142 markets) and `config/commodities.json` (400); offline snapshot for tomato and onion near Kolar.
 - [x] Glut Radar for any crop; top 20 fruits and vegetables preloaded; any other fetched on request (SQS). App: crop chips from `/crops`, Other crop screen with fetch-later.
 - [x] Onion profile sourced (routing on). Potato and banana: no sourced harvest cost; radar only until one is supplied.
-- [ ] Headline replay day (D18): on market-level data 2023-09-06 gives waste avoided about -8 kg and no load split; 2023-09-15 and 2023-09-29 split the ten loads with positive waste avoided. Team to choose; then set `replay_date` and re-run ingest.
+- [x] Headline replay day (D18), chosen Oct 10: 2023-09-29 (see A1). On market-level data 2023-09-06 gives waste avoided about -8 kg and no load split; 2023-09-15 and 2023-09-29 split the ten loads with positive waste avoided. Team to choose; then set `replay_date` and re-run ingest.
 
 ### 3. iPhone and Android test
 - [ ] 3.1 Put the API URL and key in `app/.env` (from `app/.env.example`); never commit it.
@@ -116,7 +117,7 @@ in TODO.md as they are done and commit TODO.md with the work.
 ## Tomorrow (October 10)
 
 - [x] 10. Commit history check: clear messages, no secrets, no model identifiers, no `node_modules` or build output. Oct 9: no keys, `.env`, `samconfig.toml`, `node_modules`, build output or model IDs in any commit. Early messages (`v1`, `merge (#1)`) are terse; left as is (rewriting `main` is not worth it). Re-check before 9.3.
-- [ ] 11. Demo video, 3 minutes or less: the live app on a phone, the 2025 Kolar price crash (2025-03-19), and the second case study (2023-09-06 arrival glut, ten loads split). Show "Replaying <date> data", label counterfactuals as modelled, waste avoided separate from redirected. Then fill the video link in README.md (replace "TBD").
+- [ ] 11. Demo video, 3 minutes or less: the live app on a phone, the 2025 Kolar price crash (2025-03-19), and the second case study (2023-09-29, documented Sept 2023 arrival glut, ten loads split; D18). Show "Replaying <date> data", label counterfactuals as modelled, waste avoided separate from redirected. Then fill the video link in README.md (replace "TBD").
 - [ ] 12. Short writeup (submission form): problem, build, AWS usage (name the SAM CLI and every AWS service; CLAUDE.md Section 22.1).
   List the AI coding tools used (Claude Code), as the rules require: "You can use AI coding tools. List the ones you used in your writeup." (https://www.wemakedevs.org/aws/env/rules). Add the same line to README.md.
 
