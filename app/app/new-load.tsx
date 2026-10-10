@@ -1,12 +1,12 @@
 // New load: hold-to-speak mic (upload -> presigned PUT -> parse -> Confirm), typed form as fallback.
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { api } from '../api/client';
 import { isRouterCrop } from '../api/types';
 import { LoadForm } from '../components/LoadForm';
 import { MicButton } from '../components/MicButton';
-import { Banner, Btn, DataBanners, Loading, Screen, T, useErrorText } from '../components/ui';
+import { Banner, Btn, DataBanners, Screen, T, useErrorText } from '../components/ui';
 import { draftComplete, useRecommend } from '../lib/recommend';
 import { EMPTY_DRAFT, useSession } from '../lib/session';
 import { C, SIZE } from '../lib/theme';
@@ -76,18 +76,22 @@ export default function NewLoadScreen() {
         onFailed={(r) => setMessage(r === 'denied' ? t('mic_denied') : t('parse_failed'))}
       />
       {busy && (
-        <View>
-          <Loading />
+        <View style={{ alignItems: 'center' }}>
+          <ActivityIndicator size="large" color={C.primary} />
           <T bold style={{ textAlign: 'center' }}>
             {t('processing')}
           </T>
         </View>
       )}
-      {message && <Banner kind="error" text={message} />}
+      {message && <Banner kind={message === t('fill_all') || message === t('parse_failed') || message === t('mic_denied') ? 'warn' : 'error'} text={message} />}
 
-      <T bold size={SIZE.title} color={C.text}>
-        {t('or_type')}
-      </T>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <View style={{ flex: 1, height: 1, backgroundColor: C.divider }} />
+        <T size={SIZE.small} color={C.muted} style={{ textAlign: 'center', flexShrink: 1 }}>
+          {t('or_type')}
+        </T>
+        <View style={{ flex: 1, height: 1, backgroundColor: C.divider }} />
+      </View>
       {ready && <LoadForm draft={draft} onChange={setDraft} />}
       <Btn label={t('get_recommendation')} onPress={() => void submit()} disabled={busy} />
     </Screen>

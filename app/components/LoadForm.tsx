@@ -1,12 +1,13 @@
 // Typed load form, shared by New load and Confirm. Highlighted fields need checking.
 import * as Location from 'expo-location';
 import { useState } from 'react';
-import { TextInput, View } from 'react-native';
+import { Pressable, TextInput, View } from 'react-native';
 import { CROPS, type Harvest } from '../api/types';
 import { fmtNum } from '../i18n';
 import { UNIT_KG } from '../lib/recommend';
 import { useSession, type LoadDraft } from '../lib/session';
-import { C, SIZE, fontFor } from '../lib/theme';
+import { C, RADIUS, SIZE, fontFor } from '../lib/theme';
+import { Icon } from './Icon';
 import { Btn, Chip, T, s } from './ui';
 
 type Unit = keyof typeof UNIT_KG | 'box';
@@ -25,14 +26,73 @@ export function parseCoords(text: string): { lat: number; lon: number } | null {
     : null;
 }
 
+/** Material segmented buttons: one outlined row, selected segment tonal with a check. */
+function Segmented<V extends string>({
+  options,
+  value,
+  onSelect,
+  highlight,
+}: {
+  options: { value: V; label: string }[];
+  value: V | null;
+  onSelect: (v: V) => void;
+  highlight?: boolean;
+}) {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        borderWidth: highlight ? 2 : 1,
+        borderColor: highlight ? C.warnText : C.outline,
+        backgroundColor: highlight ? C.warnBg : 'transparent',
+        borderRadius: RADIUS.pill,
+        overflow: 'hidden',
+      }}
+    >
+      {options.map((o, i) => {
+        const sel = o.value === value;
+        return (
+          <Pressable
+            key={o.value}
+            accessibilityRole="button"
+            accessibilityState={{ selected: sel }}
+            onPress={() => onSelect(o.value)}
+            style={{
+              flex: 1,
+              minHeight: SIZE.touch,
+              paddingHorizontal: 4,
+              paddingVertical: 6,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 4,
+              backgroundColor: sel ? C.tonal : 'transparent',
+              borderLeftWidth: i === 0 ? 0 : 1,
+              borderLeftColor: highlight ? C.warnText : C.outline,
+            }}
+          >
+            {sel ? <Icon name="check" size={16} color={C.onTonal} strokeWidth={2.6} /> : null}
+            <T bold={sel} size={SIZE.small} color={sel ? C.onTonal : C.text} style={{ textAlign: 'center', flexShrink: 1 }}>
+              {o.label}
+            </T>
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+}
+
 export function LoadForm({
   draft,
   onChange,
   highlight,
+  showNotHeard,
 }: {
   draft: LoadDraft;
   onChange: (d: LoadDraft) => void;
   highlight?: (keyof LoadDraft)[];
+  /** Confirm screen: empty fields say "Not heard" inside the field. */
+  showNotHeard?: boolean;
 }) {
   const { t, lang, crop: radarCrop, unitBoxKg } = useSession();
   const [unit, setUnit] = useState<Unit>('kg');
@@ -73,84 +133,95 @@ export function LoadForm({
   }
 
   const inputStyle = (k: keyof LoadDraft) => ({
-    minHeight: SIZE.touch,
-    borderWidth: hl(k) ? 3 : 2,
-    borderColor: hl(k) ? C.highlightBorder : C.border,
-    backgroundColor: hl(k) ? C.highlight : C.bg,
-    borderRadius: 8,
-    paddingHorizontal: 12,
+    minHeight: 56,
+    borderWidth: hl(k) ? 2 : 1,
+    borderColor: hl(k) ? C.warnText : C.outline,
+    backgroundColor: hl(k) ? C.warnBg : C.bg,
+    borderRadius: RADIUS.field,
+    paddingHorizontal: 16,
     fontSize: SIZE.large,
     color: C.text,
     fontFamily: fontFor(lang),
   });
+  const hint = showNotHeard ? t('not_heard') : undefined;
+  const hintColor = C.muted;
+  const label = (key: 'crop' | 'quantity' | 'place' | 'harvest', empty?: boolean) => (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+      <T bold>{t(key)}</T>
+      {showNotHeard && empty ? <T size={SIZE.label} color={hintColor}>{hint}</T> : null}
+    </View>
+  );
 
   return (
-    <View style={{ gap: 10 }}>
-      <T bold>{t('crop')}</T>
-      <View style={s.row}>
-        {CROPS.map((c) => (
-          <Chip
-            key={c}
-            label={t(`crop_${c}`)}
-            selected={draft.crop === c}
-            highlight={hl('crop')}
-            onPress={() => onChange({ ...draft, crop: c })}
-          />
-        ))}
+    <View style={{ gap: 20 }}>
+      <View style={{ gap: 8 }}>
+        {label('crop', draft.crop === null)}
+        <View style={s.row}>
+          {CROPS.map((c) => (
+            <Chip
+              key={c}
+              label={t(`crop_${c}`)}
+              selected={draft.crop === c}
+              highlight={hl('crop')}
+              onPress={() => onChange({ ...draft, crop: c })}
+            />
+          ))}
+        </View>
       </View>
 
-      <T bold>{t('quantity')}</T>
-      <TextInput
-        value={qtyText}
-        onChangeText={(v) => setQty(v, unit)}
-        keyboardType="numeric"
-        accessibilityLabel={t('quantity')}
-        style={inputStyle('quantity_kg')}
-      />
-      <View style={s.row}>
-        {(['kg', 'box', 'quintal', 'tonne'] as Unit[]).map((u) => (
-          <Chip
-            key={u}
-            label={t(`unit_${u}`)}
-            selected={unit === u}
-            onPress={() => setQty(qtyText, u)}
-          />
-        ))}
+      <View style={{ gap: 8 }}>
+        {label('quantity')}
+        <TextInput
+          value={qtyText}
+          onChangeText={(v) => setQty(v, unit)}
+          keyboardType="numeric"
+          placeholder={showNotHeard && !qtyText ? hint : undefined}
+          placeholderTextColor={C.muted}
+          accessibilityLabel={t('quantity')}
+          style={inputStyle('quantity_kg')}
+        />
+        <Segmented
+          options={(['kg', 'box', 'quintal', 'tonne'] as Unit[]).map((u) => ({ value: u, label: t(`unit_${u}`) }))}
+          value={unit}
+          onSelect={(u) => setQty(qtyText, u)}
+        />
+        {unit === 'box' && !boxKg && <T color={C.errorBg}>{t('box_unavailable')}</T>}
+        {unit !== 'kg' && draft.quantity_kg ? <T color={C.muted}>{t('kg_value', { v: fmtNum(draft.quantity_kg) })}</T> : null}
       </View>
-      {unit === 'box' && !boxKg && <T color={C.errorBg}>{t('box_unavailable')}</T>}
-      {unit !== 'kg' && draft.quantity_kg ? <T>{t('kg_value', { v: fmtNum(draft.quantity_kg) })}</T> : null}
 
-      <T bold>{t('place')}</T>
-      <TextInput
-        value={draft.origin_place ?? ''}
-        onChangeText={(v) => onChange({ ...draft, origin_place: v || null })}
-        accessibilityLabel={t('place')}
-        style={inputStyle('origin_place')}
-      />
-      <Btn kind="secondary" label={t('use_location')} onPress={() => void useLocation()} />
-      {locMsg && <T color={C.errorBg}>{locMsg}</T>}
-      <T bold>{t('coords')}</T>
-      <TextInput
-        value={coordText}
-        onChangeText={setCoords}
-        keyboardType="numbers-and-punctuation"
-        placeholder="13.14, 78.13"
-        accessibilityLabel={t('coords')}
-        style={inputStyle('lat')}
-      />
-      {coordText.trim() !== '' && draft.lat === null && <T color={C.errorBg}>{t('coords_invalid')}</T>}
+      <View style={{ gap: 8 }}>
+        {label('place')}
+        <TextInput
+          value={draft.origin_place ?? ''}
+          onChangeText={(v) => onChange({ ...draft, origin_place: v || null })}
+          placeholder={showNotHeard && !draft.origin_place ? hint : undefined}
+          placeholderTextColor={C.muted}
+          accessibilityLabel={t('place')}
+          style={inputStyle('origin_place')}
+        />
+        <Btn kind="text" icon="pin" label={t('use_location')} onPress={() => void useLocation()} style={{ alignSelf: 'flex-start' }} />
+        {locMsg && <T color={C.errorBg}>{locMsg}</T>}
+        <T bold size={SIZE.small}>{t('coords')}</T>
+        <TextInput
+          value={coordText}
+          onChangeText={setCoords}
+          keyboardType="numbers-and-punctuation"
+          placeholder="13.14, 78.13"
+          placeholderTextColor={C.muted}
+          accessibilityLabel={t('coords')}
+          style={inputStyle('lat')}
+        />
+        {coordText.trim() !== '' && draft.lat === null && <T color={C.errorBg}>{t('coords_invalid')}</T>}
+      </View>
 
-      <T bold>{t('harvest')}</T>
-      <View style={s.row}>
-        {HARVESTS.map((h) => (
-          <Chip
-            key={h}
-            label={t(`harvest_${h}`)}
-            selected={draft.harvest === h}
-            highlight={hl('harvest')}
-            onPress={() => onChange({ ...draft, harvest: h })}
-          />
-        ))}
+      <View style={{ gap: 8 }}>
+        {label('harvest', draft.harvest === null)}
+        <Segmented
+          options={HARVESTS.map((h) => ({ value: h, label: t(`harvest_${h}`) }))}
+          value={draft.harvest}
+          onSelect={(h) => onChange({ ...draft, harvest: h })}
+          highlight={hl('harvest')}
+        />
       </View>
     </View>
   );

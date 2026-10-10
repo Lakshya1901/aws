@@ -8,7 +8,8 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { useSession } from '../lib/session';
-import { C, SIZE } from '../lib/theme';
+import { C, SHADOW, SIZE } from '../lib/theme';
+import { Icon } from './Icon';
 import { T } from './ui';
 
 const MAX_MS = 20000; // clips under 20 s (Section 14.4)
@@ -85,32 +86,45 @@ export function MicButton({
   }
 
   return (
-    <View style={{ alignItems: 'center', gap: 10, paddingVertical: 8 }}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={t('speak')}
-        disabled={disabled}
-        onPressIn={() => void start()}
-        onPressOut={() => void stop()}
+    <View style={{ alignItems: 'center', gap: 12, paddingVertical: 8 }}>
+      <View
         style={{
-          width: 140,
-          height: 140,
-          borderRadius: 70,
-          backgroundColor: recording ? C.errorBg : C.primary,
-          justifyContent: 'center',
+          width: 144,
+          height: 144,
+          borderRadius: 72,
           alignItems: 'center',
-          opacity: disabled ? 0.5 : 1,
-          borderWidth: 6,
-          borderColor: recording ? C.warnBg : C.card,
+          justifyContent: 'center',
+          backgroundColor: recording ? C.tonal : 'transparent',
         }}
       >
-        <T bold size={44} color={C.primaryText}>
-          {'🎤'}
-        </T>
-      </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('speak')}
+          disabled={disabled}
+          onPressIn={() => void start()}
+          onPressOut={() => void stop()}
+          style={{
+            width: 120,
+            height: 120,
+            borderRadius: 60,
+            backgroundColor: C.primary,
+            justifyContent: 'center',
+            alignItems: 'center',
+            opacity: disabled ? 0.5 : 1,
+            ...SHADOW,
+          }}
+        >
+          <Icon name="mic" size={52} color={C.primaryText} strokeWidth={2} />
+        </Pressable>
+      </View>
       <T bold size={SIZE.large}>
         {recording ? t('recording') : t('speak')}
       </T>
+      {recording ? null : (
+        <T size={SIZE.small} color={C.muted} style={{ textAlign: 'center' }}>
+          {t('say_hint')}
+        </T>
+      )}
     </View>
   );
 }
