@@ -1,3 +1,5 @@
+<img src="../docs/brand/icon-256.png" width="72" alt="AnnaSetu icon">
+
 # AnnaSetu mobile app
 
 React Native + Expo (SDK 57) + TypeScript, expo-router. Android is the primary target; iOS runs in Expo Go or a simulator.

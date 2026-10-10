@@ -37,6 +37,10 @@ Used on low-to-mid Android phones, outdoors and in sunlight, on slow connections
 
 Real replayed AGMARKNET prices and arrivals (demo days 2023-09-29 and 2025-03-19), NASA POWER weather, Amazon Location routes, seeded outlets from desk research ("Not yet partnered"). No user testing yet; Hindi and Kannada strings await native-speaker review.
 
+## Brand
+
+Anna (food) + Setu (bridge): an arch bridge with a sprout growing from its deck. Deep green `#215C3B`, light beige `#FAF6EE`, light green `#CFE3D4`, the same tokens as `app/lib/theme.ts`. Icon files in `docs/brand/` and `app/assets/`.
+
 ## Product Principles
 
 1. Answer first: where to send it, then why, then the cost of the choice.

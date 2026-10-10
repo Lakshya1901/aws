@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/brand/icon-256.png" width="128" alt="AnnaSetu icon: an arch bridge with a sprout"></p>
+
 # AnnaSetu
 
 Every day, a city's mandis turn good food into garbage. AnnaSetu stops the glut before the truck leaves, rescues what's left before it's dumped, and turns the rest into energy, not landfill.
@@ -5,8 +7,8 @@ Every day, a city's mandis turn good food into garbage. AnnaSetu stops the glut 
 One surplus router, three entry points, centred on the city mandi:
 
 - **Prevent (built):** tells farmer collectives (FPOs) where each load should go (sell fresh, process, donate, feed or compost) using public mandi data, and allocates loads across markets so they don't all crash the same one.
-- **Rescue (built; real city outlets pending, D20):** a trader at a city mandi logs unsold end-of-day stock; the router sends the edible part to food banks or processors before it is dumped.
-- **Recover (built; no biogas or compost unit seeded yet, D20):** what can't be eaten goes to animal feed, biogas or compost instead of landfill. Biogas energy is shown only as a labelled estimate.
+- **Rescue (built; outlets seeded where a real organisation was found, D31):** a trader at a city mandi logs unsold end-of-day stock; the router sends the edible part to food banks or processors before it is dumped.
+- **Recover (built; biogas and compost units in 7 states, D31):** what can't be eaten goes to animal feed, biogas or compost instead of landfill. Biogas energy is shown only as a labelled estimate.
 
 The core question it answers: **"Where should this load go today, and what will it actually earn after costs?"**
 
@@ -14,6 +16,18 @@ The core question it answers: **"Where should this load go today, and what will 
 - Platform: Android/iOS app (Expo), serverless backend on AWS in ap-south-1, built and deployed with the AWS SAM CLI
 - Demo video: TBD
 - Android APK: [annasetu.apk](https://expo.dev/artifacts/eas/BygXbwO-2GY_xedOPQo8k5jfkWs5yDkbset9HNDhyO8.apk) (EAS preview build, October 10; talks to the live API)
+
+## Brand
+
+Anna (food) + Setu (bridge): the icon is an arch bridge with a sprout growing from its deck, food carried to where it is needed. The app and the icon share one palette:
+
+| Role | Colour |
+| --- | --- |
+| Primary (icon background, buttons) | `#215C3B` deep green |
+| Surface (icon mark, app background) | `#FAF6EE` light beige |
+| Accent (leaves, selected chips) | `#CFE3D4` light green |
+
+Files: `docs/brand/icon.svg` (app icon), `docs/brand/mark.svg` (mark on a transparent background), `docs/brand/icon-256.png`; the app's icon set is in `app/assets/` (iOS icon, Android adaptive foreground, background and monochrome, splash, favicon). Colours match `app/lib/theme.ts`.
 
 | Problem | Decision | Intervention | Impact (shown per load) |
 | --- | --- | --- | --- |
