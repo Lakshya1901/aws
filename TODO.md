@@ -45,7 +45,7 @@ in TODO.md as they are done and commit TODO.md with the work.
 - [x] C2 Typed "City, town or village" resolves to a market or district in config/markets.json (API); the app no longer replaces a typed place with GPS. Unsold stock has a place field.
 - [x] C3 Glut Radar preload top 50 fruits and vegetables (config/commodities.json); routing stays tomato and onion (no other crop has a full sourced profile, D28).
 - [x] C4 Delhi outlet: India FoodBanking Network seeded in config/outlets.json (only Delhi outlet with a fetched source). No Delhi biogas/compost/feed/processor found with a source.
-- [ ] C5 Routes cached from Azadpur (data/routes_cache.json), Delhi Rescue run checked locally.
+- [x] C5 Routes cached from Azadpur (534 routes, data/routes_cache.json). Delhi Rescue checked locally: typed "Azadpur" resolves; no split -> 422 split_required (no Delhi weather, D19); trader split 420/80 kg -> India FoodBanking Network 5.5 km, kept out of landfill 420 kg; spoiled part "No biogas or compost unit near you yet"; Urdu template explanation works.
 - [ ] C6 Redeploy (confirm first): new languages, place lookup, preload 50, outlets; run `scripts/seed.py` for the Delhi outlet; ingest for the replay date (50 crops).
 - [ ] C7 Voice parse in languages other than en/hi/kn needs Bedrock (D23, still blocked); until then those transcripts land on Confirm with fields highlighted.
 - [ ] C8 Video beat 1 (D22): no recent Delhi dumping report found; best fetched: INPECS 2012 (Azadpur "approximately 2 000 tons of waste ... daily"), Tribune 2025-05-17 (CM: "garbage dump"). Team to choose.

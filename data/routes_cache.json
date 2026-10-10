@@ -9623,5 +9623,335 @@
   "drive_hours": 1.837117315616389,
   "source": "amazon_location:annasetu-routes",
   "fetched_at": "2026-10-10T07:12:25.622252+00:00"
+ },
+ "28.721,77.165|9-khatauli": {
+  "distance_km": 114.52431303864266,
+  "drive_hours": 2.3646496278194444,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:26.780852+00:00"
+ },
+ "28.721,77.165|9-khekda": {
+  "distance_km": 29.452977848494267,
+  "drive_hours": 0.7813650023233333,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:27.930653+00:00"
+ },
+ "28.721,77.165|9-khurja": {
+  "distance_km": 133.15604492541368,
+  "drive_hours": 2.7279125521638887,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:29.115822+00:00"
+ },
+ "28.721,77.165|9-kiratpur": {
+  "distance_km": 205.59026708095558,
+  "drive_hours": 3.8581704982169445,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:30.152661+00:00"
+ },
+ "28.721,77.165|9-kosikalan": {
+  "distance_km": 136.9531731761369,
+  "drive_hours": 2.717791806278889,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:31.200176+00:00"
+ },
+ "28.721,77.165|9-mainpuri": {
+  "distance_km": 339.51539670822086,
+  "drive_hours": 5.929522134047778,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:33.464719+00:00"
+ },
+ "28.721,77.165|9-mathura": {
+  "distance_km": 180.47710107970622,
+  "drive_hours": 3.357382722045834,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:34.826996+00:00"
+ },
+ "28.721,77.165|9-mawana": {
+  "distance_km": 115.6042234687693,
+  "drive_hours": 2.7144802248747215,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:36.219754+00:00"
+ },
+ "28.721,77.165|9-meeranpurkatra": {
+  "distance_km": 302.12905967622436,
+  "drive_hours": 4.99718829661639,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:37.588736+00:00"
+ },
+ "28.721,77.165|9-meerut": {
+  "distance_km": 83.34031764600357,
+  "drive_hours": 1.7808168206919441,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:38.763566+00:00"
+ },
+ "28.721,77.165|9-milak": {
+  "distance_km": 227.42922784625063,
+  "drive_hours": 4.862601530768887,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:40.071513+00:00"
+ },
+ "28.721,77.165|9-mohamadabad": {
+  "distance_km": 385.0584379812795,
+  "drive_hours": 5.920052637181945,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:41.102594+00:00"
+ },
+ "28.721,77.165|9-muradabad": {
+  "distance_km": 172.60976696861655,
+  "drive_hours": 3.7257277727425,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:42.443325+00:00"
+ },
+ "28.721,77.165|9-muradnagar": {
+  "distance_km": 41.911226469103006,
+  "drive_hours": 1.3199914028711113,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:43.563955+00:00"
+ },
+ "28.721,77.165|9-muzzafarnagar": {
+  "distance_km": 134.04078851958388,
+  "drive_hours": 2.3578138917155558,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:44.852810+00:00"
+ },
+ "28.721,77.165|9-nagina": {
+  "distance_km": 220.60393296838626,
+  "drive_hours": 4.252105560093611,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:46.164775+00:00"
+ },
+ "28.721,77.165|9-najibabad": {
+  "distance_km": 225.77341775627306,
+  "drive_hours": 4.274702374557778,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:47.519143+00:00"
+ },
+ "28.721,77.165|9-nakud": {
+  "distance_km": 181.96884562979818,
+  "drive_hours": 2.920713540492222,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:48.764287+00:00"
+ },
+ "28.721,77.165|9-nakur": {
+  "distance_km": 181.3307603282537,
+  "drive_hours": 2.8785329705869445,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:50.020070+00:00"
+ },
+ "28.721,77.165|9-nanuta": {
+  "distance_km": 138.90779494249662,
+  "drive_hours": 2.241996861993611,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:51.279607+00:00"
+ },
+ "28.721,77.165|9-noida": {
+  "distance_km": 38.49205453204012,
+  "drive_hours": 1.1749600081624998,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:52.489153+00:00"
+ },
+ "28.721,77.165|9-parikshitgarh": {
+  "distance_km": 104.21388958064138,
+  "drive_hours": 2.6243011709494444,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:54.112764+00:00"
+ },
+ "28.721,77.165|9-pilibhit": {
+  "distance_km": 336.2667256222068,
+  "drive_hours": 6.333610205804446,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:55.419688+00:00"
+ },
+ "28.721,77.165|9-powayan": {
+  "distance_km": 380.92351552853887,
+  "drive_hours": 6.165294318160278,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:56.785810+00:00"
+ },
+ "28.721,77.165|9-puranpur": {
+  "distance_km": 388.51131754180625,
+  "drive_hours": 7.156236803936113,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:58.182039+00:00"
+ },
+ "28.721,77.165|9-rampur": {
+  "distance_km": 210.39394878948315,
+  "drive_hours": 4.541860931330277,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:12:59.577303+00:00"
+ },
+ "28.721,77.165|9-rampurmaniharan": {
+  "distance_km": 144.22700225965158,
+  "drive_hours": 2.3689937018986114,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:00.960788+00:00"
+ },
+ "28.721,77.165|9-richha": {
+  "distance_km": 329.80693955019103,
+  "drive_hours": 6.014079536666389,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:02.361214+00:00"
+ },
+ "28.721,77.165|9-saharanpur": {
+  "distance_km": 174.12006318355787,
+  "drive_hours": 2.8275731767275,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:03.688951+00:00"
+ },
+ "28.721,77.165|9-sambhal": {
+  "distance_km": 166.65361603098393,
+  "drive_hours": 3.0128937956952777,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:05.001121+00:00"
+ },
+ "28.721,77.165|9-samsabad": {
+  "distance_km": 243.8949591574121,
+  "drive_hours": 4.698389004397223,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:06.338433+00:00"
+ },
+ "28.721,77.165|9-sardhana": {
+  "distance_km": 94.7756642715126,
+  "drive_hours": 1.9961418876630554,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:07.584182+00:00"
+ },
+ "28.721,77.165|9-shadabad": {
+  "distance_km": 193.75062468811086,
+  "drive_hours": 3.991080039999167,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:08.903586+00:00"
+ },
+ "28.721,77.165|9-shahabad": {
+  "distance_km": 228.0123759471855,
+  "drive_hours": 4.279786717462778,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:10.221376+00:00"
+ },
+ "28.721,77.165|9-shahaswan": {
+  "distance_km": 235.8324272220733,
+  "drive_hours": 4.342317162640277,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:11.560329+00:00"
+ },
+ "28.721,77.165|9-shahjahanpur": {
+  "distance_km": 349.8515702580858,
+  "drive_hours": 5.426833543981668,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:12.598850+00:00"
+ },
+ "28.721,77.165|9-shahpur": {
+  "distance_km": 99.28454380196753,
+  "drive_hours": 2.038031997253056,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:13.795724+00:00"
+ },
+ "28.721,77.165|9-shamli": {
+  "distance_km": 106.58097469301208,
+  "drive_hours": 1.9098170768766665,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:15.163131+00:00"
+ },
+ "28.721,77.165|9-shikohabad": {
+  "distance_km": 288.3198973159978,
+  "drive_hours": 5.354768822851946,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:16.544898+00:00"
+ },
+ "28.721,77.165|9-sikanderabad": {
+  "distance_km": 102.1655494596915,
+  "drive_hours": 1.837044962254722,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:17.834327+00:00"
+ },
+ "28.721,77.165|9-sikandraraau": {
+  "distance_km": 194.076318694804,
+  "drive_hours": 4.315476989639167,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:19.212911+00:00"
+ },
+ "28.721,77.165|9-sikarpur": {
+  "distance_km": 144.6666012604761,
+  "drive_hours": 2.900633680813611,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:20.192540+00:00"
+ },
+ "28.721,77.165|9-sirsaganj": {
+  "distance_km": 289.3665725989621,
+  "drive_hours": 5.3715937816302795,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:21.188465+00:00"
+ },
+ "28.721,77.165|9-siyana": {
+  "distance_km": 110.73919378175957,
+  "drive_hours": 2.4939757307480557,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:22.422658+00:00"
+ },
+ "28.721,77.165|9-sultanpurchilkana": {
+  "distance_km": 186.23916694821483,
+  "drive_hours": 3.0225380587841664,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:23.754821+00:00"
+ },
+ "28.721,77.165|9-tandarampur": {
+  "distance_km": 208.57433700616673,
+  "drive_hours": 4.635398896429444,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:25.374355+00:00"
+ },
+ "28.721,77.165|9-thanabhavan": {
+  "distance_km": 119.19523756419557,
+  "drive_hours": 1.9373068894133334,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:26.462358+00:00"
+ },
+ "28.721,77.165|9-thanabhawan": {
+  "distance_km": 119.07470068989636,
+  "drive_hours": 1.9336940965908334,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:27.327658+00:00"
+ },
+ "28.721,77.165|9-tilhar": {
+  "distance_km": 309.1801779760248,
+  "drive_hours": 5.185024601696388,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:28.523375+00:00"
+ },
+ "28.721,77.165|9-tundla": {
+  "distance_km": 229.06570891479475,
+  "drive_hours": 4.480149749572778,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:29.892739+00:00"
+ },
+ "28.721,77.165|9-ujhani": {
+  "distance_km": 255.49185827434937,
+  "drive_hours": 4.473622815711666,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:31.163126+00:00"
+ },
+ "28.721,77.165|9-vilaspur": {
+  "distance_km": 70.0714545852143,
+  "drive_hours": 1.7487097973424996,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:32.430454+00:00"
+ },
+ "28.721,77.165|9-visoli": {
+  "distance_km": 293.97837330323114,
+  "drive_hours": 5.434194937858612,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:33.860937+00:00"
+ },
+ "28.721,77.165|9-wazirganj": {
+  "distance_km": 234.53461015024325,
+  "drive_hours": 3.737167785867777,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:35.045722+00:00"
+ },
+ "28.721,77.165|india_foodbanking_network_delhi": {
+  "distance_km": 5.4801968753319725,
+  "drive_hours": 0.2460232200991667,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-10T07:13:36.253201+00:00"
  }
 }
