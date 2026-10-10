@@ -82,7 +82,8 @@ def api(tmp_path, monkeypatch):
     monkeypatch.setenv("PLAN_ID_DETERMINISTIC", "1")
     monkeypatch.setattr(store, "_plans", {})
     routes = tmp_path / "routes.json"
-    routes.write_text(json.dumps(synthetic_routes_test_only([(ORIGIN["lat"], ORIGIN["lon"])], MARKETS)))
+    routes.write_text(json.dumps(synthetic_routes_test_only([(ORIGIN["lat"], ORIGIN["lon"]), (DELHI["lat"], DELHI["lon"])],
+                                                            MARKETS)))
     monkeypatch.setenv("ROUTES_CACHE", str(routes))
 
     def setup(dataset):

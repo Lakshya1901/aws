@@ -37,16 +37,34 @@
     "spoiled_kg": 300,
     "source": "trader"
    },
-   "top": null,
+   "top": {
+    "outlet_id": "india_foodbanking_network_delhi",
+    "name": "India FoodBanking Network (fresh produce recovery)",
+    "type": "food_bank",
+    "state": "DL",
+    "net_rs_per_kg": null,
+    "net_note": "not yet estimated",
+    "distance_km": 14.29,
+    "distance_approx": false,
+    "drive_hours": 0.357,
+    "spoilage_share": null,
+    "spoilage_range": null,
+    "freight_rs_per_kg": 0.1572,
+    "freight_rs_load": 110.033,
+    "contact": "https://www.indiafoodbanking.org",
+    "verified": false,
+    "note": "Not yet partnered. Fresh Produce Recovery programme (indiafoodbanking.org); 'IFBN has also begun work with wholesale markets like Azadpur Mandi in Delhi' (diplomatist.com). D26",
+    "partnered": false
+   },
    "recover": null,
    "alternatives": [],
    "impact": {
     "kept_out_of_landfill_kg": {
-     "low": 0.0,
-     "mid": 0.0,
-     "high": 0.0
+     "low": 700.0,
+     "mid": 700.0,
+     "high": 700.0
     },
-    "rescued_kg": 0,
+    "rescued_kg": 700,
     "recovered_kg": 0,
     "biogas_kg": 0,
     "biogas_energy": 0.0,
@@ -64,10 +82,11 @@
    },
    "explanation": {
     "language": "en",
-    "text": "Still good to eat: 700 kg. Spoiled: 300 kg. No biogas or compost unit near you yet.",
+    "text": "Still good to eat: 700 kg. Send to India FoodBanking Network (fresh produce recovery). Spoiled: 300 kg. No biogas or compost unit near you yet.",
     "source": "template"
    },
    "assumptions_used": [
+    "freight_rs_per_tonne_km",
     "max_radius_km"
    ]
   }
