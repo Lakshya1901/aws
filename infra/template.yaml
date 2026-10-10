@@ -50,6 +50,7 @@ Globals:
         FETCH_QUEUE_URL: !Ref FetchQueue
         BEDROCK_ENABLED: !If [HasBedrock, "true", "false"]
         BEDROCK_MODEL_ID: !Ref BedrockModelId
+        WEATHER_LIVE: "1"  # no snapshot for the day: Open-Meteo forecast, or NOAA GHCN on AWS Open Data (D29)
 
 Resources:
   # ---------- API ----------
