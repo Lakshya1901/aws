@@ -15,7 +15,7 @@ import { useSession } from '../lib/session';
 import { C, RISK, SIZE } from '../lib/theme';
 
 export default function RecommendationScreen() {
-  const { t, lang, current, addLoad } = useSession();
+  const { t, lang, current, addLoad, cropLabel, crops } = useSession();
   const L = useOutletLabels();
   const [compareOpen, setCompareOpen] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -45,7 +45,7 @@ export default function RecommendationScreen() {
           translate('en', 'glut_reason', {
             market: en(d),
             ratio: d.arrival_ratio.toFixed(1),
-            crop: translate('en', `crop_${req.crop}`).toLowerCase(),
+            crop: (crops.find((c) => c.crop_id === req.crop)?.names?.en ?? req.crop).toLowerCase(),
           }),
         );
       } else if ((d.risk_level === 'watch' || d.risk_level === 'glut') && d.price_change_3d != null && d.price_change_3d < 0) {
@@ -141,7 +141,7 @@ export default function RecommendationScreen() {
 
   return (
     <Screen>
-      <Stack.Screen options={{ title: t('load_line', { qty: fmtNum(req.quantity_kg), crop: t(`crop_${req.crop}`) }) }} />
+      <Stack.Screen options={{ title: t('load_line', { qty: fmtNum(req.quantity_kg), crop: cropLabel(req.crop) }) }} />
       <DataBanners fixture={res._fixture} replayDate={res.replay_date} stale={res.data.stale} demoLoads={res.demo_loads} />
 
       {advice && bestFresh && (

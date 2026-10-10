@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint"
     ]
   },
   "new_load": "ᱱᱟᱣᱟ ᱵᱚᱡᱷᱟ",
@@ -371,6 +371,10 @@
   "total_money_saved": "ᱥᱟᱱᱟᱢ ᱵᱚᱪᱟᱣ ᱠᱟᱱ ᱯᱟᱭᱥᱟ",
   "money_note": "ᱵᱷᱟᱰᱟ ᱟᱨ ᱯᱷᱤᱥ ᱵᱟᱫ ᱮᱱᱟ ᱛᱟᱭᱚᱢ ᱟᱢᱟᱜ ᱵᱚᱡᱷᱟ ᱠᱷᱚᱱ ᱧᱟᱢᱚᱜᱼᱟ (ᱟᱱᱩᱢᱟᱱ)",
   "est_note": "ᱡᱷᱚᱛᱚ ᱮᱞ ᱠᱚ ᱟᱸᱫᱟᱡᱽ ᱠᱟᱱᱟ᱾",
+  "settings": "ᱥᱮᱴᱤᱝ",
+  "more_crops": "ᱟᱨᱦᱚᱸ ᱡᱚᱢᱟᱜ",
+  "my_crops": "ᱤᱧᱟᱜ ᱡᱚᱢᱟᱜ",
+  "my_crops_hint": "ᱟᱢ ᱟᱠᱤᱨᱤᱧ ᱡᱚᱢᱟᱜ ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾",
   "count_since": "{date} ᱠᱷᱚᱱ {n} ᱵᱚᱡᱷᱟ",
   "ledger_empty": "ᱱᱤᱛᱚᱜ ᱪᱮᱫᱟᱜ ᱵᱟᱝ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱟᱢᱟᱜ ᱨᱮᱠᱚᱰ ᱮᱛᱦᱚᱵ ᱞᱟᱹᱜᱤᱫ ᱥᱚᱡᱷᱮ ᱨᱮ \"ᱱᱚᱶᱟ ᱵᱮᱵᱷᱟᱨ ᱢᱮ\" ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾",
   "saved_record": "ᱟᱢᱟᱜ ᱨᱮᱠᱚᱰ ᱨᱮ ᱥᱟᱵᱟᱦᱟᱨ ᱮᱱᱟ",

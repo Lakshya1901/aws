@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint"
     ]
   },
   "new_load": "নতুন লোড",
@@ -371,6 +371,10 @@
   "total_money_saved": "মোট টাকার সাশ্রয়",
   "money_note": "ভাড়া ও খরচ বাদে আপনার লোডের আয় (আনুমানিক)",
   "est_note": "সব সংখ্যা আনুমানিক।",
+  "settings": "সেটিংস",
+  "more_crops": "আরও ফসল",
+  "my_crops": "আমার ফসল",
+  "my_crops_hint": "আপনি যে ফসল বিক্রি করেন তা বেছে নিন। সেগুলো সব জায়গায় আগে দেখাবে।",
   "count_since": "{date} থেকে {n}টি লোড",
   "ledger_empty": "এখনও কিছু নেই। আপনার হিসাব শুরু করতে কোনো পরামর্শে \"এটাই নিন\" চাপুন।",
   "saved_record": "আপনার হিসাবে সংরক্ষিত",

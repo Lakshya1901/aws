@@ -3,7 +3,6 @@ import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { api } from '../api/client';
-import { isRouterCrop } from '../api/types';
 import { LoadForm } from '../components/LoadForm';
 import { MicButton } from '../components/MicButton';
 import { Banner, Btn, DataBanners, Screen, T, useErrorText } from '../components/ui';
@@ -15,7 +14,7 @@ import { C, SIZE } from '../lib/theme';
 const CONTENT_TYPE = 'audio/mp4'; // m4a (AAC)
 
 export default function NewLoadScreen() {
-  const { t, lang, crop, coords, draft, setDraft, setVoice } = useSession();
+  const { t, lang, crop, coords, draft, setDraft, setVoice, canRoute } = useSession();
   const recommend = useRecommend();
   const errorText = useErrorText();
   const [busy, setBusy] = useState(false);
@@ -24,7 +23,7 @@ export default function NewLoadScreen() {
 
   // Fresh draft each time the screen opens.
   useEffect(() => {
-    setDraft({ ...EMPTY_DRAFT, crop: isRouterCrop(crop) ? crop : null, lat: coords?.lat ?? null, lon: coords?.lon ?? null });
+    setDraft({ ...EMPTY_DRAFT, crop: canRoute(crop) ? crop : null, lat: coords?.lat ?? null, lon: coords?.lon ?? null });
     setReady(true);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint"
     ]
   },
   "new_load": "కొత్త లోడ్",
@@ -371,6 +371,10 @@
   "total_money_saved": "మొత్తం ఆదా అయిన డబ్బు",
   "money_note": "రవాణా, ఫీజులు పోగా మీ లోడ్ల ఆదాయం (అంచనా)",
   "est_note": "అన్ని సంఖ్యలు అంచనాలు.",
+  "settings": "సెట్టింగ్‌లు",
+  "more_crops": "మరిన్ని పంటలు",
+  "my_crops": "నా పంటలు",
+  "my_crops_hint": "మీరు అమ్మే పంటలను ఎంచుకోండి. అవి అన్నిచోట్లా ముందుగా కనిపిస్తాయి.",
   "count_since": "{date} నుంచి {n} లోడ్లు",
   "ledger_empty": "ఇంకా ఏమీ లేదు. మీ రికార్డు మొదలుపెట్టడానికి సలహాపై \"ఇది వాడండి\" నొక్కండి.",
   "saved_record": "మీ రికార్డులో భద్రపరిచాం",

@@ -2,10 +2,12 @@
 // Edible part -> processor or food bank; spoiled part -> feed, biogas or compost. Same POST /recommend.
 // The edible/spoiled split is optional: empty = the engine proposes it (needs weather at the place);
 // without weather (Delhi, Mumbai) the API answers 422 split_required and the trader enters both.
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { TextInput, View, type KeyboardTypeOptions } from 'react-native';
 import { ApiError, api } from '../api/client';
-import { CROPS, isRouterCrop, type CropId, type RescueResponse } from '../api/types';
+import type { CropId, RescueResponse } from '../api/types';
+import { cropChoices } from '../components/LoadForm';
 import { ImpactHeadline, ImpactRows } from '../components/ImpactRows';
 import { parseCoords } from '../components/LoadForm';
 import { useOutletLabels } from '../components/RecommendationCard';
@@ -22,10 +24,10 @@ const num = (text: string): number | null => {
 };
 
 export default function RescueScreen() {
-  const { t, lang, crop: radarCrop, coords, setCoords, planId, setPlanId } = useSession();
+  const { t, lang, crop: radarCrop, coords, setCoords, planId, setPlanId, myCrops, canRoute, cropLabel } = useSession();
   const L = useOutletLabels();
   const errorText = useErrorText();
-  const [crop, setCrop] = useState<CropId>(isRouterCrop(radarCrop) ? radarCrop : 'tomato');
+  const [crop, setCrop] = useState<CropId>(canRoute(radarCrop) ? radarCrop : (myCrops.find(canRoute) ?? 'tomato'));
   const [qty, setQty] = useState('');
   const [hours, setHours] = useState('');
   const [edible, setEdible] = useState('');
@@ -138,9 +140,10 @@ export default function RescueScreen() {
           {t('crop')}
         </T>
         <View style={s.row}>
-          {CROPS.map((c) => (
-            <Chip key={c} label={t(`crop_${c}`)} selected={crop === c} onPress={() => setCrop(c)} />
+          {cropChoices(myCrops, crop, canRoute).map((c) => (
+            <Chip key={c} label={cropLabel(c)} selected={crop === c} onPress={() => setCrop(c)} />
           ))}
+          <Chip label={t('more_crops')} selected={false} onPress={() => router.push('/settings')} />
         </View>
       </View>
       {field(`${t('quantity')} (${t('unit_kg')})`, qty, setQty)}

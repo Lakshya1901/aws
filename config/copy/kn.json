@@ -21,7 +21,7 @@
       "diesel", "co2", "water", "litres_value", "kg_value", "km_value", "impact_title", "no_plan", "rs_range",
       "type_hold", "hold_title", "hold_body", "waste_none_load", "waste_none_total", "waste_spoilage", "waste_range_loss", "water_lost", "shorter_km_value", "diesel_saved_value", "coords", "coords_invalid", "err_origin_unknown", "err_drive_time", "err_temperature", "err_plan_not_found", "err_bad_request",
       "unsold_stock", "hours_since_harvest", "edible", "spoiled", "kept_out_of_landfill", "prevented", "rescued", "recovered", "biogas_energy", "type_feed", "type_biogas", "type_compost", "no_recover_outlet", "err_split_required", "split_hint", "split_sum", "other_crop", "search_crop", "get_data", "fetching_data", "data_ready", "radar_only",
-      "markets_near", "more_markets", "km_away", "after_costs", "advice_note", "not_advised", "say_hint", "change", "not_heard", "type_instead", "split_title", "edit", "rescue_advice", "demo_stock", "plan_headline", "plan_spread", "loads", "loads_count", "impact_from", "trip_costs", "kept_note", "redirected_note", "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note"
+      "markets_near", "more_markets", "km_away", "after_costs", "advice_note", "not_advised", "say_hint", "change", "not_heard", "type_instead", "split_title", "edit", "rescue_advice", "demo_stock", "plan_headline", "plan_spread", "loads", "loads_count", "impact_from", "trip_costs", "kept_note", "redirected_note", "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint"
     ]
   },
 
@@ -212,6 +212,10 @@
   "total_money_saved": "ಒಟ್ಟು ಉಳಿದ ಹಣ",
   "money_note": "ಸಾಗಣೆ ಮತ್ತು ಶುಲ್ಕ ಕಳೆದು ನಿಮ್ಮ ಲೋಡ್‌ಗಳ ಆದಾಯ (ಅಂದಾಜು)",
   "est_note": "ಎಲ್ಲಾ ಸಂಖ್ಯೆಗಳು ಅಂದಾಜು.",
+  "settings": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
+  "more_crops": "ಇನ್ನಷ್ಟು ಬೆಳೆಗಳು",
+  "my_crops": "ನನ್ನ ಬೆಳೆಗಳು",
+  "my_crops_hint": "ನೀವು ಮಾರುವ ಬೆಳೆಗಳನ್ನು ಆರಿಸಿ. ಅವು ಎಲ್ಲೆಡೆ ಮೊದಲು ಕಾಣುತ್ತವೆ.",
   "count_since": "{date} ರಿಂದ {n} ಲೋಡ್‌ಗಳು",
   "ledger_empty": "ಇನ್ನೂ ಏನೂ ಇಲ್ಲ. ನಿಮ್ಮ ದಾಖಲೆ ಶುರು ಮಾಡಲು ಸಲಹೆಯಲ್ಲಿ \"ಇದನ್ನೇ ಬಳಸಿ\" ಒತ್ತಿ.",
   "saved_record": "ನಿಮ್ಮ ದಾಖಲೆಗೆ ಉಳಿಸಲಾಗಿದೆ",

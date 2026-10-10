@@ -52,6 +52,7 @@ function Nav() {
       <Stack.Screen name="language" options={{ title: t('app_name') }} />
       <Stack.Screen name="today" options={{ title: t('today_title'), ...TAB }} />
       <Stack.Screen name="crops" options={{ title: t('other_crop') }} />
+      <Stack.Screen name="settings" options={{ title: t('settings') }} />
       <Stack.Screen name="new-load" options={{ title: t('new_load') }} />
       <Stack.Screen name="confirm" options={{ title: t('confirm_title') }} />
       <Stack.Screen name="rescue" options={{ title: t('unsold_stock') }} />

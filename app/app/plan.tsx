@@ -13,7 +13,7 @@ import { C, SIZE } from '../lib/theme';
 import { ImpactRows } from '../components/ImpactRows';
 
 export default function PlanScreen() {
-  const { t, lang, loads, planId, setPlanId } = useSession();
+  const { t, lang, loads, planId, setPlanId, cropLabel } = useSession();
   const L = useOutletLabels();
   const errorText = useErrorText();
   const [data, setData] = useState<PlanResponse | null>(null);
@@ -137,7 +137,7 @@ export default function PlanScreen() {
                   <View style={{ minWidth: 88 }}>
                     <T bold>{t('kg_value', { v: fmtNum(a.quantity_kg) })}</T>
                     <T size={SIZE.small} color={C.muted}>
-                      {t(`crop_${a.crop}`)}
+                      {cropLabel(a.crop)}
                     </T>
                   </View>
                   <View style={{ flex: 1, flexShrink: 1, gap: 2 }}>

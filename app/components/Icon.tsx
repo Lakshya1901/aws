@@ -20,6 +20,7 @@ const PATHS = {
   pin: ['M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z'],
   plus: ['M12 5v14', 'M5 12h14'],
   basket: ['M3 9h18l-2 11H5L3 9z', 'M8 9l4-6 4 6'],
+  settings: ['M4 6h9', 'M17 6h3', 'M4 12h3', 'M11 12h9', 'M4 18h11', 'M19 18h1'],
 } as const;
 
 export type IconName = keyof typeof PATHS;
@@ -31,6 +32,13 @@ export function Icon({ name, size = 20, color, strokeWidth = 2 }: { name: IconNa
       {name === 'mic' && <Rect x={9} y={3} width={6} height={11} rx={3} />}
       {(name === 'globe' || name === 'clock') && <Circle cx={12} cy={12} r={9} />}
       {name === 'pin' && <Circle cx={12} cy={10} r={2.5} />}
+      {name === 'settings' && (
+        <>
+          <Circle cx={15} cy={6} r={2} />
+          <Circle cx={9} cy={12} r={2} />
+          <Circle cx={17} cy={18} r={2} />
+        </>
+      )}
       {name === 'truck' && (
         <>
           <Circle cx={7} cy={18} r={2} />

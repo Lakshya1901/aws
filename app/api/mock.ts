@@ -32,7 +32,7 @@ export const mock = {
       category: c === 'banana' ? 'Fruits' : 'Vegetables',
       markets: 0,
       preload: true,
-      routing: c === 'tomato' || c === 'onion',
+      routing: true, // D33: every preloaded crop has a profile
       status: 'ready' as const,
     }));
     return { _fixture: true, crops: crop ? all.filter((c) => c.crop_id === crop) : all };

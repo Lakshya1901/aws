@@ -65,7 +65,7 @@ export function RecommendationCard({
   onUse: () => void;
   used: boolean;
 }) {
-  const { t } = useSession();
+  const { t, cropLabel } = useSession();
   const L = useOutletLabels();
   const wasteText = useWasteText();
   const { top, impact } = res;
@@ -73,7 +73,7 @@ export function RecommendationCard({
   const diverted = L.key(dflt) !== L.key(top);
   const hold = top.type === 'hold';
   const secondLife = top.type !== 'mandi' && !hold;
-  const cropName = t(`crop_${req.crop}`);
+  const cropName = cropLabel(req.crop);
 
   const waste = wasteText(impact.waste_avoided_kg, 'load');
   const diesel =

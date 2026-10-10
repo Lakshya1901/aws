@@ -452,7 +452,8 @@ def get_crops(q):
     (full profile) and its data status (ready | fetching | available, D24)."""
     cfg = store.configs()
     rows = [{"crop_id": c["crop_id"], "name": c["name"], "category": c.get("category"), "markets": c["markets"],
-             "preload": bool(c.get("preload")), "routing": c["crop_id"] in cfg["crops"]}
+             "preload": bool(c.get("preload")), "routing": c["crop_id"] in cfg["crops"],
+             **({"names": cfg["crops"][c["crop_id"]]["names"]} if c["crop_id"] in cfg["crops"] else {})}
             for c in cfg["commodities"].values()]
     if q.get("crop"):
         rows = [r for r in rows if r["crop_id"] == q["crop"]]

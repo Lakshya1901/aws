@@ -2,7 +2,8 @@
 import * as Location from 'expo-location';
 import { useState } from 'react';
 import { Pressable, TextInput, View } from 'react-native';
-import { CROPS, type Harvest } from '../api/types';
+import { router } from 'expo-router';
+import type { Harvest } from '../api/types';
 import { fmtNum } from '../i18n';
 import { UNIT_KG } from '../lib/recommend';
 import { useSession, type LoadDraft } from '../lib/session';
@@ -15,6 +16,12 @@ const HARVESTS: Harvest[] = ['today', 'tomorrow', 'harvested'];
 
 const fmtCoords = (lat: number | null, lon: number | null) =>
   lat !== null && lon !== null ? `${lat.toFixed(4)}, ${lon.toFixed(4)}` : '';
+
+/** The farmer's crops (Settings) that can be routed, plus the current choice if it is not among them. */
+export function cropChoices(myCrops: string[], current: string | null, canRoute: (c: string) => boolean): string[] {
+  const list = myCrops.filter(canRoute);
+  return current && !list.includes(current) ? [...list, current] : list;
+}
 
 /** "13.14, 78.13" (comma or space separated) -> coordinates, or null. */
 export function parseCoords(text: string): { lat: number; lon: number } | null {
@@ -94,7 +101,7 @@ export function LoadForm({
   /** Confirm screen: empty fields say "Not heard" inside the field. */
   showNotHeard?: boolean;
 }) {
-  const { t, lang, crop: radarCrop, unitBoxKg } = useSession();
+  const { t, lang, crop: radarCrop, unitBoxKg, myCrops, canRoute, cropLabel } = useSession();
   const [unit, setUnit] = useState<Unit>('kg');
   const [qtyText, setQtyText] = useState(draft.quantity_kg ? String(draft.quantity_kg) : '');
   const [locMsg, setLocMsg] = useState<string | null>(null);
@@ -157,15 +164,16 @@ export function LoadForm({
       <View style={{ gap: 8 }}>
         {label('crop', draft.crop === null)}
         <View style={s.row}>
-          {CROPS.map((c) => (
+          {cropChoices(myCrops, draft.crop, canRoute).map((c) => (
             <Chip
               key={c}
-              label={t(`crop_${c}`)}
+              label={cropLabel(c)}
               selected={draft.crop === c}
               highlight={hl('crop')}
               onPress={() => onChange({ ...draft, crop: c })}
             />
           ))}
+          <Chip label={t('more_crops')} selected={false} onPress={() => router.push('/settings')} />
         </View>
       </View>
 
@@ -193,7 +201,10 @@ export function LoadForm({
         {label('place')}
         <TextInput
           value={draft.origin_place ?? ''}
-          onChangeText={(v) => onChange({ ...draft, origin_place: v || null, lat: null, lon: null })} // a typed place replaces GPS
+          onChangeText={(v) => {
+            onChange({ ...draft, origin_place: v || null, lat: null, lon: null }); // a typed place replaces GPS
+            setCoordText('');
+          }}
           placeholder={showNotHeard && !draft.origin_place ? hint : undefined}
           placeholderTextColor={C.muted}
           accessibilityLabel={t('place')}

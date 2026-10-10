@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint"
     ]
   },
   "new_load": "નવો લોડ",
@@ -371,6 +371,10 @@
   "total_money_saved": "કુલ બચેલા પૈસા",
   "money_note": "ભાડું અને ફી બાદ કર્યા પછી તમારા લોડની કમાણી (અંદાજ)",
   "est_note": "બધા આંકડા અંદાજિત છે.",
+  "settings": "સેટિંગ્સ",
+  "more_crops": "વધુ પાક",
+  "my_crops": "મારા પાક",
+  "my_crops_hint": "તમે વેચો છો તે પાક પસંદ કરો. તે બધે પહેલા દેખાશે.",
   "count_since": "{date} થી {n} લોડ",
   "ledger_empty": "હજી કંઈ નથી. તમારો રેકોર્ડ શરૂ કરવા સૂચન પર \"આ જ પસંદ કરો\" દબાવો.",
   "saved_record": "તમારા રેકોર્ડમાં સાચવ્યું",

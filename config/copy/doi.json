@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint"
     ]
   },
   "new_load": "नेआं लोड",
@@ -371,6 +371,10 @@
   "total_money_saved": "कुल बचे दे पैसे",
   "money_note": "भाड़े ते फीस कड्ढने मगरा तुंदे लोडें दी कमाई (अंदाजा)",
   "est_note": "सारे अंकड़े अंदाजे न।",
+  "settings": "सेटिंग्स",
+  "more_crops": "होर फसलां",
+  "my_crops": "मेरियां फसलां",
+  "my_crops_hint": "जेह्ड़ियां फसलां तुस बेचदे ओ, ओह् चुनो।",
   "count_since": "{date} थमां {n} लोड",
   "ledger_empty": "हल्ली किश नेईं। अपना रिकार्ड शुरू करने आस्तै सुझाऽ पर \"एह्दा चुनो\" दबाओ।",
   "saved_record": "तुंदे रिकार्ड च् सहेजेआ गेआ",

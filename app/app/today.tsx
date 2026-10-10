@@ -4,16 +4,15 @@ import { Stack, router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { MOCK, api } from '../api/client';
-import { CROPS, type RiskResponse } from '../api/types';
+import type { RiskResponse } from '../api/types';
 import { RiskList } from '../components/RiskList';
 import { Icon } from '../components/Icon';
 import { Banner, Btn, Chip, DataBanners, Loading, Screen, SectionTitle, T, useErrorText } from '../components/ui';
-import { LANG_INFO } from '../i18n';
 import { cacheRisk, readCachedRisk, useSession } from '../lib/session';
 import { C, RADIUS, SIZE } from '../lib/theme';
 
 export default function TodayScreen() {
-  const { t, lang, crop, setCrop, crops, setCrops, cropLabel, coords, setCoords, setUnitBoxKg } = useSession();
+  const { t, lang, crop, setCrop, crops, setCrops, cropLabel, coords, setCoords, setUnitBoxKg, myCrops } = useSession();
   const errorText = useErrorText();
   const [data, setData] = useState<RiskResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -40,7 +39,7 @@ export default function TodayScreen() {
     if (crops.length) return;
     api.crops().then((r) => setCrops(r.crops), () => {});
   }, [crops.length, setCrops]);
-  const top = crops.length ? crops.filter((c) => c.preload).map((c) => c.crop_id) : [...CROPS];
+  const top = myCrops;
   const chips = top.includes(crop) ? top : [...top, crop];
 
   const load = useCallback(async () => {
@@ -79,12 +78,7 @@ export default function TodayScreen() {
       <Stack.Screen
         options={{
           headerRight: () => (
-            <Btn
-              kind="text"
-              icon="globe"
-              label={LANG_INFO[lang ?? 'en'].name}
-              onPress={() => router.push('/language')}
-            />
+            <Btn kind="text" icon="settings" label={t('settings')} onPress={() => router.push('/settings')} />
           ),
         }}
       />

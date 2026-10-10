@@ -364,7 +364,7 @@ One JSON file per crop in `config/crops/`. A profile with a null required field 
 | alpha | 0.31, placeholder: calibrated so a 14 h trip (6 h since harvest + 2 h drive + 6 h wait) at 25 C gives 3.25% loss, the market-stage tomato loss in Section 3.2 | 0.31, placeholder: mean total loss after 4 months ambient storage (26.66% and 35.87%, same Gorrepati et al. trial) | placeholder | placeholder |
 | Storable (hold option) | no | yes | yes | limited |
 | Water footprint | 184 L/kg world average, tropical production 200-900 L/kg (Hoekstra, cited in Nederhoff and Stanghellini 2010, https://edepot.wur.nl/156932) | 345 L/kg | 287 L/kg | 790 L/kg (onion, potato, banana: Mekonnen and Hoekstra 2010, Value of Water Report 47, Table 4, global averages) |
-| Harvest cost per kg | ~Rs 4.7 (Kolar) | ~Rs 3.5, placeholder: Rs 300-400/quintal harvest labour plus transport, one Nashik farmer, FreshPlaza 2016 | not found (null: routing off) | not found (null: routing off) |
+| Harvest cost per kg | ~Rs 4.7 (Kolar) | ~Rs 3.5, placeholder: Rs 300-400/quintal harvest labour plus transport, one Nashik farmer, FreshPlaza 2016 | not found (optional since D33; no harvest advice) | not found (optional since D33; no harvest advice) |
 | Second life | puree/paste, food bank; Recover: biogas, compost | dehydration, food bank; Recover: biogas, compost | processing, food bank; Recover: biogas, compost | ripening/retail, chips, food bank; Recover: feed, biogas, compost |
 
 Sources: ASHRAE vegetables chapter (https://handbook.ashrae.org/Handbooks/R26/IP/r26_ch37/r26_ch37_ip.aspx), Indian tomato supply chain study (https://www.mdpi.com/2071-1050/15/2/1331), USDA Handbook 66, ICAR-NRCB (https://nrcb.org.in/Pages/achievements_pht). Present these in the app as "reference post-harvest parameters" and state that spoilage is estimated from outside temperature and travel time.
@@ -491,6 +491,7 @@ Example `/recommend` response (illustrative values):
 | Screen | Question | Default | Other states |
 | --- | --- | --- | --- |
 | Language (first launch) | Which language? | Large buttons | - |
+| Settings | Which language and crops are mine? | Language row; My crops (search every crop with a routing profile, check the ones I sell; kept on the phone) | My crops show first in New load, Unsold stock and Today (D33) |
 | Today (Glut Radar) | Is a glut coming near me? | Nearby markets for the chosen crop, colour + word + icon, ratio, price | Loading, stale, same_day, market not reported |
 | New load | What am I sending? | Big mic button; form below (crop, qty, place, harvest) | Recording, processing, parse failed |
 | Unsold stock (Rescue) | I have unsold stock at the market | Crop, quantity, hours since harvest; proposed edible/spoiled split, editable | Estimate vs trader values, no outlet in radius |

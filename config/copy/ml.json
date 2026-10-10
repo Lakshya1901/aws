@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint"
     ]
   },
   "new_load": "പുതിയ ലോഡ്",
@@ -371,6 +371,10 @@
   "total_money_saved": "ആകെ ലാഭിച്ച പണം",
   "money_note": "ഗതാഗതവും ഫീസും കഴിഞ്ഞ് നിങ്ങളുടെ ലോഡുകളുടെ വരുമാനം (ഏകദേശം)",
   "est_note": "എല്ലാ സംഖ്യകളും ഏകദേശ കണക്കുകളാണ്.",
+  "settings": "ക്രമീകരണങ്ങൾ",
+  "more_crops": "കൂടുതൽ വിളകൾ",
+  "my_crops": "എന്റെ വിളകൾ",
+  "my_crops_hint": "നിങ്ങൾ വിൽക്കുന്ന വിളകൾ തിരഞ്ഞെടുക്കുക. അവ എല്ലായിടത്തും ആദ്യം കാണിക്കും.",
   "count_since": "{date} മുതൽ {n} ലോഡ്",
   "ledger_empty": "ഇതുവരെ ഒന്നുമില്ല. നിങ്ങളുടെ രേഖ തുടങ്ങാൻ ഒരു നിർദേശത്തിൽ \"ഇത് എടുക്കുക\" അമർത്തുക.",
   "saved_record": "നിങ്ങളുടെ രേഖയിൽ സേവ് ചെയ്തു",

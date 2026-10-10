@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint"
     ]
   },
   "new_load": "نئون لوڊ",
@@ -371,6 +371,10 @@
   "total_money_saved": "ڪل بچيل پئسا",
   "money_note": "ڀاڙو ۽ فيس ڪڍڻ کانپوءِ توهان جي لوڊن جي ڪمائي (اندازو)",
   "est_note": "سڀ انگ اندازا آهن.",
+  "settings": "سيٽنگون",
+  "more_crops": "وڌيڪ فصل",
+  "my_crops": "منهنجا فصل",
+  "my_crops_hint": "اهي فصل چونڊيو جيڪي توهان وڪڻو ٿا. اهي هر هنڌ پهرين ڏيکاريا ويندا.",
   "count_since": "{date} کان {n} لوڊ",
   "ledger_empty": "اڃا ڪجهه ناهي. پنهنجو رڪارڊ شروع ڪرڻ لاءِ صلاح تي \"اهو چونڊيو\" دٻايو.",
   "saved_record": "توهان جي رڪارڊ ۾ محفوظ ٿيو",
