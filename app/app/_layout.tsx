@@ -23,7 +23,9 @@ import { NotoSansOlChiki_700Bold } from '@expo-google-fonts/noto-sans-ol-chiki/7
 import { NotoSansKannada_400Regular } from '@expo-google-fonts/noto-sans-kannada/400Regular';
 import { NotoSansKannada_700Bold } from '@expo-google-fonts/noto-sans-kannada/700Bold';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { router, Stack } from 'expo-router';
+import { Pressable } from 'react-native';
+import { Icon } from '../components/Icon';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Loading } from '../components/ui';
@@ -33,12 +35,29 @@ import { C, fontFor } from '../lib/theme';
 // Today, Today's plan and Impact are tabs (NavBar): no back arrow, no swipe back between them.
 const TAB = { headerBackVisible: false, headerLeft: () => null, gestureEnabled: false, animation: 'none' } as const;
 
+/** Settings on every screen's top bar (icon only, 48 dp). */
+function SettingsButton({ label }: { label: string }) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      onPress={() => router.push('/settings')}
+      style={{ width: 48, height: 48, alignItems: 'center', justifyContent: 'center' }}
+    >
+      <Icon name="settings" size={24} color={C.text} />
+    </Pressable>
+  );
+}
+
 function Nav() {
   const { ready, t, lang } = useSession();
   if (!ready) return <Loading />;
   const fontFamily = fontFor(lang, true);
+  // key: a language change remounts the stack (fresh at index -> Today) instead of re-styling every mounted native
+  // header with a new script font, which crashed Android on the October 10 phone test.
   return (
     <Stack
+      key={lang ?? 'none'}
       screenOptions={{
         // Material 3 top app bar: same surface as the page, no shadow.
         headerStyle: { backgroundColor: C.bg },
@@ -46,13 +65,14 @@ function Nav() {
         headerTintColor: C.text,
         headerTitleStyle: { fontSize: 20, fontFamily },
         contentStyle: { backgroundColor: C.bg },
+        headerRight: () => <SettingsButton label={t('settings')} />,
       }}
     >
       <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="language" options={{ title: t('app_name') }} />
+      <Stack.Screen name="language" options={{ title: t('app_name'), headerRight: () => null }} />
       <Stack.Screen name="today" options={{ title: t('today_title'), ...TAB }} />
       <Stack.Screen name="crops" options={{ title: t('other_crop') }} />
-      <Stack.Screen name="settings" options={{ title: t('settings') }} />
+      <Stack.Screen name="settings" options={{ title: t('settings'), headerRight: () => null }} />
       <Stack.Screen name="new-load" options={{ title: t('new_load') }} />
       <Stack.Screen name="confirm" options={{ title: t('confirm_title') }} />
       <Stack.Screen name="rescue" options={{ title: t('unsold_stock') }} />

@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location"
     ]
   },
   "new_load": "नेआं लोड",
@@ -380,6 +380,12 @@
   "data_demo": "डेमो: बित्ती आमद दा असली दिन",
   "data_hint": "लाइव च तुंदे नेड़े दियें मंडियें दे अज्ज दे भाअ औंदे न। डेमो 29 सितंबर 2023 दी कोलार दी टमाटर दी बित्ती आमद फिरी चलांदा ऐ।",
   "prices_from": "{date} दे भाअ",
+  "harvested_when": "बड्ढी कदूं होई?",
+  "age_today": "अज्ज",
+  "age_yesterday": "कल्ल",
+  "age_days": "{n} दिन पैह्लें",
+  "exact_hours": "जां बड्ढी परैंत ठीक घैंटे (मर्जी मताबक)",
+  "my_location": "मेरी थाह्र",
   "count_since": "{date} थमां {n} लोड",
   "ledger_empty": "हल्ली किश नेईं। अपना रिकार्ड शुरू करने आस्तै सुझाऽ पर \"एह्दा चुनो\" दबाओ।",
   "saved_record": "तुंदे रिकार्ड च् सहेजेआ गेआ",

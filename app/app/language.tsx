@@ -11,10 +11,9 @@ import { C, SIZE } from '../lib/theme';
 export default function LanguageScreen() {
   const { setLang, lang } = useSession();
 
+  // The stack remounts on a language change (app/_layout.tsx) and opens Today.
   function pick(l: Lang) {
-    const first = lang === null;
-    setLang(l);
-    if (first) router.replace('/today');
+    if (l !== lang) setLang(l);
     else router.back();
   }
 

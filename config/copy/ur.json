@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location"
     ]
   },
   "new_load": "نیا لوڈ",
@@ -380,6 +380,12 @@
   "data_demo": "ڈیمو: بہت زیادہ آمد کا اصل دن",
   "data_hint": "لائیو میں آپ کے قریب کی منڈیوں کے آج کے بھاؤ آتے ہیں۔ ڈیمو 29 ستمبر 2023 کو کولار میں ٹماٹر کی بہت زیادہ آمد کا دن دوبارہ دکھاتا ہے۔",
   "prices_from": "{date} کے بھاؤ",
+  "harvested_when": "کٹائی کب ہوئی؟",
+  "age_today": "آج",
+  "age_yesterday": "کل",
+  "age_days": "{n} دن پہلے",
+  "exact_hours": "یا کٹائی کے بعد کے ٹھیک گھنٹے (اختیاری)",
+  "my_location": "میری جگہ",
   "count_since": "{date} سے {n} لوڈ",
   "ledger_empty": "ابھی کچھ نہیں۔ اپنا ریکارڈ شروع کرنے کے لیے کسی مشورے پر \"یہی چنیں\" دبائیں۔",
   "saved_record": "آپ کے ریکارڈ میں محفوظ ہو گیا",

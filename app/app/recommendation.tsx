@@ -100,6 +100,7 @@ export default function RecommendationScreen() {
       quantity_kg: req.quantity_kg,
       origin: req.origin,
       harvest: req.harvest,
+      ...(req.days_since_harvest !== undefined ? { days_since_harvest: req.days_since_harvest } : {}),
       chosen_outlet_id: outlet.outlet_id,
       override: L.key(outlet) !== L.key(res.top),
     });

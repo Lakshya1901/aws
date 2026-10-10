@@ -28,6 +28,7 @@ export interface LoadDraft {
   quantity_kg: number | null;
   origin_place: string | null;
   harvest: Harvest | null;
+  days_since_harvest: number | null; // harvest "harvested": days ago (0 = today)
   lat: number | null;
   lon: number | null;
 }
@@ -74,6 +75,7 @@ export const EMPTY_DRAFT: LoadDraft = {
   quantity_kg: null,
   origin_place: null,
   harvest: null,
+  days_since_harvest: null,
   lat: null,
   lon: null,
 };

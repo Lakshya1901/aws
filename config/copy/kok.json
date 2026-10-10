@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location"
     ]
   },
   "new_load": "नवो लोड",
@@ -380,6 +380,12 @@
   "data_demo": "डेमो: चड आवकेचो खरो दीस",
   "data_hint": "लायवांत तुमच्या लागसारच्या बाजारांचे आयचे दर मेळटात. डेमो 29 सप्टेंबर 2023 चो कोलारांतलो टोमॅटोचो चड आवकेचो दीस परतून दाखयता.",
   "prices_from": "{date} चे दर",
+  "harvested_when": "कापणी केन्ना जाली?",
+  "age_today": "आयज",
+  "age_yesterday": "काल",
+  "age_days": "{n} दीस आदीं",
+  "exact_hours": "वा कापणी उपरांतचे नेमके वरां (पर्यायी)",
+  "my_location": "म्हजी सुवात",
   "count_since": "{date} थावन {n} लोड",
   "ledger_empty": "अजून कांयच ना. तुमचो रेकॉर्ड सुरू करपाक सुचवणेर \"हेंच वेंचात\" दाबात.",
   "saved_record": "तुमच्या रेकॉर्डांत सांबाळ्ळें",

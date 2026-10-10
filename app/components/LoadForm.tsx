@@ -8,14 +8,12 @@ import { fmtNum } from '../i18n';
 import { UNIT_KG } from '../lib/recommend';
 import { useSession, type LoadDraft } from '../lib/session';
 import { C, RADIUS, SIZE, fontFor } from '../lib/theme';
+import { HarvestAge } from './HarvestAge';
 import { Icon } from './Icon';
 import { Btn, Chip, T, s } from './ui';
 
 type Unit = keyof typeof UNIT_KG | 'box';
 const HARVESTS: Harvest[] = ['today', 'tomorrow', 'harvested'];
-
-const fmtCoords = (lat: number | null, lon: number | null) =>
-  lat !== null && lon !== null ? `${lat.toFixed(4)}, ${lon.toFixed(4)}` : '';
 
 /** The farmer's crops (Settings) that can be routed, plus the current choice if it is not among them. */
 export function cropChoices(myCrops: string[], current: string | null, canRoute: (c: string) => boolean): string[] {
@@ -23,14 +21,11 @@ export function cropChoices(myCrops: string[], current: string | null, canRoute:
   return current && !list.includes(current) ? [...list, current] : list;
 }
 
-/** "13.14, 78.13" (comma or space separated) -> coordinates, or null. */
-export function parseCoords(text: string): { lat: number; lon: number } | null {
-  const parts = text.trim().split(/[\s,]+/);
-  if (parts.length !== 2) return null;
-  const [lat, lon] = parts.map(Number);
-  return Number.isFinite(lat) && Number.isFinite(lon) && Math.abs(lat) <= 90 && Math.abs(lon) <= 180
-    ? { lat, lon }
-    : null;
+/** Place name for device coordinates (reverse geocode on the phone), or null. */
+export async function placeName(lat: number, lon: number): Promise<string | null> {
+  const geo = await Location.reverseGeocodeAsync({ latitude: lat, longitude: lon }).catch(() => []);
+  const g = geo[0];
+  return g?.city ?? g?.district ?? g?.subregion ?? g?.region ?? null;
 }
 
 /** Material segmented buttons: one outlined row, selected segment tonal with a check. */
@@ -105,7 +100,6 @@ export function LoadForm({
   const [unit, setUnit] = useState<Unit>('kg');
   const [qtyText, setQtyText] = useState(draft.quantity_kg ? String(draft.quantity_kg) : '');
   const [locMsg, setLocMsg] = useState<string | null>(null);
-  const [coordText, setCoordText] = useState(fmtCoords(draft.lat, draft.lon));
   const boxKg = draft.crop && draft.crop === radarCrop ? unitBoxKg : null;
   const hl = (k: keyof LoadDraft) => !!highlight?.includes(k);
 
@@ -123,20 +117,12 @@ export function LoadForm({
       const perm = await Location.requestForegroundPermissionsAsync();
       if (!perm.granted) throw new Error('denied');
       const pos = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
-      const geo = await Location.reverseGeocodeAsync(pos.coords).catch(() => []);
-      const place = geo[0]?.city ?? geo[0]?.district ?? geo[0]?.subregion ?? draft.origin_place;
-      onChange({ ...draft, lat: pos.coords.latitude, lon: pos.coords.longitude, origin_place: place ?? null });
-      setCoordText(fmtCoords(pos.coords.latitude, pos.coords.longitude));
+      // The place box shows where the phone is; the coordinates go to the API with it.
+      const place = await placeName(pos.coords.latitude, pos.coords.longitude);
+      onChange({ ...draft, lat: pos.coords.latitude, lon: pos.coords.longitude, origin_place: place ?? t('my_location') });
     } catch {
-      // The API needs coordinates (422 origin_unknown): ask for location access or typed coordinates.
       setLocMsg(t('err_origin_unknown'));
     }
-  }
-
-  function setCoords(text: string) {
-    setCoordText(text);
-    const c = parseCoords(text);
-    onChange({ ...draft, lat: c?.lat ?? null, lon: c?.lon ?? null });
   }
 
   const inputStyle = (k: keyof LoadDraft) => ({
@@ -203,7 +189,6 @@ export function LoadForm({
           value={draft.origin_place ?? ''}
           onChangeText={(v) => {
             onChange({ ...draft, origin_place: v || null, lat: null, lon: null }); // a typed place replaces GPS
-            setCoordText('');
           }}
           placeholder={showNotHeard && !draft.origin_place ? hint : undefined}
           placeholderTextColor={C.muted}
@@ -212,17 +197,6 @@ export function LoadForm({
         />
         <Btn kind="text" icon="pin" label={t('use_location')} onPress={() => void useLocation()} style={{ alignSelf: 'flex-start' }} />
         {locMsg && <T color={C.errorBg}>{locMsg}</T>}
-        <T bold size={SIZE.small}>{t('coords')}</T>
-        <TextInput
-          value={coordText}
-          onChangeText={setCoords}
-          keyboardType="numbers-and-punctuation"
-          placeholder="13.14, 78.13"
-          placeholderTextColor={C.muted}
-          accessibilityLabel={t('coords')}
-          style={inputStyle('lat')}
-        />
-        {coordText.trim() !== '' && draft.lat === null && <T color={C.errorBg}>{t('coords_invalid')}</T>}
       </View>
 
       <View style={{ gap: 8 }}>
@@ -233,6 +207,14 @@ export function LoadForm({
           onSelect={(h) => onChange({ ...draft, harvest: h })}
           highlight={hl('harvest')}
         />
+        {draft.harvest === 'harvested' && (
+          <>
+            <T size={SIZE.small} color={C.muted}>
+              {t('harvested_when')}
+            </T>
+            <HarvestAge days={draft.days_since_harvest} onSelect={(d) => onChange({ ...draft, days_since_harvest: d })} />
+          </>
+        )}
       </View>
     </View>
   );

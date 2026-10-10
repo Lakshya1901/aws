@@ -9,7 +9,8 @@ import { ApiError, api } from '../api/client';
 import type { CropId, RescueResponse } from '../api/types';
 import { cropChoices } from '../components/LoadForm';
 import { ImpactHeadline, ImpactRows } from '../components/ImpactRows';
-import { parseCoords } from '../components/LoadForm';
+import { placeName } from '../components/LoadForm';
+import { HarvestAge } from '../components/HarvestAge';
 import { useOutletLabels } from '../components/RecommendationCard';
 import { Banner, Btn, Chip, DataBanners, ListRow, Loading, Screen, SectionTitle, Surface, T, Tag, s, useErrorText } from '../components/ui';
 import { fmtNum } from '../i18n';
@@ -24,16 +25,21 @@ const num = (text: string): number | null => {
 };
 
 export default function RescueScreen() {
-  const { t, lang, crop: radarCrop, coords, setCoords, planId, setPlanId, myCrops, canRoute, cropLabel } = useSession();
+  const { t, lang, crop: radarCrop, planId, setPlanId, myCrops, canRoute, cropLabel } = useSession();
   const L = useOutletLabels();
   const errorText = useErrorText();
   const [crop, setCrop] = useState<CropId>(canRoute(radarCrop) ? radarCrop : (myCrops.find(canRoute) ?? 'tomato'));
   const [qty, setQty] = useState('');
-  const [hours, setHours] = useState('');
+  const [days, setDays] = useState<number | null>(null);
+  const [hours, setHours] = useState(''); // optional, wins over days
   const [edible, setEdible] = useState('');
   const [spoiled, setSpoiled] = useState('');
-  const [place, setPlace] = useState('');
-  const [coordText, setCoordText] = useState(coords ? `${coords.lat.toFixed(4)}, ${coords.lon.toFixed(4)}` : '');
+  const [place, setPlaceText] = useState('');
+  const [gps, setGps] = useState<{ lat: number; lon: number } | null>(null); // "Use my location" only
+  const setPlace = (v: string) => {
+    setPlaceText(v);
+    setGps(null); // a typed place replaces GPS
+  };
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [needSplit, setNeedSplit] = useState(false);
@@ -80,17 +86,17 @@ export default function RescueScreen() {
   async function useLocation() {
     const at = await deviceCoords();
     if (!at) return setMessage(t('err_origin_unknown'));
-    setCoords(at);
-    setCoordText(`${at.lat.toFixed(4)}, ${at.lon.toFixed(4)}`);
+    setPlaceText((await placeName(at.lat, at.lon)) ?? t('my_location'));
+    setGps(at);
   }
 
   async function submit() {
     setMessage(null);
     const q = num(qty);
     const h = num(hours);
-    // Typed coordinates, else the typed city, town or village (resolved by the API), else the device location.
-    const at = parseCoords(coordText) ?? (place.trim() ? { lat: null, lon: null } : coords);
-    if (!q || h === null) return setMessage(t('fill_all'));
+    // "Use my location", else the typed city, town or village (resolved by the API).
+    const at = gps ?? (place.trim() ? { lat: null, lon: null } : null);
+    if (!q || (h === null && days === null)) return setMessage(t('fill_all'));
     if (!at) return setMessage(t('err_origin_unknown'));
     const e = num(edible);
     const sp = num(spoiled);
@@ -102,7 +108,7 @@ export default function RescueScreen() {
         source: 'mandi_unsold',
         crop,
         quantity_kg: q,
-        hours_since_harvest: h,
+        ...(h !== null ? { hours_since_harvest: h } : { days_since_harvest: days! }),
         ...(split ? { edible_kg: e!, spoiled_kg: sp! } : {}),
         origin: { lat: at.lat, lon: at.lon, place: place.trim() || null },
         language: lang ?? 'en',
@@ -147,7 +153,13 @@ export default function RescueScreen() {
         </View>
       </View>
       {field(`${t('quantity')} (${t('unit_kg')})`, qty, setQty)}
-      {field(t('hours_since_harvest'), hours, setHours)}
+      <View style={{ gap: 6 }}>
+        <T size={SIZE.label} color={C.muted}>
+          {t('harvested_when')}
+        </T>
+        <HarvestAge days={days} onSelect={setDays} />
+      </View>
+      {field(t('exact_hours'), hours, setHours)}
 
       <SectionTitle>{t('split_title')}</SectionTitle>
       <View style={{ flexDirection: 'row', gap: 12 }}>
@@ -171,8 +183,6 @@ export default function RescueScreen() {
       </T>
 
       {field(t('place'), place, setPlace, { keyboard: 'default', placeholder: 'Azadpur' })}
-      {field(t('coords'), coordText, setCoordText, { keyboard: 'numbers-and-punctuation', placeholder: '12.97, 77.59' })}
-      {coordText.trim() !== '' && !parseCoords(coordText) && <T color={C.warnText}>{t('coords_invalid')}</T>}
       <Btn kind="text" icon="pin" label={t('use_location')} onPress={() => void useLocation()} />
 
       {message && <Banner kind="error" text={message} />}

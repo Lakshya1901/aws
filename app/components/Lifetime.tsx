@@ -53,15 +53,38 @@ export function Lifetime({ totals }: { totals: LedgerTotals }) {
         </T>
       ) : null}
 
-      <View style={{ gap: 4 }}>
-        <T size={SIZE.small} color={C.muted}>
-          {t('kept_out_of_landfill')}
-        </T>
-        <T bold size={36} color={C.primary} style={{ lineHeight: 44 }}>
-          {t('waste_value', { mid: fmtNum(Math.max(0, k.mid)) })}
-        </T>
-        <T size={SIZE.small}>{rangeKg}</T>
+      {/* The two headline numbers side by side: food kept out of landfill, money AnnaSetu added. */}
+      <View style={{ flexDirection: 'row', gap: 12 }}>
+        <Surface style={{ flex: 1, padding: 16, gap: 4, backgroundColor: C.tonal }}>
+          <T size={SIZE.small} color={C.onTonal}>
+            {t('kept_out_of_landfill')}
+          </T>
+          <T bold size={SIZE.number} color={C.primary}>
+            {t('kg_value', { v: fmtNum(Math.max(0, Math.round(k.mid))) })}
+          </T>
+          <T size={SIZE.label} color={C.onTonal}>
+            {rangeKg}
+          </T>
+        </Surface>
+        <Surface style={{ flex: 1, padding: 16, gap: 4, backgroundColor: C.tonal }}>
+          <T size={SIZE.small} color={C.onTonal}>
+            {t('total_money_saved')}
+          </T>
+          {m ? (
+            <>
+              <T bold size={SIZE.number} color={C.primary}>{`Rs ${fmtNum(Math.round(m.mid))}`}</T>
+              <T size={SIZE.label} color={C.onTonal}>
+                {t('money_range', { low: fmtNum(Math.round(m.low)), high: fmtNum(Math.round(m.high)) })}
+              </T>
+            </>
+          ) : (
+            <T color={C.muted}>{t('not_estimated')}</T>
+          )}
+        </Surface>
       </View>
+      <T size={SIZE.label} color={C.muted}>
+        {t('money_note')}
+      </T>
 
       <Surface style={{ padding: 16, gap: 10 }}>
         <T size={SIZE.small} color={C.muted}>
@@ -80,22 +103,6 @@ export function Lifetime({ totals }: { totals: LedgerTotals }) {
         </T>
       </Surface>
 
-      <Surface style={{ padding: 16, gap: 6 }}>
-        <T size={SIZE.small} color={C.muted}>
-          {t('total_money_saved')}
-        </T>
-        {m ? (
-          <>
-            <T bold size={SIZE.number}>{`Rs ${fmtNum(Math.round(m.mid))}`}</T>
-            <T size={SIZE.label}>{t('money_range', { low: fmtNum(Math.round(m.low)), high: fmtNum(Math.round(m.high)) })}</T>
-          </>
-        ) : (
-          <T color={C.muted}>{t('not_estimated')}</T>
-        )}
-        <T size={SIZE.label} color={C.muted}>
-          {t('money_note')}
-        </T>
-      </Surface>
 
       {partsTotal > 0 ? (
         <Surface style={{ padding: 16, gap: 12 }}>

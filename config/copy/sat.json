@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location"
     ]
   },
   "new_load": "ᱱᱟᱣᱟ ᱵᱚᱡᱷᱟ",
@@ -380,6 +380,12 @@
   "data_demo": "ᱰᱮᱢᱳ: ᱟᱲᱟᱝ ᱵᱷᱟᱨᱤ ᱨᱮᱭᱟᱜ ᱥᱟᱹᱨᱤ ᱫᱤᱱ",
   "data_hint": "ᱞᱟᱭᱤᱵ ᱨᱮ ᱟᱢᱟᱜ ᱥᱮᱴᱮᱨ ᱦᱟᱴ ᱠᱚᱨᱮᱭᱟᱜ ᱛᱮᱦᱮᱧᱟᱜ ᱫᱟᱢ ᱧᱮᱞᱚᱜᱼᱟ᱾ ᱰᱮᱢᱳ ᱫᱚ 29 ᱥᱮᱯᱴᱮᱢᱵᱚᱨ 2023 ᱨᱮᱭᱟᱜ ᱠᱳᱞᱟᱨ ᱵᱤᱞᱟᱛᱤ ᱵᱮᱝᱜᱟᱹᱲ ᱟᱲᱟᱝ ᱵᱷᱟᱨᱤ ᱫᱩᱦᱲᱟᱹ ᱩᱫᱩᱜᱼᱟ᱾",
   "prices_from": "{date} ᱨᱮᱭᱟᱜ ᱫᱟᱢ",
+  "harvested_when": "ᱛᱤᱦᱤᱧ ᱤᱨ ᱞᱮᱱᱟ?",
+  "age_today": "ᱛᱮᱦᱮᱧ",
+  "age_yesterday": "ᱦᱚᱞᱟ",
+  "age_days": "{n} ᱫᱤᱱ ᱞᱟᱦᱟ",
+  "exact_hours": "ᱟᱨᱵᱟᱝ ᱤᱨ ᱛᱟᱭᱚᱢ ᱴᱷᱤᱠ ᱴᱟᱲᱟᱝ (ᱢᱚᱱᱮ ᱠᱷᱟᱛᱤᱨ)",
+  "my_location": "ᱤᱧᱟᱜ ᱡᱟᱭᱜᱟ",
   "count_since": "{date} ᱠᱷᱚᱱ {n} ᱵᱚᱡᱷᱟ",
   "ledger_empty": "ᱱᱤᱛᱚᱜ ᱪᱮᱫᱟᱜ ᱵᱟᱝ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱟᱢᱟᱜ ᱨᱮᱠᱚᱰ ᱮᱛᱦᱚᱵ ᱞᱟᱹᱜᱤᱫ ᱥᱚᱡᱷᱮ ᱨᱮ \"ᱱᱚᱶᱟ ᱵᱮᱵᱷᱟᱨ ᱢᱮ\" ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾",
   "saved_record": "ᱟᱢᱟᱜ ᱨᱮᱠᱚᱰ ᱨᱮ ᱥᱟᱵᱟᱦᱟᱨ ᱮᱱᱟ",

@@ -14,7 +14,7 @@ import { C, SIZE } from '../lib/theme';
 const CONTENT_TYPE = 'audio/mp4'; // m4a (AAC)
 
 export default function NewLoadScreen() {
-  const { t, lang, crop, coords, draft, setDraft, setVoice, canRoute } = useSession();
+  const { t, lang, crop, draft, setDraft, setVoice, canRoute } = useSession();
   const recommend = useRecommend();
   const errorText = useErrorText();
   const [busy, setBusy] = useState(false);
@@ -23,7 +23,8 @@ export default function NewLoadScreen() {
 
   // Fresh draft each time the screen opens.
   useEffect(() => {
-    setDraft({ ...EMPTY_DRAFT, crop: canRoute(crop) ? crop : null, lat: coords?.lat ?? null, lon: coords?.lon ?? null });
+    // No silent GPS: the place comes from the farmer (typed, spoken or "Use my location").
+    setDraft({ ...EMPTY_DRAFT, crop: canRoute(crop) ? crop : null });
     setReady(true);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -40,7 +41,9 @@ export default function NewLoadScreen() {
         ...draft,
         crop: parsed.fields.crop,
         quantity_kg: parsed.fields.quantity_kg,
-        origin_place: parsed.fields.origin_place,
+        origin_place: parsed.fields.origin_place ?? draft.origin_place,
+        // A spoken place replaces any GPS position.
+        ...(parsed.fields.origin_place ? { lat: null, lon: null } : {}),
         harvest: parsed.fields.harvest,
       });
       router.push('/confirm');

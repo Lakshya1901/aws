@@ -1,6 +1,6 @@
 // Today (Glut Radar): nearby markets for the chosen crop, risk as colour + word + icon.
 import * as Location from 'expo-location';
-import { Stack, router } from 'expo-router';
+import { router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { MOCK, api } from '../api/client';
@@ -75,13 +75,6 @@ export default function TodayScreen() {
 
   return (
     <Screen nav>
-      <Stack.Screen
-        options={{
-          headerRight: () => (
-            <Btn kind="text" icon="settings" label={t('settings')} onPress={() => router.push('/settings')} />
-          ),
-        }}
-      />
       {!loading && data && (
         <DataBanners fixture={data._fixture} replayDate={data.replay_date} stale={anyStale} />
       )}

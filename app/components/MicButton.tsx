@@ -6,7 +6,7 @@ import {
   useAudioRecorder,
 } from 'expo-audio';
 import { useEffect, useRef, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { Animated, Easing, Pressable, View } from 'react-native';
 import { useSession } from '../lib/session';
 import { C, SHADOW, SIZE } from '../lib/theme';
 import { Icon } from './Icon';
@@ -32,10 +32,31 @@ export function MicButton({
   const active = useRef(false);
   const starting = useRef(false);
   const released = useRef(false);
+  const pulse = useRef(new Animated.Value(0)).current;
+  const [secs, setSecs] = useState(0);
 
   useEffect(() => () => {
     if (timer.current) clearTimeout(timer.current);
   }, []);
+
+  // While recording: a pulsing ring and a seconds counter, so it is clear the phone is listening.
+  useEffect(() => {
+    if (!recording) {
+      pulse.stopAnimation();
+      pulse.setValue(0);
+      setSecs(0);
+      return;
+    }
+    const loop = Animated.loop(
+      Animated.timing(pulse, { toValue: 1, duration: 1100, easing: Easing.out(Easing.ease), useNativeDriver: true }),
+    );
+    loop.start();
+    const tick = setInterval(() => setSecs(Math.floor((Date.now() - startedAt.current) / 1000)), 250);
+    return () => {
+      loop.stop();
+      clearInterval(tick);
+    };
+  }, [recording, pulse]);
 
   async function start() {
     if (disabled || starting.current || active.current) return;
@@ -97,6 +118,20 @@ export function MicButton({
           backgroundColor: recording ? C.tonal : 'transparent',
         }}
       >
+        {recording && (
+          <Animated.View
+            pointerEvents="none"
+            style={{
+              position: 'absolute',
+              width: 144,
+              height: 144,
+              borderRadius: 72,
+              backgroundColor: C.primary,
+              opacity: pulse.interpolate({ inputRange: [0, 1], outputRange: [0.35, 0] }),
+              transform: [{ scale: pulse.interpolate({ inputRange: [0, 1], outputRange: [0.85, 1.35] }) }],
+            }}
+          />
+        )}
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={t('speak')}
@@ -118,7 +153,7 @@ export function MicButton({
         </Pressable>
       </View>
       <T bold size={SIZE.large}>
-        {recording ? t('recording') : t('speak')}
+        {recording ? `${t('recording')} 0:${String(secs).padStart(2, '0')}` : t('speak')}
       </T>
       {recording ? null : (
         <T size={SIZE.small} color={C.muted} style={{ textAlign: 'center' }}>

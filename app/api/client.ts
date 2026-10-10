@@ -1,4 +1,5 @@
 // Typed client for the AnnaSetu API (CLAUDE.md Section 13). The app never calls AWS directly.
+import * as FileSystem from 'expo-file-system/legacy';
 import { ApiError } from './errors';
 import type {
   ApiErrorBody,
@@ -102,17 +103,16 @@ export const api = {
     return request('POST', '/voice/upload', req);
   },
 
-  /** PUT the recorded file to the presigned S3 URL from voiceUpload. */
+  /** PUT the recorded file to the presigned S3 URL from voiceUpload. Native file upload: fetch(file://).blob() sent
+   * no audio on Android (October 10 phone test: uploads were requested, no transcription job ever started). */
   async putAudio(uploadUrl: string, fileUri: string, contentType: string): Promise<void> {
     if (mock) return;
-    const file = await fetch(fileUri);
-    const blob = await file.blob();
-    const res = await fetch(uploadUrl, {
-      method: 'PUT',
+    const res = await FileSystem.uploadAsync(uploadUrl, fileUri, {
+      httpMethod: 'PUT',
       headers: { 'Content-Type': contentType },
-      body: blob,
+      uploadType: FileSystem.FileSystemUploadType.BINARY_CONTENT,
     });
-    if (!res.ok) throw new ApiError(res.status, 'upload_failed');
+    if (res.status < 200 || res.status >= 300) throw new ApiError(res.status, 'upload_failed');
   },
 
   voiceParse(req: VoiceParseRequest): Promise<VoiceParseResponse> {

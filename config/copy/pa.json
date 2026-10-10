@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location"
     ]
   },
   "new_load": "ਨਵਾਂ ਲੋਡ",
@@ -380,6 +380,12 @@
   "data_demo": "ਡੈਮੋ: ਬਹੁਤ ਜ਼ਿਆਦਾ ਆਮਦ ਦਾ ਅਸਲ ਦਿਨ",
   "data_hint": "ਲਾਈਵ ਵਿੱਚ ਤੁਹਾਡੇ ਨੇੜੇ ਦੀਆਂ ਮੰਡੀਆਂ ਦੇ ਅੱਜ ਦੇ ਭਾਅ ਆਉਂਦੇ ਹਨ। ਡੈਮੋ 29 ਸਤੰਬਰ 2023 ਦੀ ਕੋਲਾਰ ਦੀ ਟਮਾਟਰ ਦੀ ਬਹੁਤ ਜ਼ਿਆਦਾ ਆਮਦ ਦੁਬਾਰਾ ਦਿਖਾਉਂਦਾ ਹੈ।",
   "prices_from": "{date} ਦੇ ਭਾਅ",
+  "harvested_when": "ਵਾਢੀ ਕਦੋਂ ਹੋਈ?",
+  "age_today": "ਅੱਜ",
+  "age_yesterday": "ਕੱਲ੍ਹ",
+  "age_days": "{n} ਦਿਨ ਪਹਿਲਾਂ",
+  "exact_hours": "ਜਾਂ ਵਾਢੀ ਤੋਂ ਬਾਅਦ ਦੇ ਠੀਕ ਘੰਟੇ (ਵਿਕਲਪਿਕ)",
+  "my_location": "ਮੇਰੀ ਥਾਂ",
   "count_since": "{date} ਤੋਂ {n} ਲੋਡ",
   "ledger_empty": "ਹਾਲੇ ਕੁਝ ਨਹੀਂ। ਆਪਣਾ ਰਿਕਾਰਡ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਸਲਾਹ 'ਤੇ \"ਇਹ ਵਰਤੋ\" ਦਬਾਓ।",
   "saved_record": "ਤੁਹਾਡੇ ਰਿਕਾਰਡ ਵਿੱਚ ਸੰਭਾਲਿਆ ਗਿਆ",

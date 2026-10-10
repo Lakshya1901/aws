@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location"
     ]
   },
   "new_load": "नवीन लोड",
@@ -380,6 +380,12 @@
   "data_demo": "डेमो: जास्त आवकेचा खरा दिवस",
   "data_hint": "लाइव्हमध्ये तुमच्या जवळच्या बाजारांचे आजचे भाव येतात. डेमो 29 सप्टेंबर 2023 चा कोलारमधील टोमॅटोच्या जास्त आवकेचा दिवस पुन्हा दाखवतो.",
   "prices_from": "{date} चे भाव",
+  "harvested_when": "कापणी कधी झाली?",
+  "age_today": "आज",
+  "age_yesterday": "काल",
+  "age_days": "{n} दिवसांपूर्वी",
+  "exact_hours": "किंवा कापणीनंतरचे नेमके तास (ऐच्छिक)",
+  "my_location": "माझे ठिकाण",
   "count_since": "{date} पासून {n} लोड",
   "ledger_empty": "अजून काही नाही. तुमची नोंद सुरू करण्यासाठी सल्ल्यावर \"हेच निवडा\" दाबा.",
   "saved_record": "तुमच्या नोंदीत जतन केले",

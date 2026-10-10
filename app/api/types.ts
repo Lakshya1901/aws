@@ -140,6 +140,7 @@ export interface RecommendRequest {
   quantity_kg: number;
   origin: Origin;
   harvest: Harvest;
+  days_since_harvest?: number; // harvest "harvested": 0 = today (the API turns days into hours)
   language: Lang;
   plan_id?: string;
 }
@@ -227,7 +228,8 @@ export interface RescueRequest {
   source: 'mandi_unsold';
   crop: CropId;
   quantity_kg: number;
-  hours_since_harvest: number;
+  hours_since_harvest?: number; // one of hours or days (the API turns days into hours)
+  days_since_harvest?: number;
   edible_kg?: number;
   spoiled_kg?: number;
   origin: Origin;
@@ -266,6 +268,7 @@ export interface PlanLoad {
   quantity_kg: number;
   origin: Origin;
   harvest: Harvest;
+  days_since_harvest?: number;
   chosen_outlet_id?: string | null; // records "Use this" or an override
   override?: boolean; // true when chosen != recommended
 }
