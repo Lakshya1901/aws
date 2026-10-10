@@ -21,7 +21,7 @@
       "diesel", "co2", "water", "litres_value", "kg_value", "km_value", "impact_title", "no_plan", "rs_range",
       "type_hold", "hold_title", "hold_body", "waste_none_load", "waste_none_total", "waste_spoilage", "waste_range_loss", "water_lost", "shorter_km_value", "diesel_saved_value", "coords", "coords_invalid", "err_origin_unknown", "err_drive_time", "err_temperature", "err_plan_not_found", "err_bad_request",
       "unsold_stock", "hours_since_harvest", "edible", "spoiled", "kept_out_of_landfill", "prevented", "rescued", "recovered", "biogas_energy", "type_feed", "type_biogas", "type_compost", "no_recover_outlet", "err_split_required", "split_hint", "split_sum", "other_crop", "search_crop", "get_data", "fetching_data", "data_ready", "radar_only",
-      "markets_near", "more_markets", "km_away", "after_costs", "advice_note", "not_advised", "say_hint", "change", "not_heard", "type_instead", "split_title", "edit", "rescue_advice", "demo_stock", "plan_headline", "plan_spread", "loads", "loads_count", "impact_from", "trip_costs", "kept_note", "redirected_note", "load_one"
+      "markets_near", "more_markets", "km_away", "after_costs", "advice_note", "not_advised", "say_hint", "change", "not_heard", "type_instead", "split_title", "edit", "rescue_advice", "demo_stock", "plan_headline", "plan_spread", "loads", "loads_count", "impact_from", "trip_costs", "kept_note", "redirected_note", "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range"
     ]
   },
 
@@ -205,5 +205,14 @@
   "trip_costs": "Trip costs",
   "kept_note": "Food that would have been thrown away.",
   "redirected_note": "Moved to other markets. Not counted as saved.",
-  "load_one": "1 load"
+  "load_one": "1 load",
+  "since_start": "Since you started",
+  "share_saved": "Share of your produce saved",
+  "of_handled": "of {kg} kg you sent through AnnaSetu",
+  "total_money_saved": "Total money saved",
+  "money_note": "What your loads earn after transport and fees (estimate)",
+  "count_since": "Since {date}: {n} confirmed",
+  "ledger_empty": "Nothing yet. Choose \"Use this\" on a recommendation to start your record.",
+  "saved_record": "Saved to your record",
+  "money_range": "(likely Rs {low} to Rs {high})"
 }

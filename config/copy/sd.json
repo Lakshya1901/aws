@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range"
     ]
   },
   "new_load": "نئون لوڊ",
@@ -364,5 +364,14 @@
   "trip_costs": "سفر جو خرچ",
   "kept_note": "اهو کاڌو جيڪو اڇليو وڃي ها.",
   "redirected_note": "ٻين منڊين ڏانهن موڪليو ويو. هن کي بچت ۾ نه ڳڻيو ويو.",
-  "load_one": "1 لوڊ"
+  "load_one": "1 لوڊ",
+  "since_start": "توهان شروع ڪرڻ کان وٺي",
+  "share_saved": "توهان جي فصل جو ڪيترو حصو بچيو",
+  "of_handled": "اناسيتو ذريعي موڪليل {kg} ڪلو مان",
+  "total_money_saved": "ڪل بچيل پئسا",
+  "money_note": "ڀاڙو ۽ فيس ڪڍڻ کانپوءِ توهان جي لوڊن جي ڪمائي (اندازو)",
+  "count_since": "{date} کان {n} لوڊ",
+  "ledger_empty": "اڃا ڪجهه ناهي. پنهنجو رڪارڊ شروع ڪرڻ لاءِ صلاح تي \"اهو چونڊيو\" دٻايو.",
+  "saved_record": "توهان جي رڪارڊ ۾ محفوظ ٿيو",
+  "money_range": "(شايد ₹{low} کان ₹{high})"
 }

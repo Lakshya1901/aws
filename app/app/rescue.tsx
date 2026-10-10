@@ -12,6 +12,7 @@ import { useOutletLabels } from '../components/RecommendationCard';
 import { Banner, Btn, Chip, DataBanners, ListRow, Loading, Screen, SectionTitle, Surface, T, Tag, s, useErrorText } from '../components/ui';
 import { fmtNum } from '../i18n';
 import { deviceCoords } from '../lib/recommend';
+import { earnFor, fromImpact, recordLedger } from '../lib/ledger';
 import { useSession } from '../lib/session';
 import { C, RADIUS, SIZE, fontFor } from '../lib/theme';
 
@@ -35,6 +36,7 @@ export default function RescueScreen() {
   const [message, setMessage] = useState<string | null>(null);
   const [needSplit, setNeedSplit] = useState(false);
   const [res, setRes] = useState<RescueResponse | null>(null);
+  const [saved, setSaved] = useState(false);
 
   const field = (
     label: string,
@@ -105,6 +107,7 @@ export default function RescueScreen() {
         ...(planId ? { plan_id: planId } : {}),
       });
       setRes(r);
+      setSaved(false);
       setNeedSplit(false);
       if (!planId) setPlanId(r.plan_id);
     } catch (err) {
@@ -220,6 +223,26 @@ export default function RescueScreen() {
                 </T>
               )}
             </View>
+          )}
+
+          {(dest || res.recover) && (
+            <Btn
+              icon={saved ? 'check' : undefined}
+              label={saved ? t('saved_record') : t('use_this')}
+              disabled={saved}
+              onPress={() => {
+                // Lifetime record on this phone: kg rescued and recovered for this lot (food banks pay nothing).
+                void recordLedger({
+                  key: `${res.plan_id}|rescue|${res.crop}|${res.quantity_kg}`,
+                  at: new Date().toISOString(),
+                  kind: 'rescue',
+                  qty_kg: res.quantity_kg,
+                  ...fromImpact(res.impact, 'rescue'),
+                  earn_rs: dest ? earnFor(dest, res.split.edible_kg) : null,
+                });
+                setSaved(true);
+              }}
+            />
           )}
 
           {others.length > 0 && (

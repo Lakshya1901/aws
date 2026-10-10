@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range"
     ]
   },
   "new_load": "नव लोड",
@@ -364,5 +364,14 @@
   "trip_costs": "यात्राक खर्च",
   "kept_note": "जे खाना फेकल जाइत।",
   "redirected_note": "दोसर मंडी मे पठाओल गेल। एकरा बचत मे नहि गनल गेल।",
-  "load_one": "1 लोड"
+  "load_one": "1 लोड",
+  "since_start": "अहाँ जहिया शुरू कएलहुँ तहिया सँ",
+  "share_saved": "अहाँक उपजक कतेक हिस्सा बचल",
+  "of_handled": "अन्नसेतु सँ पठाओल {kg} किलो मे सँ",
+  "total_money_saved": "कुल बचल पैसा",
+  "money_note": "भाड़ा आ शुल्क घटेलाक बाद अहाँक लोडक कमाई (अन्दाज)",
+  "count_since": "{date} सँ {n} लोड",
+  "ledger_empty": "एखन किछु नहि। अपन रिकॉर्ड शुरू करबा लेल सुझाव पर \"इएह चुनू\" दबाउ।",
+  "saved_record": "अहाँक रिकॉर्ड मे सहेजल गेल",
+  "money_range": "(शायद ₹{low} सँ ₹{high})"
 }

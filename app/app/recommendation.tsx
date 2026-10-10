@@ -10,6 +10,7 @@ import { RecommendationCard, useOutletLabels } from '../components/Recommendatio
 import { Banner, Btn, DataBanners, ListRow, Screen, SectionTitle, Surface, Tag, T } from '../components/ui';
 import { fmtNum, fmtRs, translate } from '../i18n';
 import { ratioDriven } from '../lib/recommend';
+import { earnFor, fromImpact, recordLedger } from '../lib/ledger';
 import { useSession } from '../lib/session';
 import { C, RISK, SIZE } from '../lib/theme';
 
@@ -101,6 +102,17 @@ export default function RecommendationScreen() {
       harvest: req.harvest,
       chosen_outlet_id: outlet.outlet_id,
       override: L.key(outlet) !== L.key(res.top),
+    });
+    const isTop = L.key(outlet) === L.key(res.top);
+    // Lifetime record on this phone; waste avoided is computed for the recommended outlet only.
+    void recordLedger({
+      key: `${res.plan_id}|${loadId}`,
+      at: new Date().toISOString(),
+      kind: 'farm',
+      qty_kg: req.quantity_kg,
+      ...fromImpact(res.impact, 'farm'),
+      prevented_kg: isTop ? res.impact.waste_avoided_kg : null,
+      earn_rs: earnFor(outlet, req.quantity_kg),
     });
     setUsed(L.key(outlet));
     router.push('/plan');

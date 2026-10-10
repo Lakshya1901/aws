@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range"
     ]
   },
   "new_load": "অশোবা লোড",
@@ -364,5 +364,14 @@
   "trip_costs": "ফুনবগী খরচ",
   "kept_note": "লাক্তনা ফাওদ্রবা চাবা খরা।",
   "redirected_note": "অমুক কৈঠেলদা থোকখিবা। ফঙখিবা ওইনা য়াওদ্রে।",
-  "load_one": "লোড ১"
+  "load_one": "লোড ১",
+  "since_start": "নহাক হৌরবদগি",
+  "share_saved": "নহাক্কী ফজবগী ফংলিবা অংশ",
+  "of_handled": "অন্নসেতু দা থাদোকপা কিলো {kg} গী মনুংদগি",
+  "total_money_saved": "মপুং ওইবা ফংলিবা পৈসা",
+  "money_note": "ভাড়া অমসুং ফী কেন্নদুনা লোডশিংগী ফংনবা (অনুমান)",
+  "count_since": "{date} দগি লোড {n}",
+  "ledger_empty": "হৌজিক খন্দ্রে। নহাক্কী রেকর্ড হৌরকপা সুজাবদা \"মসি পাউলু\" ফোঙ্গো।",
+  "saved_record": "নহাক্কী রেকর্ডদা শীজিল্লে",
+  "money_range": "(অনুমান ₹{low} দগি ₹{high})"
 }

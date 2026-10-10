@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range"
     ]
   },
   "new_load": "ନୂଆ ଲୋଡ୍",
@@ -364,5 +364,14 @@
   "trip_costs": "ଯାତ୍ରା ଖର୍ଚ୍ଚ",
   "kept_note": "ଯେଉଁ ଖାଦ୍ୟ ଫିଙ୍ଗିଦିଆଯାଉଥାନ୍ତା।",
   "redirected_note": "ଅନ୍ୟ ବଜାରକୁ ପଠାଗଲା। ବଞ୍ଚିଲା ବୋଲି ଗଣାଯାଇନାହିଁ।",
-  "load_one": "୧ ଟି ଲୋଡ୍"
+  "load_one": "୧ ଟି ଲୋଡ୍",
+  "since_start": "ଆପଣ ଆରମ୍ଭ କରିବା ପରଠାରୁ",
+  "share_saved": "ଆପଣଙ୍କ ଫସଲର କେତେ ଅଂଶ ବଞ୍ଚିଲା",
+  "of_handled": "ଅନ୍ନସେତୁ ଦ୍ୱାରା ପଠାଇଥିବା {kg} କିଲୋ ମଧ୍ୟରୁ",
+  "total_money_saved": "ମୋଟ ବଞ୍ଚିଥିବା ଟଙ୍କା",
+  "money_note": "ଭଡ଼ା ଓ ଶୁଳ୍କ କାଟିବା ପରେ ଆପଣଙ୍କ ଲୋଡ୍‌ର ଆୟ (ଅନୁମାନ)",
+  "count_since": "{date} ଠାରୁ {n} ଟି ଲୋଡ୍",
+  "ledger_empty": "ଏପର୍ଯ୍ୟନ୍ତ କିଛି ନାହିଁ। ଆପଣଙ୍କ ରେକର୍ଡ ଆରମ୍ଭ କରିବାକୁ ପରାମର୍ଶରେ \"ଏହା ନିଅନ୍ତୁ\" ଦବାନ୍ତୁ।",
+  "saved_record": "ଆପଣଙ୍କ ରେକର୍ଡରେ ସାଇତାଗଲା",
+  "money_range": "(ପ୍ରାୟ ₹ {low} ରୁ ₹ {high})"
 }

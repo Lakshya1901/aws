@@ -6,6 +6,7 @@ import type { Impact, Range } from '../api/types';
 import { fmtNum } from '../i18n';
 import { useSession } from '../lib/session';
 import { C, SIZE } from '../lib/theme';
+import { PART_COLORS } from './Lifetime';
 import { ListRow, Surface, T } from './ui';
 
 /** Waste avoided as {value, sub}: null -> not yet estimated; mid <= 0 -> "No waste avoided" (+ extra spoilage). */
@@ -61,7 +62,7 @@ export function ImpactHeadline({ impact }: { impact: Impact }) {
         <View style={{ gap: 8, marginTop: 12 }}>
           <View style={{ height: 12, borderRadius: 6, backgroundColor: C.track, overflow: 'hidden', flexDirection: 'row' }}>
             {parts.map((p, i) =>
-              p.n > 0 ? <View key={p.key} style={{ flex: p.n, backgroundColor: i === 0 ? C.primary : i === 1 ? C.tonal : C.outline }} /> : null,
+              p.n > 0 ? <View key={p.key} style={{ flex: p.n, backgroundColor: PART_COLORS[p.key] }} /> : null,
             )}
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 8 }}>

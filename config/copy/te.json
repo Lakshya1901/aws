@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range"
     ]
   },
   "new_load": "కొత్త లోడ్",
@@ -364,5 +364,14 @@
   "trip_costs": "ప్రయాణ ఖర్చులు",
   "kept_note": "లేకపోతే పారేసి ఉండేవారు ఆహారం.",
   "redirected_note": "ఇతర మార్కెట్లకు మళ్లించాం. కాపాడినదిగా లెక్కించలేదు.",
-  "load_one": "1 లోడ్"
+  "load_one": "1 లోడ్",
+  "since_start": "మీరు మొదలుపెట్టినప్పటి నుంచి",
+  "share_saved": "మీ సరుకులో ఎంత భాగం కాపాడారు",
+  "of_handled": "అన్నసేతు ద్వారా మీరు పంపిన {kg} కిలోలలో",
+  "total_money_saved": "మొత్తం ఆదా అయిన డబ్బు",
+  "money_note": "రవాణా, ఫీజులు పోగా మీ లోడ్ల ఆదాయం (అంచనా)",
+  "count_since": "{date} నుంచి {n} లోడ్లు",
+  "ledger_empty": "ఇంకా ఏమీ లేదు. మీ రికార్డు మొదలుపెట్టడానికి సలహాపై \"ఇది వాడండి\" నొక్కండి.",
+  "saved_record": "మీ రికార్డులో భద్రపరిచాం",
+  "money_range": "(సుమారు ₹{low} నుంచి ₹{high})"
 }

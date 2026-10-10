@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range"
     ]
   },
   "new_load": "নতুন লোড",
@@ -364,5 +364,14 @@
   "trip_costs": "যাত্ৰাৰ খৰচ",
   "kept_note": "যিবোৰ খাদ্য পেলাই দিয়া হ’লহেঁতেন।",
   "redirected_note": "আন বজাৰলৈ পঠোৱা। এইটো ৰক্ষা কৰাৰ হিচাপত ধৰা হোৱা নাই।",
-  "load_one": "১টা লোড"
+  "load_one": "১টা লোড",
+  "since_start": "আপুনি আৰম্ভ কৰাৰ পৰা",
+  "share_saved": "আপোনাৰ শস্যৰ কিমান অংশ বচিল",
+  "of_handled": "অন্নসেতুৰ জৰিয়তে পঠোৱা {kg} কিলোৰ ভিতৰত",
+  "total_money_saved": "মুঠ বচোৱা ধন",
+  "money_note": "ভাড়া আৰু মাশুল বাদ দি আপোনাৰ লোডৰ আয় (আনুমানিক)",
+  "count_since": "{date}ৰ পৰা {n}টা লোড",
+  "ledger_empty": "এতিয়ালৈ একো নাই। আপোনাৰ ৰেকৰ্ড আৰম্ভ কৰিবলৈ পৰামৰ্শত \"এইটোকে লওক\" টিপক।",
+  "saved_record": "আপোনাৰ ৰেকৰ্ডত সংৰক্ষণ কৰা হ'ল",
+  "money_range": "(সম্ভবতঃ ₹{low}ৰ পৰা ₹{high}লৈ)"
 }

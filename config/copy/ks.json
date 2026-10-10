@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range"
     ]
   },
   "new_load": "نوو لوڈ",
@@ -364,5 +364,14 @@
   "trip_costs": "سفرکۍ خرچ",
   "kept_note": "تتھ کھینہ یُس شیرنہ آمت آسہِ۔",
   "redirected_note": "بییہ منڈی روانہ کرنہ آمت۔ یہِ چھنہ بچتس منٛز گنُن آمت۔",
-  "load_one": "1 لوڈ"
+  "load_one": "1 لوڈ",
+  "since_start": "توٚہی شروع کرنہٕ پیٹھ",
+  "share_saved": "توہؠ سنزِ پیداوارِ منزٕ کتھ حصہ بچیوٚ",
+  "of_handled": "اَنَّسیتُو ذریعہ ہیجمتٕ {kg} کلو منز",
+  "total_money_saved": "کل بچوومت پیسہ",
+  "money_note": "کرایہ تہٕ فیس کڈنہٕ پتہٕ توہہِ سنزِ لوڈن کمٲے (اندازہ)",
+  "count_since": "{date} پیٹھ {n} لوڈ",
+  "ledger_empty": "ہیور کانہہ کُن۔ پنُن ریکارڈ شروع کرنہٕ خاطرٕ مشورس پیٹھ \"یہِ ژٲنٹھو\" دبٲو۔",
+  "saved_record": "توہہِ سنز ریکارڈس منز محفوظ",
+  "money_range": "(غالبا ₹{low} پیٹھ ₹{high} تام)"
 }

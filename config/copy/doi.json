@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range"
     ]
   },
   "new_load": "नेआं लोड",
@@ -364,5 +364,14 @@
   "trip_costs": "सफर दा खर्चा",
   "kept_note": "जेह्ड़ा खाना सुट्टेआ जंदा।",
   "redirected_note": "होर मंडियें च भेजेआ गेआ। इसी बचत च नेईं गिनेआ गेआ।",
-  "load_one": "1 लोड"
+  "load_one": "1 लोड",
+  "since_start": "तुसें शुरू कीते दे बाद थमां",
+  "share_saved": "तुंदी उपज दा कित्ता हिस्सा बचेआ",
+  "of_handled": "अन्नसेतु राहें भेजे दे {kg} किलो च् चा",
+  "total_money_saved": "कुल बचे दे पैसे",
+  "money_note": "भाड़े ते फीस कड्ढने मगरा तुंदे लोडें दी कमाई (अंदाजा)",
+  "count_since": "{date} थमां {n} लोड",
+  "ledger_empty": "हल्ली किश नेईं। अपना रिकार्ड शुरू करने आस्तै सुझाऽ पर \"एह्दा चुनो\" दबाओ।",
+  "saved_record": "तुंदे रिकार्ड च् सहेजेआ गेआ",
+  "money_range": "(शायद ₹{low} थमां ₹{high})"
 }

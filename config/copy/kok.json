@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range"
     ]
   },
   "new_load": "नवो लोड",
@@ -364,5 +364,14 @@
   "trip_costs": "प्रवासाचो खर्च",
   "kept_note": "जें जेवण उडोवन घाल्लें अशें.",
   "redirected_note": "हेर मंडयांक धाडलें. सोडयिल्ल्यांत मेजूंक ना.",
-  "load_one": "1 लोड"
+  "load_one": "1 लोड",
+  "since_start": "तुमी सुरू केल्यार थावन",
+  "share_saved": "तुमच्या मालाचो कितलो वांटो वाटलो",
+  "of_handled": "अन्नसेतूंतल्यान धाडिल्ल्या {kg} किलोंतले",
+  "total_money_saved": "एकूण वाटिल्ले पैसे",
+  "money_note": "वाहतूक आनी शुल्क वजा केल्या उपरांत तुमच्या लोडांची कमाई (अदमास)",
+  "count_since": "{date} थावन {n} लोड",
+  "ledger_empty": "अजून कांयच ना. तुमचो रेकॉर्ड सुरू करपाक सुचवणेर \"हेंच वेंचात\" दाबात.",
+  "saved_record": "तुमच्या रेकॉर्डांत सांबाळ्ळें",
+  "money_range": "(अदमासे ₹{low} ते ₹{high})"
 }

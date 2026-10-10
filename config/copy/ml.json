@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range"
     ]
   },
   "new_load": "പുതിയ ലോഡ്",
@@ -364,5 +364,14 @@
   "trip_costs": "യാത്രാ ചെലവുകൾ",
   "kept_note": "അല്ലെങ്കിൽ വലിച്ചെറിയപ്പെടുമായിരുന്ന ഭക്ഷണം.",
   "redirected_note": "മറ്റ് വിപണികളിലേക്ക് മാറ്റിവിട്ടു. രക്ഷിച്ചതായി കണക്കാക്കുന്നില്ല.",
-  "load_one": "1 ലോഡ്"
+  "load_one": "1 ലോഡ്",
+  "since_start": "നിങ്ങൾ തുടങ്ങിയതു മുതൽ",
+  "share_saved": "നിങ്ങളുടെ വിളയുടെ എത്ര ഭാഗം രക്ഷിച്ചു",
+  "of_handled": "അന്നസേതു വഴി നിങ്ങൾ അയച്ച {kg} കിലോയിൽ",
+  "total_money_saved": "ആകെ ലാഭിച്ച പണം",
+  "money_note": "ഗതാഗതവും ഫീസും കഴിഞ്ഞ് നിങ്ങളുടെ ലോഡുകളുടെ വരുമാനം (ഏകദേശം)",
+  "count_since": "{date} മുതൽ {n} ലോഡ്",
+  "ledger_empty": "ഇതുവരെ ഒന്നുമില്ല. നിങ്ങളുടെ രേഖ തുടങ്ങാൻ ഒരു നിർദേശത്തിൽ \"ഇത് എടുക്കുക\" അമർത്തുക.",
+  "saved_record": "നിങ്ങളുടെ രേഖയിൽ സേവ് ചെയ്തു",
+  "money_range": "(ഏകദേശം ₹{low} മുതൽ ₹{high} വരെ)"
 }
