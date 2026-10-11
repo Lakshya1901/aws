@@ -15,7 +15,7 @@ The core question it answers: **"Where should this load go today, and what will 
 - Track: Waste and Energy, WeMakeDevs x AWS Environmental Hacks: close the loop on what a city throws away (Rescue, Recover), make the city lighter (Prevent), power it cleaner (Recover: biogas)
 - Platform: Android/iOS app (Expo), serverless backend on AWS in ap-south-1, built and deployed with the AWS SAM CLI
 - Demo video: TBD
-- Android APK: [annasetu.apk](https://expo.dev/artifacts/eas/Yx17SPWaQy3V3q8lO8fHUx2E0CG1C8ae1rpfT9JnfJc.apk) (EAS preview build, October 10; talks to the live API)
+- Android APK: [annasetu.apk](https://expo.dev/artifacts/eas/zimvjrUv9exYufPVm1UZrpx6QHH-wNO9-IqEBOfqDn8.apk) (EAS preview build, October 10; talks to the live API)
 - Stat report: [docs/stat-report-2026.html](docs/stat-report-2026.html): the deployed engine replayed on March-May 2026 mandi data (Kolar and Delhi): Rs 2.20 crore saved (estimate), 180 t kept out of landfill, advice held out of sample on 1,248 of 1,279 diverted loads (`analysis/simulate_2026.py`, `analysis/sim_summary.py`)
 
 ## Brand
