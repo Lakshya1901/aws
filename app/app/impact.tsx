@@ -11,7 +11,7 @@ import { useSession } from '../lib/session';
 import { C } from '../lib/theme';
 
 export default function ImpactScreen() {
-  const { t, planId } = useSession();
+  const { t, planId, demoBusy } = useSession();
   const errorText = useErrorText();
   const [data, setData] = useState<ImpactResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -41,13 +41,13 @@ export default function ImpactScreen() {
     useCallback(() => {
       void readLedger().then(setEntries);
       void load();
-    }, [load]),
+    }, [load, demoBusy]),
   );
 
   return (
     <Screen nav>
       <SectionTitle>{t('since_start')}</SectionTitle>
-      {life && <Lifetime totals={life} />}
+      {demoBusy ? <Loading /> : life && <Lifetime totals={life} />}
 
       <SectionTitle>{t('todays_plan')}</SectionTitle>
       {!planId && <T color={C.muted}>{t('no_plan')}</T>}

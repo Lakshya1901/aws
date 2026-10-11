@@ -13,7 +13,7 @@ import { C, SIZE } from '../lib/theme';
 import { ImpactRows } from '../components/ImpactRows';
 
 export default function PlanScreen() {
-  const { t, lang, loads, planId, setPlanId, cropLabel } = useSession();
+  const { t, lang, loads, planId, setPlanId, cropLabel, demoBusy } = useSession();
   const L = useOutletLabels();
   const errorText = useErrorText();
   const [data, setData] = useState<PlanResponse | null>(null);
@@ -42,7 +42,11 @@ export default function PlanScreen() {
   }, [loads]);
 
   if (loads.length === 0) {
-    return (
+    return demoBusy ? (
+      <Screen nav>
+        <Loading />
+      </Screen>
+    ) : (
       <Screen nav>
         <T size={SIZE.large}>{t('plan_empty')}</T>
         <Btn label={t('new_load')} onPress={() => router.push('/new-load')} />

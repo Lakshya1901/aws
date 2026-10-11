@@ -1,9 +1,11 @@
 // Lifetime record on this phone (no user accounts, CLAUDE.md Section 21): every load or unsold lot the user
 // confirms with "Use this", for the "Since you started" dashboard. Figures are the API's own (estimates, ranges).
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getDataMode } from '../api/client';
 import type { Impact, OutletOption, Range } from '../api/types';
 
-const KEY = 'annasetu.ledger.v1';
+// Live and demo totals are kept apart (D37): demo mode fills its own ledger with the demo day.
+const key = () => (getDataMode() === 'demo' ? 'annasetu.ledger.demo.v1' : 'annasetu.ledger.v1');
 
 export interface LedgerEntry {
   key: string; // plan_id|load: the same load chosen again replaces its entry
@@ -32,7 +34,7 @@ export interface LedgerTotals {
 
 export async function readLedger(): Promise<LedgerEntry[]> {
   try {
-    const raw = await AsyncStorage.getItem(KEY);
+    const raw = await AsyncStorage.getItem(key());
     return raw ? (JSON.parse(raw) as LedgerEntry[]) : [];
   } catch {
     return [];
@@ -43,14 +45,14 @@ export async function recordLedger(e: LedgerEntry): Promise<void> {
   const all = (await readLedger()).filter((x) => x.key !== e.key);
   all.push(e);
   try {
-    await AsyncStorage.setItem(KEY, JSON.stringify(all));
+    await AsyncStorage.setItem(key(), JSON.stringify(all));
   } catch {}
 }
 
-/** Settings, "Clear saved data": forget every confirmed load and unsold lot on this phone. */
+/** Settings, "Clear saved data": forget every confirmed load and unsold lot of the current mode on this phone. */
 export async function clearLedger(): Promise<void> {
   try {
-    await AsyncStorage.removeItem(KEY);
+    await AsyncStorage.removeItem(key());
   } catch {}
 }
 
