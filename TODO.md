@@ -60,6 +60,7 @@ in TODO.md as they are done and commit TODO.md with the work.
   - `app/.env` not written: no AWS CLI or credentials on this Mac, so the key in SSM `/annasetu/app_api_key` can't be read here; the user supplies it.
   - Xcode 27.0 first-launch components missing (CoreSimulator absent, `simctl` fails, `xcodebuild -checkFirstLaunchStatus` exits 69) and no iOS simulator runtime. User runs `sudo xcodebuild -runFirstLaunch`, then `xcodebuild -downloadPlatform iOS`.
   - Then: `npx expo start --ios`, screenshot Language, Today, New load, Unsold stock, Recommendation, Today's plan, Impact, Settings; check first: New load "Crop" label clipped under the header (seen on Android), doubled chip / segmented-button borders (Android; check iOS), long Hindi/Kannada strings, overall polish.
+- [x] C15 Phone-test batch 2 (D36, Oct 10): unsold stock resells at nearby mandis, harvest age in days, no coordinates field, voice upload fix + recording animation, one Impact page, settings on every screen, language-change remount, 14 OSM outlets. Deployed and seeded; APK 68f84a33. Waiting on the user's phone test (language crash fix unverified).
 - [ ] C7 Voice parse in languages other than en/hi/kn needs Bedrock (D23, still blocked); until then those transcripts land on Confirm with fields highlighted.
 - [ ] C8 Video beat 1 (D22): no recent Delhi dumping report found; best fetched: INPECS 2012 (Azadpur "approximately 2 000 tons of waste ... daily"), Tribune 2025-05-17 (CM: "garbage dump"). Team to choose.
 
@@ -99,10 +100,10 @@ in TODO.md as they are done and commit TODO.md with the work.
 - [x] Headline replay day (D18), chosen Oct 10: 2023-09-29 (see A1). On market-level data 2023-09-06 gives waste avoided about -8 kg and no load split; 2023-09-15 and 2023-09-29 split the ten loads with positive waste avoided. Team to choose; then set `replay_date` and re-run ingest.
 
 ### 3. iPhone and Android test
-- [ ] 3.1 Put the API URL and key in `app/.env` (from `app/.env.example`); never commit it.
-- [ ] 3.2 Android: `app/eas.json` has a `preview` profile that builds an APK (EAS environment `preview`). Needs an Expo account (`eas login`). EAS does not upload the git-ignored `app/.env`, so set `EXPO_PUBLIC_API_URL` and `EXPO_PUBLIC_API_KEY` with `eas env:create --environment preview` (key as a secret). Then `eas build -p android --profile preview`; install the APK; one typed and one voice recommendation end to end (target under 15 s from release to card).
+- [x] 3.1 (Oct 10, B3) Put the API URL and key in `app/.env` (from `app/.env.example`); never commit it.
+- [ ] 3.2 (Oct 11: APK built and installed; typed flow works on a phone; voice and batch-2 fixes await the user's retest) Android: `app/eas.json` has a `preview` profile that builds an APK (EAS environment `preview`). Needs an Expo account (`eas login`). EAS does not upload the git-ignored `app/.env`, so set `EXPO_PUBLIC_API_URL` and `EXPO_PUBLIC_API_KEY` with `eas env:create --environment preview` (key as a secret). Then `eas build -p android --profile preview`; install the APK; one typed and one voice recommendation end to end (target under 15 s from release to card).
 - [ ] 3.3 iPhone: run through Expo Go (no App Store / TestFlight). Same two flows.
-- [ ] 3.5 Build the APK file (steps in `app/README.md`, Build): `eas build -p android --profile preview`, download the `.apk`, attach it to a GitHub Release (not committed; large binary) and use that link for README "Android APK".
+- [x] 3.5 (Oct 10: APK linked from expo.dev in README instead of a GitHub Release) Build the APK file (steps in `app/README.md`, Build): `eas build -p android --profile preview`, download the `.apk`, attach it to a GitHub Release (not committed; large binary) and use that link for README "Android APK".
 - [ ] 3.6 iOS build (steps in `app/README.md`, Build): Expo Go on a real iPhone; optional simulator build `eas build -p ios --profile preview` on a Mac. No `.ipa` for real devices without a paid Apple Developer account.
 - [ ] 3.4 Check Listen (Hindi and English only; Kannada shows the note), Second Life screen, stale banner, 422 messages.
 
@@ -115,7 +116,7 @@ in TODO.md as they are done and commit TODO.md with the work.
 - [ ] 4.5 Fill open decisions D20 (real outlets per Rescue city: Bengaluru, Delhi, Mumbai), D21 (biogas yield source), D22 (video beat 1 source of dumping at a city mandi).
 
 ### 5. Verification
-- [x] 5.1 Full checks (Oct 10: 105 passed, tsc clean, template valid): `python -m pytest backend/tests -q`, `cd app && npx tsc --noEmit`, `cd infra && sam validate --lint`. Oct 9: 85 passed, tsc clean, template valid. Re-run after any later change.
+- [x] 5.1 Full checks (Oct 11: 120 passed, tsc clean. Oct 10: 105 passed, tsc clean, template valid): `python -m pytest backend/tests -q`, `cd app && npx tsc --noEmit`, `cd infra && sam validate --lint`. Oct 9: 85 passed, tsc clean, template valid. Re-run after any later change.
 - [x] 5.2 Reproducibility (Oct 10: backtest 937fb04f9baf JSON and both PNGs byte-identical on re-run): re-run `python analysis/backtest.py --crop tomato` and `python analysis/second_replay.py`; outputs must be byte-identical to the committed files. Oct 9: JSON and both PNGs byte-identical (charts need matplotlib).
 - [ ] 5.3 Every number on screen traces to `config/` or computed data with its status (CLAUDE.md Section 20). No Section 3.3 claims anywhere. No "days early" wording (mode is `same_day`).
   - Oct 9: no Section 3.3 claims in app, config, backend or README; `glut_in_days` renders only in `predictive` mode. Number tracing waits on 2.2 figures and phone screens.
@@ -130,11 +131,11 @@ in TODO.md as they are done and commit TODO.md with the work.
   - Price sensitivity: every market uses the spec's fallback b = -0.5 because price barely tracks arrivals in this data (D15). Stated in the README.
 
 ### 8. Branding and repo rename
-- [ ] 8.1 App name, icon and splash in `app/app.json` / `app/assets/`.
+- [x] 8.1 (Oct 10: name AnnaSetu, bridge + sprout icon, C9; no custom splash) App name, icon and splash in `app/app.json` / `app/assets/`.
 - [ ] 8.2 Rename the GitHub repo (e.g. `annasetu`) in GitHub settings; then `git remote set-url origin https://github.com/Lakshya1901/<new-name>` and update any URLs in README.md.
 
 ### 9. README, final push, public repo
-- [ ] 9.1 Update README.md with the stat report figures, screenshots in `docs/`, and the APK link (replace "TBD").
+- [ ] 9.1 (Oct 11: APK link done; stat figures, screenshots and video link still open) Update README.md with the stat report figures, screenshots in `docs/`, and the APK link (replace "TBD").
 - [ ] 9.2 Merge the working branch into `main` (via a PR; confirm first). `edit/festive-darwin-bd1y1i` already merged on October 9.
 - [ ] 9.3 Make the repo public. Check nothing secret is committed (no keys, `samconfig.toml`, `.env`).
 
