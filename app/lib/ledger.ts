@@ -57,8 +57,9 @@ export function totals(entries: LedgerEntry[]): LedgerTotals {
   let rescued = 0;
   let recovered = 0;
   for (const e of entries) {
-    if (e.prevented_kg) prevented = add(prevented, e.prevented_kg);
-    // Only what AnnaSetu gained counts: a load that earned less than the nearest mandi adds 0, never a loss.
+    // Only what AnnaSetu gained counts (D35): a load with no waste avoided, or that earned less than the nearest
+    // mandi, adds 0 and never cancels another load's gain.
+    if (e.prevented_kg) prevented = add(prevented, pos(e.prevented_kg));
     // Entries saved before this field count nothing.
     if (e.extra_rs) extra_rs = add(extra_rs ?? ZERO, pos(e.extra_rs));
     rescued += e.rescued_kg;

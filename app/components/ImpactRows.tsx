@@ -46,7 +46,7 @@ export function ImpactHeadline({ impact }: { impact: Impact }) {
       <T bold size={36} color={kept ? C.primary : C.muted} style={{ lineHeight: 44 }}>
         {kept ? t('waste_value', { mid: fmtNum(Math.max(0, kept.mid)) }) : t('not_estimated')}
       </T>
-      {kept ? <T size={SIZE.small}>{rangeText(kept)}</T> : null}
+      {kept && Math.round(kept.low) !== Math.round(kept.high) ? <T size={SIZE.small}>{rangeText(kept)}</T> : null}
       <T style={{ marginTop: 4 }}>{t('kept_note')}</T>
       {kept && kept.mid > 0 && total > 0 ? (
         <View style={{ gap: 8, marginTop: 12 }}>
@@ -107,7 +107,10 @@ export function ImpactRows({ impact, lines }: { impact: Impact; lines: 'plan' | 
   return (
     <>
       <Surface>
-        {sets[lines].filter((k) => k !== 'water' || impact.water_l == null || impact.water_l > 0).map((k, i) => {
+        {sets[lines]
+          .filter((k) => k !== 'water' || impact.water_l == null || impact.water_l > 0)
+          .filter((k) => k !== 'biogas' || impact.biogas_energy == null || impact.biogas_energy > 0)
+          .map((k, i) => {
           const r = R[k]!;
           const isNull = r.value === t('not_estimated');
           return (

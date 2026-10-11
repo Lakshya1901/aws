@@ -62,9 +62,11 @@ export function Lifetime({ totals }: { totals: LedgerTotals }) {
           <T bold size={SIZE.number} color={C.primary}>
             {t('kg_value', { v: fmtNum(Math.max(0, Math.round(k.mid))) })}
           </T>
-          <T size={SIZE.label} color={C.onTonal}>
-            {rangeKg}
-          </T>
+          {Math.round(k.low) !== Math.round(k.high) ? (
+            <T size={SIZE.label} color={C.onTonal}>
+              {rangeKg}
+            </T>
+          ) : null}
         </Surface>
         <Surface style={{ flex: 1, padding: 16, gap: 4, backgroundColor: C.tonal }}>
           <T size={SIZE.small} color={C.onTonal}>
