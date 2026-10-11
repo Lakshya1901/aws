@@ -10043,5 +10043,65 @@
   "drive_hours": 2.1879177864374997,
   "source": "amazon_location:annasetu-routes",
   "fetched_at": "2026-10-10T08:19:24.392544+00:00"
+ },
+ "13.137,78.134|chennai_chetpet_biocng": {
+  "distance_km": 265.5650566728448,
+  "drive_hours": 5.51596255872389,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-11T05:00:22.606497+00:00"
+ },
+ "13.137,78.134|abc_fruits": {
+  "distance_km": 84.7017029864542,
+  "drive_hours": 2.0791714295152772,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-11T05:00:24.014262+00:00"
+ },
+ "13.137,78.134|osm-compost-n13955481745": {
+  "distance_km": 253.6340216826063,
+  "drive_hours": 5.13160094320139,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-11T05:00:25.539916+00:00"
+ },
+ "13.137,78.134|osm-compost-w287327441": {
+  "distance_km": 73.6636459473244,
+  "drive_hours": 1.880325860118888,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-11T05:00:26.902579+00:00"
+ },
+ "13.137,78.134|osm-compost-w497319706": {
+  "distance_km": 352.96454472426325,
+  "drive_hours": 6.873146615171666,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-11T05:00:28.609836+00:00"
+ },
+ "13.137,78.134|osm-compost-w1354135994": {
+  "distance_km": 68.18490977462751,
+  "drive_hours": 1.6335121489436106,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-11T05:00:29.967853+00:00"
+ },
+ "28.721,77.165|gwalior_adarsh_gaushala": {
+  "distance_km": 347.5031807933698,
+  "drive_hours": 7.364632908929999,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-11T05:00:31.562195+00:00"
+ },
+ "28.721,77.165|agra_transport_nagar_compost": {
+  "distance_km": 220.0121861395213,
+  "drive_hours": 4.3332639073825,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-11T05:00:33.069207+00:00"
+ },
+ "28.721,77.165|agra_raj_nagar_compost": {
+  "distance_km": 223.83893254516556,
+  "drive_hours": 4.50927756671889,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-11T05:00:34.543664+00:00"
+ },
+ "28.721,77.165|shimlared": {
+  "distance_km": 326.5277530661324,
+  "drive_hours": 7.6008080656336094,
+  "source": "amazon_location:annasetu-routes",
+  "fetched_at": "2026-10-11T05:00:36.118536+00:00"
  }
 }

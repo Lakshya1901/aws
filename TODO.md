@@ -122,10 +122,10 @@ in TODO.md as they are done and commit TODO.md with the work.
   - Oct 9: no Section 3.3 claims in app, config, backend or README; `glut_in_days` renders only in `predictive` mode. Number tracing waits on 2.2 figures and phone screens.
 
 ### 6. Stat report generation
-- [ ] 6.1 One report of the final numbers for both replay days from the live or local API: per load and 10-load plan, waste avoided (range), redirected, extra km, diesel, CO2, net value default vs advised. Save as `analysis/out/demo_report.json` (+ a readable `.md`).
+- [x] 6.1 (Oct 11: replaced by a 92-day replay of March-May 2026, Kolar and Delhi, docs/stat-report-2026.html; replay-day figures stay in CLAUDE.md D18 and D37) One report of the final numbers for both replay days from the live or local API: per load and 10-load plan, waste avoided (range), redirected, extra km, diesel, CO2, net value default vs advised. Save as `analysis/out/demo_report.json` (+ a readable `.md`).
 
 ### 7. Result verification and classification
-- [ ] 7.1 Label every figure in the report as observed (CEDA prices and arrivals, NASA POWER weather, Amazon Location routes), model output (R, net value, spoilage, waste avoided) or assumption (Section 10 placeholders).
+- [x] 7.1 (Oct 11: classification table in docs/stat-report-2026.html) Label every figure in the report as observed (CEDA prices and arrivals, NASA POWER weather, Amazon Location routes), model output (R, net value, spoilage, waste avoided) or assumption (Section 10 placeholders).
 - [ ] 7.2 Two numbers judges may question; keep them labelled:
   - Waste avoided on 2025-03-19 is driven mostly by the placeholder 40% dump share (D12). Always "(estimate)".
   - Price sensitivity: every market uses the spec's fallback b = -0.5 because price barely tracks arrivals in this data (D15). Stated in the README.

@@ -1,0 +1,320 @@
+<title>AnnaSetu 2026 Replay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700&family=Spectral:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; KPI row, then one chart per question, then the ledger of what is real. */
+:root {
+  --bg: #FAF6EE; --surface: #FFFFFF; --sunk: #F2ECE0; --line: #E6DFD1;
+  --fg: #24352A; --muted: #5D6A60; --faint: #8D9A90; --accent: #215C3B; --tonal: #CFE3D4; --on-tonal: #12351F;
+  --kolar: #2F855A; --delhi: #2B6CB0;
+  --p-glut: #B94337; --p-watch: #E9A23B; --p-fall: #F3CB8A; --p-cost: #7A4E0E; --p-normal: #CFE3D4; --p-none: #F1EBDF;
+  --pos: #2F855A; --neg: #9A6B4F; --hatch: #C9BFAE;
+  --display: "Spectral", Georgia, "Times New Roman", serif;
+  --body: "Libre Franklin", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #161A17; --surface: #1E2420; --sunk: #232A25; --line: #333C36;
+  --fg: #E8ECE6; --muted: #A9B5AC; --faint: #76837A; --accent: #8CCBA3; --tonal: #2E4A38; --on-tonal: #D6EEDD;
+  --kolar: #3A9A68; --delhi: #4683CE;
+  --p-glut: #D0605A; --p-watch: #D9952F; --p-fall: #9C7A43; --p-cost: #C8873A; --p-normal: #36513F; --p-none: #262D28;
+  --pos: #3A9A68; --neg: #B08466; --hatch: #4A544D; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #161A17; --surface: #1E2420; --sunk: #232A25; --line: #333C36;
+  --fg: #E8ECE6; --muted: #A9B5AC; --faint: #76837A; --accent: #8CCBA3; --tonal: #2E4A38; --on-tonal: #D6EEDD;
+  --kolar: #3A9A68; --delhi: #4683CE;
+  --p-glut: #D0605A; --p-watch: #D9952F; --p-fall: #9C7A43; --p-cost: #C8873A; --p-normal: #36513F; --p-none: #262D28;
+  --pos: #3A9A68; --neg: #B08466; --hatch: #4A544D; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 400 15px/1.55 var(--body); }
+.wrap { max-width: 920px; margin: 0 auto; padding-inline: 20px; padding-block: 32px 64px; display: grid; gap: 40px; }
+h1, h2 { font-family: var(--display); font-weight: 600; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.1; }
+h2 { font-size: 22px; line-height: 1.25; }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lede { color: var(--muted); font-size: 16px; }
+header { display: grid; gap: 12px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: 500 12px/1 var(--mono); padding: 6px 10px; border-radius: 999px; background: var(--sunk); color: var(--muted); }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 4px; align-content: start; }
+.kpi.lead { background: var(--tonal); border-color: transparent; color: var(--on-tonal); }
+.kpi .k { font-size: 13px; color: inherit; opacity: 0.85; }
+.kpi .v { font: 600 30px/1.1 var(--display); font-variant-numeric: tabular-nums; }
+.kpi .s { font-size: 12.5px; opacity: 0.8; }
+section { display: grid; gap: 14px; }
+.fig { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 10px; min-width: 0; }
+.fig svg { width: 100%; height: auto; display: block; overflow: visible; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.note { font-size: 13px; color: var(--muted); }
+.axis text, .lbl { font: 400 11px var(--mono); fill: var(--muted); }
+.grid line { stroke: var(--line); stroke-width: 1; }
+.dlbl { font: 500 12px var(--body); fill: var(--fg); }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 11px/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+td.n { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.scroll { overflow-x: auto; }
+.tag { font: 500 11px/1 var(--mono); padding: 4px 8px; border-radius: 6px; white-space: nowrap; }
+.t-obs { background: var(--tonal); color: var(--on-tonal); }
+.t-mod { background: var(--sunk); color: var(--fg); border: 1px solid var(--line); }
+.t-asm { background: transparent; color: var(--muted); border: 1px dashed var(--faint); }
+ul.checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+ul.checks li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; align-items: start; }
+ul.checks b { font-weight: 600; }
+.ok { color: var(--accent); font-weight: 700; }
+.warn { color: var(--p-cost); font-weight: 700; }
+#tip { position: fixed; pointer-events: none; background: var(--fg); color: var(--bg); font: 500 12px/1.4 var(--body); padding: 8px 10px; border-radius: 8px; max-width: 240px; z-index: 5; }
+footer { font-size: 12.5px; color: var(--muted); display: grid; gap: 6px; }
+@media (prefers-reduced-motion: no-preference) { .fig { transition: border-color .2s; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">AnnaSetu · stat report · engine replay</div>
+    <h1>Three months of 2026, routed by the deployed engine</h1>
+    <p class="lede">Every day from 1 March to 31 May 2026, the same simulated loads went through AnnaSetu's own advisor code on that day's real mandi data: ten tomato loads from a Kolar FPO, five 5-tonne loads from Azadpur, Delhi, and one unsold tomato lot at Azadpur.</p>
+    <div class="meta">
+      <span class="chip">92 days</span><span class="chip">1,380 farm loads · 3,772 t</span><span class="chip">92 unsold lots · 184 t</span><span class="chip">0 failed requests</span>
+    </div>
+  </header>
+
+  <div class="kpis" id="kpis"></div>
+
+  <section>
+    <div class="eyebrow">Result</div>
+    <h2>Money AnnaSetu added, day by day</h2>
+    <p class="note">Cumulative money saved (Rs lakh), mid estimate: expected earnings at the advised market minus the nearest mandi, after freight, fees and spoilage (Section 9).</p>
+    <div class="fig">
+      <div class="legend"><span><i class="sw" style="background:var(--kolar)"></i>Kolar tomato FPO</span><span><i class="sw" style="background:var(--delhi)"></i>Delhi (Azadpur)</span></div>
+      <svg id="cum" viewBox="0 0 860 300" role="img" aria-label="Cumulative money saved by region"></svg>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Problem classification</div>
+    <h2>What was wrong at the nearest mandi</h2>
+    <p class="note">Each load-day is classed by the nearest mandi's state that day (Section 9 Step 1 rules; below cost per D12). Delhi's arrival gluts were all banana at Azadpur; Kolar had no arrival glut this spring, only price falls.</p>
+    <div class="fig">
+      <div class="legend" id="plegend"></div>
+      <svg id="prob" viewBox="0 0 860 150" role="img" aria-label="Share of load-days by problem class, per region"></svg>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Verification</div>
+    <h2>Did the advised market really pay more?</h2>
+    <p class="note">Out-of-sample check on every load sent away from the nearest mandi: the advised and the nearest market's next real price report (within 7 days after the decision), minus freight. Above the zero line, the advice held. The diagonal is a perfect prediction.</p>
+    <div class="two">
+      <div class="fig">
+        <div class="legend"><span><i class="sw" style="background:var(--kolar);border-radius:50%"></i>Kolar</span><span><i class="sw" style="background:var(--delhi);border-radius:50%"></i>Delhi</span></div>
+        <svg id="ver" viewBox="0 0 420 360" role="img" aria-label="Predicted vs realised price gap per diverted load"></svg>
+      </div>
+      <div class="fig" style="align-content:start">
+        <table id="vtab"></table>
+        <p class="note">Predictions were conservative: the realised median gap beat the predicted one in both regions. Delhi cauliflower is the weak spot and is flagged below.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Result · waste</div>
+    <h2>Waste avoided comes from glut days, not every day</h2>
+    <p class="note">Waste avoided per crop over the 92 days (kg, mid; whiskers show the low to high estimate). On normal days a longer trip adds spoilage, so the net can be negative even when the price is better. The app never shows a load's negative figure (D35); this report does.</p>
+    <div class="fig">
+      <div class="legend"><span><i class="sw" style="background:var(--pos)"></i>less waste than the nearest mandi</span><span><i class="sw" style="background:var(--neg)"></i>more trip spoilage than saved</span></div>
+      <svg id="waste" viewBox="0 0 860 280" role="img" aria-label="Waste avoided by crop"></svg>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Result · rescue</div>
+    <h2>Unsold stock at Azadpur found a buyer every day</h2>
+    <p class="note">One 2-tonne tomato lot a day, harvested the day before. The engine proposed the spoiled share from that day's temperature and sent the edible part to the best-paying mandi within 100 km (D36).</p>
+    <div class="fig"><svg id="resc" viewBox="0 0 860 220" role="img" aria-label="Where unsold lots went"></svg><p class="note" id="rnote"></p></div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Classification of every figure</div>
+    <h2>What is observed, modelled or assumed</h2>
+    <div class="fig scroll">
+      <table>
+        <thead><tr><th>Figure</th><th>Status</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>Mandi prices and arrivals, 2021 to May 2026</td><td><span class="tag t-obs">Observed</span></td><td>AGMARKNET market-level files, India Data Portal (D24)</td></tr>
+          <tr><td>Realised prices used for verification</td><td><span class="tag t-obs">Observed</span></td><td>Same files, reports after each decision day</td></tr>
+          <tr><td>Hourly temperature at Kolar and Azadpur</td><td><span class="tag t-obs">Observed</span></td><td>NASA POWER (MERRA-2), D16</td></tr>
+          <tr><td>Road distance and drive time</td><td><span class="tag t-obs">Observed</span></td><td>Amazon Location Service routes, cached</td></tr>
+          <tr><td>Glut ratio R, risk level, problem class</td><td><span class="tag t-mod">Model</span></td><td>Section 9 Step 1 on observed arrivals and prices</td></tr>
+          <tr><td>Net value per kg, money saved</td><td><span class="tag t-mod">Model</span></td><td>Section 9 Steps 2-4, 6</td></tr>
+          <tr><td>Spoilage on the trip, edible/spoiled split</td><td><span class="tag t-mod">Model</span></td><td>Step 3: shelf life, Q10, temperature, hours</td></tr>
+          <tr><td>Waste avoided, kept out of landfill</td><td><span class="tag t-mod">Model</span></td><td>Step 6, ranges</td></tr>
+          <tr><td>Freight Rs 11/tonne-km, commission, hamali, fees</td><td><span class="tag t-asm">Assumption</span></td><td>Desk research, placeholders until FPO interviews (Section 10)</td></tr>
+          <tr><td>Dump share u(R), price-below-cost dump</td><td><span class="tag t-asm">Assumption</span></td><td>Placeholder table (Section 9, D12)</td></tr>
+          <tr><td>The loads and the unsold lots</td><td><span class="tag t-asm">Simulated</span></td><td>Fixed daily set chosen for this replay</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Verification of the build</div>
+    <h2>Checks behind these numbers</h2>
+    <div class="fig">
+      <ul class="checks">
+        <li><span class="ok">✓</span><span><b>Same code as production.</b> The replay calls the advisor's own /plan and /recommend functions; only the date and the data source change.</span></li>
+        <li><span class="ok">✓</span><span><b>0 failed requests</b> in 1,472 (1,380 loads in 184 plans, 92 unsold lots).</span></li>
+        <li><span class="ok">✓</span><span><b>Deterministic.</b> Re-running 10-11 April gave identical output for all 30 loads.</span></li>
+        <li><span class="ok">✓</span><span><b>120 backend tests pass</b>, including the Section 17.3 cases (normal week, glut day, ten-load split, rescue, recover order).</span></li>
+        <li><span class="ok">✓</span><span><b>Out of sample:</b> <span id="hitline"></span></span></li>
+        <li><span class="warn">!</span><span><b>Delhi cauliflower:</b> the advice held on only 14 of 35 checkable loads (median realised gap Rs -0.49/kg). Cauliflower prices at the advised markets moved more than their history suggested.</span></li>
+        <li><span class="warn">!</span><span><b>Kolar sent every load away</b> because Bengaluru paid Rs 7-9/kg more after freight all spring; the price edge was real (903 of 903 held), but more trucks to one city would test the anti-herding cap, which Live mode cannot check without arrivals (D34).</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <p>All money and waste figures are estimates (D32). Loads and lots are simulated; prices, arrivals, weather and routes are real. Reproduce: <code>python analysis/simulate_2026.py</code> then <code>python analysis/sim_summary.py</code>; outputs in <code>analysis/out/sim_2026*.json</code>.</p>
+  </footer>
+</div>
+<div id="tip" hidden></div>
+
+<script>
+const D = {"cum":[["2026-03-01",1.24,1.57],["2026-03-02",2.48,2.49],["2026-03-03",3.33,3.25],["2026-03-04",4.27,3.95],["2026-03-05",5.27,5.01],["2026-03-06",6.17,5.51],["2026-03-07",7.12,5.97],["2026-03-08",8.08,6.54],["2026-03-09",9.15,6.77],["2026-03-10",10.41,7.01],["2026-03-11",11.71,7.7],["2026-03-12",12.99,8.6],["2026-03-13",14.19,9.52],["2026-03-14",15.39,10.46],["2026-03-15",16.4,11.29],["2026-03-16",17.35,12.44],["2026-03-17",18.34,13.47],["2026-03-18",19.63,14.49],["2026-03-19",20.93,14.8],["2026-03-20",22.23,15.12],["2026-03-21",23.29,15.48],["2026-03-22",24.72,15.8],["2026-03-23",25.72,16.16],["2026-03-24",26.8,16.16],["2026-03-25",27.93,16.16],["2026-03-26",28.87,16.16],["2026-03-27",29.81,16.16],["2026-03-28",30.75,16.16],["2026-03-29",32.25,16.16],["2026-03-30",33.28,17.69],["2026-03-31",34.23,19.21],["2026-04-01",34.82,21.16],["2026-04-02",35.58,22.72],["2026-04-03",36.36,22.72],["2026-04-04",37.12,22.72],["2026-04-05",38.28,22.72],["2026-04-06",38.93,22.72],["2026-04-07",39.88,24.3],["2026-04-08",40.81,25.96],["2026-04-09",41.66,27.71],["2026-04-10",42.55,28.84],["2026-04-11",43.31,29.92],["2026-04-12",44.51,31.99],["2026-04-13",45.91,33.35],["2026-04-14",48.14,34.58],["2026-04-15",49.31,35.88],["2026-04-16",50.65,37.01],["2026-04-17",51.76,38.06],["2026-04-18",53.47,39.07],["2026-04-19",55.17,40.12],["2026-04-20",57.01,41.21],["2026-04-21",58.88,42.11],["2026-04-22",60.68,43.04],["2026-04-23",63.45,44.05],["2026-04-24",65.34,44.96],["2026-04-25",67.17,45.94],["2026-04-26",69.52,46.83],["2026-04-27",71.99,47.75],["2026-04-28",73.77,48.49],["2026-04-29",75.7,49.2],["2026-04-30",76.96,49.73],["2026-05-01",78.23,50.27],["2026-05-02",80.04,50.81],["2026-05-03",81.68,51.89],["2026-05-04",83.09,52.95],["2026-05-05",84.64,54.13],["2026-05-06",86.53,55.35],["2026-05-07",88.09,56.74],["2026-05-08",90.27,57.95],["2026-05-09",92.63,59.18],["2026-05-10",95.15,60.35],["2026-05-11",97.69,61.28],["2026-05-12",100.32,62.26],["2026-05-13",102.64,63.31],["2026-05-14",104.46,64.27],["2026-05-15",106.01,65.2],["2026-05-16",107.97,66.01],["2026-05-17",110.73,66.78],["2026-05-18",112.85,67.74],["2026-05-19",114.78,68.79],["2026-05-20",116.79,69.8],["2026-05-21",118.49,70.88],["2026-05-22",120.22,71.85],["2026-05-23",121.9,73.28],["2026-05-24",123.34,74.45],["2026-05-25",124.72,76.22],["2026-05-26",126.36,78.1],["2026-05-27",128.53,79.57],["2026-05-28",130.2,81.0],["2026-05-29",130.91,82.68],["2026-05-30",132.7,84.29],["2026-05-31",134.58,85.86]],"problems":{"Delhi":{"arrival_glut":39,"arrival_watch":73,"below_cost":0,"no_data":82,"normal":256,"price_fall":10},"Kolar":{"arrival_glut":0,"arrival_watch":0,"below_cost":10,"no_data":0,"normal":820,"price_fall":90}},"ver":[[10.08,5.01,"Delhi"],[7.22,7.84,"Delhi"],[2.27,-3.49,"Delhi"],[4.78,4.84,"Delhi"],[9.23,9.64,"Delhi"],[10.4,7.27,"Kolar"],[8.09,5.59,"Kolar"],[7.72,5.59,"Kolar"],[7.44,5.59,"Kolar"],[7.17,5.59,"Kolar"],[6.99,5.59,"Kolar"],[6.81,5.59,"Kolar"],[6.67,5.59,"Kolar"],[6.56,5.59,"Kolar"],[6.47,5.59,"Kolar"],[5.4,5.94,"Delhi"],[1.84,2.04,"Delhi"],[2.27,-3.49,"Delhi"],[1.77,2.94,"Delhi"],[8.77,5.84,"Delhi"],[6.67,4.54,"Kolar"],[6.52,6.6,"Kolar"],[6.49,6.57,"Kolar"],[6.49,6.57,"Kolar"],[5.9,4.82,"Kolar"],[5.78,4.82,"Kolar"],[5.66,4.82,"Kolar"],[5.56,4.82,"Kolar"],[5.49,4.82,"Kolar"],[5.43,4.82,"Kolar"],[5.4,5.94,"Delhi"],[1.84,2.04,"Delhi"],[2.27,-3.49,"Delhi"],[1.57,1.75,"Delhi"],[5.7,4.83,"Delhi"],[5.88,7.6,"Kolar"],[5.85,6.57,"Kolar"],[5.85,6.57,"Kolar"],[5.33,6.89,"Kolar"],[5.11,6.89,"Kolar"],[4.94,6.89,"Kolar"],[4.81,4.91,"Kolar"],[4.79,6.89,"Kolar"],[4.69,6.89,"Kolar"],[4.61,6.89,"Kolar"],[5.39,5.94,"Delhi"],[2.27,4.51,"Delhi"],[1.57,1.75,"Delhi"],[5.69,4.83,"Delhi"],[6.8,3.1,"Kolar"],[6.26,7.89,"Kolar"],[5.89,7.89,"Kolar"],[5.86,3.07,"Kolar"],[5.86,3.07,"Kolar"],[5.62,7.89,"Kolar"],[5.43,7.89,"Kolar"],[5.29,7.89,"Kolar"],[5.17,7.89,"Kolar"],[5.08,7.89,"Kolar"],[10.04,10.51,"Delhi"],[4.1,3.51,"Delhi"],[0.42,2.51,"Delhi"],[1.57,1.75,"Delhi"],[6.72,4.94,"Delhi"],[7.17,7.19,"Kolar"],[6.74,7.19,"Kolar"],[6.41,7.19,"Kolar"],[6.16,7.19,"Kolar"],[5.93,7.19,"Kolar"],[5.77,7.19,"Kolar"],[5.61,7.19,"Kolar"],[5.49,7.19,"Kolar"],[5.39,7.19,"Kolar"],[5.32,7.19,"Kolar"],[3.18,4.51,"Delhi"],[2.26,2.51,"Delhi"],[1.57,1.31,"Delhi"],[4.43,2.94,"Delhi"],[6.52,7.59,"Kolar"],[6.09,7.59,"Kolar"],[5.77,7.59,"Kolar"],[5.53,7.59,"Kolar"],[5.3,7.59,"Kolar"],[5.14,7.59,"Kolar"],[4.98,7.59,"Kolar"],[4.86,7.59,"Kolar"],[4.78,4.57,"Kolar"],[4.77,7.59,"Kolar"],[4.1,2.51,"Delhi"],[2.25,-0.49,"Delhi"],[1.57,1.31,"Delhi"],[2.6,-0.56,"Delhi"],[6.88,8.59,"Kolar"],[6.44,8.59,"Kolar"],[6.1,8.59,"Kolar"],[5.85,8.59,"Kolar"],[5.62,8.59,"Kolar"],[5.45,8.59,"Kolar"],[5.29,8.59,"Kolar"],[5.16,8.59,"Kolar"],[5.06,8.59,"Kolar"],[4.98,8.59,"Kolar"],[6.27,7.34,"Delhi"],[2.25,-0.49,"Delhi"],[3.56,3.9,"Delhi"],[6.88,8.59,"Kolar"],[6.44,8.59,"Kolar"],[6.11,8.59,"Kolar"],[5.86,8.59,"Kolar"],[5.62,8.59,"Kolar"],[5.45,8.59,"Kolar"],[5.29,8.59,"Kolar"],[5.17,8.59,"Kolar"],[5.06,8.59,"Kolar"],[4.98,8.59,"Kolar"],[4.91,5.44,"Delhi"],[6.73,6.84,"Delhi"],[2.25,-1.49,"Delhi"],[3.62,2.4,"Delhi"],[3.15,0.98,"Delhi"],[7.82,8.59,"Kolar"],[7.28,8.59,"Kolar"],[6.88,8.59,"Kolar"],[6.58,8.59,"Kolar"],[6.3,8.59,"Kolar"],[6.1,8.59,"Kolar"],[5.91,8.59,"Kolar"],[5.76,8.59,"Kolar"],[5.65,8.59,"Kolar"],[5.55,8.59,"Kolar"],[4.9,5.44,"Delhi"],[6.27,8.84,"Delhi"],[-2.92,-1.16,"Delhi"],[2.22,5.4,"Delhi"],[0.81,-2.02,"Delhi"],[9.25,10.3,"Kolar"],[9.22,10.27,"Kolar"],[7.83,8.59,"Kolar"],[7.47,8.59,"Kolar"],[7.13,8.59,"Kolar"],[6.97,10.27,"Kolar"],[6.89,8.59,"Kolar"],[6.71,8.59,"Kolar"],[6.56,8.59,"Kolar"],[6.45,8.59,"Kolar"],[4.9,5.44,"Delhi"],[6.27,8.84,"Delhi"],[2.22,5.4,"Delhi"],[0.71,-0.48,"Delhi"],[9.24,10.9,"Kolar"],[9.21,10.87,"Kolar"],[9.21,10.87,"Kolar"],[7.82,7.19,"Kolar"],[7.48,7.19,"Kolar"],[7.32,10.87,"Kolar"],[7.24,7.19,"Kolar"],[7.06,7.19,"Kolar"],[6.92,7.19,"Kolar"],[6.8,7.19,"Kolar"],[4.9,5.44,"Delhi"],[8.1,10.84,"Delhi"],[5.01,3.9,"Delhi"],[9.78,10.3,"Kolar"],[9.75,10.27,"Kolar"],[9.75,10.27,"Kolar"],[7.89,10.27,"Kolar"],[6.56,10.27,"Kolar"],[6.52,6.59,"Kolar"],[6.31,6.59,"Kolar"],[6.14,6.59,"Kolar"],[6.1,6.32,"Kolar"],[6.01,6.59,"Kolar"],[4.92,5.44,"Delhi"],[9.96,7.84,"Delhi"],[3.62,4.4,"Delhi"],[9.23,10.3,"Kolar"],[9.2,10.27,"Kolar"],[9.2,10.27,"Kolar"],[7.31,10.27,"Kolar"],[5.97,10.27,"Kolar"],[5.97,6.59,"Kolar"],[5.75,6.59,"Kolar"],[5.74,6.5,"Kolar"],[5.58,6.59,"Kolar"],[5.55,6.5,"Kolar"],[4.91,5.44,"Delhi"],[7.2,6.84,"Delhi"],[0.76,-0.16,"Delhi"],[4.08,3.9,"Delhi"],[1.86,2.16,"Delhi"],[9.24,5.3,"Kolar"],[9.2,10.27,"Kolar"],[9.2,5.27,"Kolar"],[7.32,5.27,"Kolar"],[5.98,5.27,"Kolar"],[5.97,6.59,"Kolar"],[5.91,7.11,"Kolar"],[5.75,6.59,"Kolar"],[5.69,7.11,"Kolar"],[5.61,6.59,"Kolar"],[4.92,5.44,"Delhi"],[6.28,11.84,"Delhi"],[3.62,4.4,"Delhi"],[1.86,2.16,"Delhi"],[9.2,5.27,"Kolar"],[6.47,7.4,"Kolar"],[5.97,6.59,"Kolar"],[5.94,7.4,"Kolar"],[5.68,6.59,"Kolar"],[5.55,7.4,"Kolar"],[5.47,6.59,"Kolar"],[5.31,6.59,"Kolar"],[5.28,7.4,"Kolar"],[5.19,6.59,"Kolar"],[4.75,5.28,"Delhi"],[10.88,6.84,"Delhi"],[1.68,1.84,"Delhi"],[4.08,4.4,"Delhi"],[1.86,4.48,"Delhi"],[6.73,2.43,"Kolar"],[6.1,2.43,"Kolar"],[5.96,5.19,"Kolar"],[5.82,5.19,"Kolar"],[5.68,5.19,"Kolar"],[5.64,2.43,"Kolar"],[5.57,5.19,"Kolar"],[5.5,5.19,"Kolar"],[5.43,5.19,"Kolar"],[5.43,4.12,"Kolar"],[4.76,5.28,"Delhi"],[10.89,6.84,"Delhi"],[1.68,1.84,"Delhi"],[4.08,4.4,"Delhi"],[4.0,6.0,"Delhi"],[7.93,10.9,"Kolar"],[7.9,10.87,"Kolar"],[7.9,10.87,"Kolar"],[6.23,10.87,"Kolar"],[5.0,10.87,"Kolar"],[4.67,7.19,"Kolar"],[4.44,7.19,"Kolar"],[4.27,7.19,"Kolar"],[4.26,10.87,"Kolar"],[4.13,7.19,"Kolar"],[4.74,5.28,"Delhi"],[10.88,6.84,"Delhi"],[1.68,1.84,"Delhi"],[4.08,4.4,"Delhi"],[3.98,6.0,"Delhi"],[9.79,10.9,"Kolar"],[9.75,10.87,"Kolar"],[9.75,10.87,"Kolar"],[8.07,10.87,"Kolar"],[6.83,10.87,"Kolar"],[6.52,7.19,"Kolar"],[6.31,7.19,"Kolar"],[6.15,7.19,"Kolar"],[6.09,10.87,"Kolar"],[6.01,7.19,"Kolar"],[4.78,5.28,"Delhi"],[6.3,6.84,"Delhi"],[1.69,-0.16,"Delhi"],[4.08,3.4,"Delhi"],[5.42,6.72,"Delhi"],[9.79,10.3,"Kolar"],[9.76,10.27,"Kolar"],[9.76,10.27,"Kolar"],[8.08,10.27,"Kolar"],[6.83,10.27,"Kolar"],[6.53,6.59,"Kolar"],[6.31,6.59,"Kolar"],[6.15,6.59,"Kolar"],[6.09,10.27,"Kolar"],[6.02,6.59,"Kolar"],[4.79,5.28,"Delhi"],[6.31,7.84,"Delhi"],[-0.16,2.84,"Delhi"],[3.15,5.65,"Delhi"],[6.72,3.8,"Delhi"],[9.24,6.3,"Kolar"],[9.2,15.27,"Kolar"],[9.2,5.27,"Kolar"],[7.75,5.52,"Kolar"],[7.58,5.52,"Kolar"],[7.46,5.52,"Kolar"],[7.34,5.52,"Kolar"],[7.32,5.27,"Kolar"],[7.25,5.52,"Kolar"],[7.19,5.52,"Kolar"],[4.95,5.44,"Delhi"],[7.22,6.84,"Delhi"],[2.61,-0.16,"Delhi"],[4.08,5.15,"Delhi"],[6.08,5.84,"Delhi"],[13.74,10.27,"Kolar"],[6.76,10.27,"Kolar"],[5.59,5.3,"Kolar"],[4.98,3.02,"Kolar"],[4.86,3.02,"Kolar"],[4.77,3.02,"Kolar"],[4.68,3.02,"Kolar"],[4.64,15.27,"Kolar"],[4.61,3.02,"Kolar"],[4.57,3.02,"Kolar"],[4.94,5.44,"Delhi"],[6.29,7.84,"Delhi"],[-0.16,1.84,"Delhi"],[3.62,5.65,"Delhi"],[6.69,2.8,"Delhi"],[13.73,10.87,"Kolar"],[10.43,10.87,"Kolar"],[9.18,5.87,"Kolar"],[8.64,10.87,"Kolar"],[7.55,10.87,"Kolar"],[6.87,10.87,"Kolar"],[6.28,10.87,"Kolar"],[5.85,10.87,"Kolar"],[5.53,10.87,"Kolar"],[5.29,10.87,"Kolar"],[4.94,5.44,"Delhi"],[7.22,9.84,"Delhi"],[2.27,-1.49,"Delhi"],[4.08,6.65,"Delhi"],[6.06,5.84,"Delhi"],[9.74,10.87,"Kolar"],[7.39,10.87,"Kolar"],[6.07,10.87,"Kolar"],[5.26,10.87,"Kolar"],[5.22,5.9,"Kolar"],[5.19,10.87,"Kolar"],[4.58,10.87,"Kolar"],[4.23,10.87,"Kolar"],[4.02,4.45,"Kolar"],[3.97,10.87,"Kolar"],[4.93,5.44,"Delhi"],[9.05,8.84,"Delhi"],[2.26,-7.49,"Delhi"],[6.17,7.15,"Delhi"],[5.24,6.8,"Delhi"],[9.73,6.57,"Kolar"],[9.73,11.57,"Kolar"],[7.31,11.57,"Kolar"],[6.01,11.57,"Kolar"],[5.22,6.6,"Kolar"],[5.02,11.57,"Kolar"],[4.42,11.57,"Kolar"],[4.23,6.57,"Kolar"],[4.01,5.6,"Kolar"],[4.01,11.57,"Kolar"],[4.91,5.44,"Delhi"],[9.03,8.84,"Delhi"],[2.26,-7.49,"Delhi"],[6.17,7.15,"Delhi"],[5.22,6.8,"Delhi"],[10.38,5.27,"Kolar"],[8.25,5.27,"Kolar"],[7.0,5.27,"Kolar"],[6.22,5.27,"Kolar"],[5.87,5.3,"Kolar"],[5.83,5.27,"Kolar"],[5.57,5.27,"Kolar"],[5.22,5.27,"Kolar"],[5.07,5.05,"Kolar"],[4.96,5.27,"Kolar"],[4.9,5.44,"Delhi"],[8.11,9.84,"Delhi"],[6.64,6.65,"Delhi"],[6.09,6.8,"Delhi"],[6.88,7.59,"Kolar"],[6.38,7.59,"Kolar"],[6.0,7.59,"Kolar"],[5.72,7.59,"Kolar"],[5.45,7.59,"Kolar"],[5.27,7.59,"Kolar"],[5.09,7.59,"Kolar"],[4.95,7.59,"Kolar"],[4.84,7.59,"Kolar"],[4.75,7.59,"Kolar"],[4.91,6.44,"Delhi"],[9.03,10.34,"Delhi"],[6.17,7.15,"Delhi"],[6.1,7.28,"Delhi"],[6.86,6.59,"Kolar"],[6.36,6.59,"Kolar"],[5.98,6.59,"Kolar"],[5.69,6.59,"Kolar"],[5.57,6.3,"Kolar"],[5.43,6.59,"Kolar"],[5.24,6.59,"Kolar"],[5.1,6.59,"Kolar"],[4.98,6.59,"Kolar"],[4.89,6.59,"Kolar"],[5.83,5.44,"Delhi"],[9.49,10.34,"Delhi"],[-3.85,-3.16,"Delhi"],[6.64,6.65,"Delhi"],[6.54,7.28,"Delhi"],[6.85,6.59,"Kolar"],[6.34,6.59,"Kolar"],[5.96,6.59,"Kolar"],[5.68,6.59,"Kolar"],[5.55,10.3,"Kolar"],[5.42,6.59,"Kolar"],[5.23,6.59,"Kolar"],[5.09,6.59,"Kolar"],[4.97,6.59,"Kolar"],[4.91,5.65,"Kolar"],[4.89,5.44,"Delhi"],[9.47,10.84,"Delhi"],[-3.85,-3.16,"Delhi"],[6.17,7.15,"Delhi"],[6.51,7.28,"Delhi"],[13.69,8.87,"Kolar"],[10.36,8.87,"Kolar"],[9.19,8.9,"Kolar"],[9.16,8.87,"Kolar"],[8.56,8.87,"Kolar"],[7.72,8.87,"Kolar"],[7.0,8.87,"Kolar"],[6.85,5.19,"Kolar"],[6.68,5.19,"Kolar"],[6.55,5.19,"Kolar"],[4.91,5.44,"Delhi"],[9.95,11.34,"Delhi"],[6.64,7.84,"Delhi"],[6.79,6.26,"Delhi"],[7.92,8.9,"Kolar"],[7.88,8.87,"Kolar"],[7.88,8.87,"Kolar"],[6.21,8.87,"Kolar"],[5.58,5.19,"Kolar"],[5.32,5.19,"Kolar"],[5.07,5.19,"Kolar"],[4.97,8.87,"Kolar"],[4.89,5.19,"Kolar"],[4.77,5.19,"Kolar"],[4.91,15.44,"Delhi"],[10.41,11.84,"Delhi"],[7.1,6.34,"Delhi"],[6.54,6.0,"Delhi"],[7.91,5.6,"Kolar"],[7.88,4.57,"Kolar"],[7.88,4.57,"Kolar"],[6.22,4.57,"Kolar"],[4.99,4.57,"Kolar"],[4.25,4.57,"Kolar"],[3.63,4.57,"Kolar"],[3.19,4.57,"Kolar"],[2.96,4.57,"Kolar"],[2.86,4.57,"Kolar"],[14.08,5.44,"Delhi"],[10.41,11.84,"Delhi"],[7.28,6.34,"Delhi"],[5.37,6.0,"Delhi"],[4.93,5.9,"Kolar"],[3.99,5.87,"Kolar"],[3.99,5.87,"Kolar"],[3.4,5.12,"Kolar"],[3.32,5.12,"Kolar"],[3.27,5.12,"Kolar"],[3.21,5.12,"Kolar"],[3.17,5.12,"Kolar"],[3.13,5.12,"Kolar"],[3.1,5.12,"Kolar"],[11.36,12.51,"Delhi"],[10.84,11.84,"Delhi"],[5.88,6.84,"Delhi"],[5.34,6.0,"Delhi"],[5.23,6.9,"Kolar"],[5.2,5.87,"Kolar"],[5.2,5.87,"Kolar"],[4.61,5.12,"Kolar"],[4.53,5.12,"Kolar"],[4.47,5.12,"Kolar"],[4.41,5.12,"Kolar"],[4.36,5.12,"Kolar"],[4.32,5.12,"Kolar"],[4.29,5.12,"Kolar"],[4.91,7.04,"Delhi"],[10.87,7.84,"Delhi"],[-3.27,-8.49,"Delhi"],[6.35,5.34,"Delhi"],[5.37,5.76,"Delhi"],[6.13,5.9,"Kolar"],[5.18,5.87,"Kolar"],[5.18,5.87,"Kolar"],[4.6,5.12,"Kolar"],[4.52,5.12,"Kolar"],[4.47,5.12,"Kolar"],[4.41,5.12,"Kolar"],[4.37,5.12,"Kolar"],[4.33,5.12,"Kolar"],[4.3,5.12,"Kolar"],[13.24,13.51,"Delhi"],[7.2,8.84,"Delhi"],[-7.87,-3.49,"Delhi"],[4.95,5.84,"Delhi"],[2.22,4.46,"Delhi"],[5.22,10.3,"Kolar"],[5.18,10.27,"Kolar"],[5.18,10.27,"Kolar"],[4.6,5.52,"Kolar"],[4.52,5.52,"Kolar"],[4.47,5.52,"Kolar"],[4.42,5.52,"Kolar"],[4.38,5.52,"Kolar"],[4.34,5.52,"Kolar"],[4.31,5.52,"Kolar"],[13.23,13.51,"Delhi"],[8.11,7.84,"Delhi"],[-7.87,-3.49,"Delhi"],[5.42,1.84,"Delhi"],[3.04,3.16,"Delhi"],[9.18,4.6,"Kolar"],[9.14,4.57,"Kolar"],[9.14,4.57,"Kolar"],[7.49,4.57,"Kolar"],[6.27,4.57,"Kolar"],[5.53,4.57,"Kolar"],[4.94,3.82,"Kolar"],[4.91,4.57,"Kolar"],[4.89,3.82,"Kolar"],[4.86,3.82,"Kolar"],[12.31,12.51,"Delhi"],[7.19,12.34,"Delhi"],[-3.27,-6.49,"Delhi"],[1.7,1.84,"Delhi"],[2.8,3.46,"Delhi"],[5.26,6.89,"Kolar"],[4.83,6.89,"Kolar"],[4.5,6.89,"Kolar"],[4.26,6.89,"Kolar"],[4.03,6.89,"Kolar"],[3.98,4.6,"Kolar"],[3.95,9.57,"Kolar"],[3.95,4.57,"Kolar"],[3.86,6.89,"Kolar"],[3.78,6.89,"Kolar"],[11.41,12.51,"Delhi"],[11.34,14.84,"Delhi"],[5.01,6.52,"Delhi"],[1.7,1.84,"Delhi"],[4.55,2.06,"Delhi"],[8.47,9.57,"Kolar"],[6.18,6.89,"Kolar"],[5.87,6.89,"Kolar"],[5.64,6.89,"Kolar"],[5.42,6.89,"Kolar"],[5.26,6.89,"Kolar"],[5.11,6.89,"Kolar"],[4.99,6.89,"Kolar"],[4.89,6.89,"Kolar"],[4.82,6.89,"Kolar"],[11.45,15.51,"Delhi"],[11.36,14.84,"Delhi"],[5.95,5.52,"Delhi"],[1.7,1.84,"Delhi"],[5.84,0.81,"Delhi"],[8.48,8.87,"Kolar"],[6.18,6.19,"Kolar"],[5.8,6.19,"Kolar"],[5.52,6.19,"Kolar"],[5.26,6.19,"Kolar"],[5.07,6.19,"Kolar"],[4.89,6.19,"Kolar"],[4.76,6.19,"Kolar"],[4.64,6.19,"Kolar"],[4.56,6.19,"Kolar"],[14.2,13.51,"Delhi"],[13.66,9.84,"Delhi"],[5.02,-8.48,"Delhi"],[1.7,0.59,"Delhi"],[3.1,3.24,"Delhi"],[7.83,8.87,"Kolar"],[5.53,4.19,"Kolar"],[5.18,4.19,"Kolar"],[4.91,4.19,"Kolar"],[4.66,4.19,"Kolar"],[4.55,6.12,"Kolar"],[4.49,6.12,"Kolar"],[4.48,4.19,"Kolar"],[4.43,6.12,"Kolar"],[4.4,6.12,"Kolar"],[12.34,12.51,"Delhi"],[9.04,12.34,"Delhi"],[0.54,0.09,"Delhi"],[2.99,1.34,"Delhi"],[7.82,6.87,"Kolar"],[5.46,4.62,"Kolar"],[5.36,4.62,"Kolar"],[5.28,4.62,"Kolar"],[5.2,4.62,"Kolar"],[5.15,4.62,"Kolar"],[5.09,4.62,"Kolar"],[5.05,4.62,"Kolar"],[5.01,4.62,"Kolar"],[4.98,4.62,"Kolar"],[11.39,15.51,"Delhi"],[9.03,12.34,"Delhi"],[0.54,0.09,"Delhi"],[2.98,1.34,"Delhi"],[6.02,9.9,"Kolar"],[5.99,9.87,"Kolar"],[5.99,7.37,"Kolar"],[4.08,8.12,"Kolar"],[3.99,8.12,"Kolar"],[3.93,8.12,"Kolar"],[3.86,8.12,"Kolar"],[3.81,8.12,"Kolar"],[3.77,8.12,"Kolar"],[3.74,8.12,"Kolar"],[11.38,15.51,"Delhi"],[11.32,12.84,"Delhi"],[5.97,0.02,"Delhi"],[14.22,0.09,"Delhi"],[8.71,9.9,"Kolar"],[8.67,9.87,"Kolar"],[7.27,10.12,"Kolar"],[7.16,10.12,"Kolar"],[7.05,10.12,"Kolar"],[6.97,10.12,"Kolar"],[6.89,10.12,"Kolar"],[6.82,10.12,"Kolar"],[6.77,10.12,"Kolar"],[6.73,10.12,"Kolar"],[14.13,12.51,"Delhi"],[11.78,11.84,"Delhi"],[1.8,2.0,"Delhi"],[2.38,2.64,"Delhi"],[9.1,15.82,"Kolar"],[8.93,15.82,"Kolar"],[8.79,15.82,"Kolar"],[8.71,12.6,"Kolar"],[8.68,15.82,"Kolar"],[8.67,12.57,"Kolar"],[8.67,10.07,"Kolar"],[8.6,15.82,"Kolar"],[8.54,15.82,"Kolar"],[8.5,15.82,"Kolar"],[11.34,14.51,"Delhi"],[10.83,6.84,"Delhi"],[2.4,4.09,"Delhi"],[2.37,2.64,"Delhi"],[14.36,6.62,"Kolar"],[14.15,6.62,"Kolar"],[13.99,6.62,"Kolar"],[13.86,6.62,"Kolar"],[13.73,6.62,"Kolar"],[13.64,6.62,"Kolar"],[13.54,6.62,"Kolar"],[13.47,6.62,"Kolar"],[13.41,6.62,"Kolar"],[13.36,6.62,"Kolar"],[13.14,13.51,"Delhi"],[10.82,6.84,"Delhi"],[2.4,4.09,"Delhi"],[2.39,-5.04,"Delhi"],[9.18,9.9,"Kolar"],[9.14,19.87,"Kolar"],[9.14,9.87,"Kolar"],[7.01,9.87,"Kolar"],[5.91,2.12,"Kolar"],[5.84,2.12,"Kolar"],[5.77,2.12,"Kolar"],[5.72,2.12,"Kolar"],[5.68,2.12,"Kolar"],[5.64,2.12,"Kolar"],[12.19,15.51,"Delhi"],[6.23,6.84,"Delhi"],[3.79,4.09,"Delhi"],[2.36,-0.64,"Delhi"],[17.72,6.87,"Kolar"],[8.71,6.9,"Kolar"],[8.68,6.87,"Kolar"],[7.85,6.87,"Kolar"],[6.53,6.87,"Kolar"],[5.3,6.87,"Kolar"],[5.0,6.87,"Kolar"],[4.29,6.87,"Kolar"],[3.79,6.87,"Kolar"],[3.71,6.87,"Kolar"],[14.0,12.51,"Delhi"],[6.23,6.84,"Delhi"],[3.79,4.09,"Delhi"],[0.83,-5.62,"Delhi"],[7.27,12.12,"Kolar"],[7.14,12.12,"Kolar"],[7.04,12.12,"Kolar"],[6.95,12.12,"Kolar"],[6.87,12.12,"Kolar"],[6.81,12.12,"Kolar"],[6.75,12.12,"Kolar"],[6.7,12.12,"Kolar"],[6.66,12.12,"Kolar"],[6.63,12.12,"Kolar"],[11.28,12.51,"Delhi"],[6.23,7.84,"Delhi"],[3.79,5.84,"Delhi"],[1.13,-5.06,"Delhi"],[10.96,11.12,"Kolar"],[10.77,11.12,"Kolar"],[10.62,11.12,"Kolar"],[10.57,14.9,"Kolar"],[10.53,9.87,"Kolar"],[10.53,12.37,"Kolar"],[10.5,11.12,"Kolar"],[10.43,11.12,"Kolar"],[10.37,11.12,"Kolar"],[10.32,11.12,"Kolar"],[4.55,10.19,"Delhi"],[7.14,4.84,"Delhi"],[4.25,4.84,"Delhi"],[1.47,4.24,"Delhi"],[13.26,14.9,"Kolar"],[10.96,14.87,"Kolar"],[10.03,11.12,"Kolar"],[9.92,11.12,"Kolar"],[9.81,11.12,"Kolar"],[9.73,11.12,"Kolar"],[9.64,11.12,"Kolar"],[9.58,11.12,"Kolar"],[9.53,11.12,"Kolar"],[9.48,11.12,"Kolar"],[9.1,5.19,"Delhi"],[4.41,4.84,"Delhi"],[4.49,4.84,"Delhi"],[3.8,5.76,"Delhi"],[13.23,13.6,"Kolar"],[13.19,13.57,"Kolar"],[13.19,13.57,"Kolar"],[10.73,13.57,"Kolar"],[10.01,12.82,"Kolar"],[9.93,12.82,"Kolar"],[9.85,12.82,"Kolar"],[9.79,12.82,"Kolar"],[9.74,12.82,"Kolar"],[9.69,12.82,"Kolar"],[4.56,5.19,"Delhi"],[4.41,6.84,"Delhi"],[4.49,3.34,"Delhi"],[5.18,2.24,"Delhi"],[12.04,13.6,"Kolar"],[12.0,13.57,"Kolar"],[12.0,13.57,"Kolar"],[11.56,11.82,"Kolar"],[11.47,11.82,"Kolar"],[11.39,11.82,"Kolar"],[11.32,11.82,"Kolar"],[11.26,11.82,"Kolar"],[11.21,11.82,"Kolar"],[11.18,11.82,"Kolar"],[4.53,10.19,"Delhi"],[4.4,6.84,"Delhi"],[4.49,3.34,"Delhi"],[5.6,2.24,"Delhi"],[12.05,11.6,"Kolar"],[12.01,11.57,"Kolar"],[12.01,11.57,"Kolar"],[10.66,18.82,"Kolar"],[10.57,18.82,"Kolar"],[10.5,18.82,"Kolar"],[10.43,18.82,"Kolar"],[10.37,18.82,"Kolar"],[10.33,18.82,"Kolar"],[10.29,18.82,"Kolar"],[9.04,5.19,"Delhi"],[6.21,4.84,"Delhi"],[3.09,1.34,"Delhi"],[1.98,-2.66,"Delhi"],[18.96,2.59,"Kolar"],[17.68,2.59,"Kolar"],[17.07,13.52,"Kolar"],[16.93,13.52,"Kolar"],[16.79,13.52,"Kolar"],[16.71,2.59,"Kolar"],[16.69,13.52,"Kolar"],[16.61,13.52,"Kolar"],[16.55,13.52,"Kolar"],[16.49,13.52,"Kolar"],[9.01,5.19,"Delhi"],[4.38,4.54,"Delhi"],[2.96,3.25,"Delhi"],[3.03,3.54,"Delhi"],[12.19,12.12,"Kolar"],[12.04,12.12,"Kolar"],[11.91,12.12,"Kolar"],[11.8,12.12,"Kolar"],[11.7,12.12,"Kolar"],[11.63,12.12,"Kolar"],[11.55,12.12,"Kolar"],[11.49,12.12,"Kolar"],[11.45,12.12,"Kolar"],[11.41,12.12,"Kolar"],[8.98,5.19,"Delhi"],[5.11,5.71,"Delhi"],[0.71,1.84,"Delhi"],[2.96,3.25,"Delhi"],[3.01,3.54,"Delhi"],[12.24,18.9,"Kolar"],[12.2,18.87,"Kolar"],[12.2,16.37,"Kolar"],[10.89,15.12,"Kolar"],[10.79,15.12,"Kolar"],[10.71,15.12,"Kolar"],[10.63,15.12,"Kolar"],[10.56,15.12,"Kolar"],[10.51,15.12,"Kolar"],[10.47,15.12,"Kolar"],[4.48,5.19,"Delhi"],[7.86,9.24,"Delhi"],[0.71,1.84,"Delhi"],[2.96,3.25,"Delhi"],[3.01,3.54,"Delhi"],[16.77,18.9,"Kolar"],[16.72,18.87,"Kolar"],[14.46,18.87,"Kolar"],[13.64,16.12,"Kolar"],[13.52,16.12,"Kolar"],[13.44,16.12,"Kolar"],[13.36,16.12,"Kolar"],[13.29,16.12,"Kolar"],[13.24,16.12,"Kolar"],[13.2,16.12,"Kolar"],[4.47,5.19,"Delhi"],[7.85,9.24,"Delhi"],[0.71,3.84,"Delhi"],[2.96,0.75,"Delhi"],[3.01,3.7,"Delhi"],[16.74,16.9,"Kolar"],[16.69,16.87,"Kolar"],[16.69,14.37,"Kolar"],[14.53,9.12,"Kolar"],[14.4,9.12,"Kolar"],[14.3,9.12,"Kolar"],[14.21,9.12,"Kolar"],[14.14,9.12,"Kolar"],[14.08,9.12,"Kolar"],[14.03,9.12,"Kolar"],[8.31,8.74,"Delhi"],[2.54,4.84,"Delhi"],[1.76,1.94,"Delhi"],[3.16,3.7,"Delhi"],[14.91,18.3,"Kolar"],[14.87,15.77,"Kolar"],[12.61,18.27,"Kolar"],[9.27,18.27,"Kolar"],[8.13,8.52,"Kolar"],[8.06,8.52,"Kolar"],[7.99,8.52,"Kolar"],[7.94,8.52,"Kolar"],[7.89,8.52,"Kolar"],[7.86,8.52,"Kolar"],[8.35,8.74,"Delhi"],[3.47,4.84,"Delhi"],[2.96,3.25,"Delhi"],[16.22,11.9,"Kolar"],[16.18,11.87,"Kolar"],[13.91,11.87,"Kolar"],[11.86,11.87,"Kolar"],[9.39,11.87,"Kolar"],[7.9,11.87,"Kolar"],[7.67,3.19,"Kolar"],[7.61,5.12,"Kolar"],[7.56,5.12,"Kolar"],[7.53,5.12,"Kolar"],[8.34,8.74,"Delhi"],[2.96,3.25,"Delhi"],[10.44,13.3,"Kolar"],[10.4,13.27,"Kolar"],[10.4,8.27,"Kolar"],[7.94,8.27,"Kolar"],[6.01,8.27,"Kolar"],[4.8,8.27,"Kolar"],[4.51,6.52,"Kolar"],[4.46,6.52,"Kolar"],[4.42,6.52,"Kolar"],[4.39,6.52,"Kolar"],[8.36,8.74,"Delhi"],[2.96,3.25,"Delhi"],[11.77,15.3,"Kolar"],[11.73,15.27,"Kolar"],[7.19,10.27,"Kolar"],[5.83,10.52,"Kolar"],[5.75,10.52,"Kolar"],[5.69,10.52,"Kolar"],[5.63,10.52,"Kolar"],[5.59,10.52,"Kolar"],[5.55,10.52,"Kolar"],[5.52,10.52,"Kolar"],[8.34,8.74,"Delhi"],[2.96,3.25,"Delhi"],[0.26,1.06,"Delhi"],[13.57,13.9,"Kolar"],[13.53,13.87,"Kolar"],[11.37,11.19,"Kolar"],[10.64,11.19,"Kolar"],[9.97,11.19,"Kolar"],[9.49,11.19,"Kolar"],[9.47,9.12,"Kolar"],[9.42,9.12,"Kolar"],[9.37,9.12,"Kolar"],[9.33,9.12,"Kolar"],[11.22,15.51,"Delhi"],[8.34,8.74,"Delhi"],[2.96,3.25,"Delhi"],[0.26,1.06,"Delhi"],[12.34,11.9,"Kolar"],[12.3,11.87,"Kolar"],[10.13,9.19,"Kolar"],[10.02,11.87,"Kolar"],[9.4,9.19,"Kolar"],[8.89,9.19,"Kolar"],[8.41,9.19,"Kolar"],[8.23,5.12,"Kolar"],[8.19,5.12,"Kolar"],[8.15,5.12,"Kolar"],[14.1,13.51,"Delhi"],[1.86,3.54,"Delhi"],[1.77,1.94,"Delhi"],[0.87,4.26,"Delhi"],[10.47,11.9,"Kolar"],[10.43,9.37,"Kolar"],[10.43,11.87,"Kolar"],[8.27,12.19,"Kolar"],[7.55,12.19,"Kolar"],[7.31,11.87,"Kolar"],[7.05,12.19,"Kolar"],[6.67,12.19,"Kolar"],[6.37,12.19,"Kolar"],[6.13,12.19,"Kolar"],[12.26,15.51,"Delhi"],[3.23,9.04,"Delhi"],[1.77,1.94,"Delhi"],[3.79,4.26,"Delhi"],[11.06,15.59,"Kolar"],[10.51,13.3,"Kolar"],[10.47,8.27,"Kolar"],[9.93,15.59,"Kolar"],[9.24,15.59,"Kolar"],[8.75,15.59,"Kolar"],[8.29,15.59,"Kolar"],[8.19,8.27,"Kolar"],[7.93,15.59,"Kolar"],[7.71,15.59,"Kolar"],[14.07,12.51,"Delhi"],[3.35,2.71,"Delhi"],[1.77,1.94,"Delhi"],[3.78,4.9,"Delhi"],[14.15,13.59,"Kolar"],[12.84,13.59,"Kolar"],[11.87,13.59,"Kolar"],[11.76,8.3,"Kolar"],[11.15,13.59,"Kolar"],[10.65,13.59,"Kolar"],[10.17,13.59,"Kolar"],[9.8,13.59,"Kolar"],[9.51,13.59,"Kolar"],[9.28,13.59,"Kolar"],[11.32,12.51,"Delhi"],[8.26,3.54,"Delhi"],[1.76,2.14,"Delhi"],[4.35,4.9,"Delhi"],[12.32,16.59,"Kolar"],[11.08,16.59,"Kolar"],[10.15,16.59,"Kolar"],[9.46,16.59,"Kolar"],[8.83,16.59,"Kolar"],[8.38,16.59,"Kolar"],[7.95,16.59,"Kolar"],[7.62,16.59,"Kolar"],[7.36,16.59,"Kolar"],[7.22,15.3,"Kolar"],[11.33,10.51,"Delhi"],[3.23,5.04,"Delhi"],[3.28,2.04,"Delhi"],[4.36,4.42,"Delhi"],[15.1,18.89,"Kolar"],[13.94,18.89,"Kolar"],[13.62,16.6,"Kolar"],[13.58,16.57,"Kolar"],[13.58,16.57,"Kolar"],[13.07,18.89,"Kolar"],[12.58,18.89,"Kolar"],[12.21,18.89,"Kolar"],[11.91,18.89,"Kolar"],[11.67,18.89,"Kolar"],[11.3,10.51,"Delhi"],[4.59,3.54,"Delhi"],[2.42,0.65,"Delhi"],[4.35,4.42,"Delhi"],[16.31,20.89,"Kolar"],[15.15,20.89,"Kolar"],[14.84,13.6,"Kolar"],[14.8,13.57,"Kolar"],[14.8,11.07,"Kolar"],[14.28,20.89,"Kolar"],[13.79,20.89,"Kolar"],[13.42,20.89,"Kolar"],[13.12,20.89,"Kolar"],[12.89,20.89,"Kolar"],[11.28,10.51,"Delhi"],[3.22,3.04,"Delhi"],[2.42,0.65,"Delhi"],[4.34,-2.58,"Delhi"],[18.14,18.89,"Kolar"],[16.98,18.89,"Kolar"],[16.11,18.89,"Kolar"],[15.47,18.89,"Kolar"],[14.86,18.89,"Kolar"],[14.44,18.89,"Kolar"],[14.03,18.89,"Kolar"],[13.71,18.89,"Kolar"],[13.46,18.89,"Kolar"],[13.26,18.89,"Kolar"],[9.43,12.51,"Delhi"],[5.17,2.24,"Delhi"],[-11.99,-12.99,"Delhi"],[2.35,2.04,"Delhi"],[17.2,20.59,"Kolar"],[16.6,20.59,"Kolar"],[16.13,20.59,"Kolar"],[15.77,20.59,"Kolar"],[15.42,20.59,"Kolar"],[15.17,20.59,"Kolar"],[14.92,20.59,"Kolar"],[14.73,20.59,"Kolar"],[14.57,20.59,"Kolar"],[14.45,20.59,"Kolar"],[11.22,12.51,"Delhi"],[5.16,2.24,"Delhi"],[2.41,3.65,"Delhi"],[18.75,18.59,"Kolar"],[17.62,18.59,"Kolar"],[16.77,18.59,"Kolar"],[16.13,18.59,"Kolar"],[15.54,18.59,"Kolar"],[15.11,18.59,"Kolar"],[14.7,18.59,"Kolar"],[14.38,18.59,"Kolar"],[14.13,18.59,"Kolar"],[13.93,18.59,"Kolar"],[11.2,14.51,"Delhi"],[5.15,2.24,"Delhi"],[5.58,1.56,"Delhi"],[16.88,15.19,"Kolar"],[15.73,15.19,"Kolar"],[14.85,15.19,"Kolar"],[14.2,15.19,"Kolar"],[13.59,15.19,"Kolar"],[13.16,15.19,"Kolar"],[12.74,15.19,"Kolar"],[12.42,15.19,"Kolar"],[12.17,15.19,"Kolar"],[11.96,15.19,"Kolar"],[13.03,14.51,"Delhi"],[1.84,3.04,"Delhi"],[4.27,1.65,"Delhi"],[1.51,1.79,"Delhi"],[13.75,12.19,"Kolar"],[12.63,12.19,"Kolar"],[11.79,12.19,"Kolar"],[11.16,12.19,"Kolar"],[10.57,12.19,"Kolar"],[10.15,12.19,"Kolar"],[9.75,12.19,"Kolar"],[9.44,12.19,"Kolar"],[9.19,12.19,"Kolar"],[9.0,12.19,"Kolar"],[13.01,13.51,"Delhi"],[2.75,3.04,"Delhi"],[1.95,2.14,"Delhi"],[1.51,-0.46,"Delhi"],[11.01,12.19,"Kolar"],[10.42,11.87,"Kolar"],[10.42,16.87,"Kolar"],[9.89,12.19,"Kolar"],[9.21,12.19,"Kolar"],[8.73,12.19,"Kolar"],[8.28,12.19,"Kolar"],[7.93,12.19,"Kolar"],[7.65,12.19,"Kolar"],[7.43,12.19,"Kolar"],[12.12,12.51,"Delhi"],[2.75,3.04,"Delhi"],[1.95,2.14,"Delhi"],[14.98,26.3,"Kolar"],[14.94,23.77,"Kolar"],[11.02,23.77,"Kolar"],[11.0,12.59,"Kolar"],[10.93,9.52,"Kolar"],[10.88,9.52,"Kolar"],[10.82,9.52,"Kolar"],[10.78,9.52,"Kolar"],[10.74,9.52,"Kolar"],[10.71,9.52,"Kolar"],[11.18,14.51,"Delhi"],[3.2,3.62,"Delhi"],[1.95,2.14,"Delhi"],[23.51,16.3,"Kolar"],[21.2,21.27,"Kolar"],[21.2,16.27,"Kolar"],[17.07,16.27,"Kolar"],[13.99,16.27,"Kolar"],[12.12,16.27,"Kolar"],[10.54,16.27,"Kolar"],[10.45,12.59,"Kolar"],[10.09,12.59,"Kolar"],[9.82,12.59,"Kolar"],[12.93,12.51,"Delhi"],[3.18,3.12,"Delhi"],[1.95,2.14,"Delhi"],[3.47,4.02,"Delhi"],[18.98,16.87,"Kolar"],[14.48,16.9,"Kolar"],[14.44,14.37,"Kolar"],[11.5,14.37,"Kolar"],[11.4,12.19,"Kolar"],[10.79,12.19,"Kolar"],[10.21,12.19,"Kolar"],[9.77,12.19,"Kolar"],[9.5,9.12,"Kolar"],[9.47,9.12,"Kolar"],[11.12,10.51,"Delhi"],[2.73,5.04,"Delhi"],[2.35,3.04,"Delhi"],[3.46,4.02,"Delhi"],[15.05,16.9,"Kolar"],[15.01,16.87,"Kolar"],[12.73,16.87,"Kolar"],[11.05,11.19,"Kolar"],[10.35,11.19,"Kolar"],[9.85,11.19,"Kolar"],[9.38,11.19,"Kolar"],[9.02,11.19,"Kolar"],[9.0,16.87,"Kolar"],[8.73,11.19,"Kolar"],[9.33,10.51,"Delhi"],[4.08,3.62,"Delhi"],[2.41,2.65,"Delhi"],[3.47,4.02,"Delhi"],[15.04,16.3,"Kolar"],[14.99,13.77,"Kolar"],[14.99,16.27,"Kolar"],[12.03,16.27,"Kolar"],[10.06,7.52,"Kolar"],[10.02,7.52,"Kolar"],[9.98,7.52,"Kolar"],[9.95,7.52,"Kolar"],[9.92,7.52,"Kolar"],[9.9,7.52,"Kolar"],[9.33,10.51,"Delhi"],[4.54,3.04,"Delhi"],[2.81,2.54,"Delhi"],[3.47,4.02,"Delhi"],[14.43,16.9,"Kolar"],[14.39,16.87,"Kolar"],[12.12,14.37,"Kolar"],[10.47,16.87,"Kolar"],[8.15,16.87,"Kolar"],[6.72,16.87,"Kolar"],[6.71,6.12,"Kolar"],[6.69,6.12,"Kolar"],[6.66,6.12,"Kolar"],[6.65,6.12,"Kolar"],[9.35,14.51,"Delhi"],[3.19,0.62,"Delhi"],[2.35,3.34,"Delhi"],[3.48,3.94,"Delhi"],[15.02,16.3,"Kolar"],[14.98,16.27,"Kolar"],[12.71,13.77,"Kolar"],[10.83,16.27,"Kolar"],[8.42,16.27,"Kolar"],[6.95,16.27,"Kolar"],[5.69,16.27,"Kolar"],[5.61,3.75,"Kolar"],[5.45,5.52,"Kolar"],[5.43,5.52,"Kolar"],[12.94,14.51,"Delhi"],[6.81,4.54,"Delhi"],[3.25,0.54,"Delhi"],[4.3,4.64,"Delhi"],[14.54,15.6,"Kolar"],[14.5,13.07,"Kolar"],[12.22,13.07,"Kolar"],[10.77,13.07,"Kolar"],[8.53,13.07,"Kolar"],[7.14,13.07,"Kolar"],[5.94,13.07,"Kolar"],[5.08,13.07,"Kolar"],[4.93,5.82,"Kolar"],[4.92,5.82,"Kolar"],[12.92,14.51,"Delhi"],[4.09,5.04,"Delhi"],[1.76,1.94,"Delhi"],[3.39,10.74,"Delhi"],[13.85,10.6,"Kolar"],[11.53,10.57,"Kolar"],[11.53,15.57,"Kolar"],[8.37,15.57,"Kolar"],[6.0,15.57,"Kolar"],[5.19,5.82,"Kolar"],[5.16,5.82,"Kolar"],[5.14,5.82,"Kolar"],[5.12,5.82,"Kolar"],[5.1,5.82,"Kolar"],[12.91,14.51,"Delhi"],[4.54,3.54,"Delhi"],[1.76,1.94,"Delhi"],[9.48,8.74,"Delhi"],[13.76,14.37,"Kolar"],[9.26,16.9,"Kolar"],[9.22,16.87,"Kolar"],[9.16,14.37,"Kolar"],[6.96,14.37,"Kolar"],[5.61,14.37,"Kolar"],[5.16,6.12,"Kolar"],[5.14,6.12,"Kolar"],[5.12,6.12,"Kolar"],[5.11,6.12,"Kolar"],[12.9,13.51,"Delhi"],[3.18,7.04,"Delhi"],[8.56,1.3,"Delhi"],[7.69,8.74,"Delhi"],[14.98,10.3,"Kolar"],[14.93,10.27,"Kolar"],[12.67,10.27,"Kolar"],[9.32,10.27,"Kolar"],[6.84,10.27,"Kolar"],[5.43,6.52,"Kolar"],[5.41,6.52,"Kolar"],[5.39,6.52,"Kolar"],[5.38,6.52,"Kolar"],[5.37,6.52,"Kolar"],[11.99,13.51,"Delhi"],[3.18,7.04,"Delhi"],[1.76,1.94,"Delhi"],[7.68,8.74,"Delhi"],[15.99,16.19,"Kolar"],[14.83,16.19,"Kolar"],[13.95,16.19,"Kolar"],[13.3,16.19,"Kolar"],[12.69,16.19,"Kolar"],[12.25,16.19,"Kolar"],[11.84,16.19,"Kolar"],[11.52,16.19,"Kolar"],[11.26,16.19,"Kolar"],[11.06,16.19,"Kolar"],[11.97,13.51,"Delhi"],[3.17,7.04,"Delhi"],[1.76,1.94,"Delhi"],[7.66,9.14,"Delhi"],[12.87,14.89,"Kolar"],[11.7,14.89,"Kolar"],[10.82,14.89,"Kolar"],[10.17,14.89,"Kolar"],[9.56,14.89,"Kolar"],[9.13,14.89,"Kolar"],[8.71,14.89,"Kolar"],[8.39,14.89,"Kolar"],[8.14,14.89,"Kolar"],[7.93,14.89,"Kolar"],[12.07,13.51,"Delhi"],[6.37,4.54,"Delhi"],[2.16,1.84,"Delhi"],[8.1,9.14,"Delhi"],[4.72,11.3,"Kolar"],[4.68,11.27,"Kolar"],[4.68,11.27,"Kolar"],[4.24,5.52,"Kolar"],[4.21,5.52,"Kolar"],[4.18,5.52,"Kolar"],[4.16,5.52,"Kolar"],[4.14,5.52,"Kolar"],[4.12,5.52,"Kolar"],[4.11,5.52,"Kolar"],[9.28,11.3,"Kolar"],[9.24,11.27,"Kolar"],[9.24,11.27,"Kolar"]],"crops":[{"k":"Delhi \u00b7 banana","mid":26437,"low":-12498,"high":78837,"money":3500430,"div":84,"n":92,"hit":82,"ver":82,"gap":10.51,"glut":39},{"k":"Delhi \u00b7 cabbage","mid":1343,"low":-3407,"high":30843,"money":2531095,"div":92,"n":92,"hit":90,"ver":90,"gap":6.84,"glut":0},{"k":"Delhi \u00b7 cauliflower","mid":-2366,"low":-2366,"high":2384,"money":186992,"div":37,"n":92,"hit":14,"ver":35,"gap":-0.49,"glut":0},{"k":"Delhi \u00b7 onion","mid":-7564,"low":-9202,"high":14324,"money":1039262,"div":92,"n":92,"hit":90,"ver":90,"gap":3.25,"glut":0},{"k":"Delhi \u00b7 tomato","mid":-114,"low":-10326,"high":29168,"money":1327909,"div":81,"n":92,"hit":69,"ver":79,"gap":4.02,"glut":0},{"k":"Kolar \u00b7 tomato","mid":-6466,"low":-27436,"high":82914,"money":13458422,"div":920,"n":920,"hit":903,"ver":903,"gap":9.19,"glut":0}],"rescue":{"kg":184000,"lots":92,"recovered_kg":0,"rescued_kg":168876,"to":{"Bahadurgarh":9,"Ghaziabad":4,"Keshopur":8,"Khekda":2,"Muradnagar":6,"Sampla":25,"Sonepat(Kharkhoda)":38}},"all":{"advice":{},"days":92,"diverted":1306,"diverted_kg":3402000,"extra_km":77984,"kg":3772000,"loads":1380,"loads_waste_positive":70,"money_saved_rs":{"high":29591175,"low":17334444,"mid":22044110},"predicted_gap_median":6.67,"problems":{"arrival_glut":39,"arrival_watch":73,"below_cost":10,"no_data":82,"normal":1076,"price_fall":100},"realised_gap_median":7.59,"stale_top":24,"to_second_life":0,"verified":1279,"verified_hit":1248,"waste_avoided_kg":{"high":238470,"low":-65235,"mid":11270}},"regions":{"Delhi":{"advice":{},"days":92,"diverted":386,"diverted_kg":1930000,"extra_km":14052,"kg":2300000,"loads":460,"loads_waste_positive":60,"money_saved_rs":{"high":12277204,"low":6362082,"mid":8585688},"predicted_gap_median":4.67,"problems":{"arrival_glut":39,"arrival_watch":73,"below_cost":0,"no_data":82,"normal":256,"price_fall":10},"realised_gap_median":5.03,"stale_top":19,"to_second_life":0,"verified":376,"verified_hit":345,"waste_avoided_kg":{"high":155556,"low":-37799,"mid":17736}},"Kolar":{"advice":{},"days":92,"diverted":920,"diverted_kg":1472000,"extra_km":63932,"kg":1472000,"loads":920,"loads_waste_positive":10,"money_saved_rs":{"high":17313971,"low":10972362,"mid":13458422},"predicted_gap_median":7.56,"problems":{"arrival_glut":0,"arrival_watch":0,"below_cost":10,"no_data":0,"normal":820,"price_fall":90},"realised_gap_median":9.19,"stale_top":5,"to_second_life":0,"verified":903,"verified_hit":903,"waste_avoided_kg":{"high":82914,"low":-27436,"mid":-6466}}}};
+const NS = "http://www.w3.org/2000/svg";
+const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+const fmt = (n) => Math.round(n).toLocaleString("en-IN");
+const crore = (rs) => (rs / 1e7).toFixed(2);
+const tip = document.getElementById("tip");
+const showTip = (ev, html) => { tip.innerHTML = html; tip.hidden = false; const x = Math.min(ev.clientX + 14, innerWidth - 250); tip.style.left = x + "px"; tip.style.top = (ev.clientY + 14) + "px"; };
+const hideTip = () => { tip.hidden = true; };
+
+// KPIs
+const A = D.all, R = D.rescue;
+const kept = A.waste_avoided_kg.mid + R.rescued_kg + R.recovered_kg;
+const pct = (a, b) => Math.round(a / b * 1000) / 10;
+document.getElementById("kpis").innerHTML = [
+  ["lead", "Money saved", "Rs " + crore(A.money_saved_rs.mid) + " cr", "likely Rs " + crore(A.money_saved_rs.low) + "-" + crore(A.money_saved_rs.high) + " crore, about Rs " + (A.money_saved_rs.mid / A.kg).toFixed(1) + "/kg"],
+  ["", "Kept out of landfill", fmt(kept / 1000) + " t", fmt(R.rescued_kg / 1000) + " t rescued + " + fmt(A.waste_avoided_kg.mid / 1000) + " t net waste avoided"],
+  ["", "Advice held out of sample", pct(A.verified_hit, A.verified) + "%", A.verified_hit.toLocaleString("en-IN") + " of " + A.verified.toLocaleString("en-IN") + " diverted loads"],
+  ["", "Sent away from the nearest mandi", pct(A.diverted, A.loads) + "%", fmt(A.diverted) + " of " + fmt(A.loads) + " loads; +" + fmt(A.extra_km) + " km in all"],
+].map(([c, k, v, s]) => `<div class="kpi ${c}"><span class="k">${k}</span><span class="v">${v}</span><span class="s">${s}</span></div>`).join("");
+const vr = D.regions;
+document.getElementById("hitline").textContent = `the advised market's next real price beat the nearest mandi's after freight on ${A.verified_hit.toLocaleString("en-IN")} of ${A.verified.toLocaleString("en-IN")} diverted loads (Kolar ${vr.Kolar.verified_hit}/${vr.Kolar.verified}, Delhi ${vr.Delhi.verified_hit}/${vr.Delhi.verified}).`;
+
+// Cumulative money (lines)
+(() => {
+  const svg = document.getElementById("cum"), W = 860, H = 300, m = { l: 44, r: 92, t: 12, b: 28 };
+  const n = D.cum.length, max = Math.ceil(Math.max(...D.cum.map(r => Math.max(r[1], r[2]))) / 25) * 25;
+  const x = i => m.l + i * (W - m.l - m.r) / (n - 1), y = v => H - m.b - v / max * (H - m.t - m.b);
+  const g = el("g", { class: "grid" }, svg), ax = el("g", { class: "axis" }, svg);
+  for (let v = 0; v <= max; v += 25) { el("line", { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v) }, g); el("text", { x: m.l - 8, y: y(v) + 4, "text-anchor": "end" }, ax).textContent = v; }
+  D.cum.forEach((r, i) => { if (r[0].endsWith("-01")) { el("text", { x: x(i), y: H - 8, "text-anchor": "start" }, ax).textContent = new Date(r[0]).toLocaleString("en-IN", { month: "short" }); } });
+  [[1, "var(--kolar)", "Kolar"], [2, "var(--delhi)", "Delhi"]].forEach(([k, c, name]) => {
+    el("path", { d: D.cum.map((r, i) => (i ? "L" : "M") + x(i).toFixed(1) + " " + y(r[k]).toFixed(1)).join(""), fill: "none", stroke: c, "stroke-width": 2, "stroke-linejoin": "round" }, svg);
+    const last = D.cum[n - 1][k];
+    el("circle", { cx: x(n - 1), cy: y(last), r: 4, fill: c, stroke: "var(--surface)", "stroke-width": 2 }, svg);
+    el("text", { x: x(n - 1) + 8, y: y(last) + 4, class: "dlbl" }, svg).textContent = name + " " + last.toFixed(0) + " L";
+  });
+  const cross = el("line", { y1: m.t, y2: H - m.b, stroke: "var(--faint)", "stroke-width": 1, visibility: "hidden" }, svg);
+  const hit = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" }, svg);
+  hit.addEventListener("pointermove", ev => {
+    const p = svg.createSVGPoint(); p.x = ev.clientX; p.y = ev.clientY; const q = p.matrixTransform(svg.getScreenCTM().inverse());
+    const i = Math.max(0, Math.min(n - 1, Math.round((q.x - m.l) / (W - m.l - m.r) * (n - 1)))), r = D.cum[i];
+    cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
+    showTip(ev, `<b>${new Date(r[0]).toLocaleDateString("en-IN", { day: "numeric", month: "short" })} 2026</b><br>Kolar Rs ${r[1].toFixed(1)} lakh<br>Delhi Rs ${r[2].toFixed(1)} lakh`);
+  });
+  hit.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); hideTip(); });
+})();
+
+// Problem classification (100% stacked bars)
+(() => {
+  const cls = [["arrival_glut", "Arrival glut", "--p-glut"], ["arrival_watch", "Arrival watch", "--p-watch"], ["price_fall", "Price fall", "--p-fall"], ["below_cost", "Below harvest cost", "--p-cost"], ["normal", "Normal", "--p-normal"], ["no_data", "No recent report", "--p-none"]];
+  document.getElementById("plegend").innerHTML = cls.map(([, l, c]) => `<span><i class="sw" style="background:var(${c});${c === "--p-none" ? "outline:1px dashed var(--hatch)" : ""}"></i>${l}</span>`).join("");
+  const svg = document.getElementById("prob"), W = 860, m = { l: 70, r: 10 };
+  const defs = el("defs", {}, svg), pat = el("pattern", { id: "hatch", width: 6, height: 6, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" }, defs);
+  el("rect", { width: 6, height: 6, fill: "var(--p-none)" }, pat); el("line", { x1: 0, y1: 0, x2: 0, y2: 6, stroke: "var(--hatch)", "stroke-width": 2 }, pat);
+  ["Kolar", "Delhi"].forEach((reg, ri) => {
+    const p = D.problems[reg], tot = Object.values(p).reduce((a, b) => a + b, 0), y0 = 14 + ri * 64;
+    el("text", { x: 0, y: y0 + 22, class: "dlbl" }, svg).textContent = reg;
+    let x0 = m.l; const span = W - m.l - m.r;
+    cls.forEach(([k, l, c]) => {
+      const v = p[k]; if (!v) return; const w = v / tot * span;
+      const r = el("rect", { x: x0, y: y0, width: Math.max(0, w - 2), height: 34, rx: 4, fill: k === "no_data" ? "url(#hatch)" : `var(${c})` }, svg);
+      r.addEventListener("pointermove", ev => showTip(ev, `<b>${reg}: ${l}</b><br>${v} load-days (${Math.round(v / tot * 100)}%)`)); r.addEventListener("pointerleave", hideTip);
+      if (w > 56) el("text", { x: x0 + 8, y: y0 + 22, class: "dlbl", style: k === "arrival_glut" || k === "below_cost" ? "fill:#fff" : "" }, svg).textContent = Math.round(v / tot * 100) + "%";
+      x0 += w;
+    });
+    el("text", { x: m.l, y: y0 + 50, class: "lbl" }, svg).textContent = tot + " load-days";
+  });
+})();
+
+// Verification scatter
+(() => {
+  const svg = document.getElementById("ver"), W = 420, H = 360, m = { l: 44, r: 10, t: 10, b: 40 };
+  const lo = -10, hi = 30, x = v => m.l + (v - lo) / (hi - lo) * (W - m.l - m.r), y = v => H - m.b - (v - lo) / (hi - lo) * (H - m.t - m.b);
+  const g = el("g", { class: "grid" }, svg), ax = el("g", { class: "axis" }, svg);
+  for (let v = lo; v <= hi; v += 10) { el("line", { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v) }, g); el("text", { x: m.l - 6, y: y(v) + 4, "text-anchor": "end" }, ax).textContent = v; el("text", { x: x(v), y: H - m.b + 16, "text-anchor": "middle" }, ax).textContent = v; }
+  el("line", { x1: m.l, x2: W - m.r, y1: y(0), y2: y(0), stroke: "var(--fg)", "stroke-width": 1 }, svg);
+  el("line", { x1: x(lo), y1: y(lo), x2: x(hi), y2: y(hi), stroke: "var(--faint)", "stroke-width": 1, "stroke-dasharray": "4 4" }, svg);
+  el("text", { x: (m.l + W - m.r) / 2, y: H - 6, "text-anchor": "middle", class: "lbl" }, svg).textContent = "Predicted gap, Rs/kg";
+  el("text", { x: 12, y: (m.t + H - m.b) / 2, "text-anchor": "middle", class: "lbl", transform: `rotate(-90 12 ${(m.t + H - m.b) / 2})` }, svg).textContent = "Realised gap, Rs/kg";
+  const clamp = v => Math.max(lo, Math.min(hi, v));
+  const pts = D.ver.map(([p, r, reg]) => ({ p, r, reg, cx: x(clamp(p)), cy: y(clamp(r)) }));
+  pts.forEach(o => el("circle", { cx: o.cx, cy: o.cy, r: 3.2, fill: o.reg === "Kolar" ? "var(--kolar)" : "var(--delhi)", "fill-opacity": 0.55 }, svg));
+  const ring = el("circle", { r: 6, fill: "none", stroke: "var(--fg)", "stroke-width": 1.5, visibility: "hidden" }, svg);
+  const hit = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" }, svg);
+  hit.addEventListener("pointermove", ev => {
+    const p = svg.createSVGPoint(); p.x = ev.clientX; p.y = ev.clientY; const q = p.matrixTransform(svg.getScreenCTM().inverse());
+    let best = null, bd = 400; for (const o of pts) { const d = (o.cx - q.x) ** 2 + (o.cy - q.y) ** 2; if (d < bd) { bd = d; best = o; } }
+    if (!best) { ring.setAttribute("visibility", "hidden"); return hideTip(); }
+    ring.setAttribute("cx", best.cx); ring.setAttribute("cy", best.cy); ring.setAttribute("visibility", "visible");
+    showTip(ev, `<b>${best.reg}</b><br>Predicted Rs ${best.p.toFixed(2)}/kg<br>Realised Rs ${best.r.toFixed(2)}/kg`);
+  });
+  hit.addEventListener("pointerleave", () => { ring.setAttribute("visibility", "hidden"); hideTip(); });
+  const t = document.getElementById("vtab");
+  t.innerHTML = `<thead><tr><th>Region</th><th class="n">Held</th><th class="n">Predicted</th><th class="n">Realised</th></tr></thead><tbody>` +
+    ["Kolar", "Delhi"].map(r => { const v = vr[r]; return `<tr><td>${r}</td><td class="n">${v.verified_hit}/${v.verified}</td><td class="n">Rs ${v.predicted_gap_median}</td><td class="n">Rs ${v.realised_gap_median}</td></tr>`; }).join("") +
+    `</tbody>` + `<caption style="caption-side:bottom;text-align:left;padding-top:8px" class="note">Median gap per kg after freight, advised minus nearest mandi.</caption>`;
+})();
+
+// Waste avoided by crop (diverging bars with range whiskers)
+(() => {
+  const svg = document.getElementById("waste"), W = 860, m = { l: 150, r: 20, t: 10 }, rowH = 40;
+  const rows = D.crops.slice().sort((a, b) => b.mid - a.mid);
+  const lo = -30000, hi = 80000, x = v => m.l + (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo) * (W - m.l - m.r);
+  const g = el("g", { class: "grid" }, svg), ax = el("g", { class: "axis" }, svg);
+  const yb = m.t + rows.length * rowH;
+  for (let v = -20000; v <= hi; v += 20000) { el("line", { x1: x(v), x2: x(v), y1: m.t, y2: yb }, g); el("text", { x: x(v), y: yb + 16, "text-anchor": "middle" }, ax).textContent = (v / 1000) + " t"; }
+  el("line", { x1: x(0), x2: x(0), y1: m.t, y2: yb, stroke: "var(--fg)", "stroke-width": 1 }, svg);
+  rows.forEach((r, i) => {
+    const cy = m.t + i * rowH + rowH / 2, c = r.mid >= 0 ? "var(--pos)" : "var(--neg)";
+    el("text", { x: m.l - 10, y: cy + 4, "text-anchor": "end", class: "dlbl" }, svg).textContent = r.k;
+    el("line", { x1: x(r.low), x2: x(r.high), y1: cy, y2: cy, stroke: "var(--faint)", "stroke-width": 1.5 }, svg);
+    [r.low, r.high].forEach(v => el("line", { x1: x(v), x2: x(v), y1: cy - 5, y2: cy + 5, stroke: "var(--faint)", "stroke-width": 1.5 }, svg));
+    const x0 = x(Math.min(0, r.mid)), w = Math.max(2, Math.abs(x(r.mid) - x(0)));
+    const b = el("rect", { x: x0, y: cy - 10, width: w, height: 20, rx: 4, fill: c }, svg);
+    el("text", { x: r.mid >= 0 ? x(r.mid) + 8 : x(r.mid) - 8, y: cy - 14, "text-anchor": r.mid >= 0 ? "start" : "end", class: "lbl" }, svg).textContent = (r.mid >= 0 ? "+" : "") + fmt(r.mid) + " kg";
+    const hb = el("rect", { x: m.l, y: cy - rowH / 2, width: W - m.l - m.r, height: rowH, fill: "transparent" }, svg);
+    hb.addEventListener("pointermove", ev => showTip(ev, `<b>${r.k}</b><br>Waste avoided ${fmt(r.mid)} kg (likely ${fmt(r.low)} to ${fmt(r.high)})<br>Arrival-glut days at the nearest mandi: ${r.glut}<br>Money saved Rs ${(r.money / 1e5).toFixed(1)} lakh`));
+    hb.addEventListener("pointerleave", hideTip);
+  });
+})();
+
+// Rescue destinations
+(() => {
+  const svg = document.getElementById("resc"), W = 860, m = { l: 170, r: 60, t: 6 }, rowH = 30;
+  const rows = Object.entries(R.to).sort((a, b) => b[1] - a[1]), max = rows[0][1];
+  rows.forEach(([name, n], i) => {
+    const cy = m.t + i * rowH + rowH / 2, w = n / max * (W - m.l - m.r);
+    el("text", { x: m.l - 10, y: cy + 4, "text-anchor": "end", class: "dlbl" }, svg).textContent = name;
+    const b = el("rect", { x: m.l, y: cy - 9, width: w, height: 18, rx: 4, fill: "var(--delhi)" }, svg);
+    el("text", { x: m.l + w + 8, y: cy + 4, class: "lbl" }, svg).textContent = n + " lots";
+    b.addEventListener("pointermove", ev => showTip(ev, `<b>${name}</b><br>${n} of ${R.lots} unsold lots`)); b.addEventListener("pointerleave", hideTip);
+  });
+  document.getElementById("rnote").textContent = `${fmt(R.rescued_kg / 1000)} t of ${fmt(R.kg / 1000)} t rescued (${pct(R.rescued_kg, R.kg)}%); the rest is the estimated spoiled share. No biogas or compost unit near Azadpur took it (D26).`;
+})();
+</script>
