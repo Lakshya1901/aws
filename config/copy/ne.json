@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear", "previous_loads", "no_previous", "sold", "not_sold", "all_loads"
     ]
   },
   "new_load": "नयाँ लोड",
@@ -223,7 +223,7 @@
   "cached_data": "इन्टरनेट छैन। सुरक्षित गरिएको डेटा देखाइँदैछ।",
   "fixture_banner": "FIXTURE डेटा - विकासको लागि मात्र, वास्तविक होइन",
   "approx": "करिब",
-  "todays_plan": "आजको योजना",
+  "todays_plan": "आजका लोड",
   "impact": "असर",
   "recording": "सुनिँदैछ... पठाउन छोड्नुहोस्",
   "processing": "प्रोसेस हुँदैछ...",
@@ -391,6 +391,11 @@
   "clear_confirm": "सबै सुरक्षित लोड र प्रभावका अंक मेटाउने? यो फिर्ता हुँदैन।",
   "cancel": "रद्द गर्नुहोस्",
   "clear": "मेटाउनुहोस्",
+  "previous_loads": "अघिल्ला लोड",
+  "no_previous": "अघिल्ला दिनका लोड यहाँ देखिन्छन्।",
+  "sold": "बिक्यो",
+  "not_sold": "बिकेन",
+  "all_loads": "सबै",
   "count_since": "{date} देखि {n} लोड",
   "ledger_empty": "अहिलेसम्म केही छैन। आफ्नो रेकर्ड सुरु गर्न सुझावमा \"यही छान्नुहोस्\" थिच्नुहोस्।",
   "saved_record": "तपाईंको रेकर्डमा सुरक्षित गरियो",

@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear", "previous_loads", "no_previous", "sold", "not_sold", "all_loads"
     ]
   },
   "new_load": "కొత్త లోడ్",
@@ -223,7 +223,7 @@
   "cached_data": "కనెక్షన్ లేదు. దాచిన సమాచారం చూపిస్తున్నాం.",
   "fixture_banner": "FIXTURE DATA - development only, not real",
   "approx": "సుమారు",
-  "todays_plan": "ఈరోజు ప్లాన్",
+  "todays_plan": "ఈరోజు లోడ్లు",
   "impact": "ప్రభావం",
   "recording": "వింటున్నాం... పంపడానికి వదిలేయండి",
   "processing": "చూస్తున్నాం...",
@@ -391,6 +391,11 @@
   "clear_confirm": "సేవ్ చేసిన అన్ని లోడ్లు, ప్రభావ మొత్తాలను తొలగించాలా? దీన్ని తిరిగి పొందలేరు.",
   "cancel": "రద్దు చేయండి",
   "clear": "తొలగించండి",
+  "previous_loads": "గత లోడ్లు",
+  "no_previous": "గత రోజుల లోడ్లు ఇక్కడ కనిపిస్తాయి.",
+  "sold": "అమ్ముడైంది",
+  "not_sold": "అమ్ముడవలేదు",
+  "all_loads": "అన్నీ",
   "count_since": "{date} నుంచి {n} లోడ్లు",
   "ledger_empty": "ఇంకా ఏమీ లేదు. మీ రికార్డు మొదలుపెట్టడానికి సలహాపై \"ఇది వాడండి\" నొక్కండి.",
   "saved_record": "మీ రికార్డులో భద్రపరిచాం",

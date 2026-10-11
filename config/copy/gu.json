@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear", "previous_loads", "no_previous", "sold", "not_sold", "all_loads"
     ]
   },
   "new_load": "નવો લોડ",
@@ -223,7 +223,7 @@
   "cached_data": "નેટવર્ક નથી. સાચવેલો ડેટા બતાવી રહ્યા છીએ.",
   "fixture_banner": "FIXTURE DATA - development only, not real",
   "approx": "લગભગ",
-  "todays_plan": "આજનું આયોજન",
+  "todays_plan": "આજના લોડ",
   "impact": "અસર",
   "recording": "સાંભળી રહ્યા છીએ... મોકલવા માટે છોડો",
   "processing": "પ્રક્રિયા ચાલુ છે...",
@@ -391,6 +391,11 @@
   "clear_confirm": "બધા સાચવેલા લોડ અને અસરના આંકડા ભૂંસવા છે? આ પાછું લાવી શકાશે નહીં.",
   "cancel": "રદ કરો",
   "clear": "ભૂંસો",
+  "previous_loads": "અગાઉના લોડ",
+  "no_previous": "અગાઉના દિવસોના લોડ અહીં દેખાશે.",
+  "sold": "વેચાયું",
+  "not_sold": "વેચાયું નથી",
+  "all_loads": "બધા",
   "count_since": "{date} થી {n} લોડ",
   "ledger_empty": "હજી કંઈ નથી. તમારો રેકોર્ડ શરૂ કરવા સૂચન પર \"આ જ પસંદ કરો\" દબાવો.",
   "saved_record": "તમારા રેકોર્ડમાં સાચવ્યું",

@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear", "previous_loads", "no_previous", "sold", "not_sold", "all_loads"
     ]
   },
   "new_load": "ਨਵਾਂ ਲੋਡ",
@@ -223,7 +223,7 @@
   "cached_data": "ਨੈੱਟ ਨਹੀਂ ਹੈ। ਸੇਵ ਕੀਤਾ ਡਾਟਾ ਦਿਖਾ ਰਹੇ ਹਾਂ।",
   "fixture_banner": "FIXTURE DATA - development only, not real",
   "approx": "ਲਗਭਗ",
-  "todays_plan": "ਅੱਜ ਦੀ ਯੋਜਨਾ",
+  "todays_plan": "ਅੱਜ ਦੇ ਲੋਡ",
   "impact": "ਅਸਰ",
   "recording": "ਸੁਣ ਰਹੇ ਹਾਂ... ਭੇਜਣ ਲਈ ਛੱਡੋ",
   "processing": "ਚੱਲ ਰਿਹਾ ਹੈ...",
@@ -391,6 +391,11 @@
   "clear_confirm": "ਸਾਰੇ ਸੰਭਾਲੇ ਲੋਡ ਅਤੇ ਅਸਰ ਦੇ ਅੰਕੜੇ ਮਿਟਾਉਣੇ ਹਨ? ਇਹ ਵਾਪਸ ਨਹੀਂ ਹੋਵੇਗਾ।",
   "cancel": "ਰੱਦ ਕਰੋ",
   "clear": "ਮਿਟਾਓ",
+  "previous_loads": "ਪਿਛਲੇ ਲੋਡ",
+  "no_previous": "ਪਿਛਲੇ ਦਿਨਾਂ ਦੇ ਲੋਡ ਇੱਥੇ ਦਿਖਣਗੇ।",
+  "sold": "ਵਿਕ ਗਿਆ",
+  "not_sold": "ਨਹੀਂ ਵਿਕਿਆ",
+  "all_loads": "ਸਾਰੇ",
   "count_since": "{date} ਤੋਂ {n} ਲੋਡ",
   "ledger_empty": "ਹਾਲੇ ਕੁਝ ਨਹੀਂ। ਆਪਣਾ ਰਿਕਾਰਡ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਸਲਾਹ 'ਤੇ \"ਇਹ ਵਰਤੋ\" ਦਬਾਓ।",
   "saved_record": "ਤੁਹਾਡੇ ਰਿਕਾਰਡ ਵਿੱਚ ਸੰਭਾਲਿਆ ਗਿਆ",

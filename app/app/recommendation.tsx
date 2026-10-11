@@ -10,7 +10,7 @@ import { RecommendationCard, useOutletLabels } from '../components/Recommendatio
 import { Banner, Btn, DataBanners, ListRow, Screen, SectionTitle, Surface, Tag, T } from '../components/ui';
 import { fmtNum, fmtRs, translate } from '../i18n';
 import { ratioDriven } from '../lib/recommend';
-import { extraOver, fromImpact, recordLedger } from '../lib/ledger';
+import { extraOver, fromImpact, recordLedger, stampFor } from '../lib/ledger';
 import { useSession } from '../lib/session';
 import { C, RISK, SIZE } from '../lib/theme';
 
@@ -108,8 +108,10 @@ export default function RecommendationScreen() {
     // Lifetime record on this phone; waste avoided is computed for the recommended outlet only.
     void recordLedger({
       key: `${res.plan_id}|${loadId}`,
-      at: new Date().toISOString(),
+      at: stampFor(res.replay_date),
       kind: 'farm',
+      crop: req.crop,
+      outlet: L.name(outlet),
       qty_kg: req.quantity_kg,
       ...fromImpact(res.impact, 'farm'),
       prevented_kg: isTop ? res.impact.waste_avoided_kg : null,

@@ -5,11 +5,14 @@ import { getDataMode } from '../api/client';
 import type { Impact, OutletOption, Range } from '../api/types';
 
 // Live and demo totals are kept apart (D37): demo mode fills its own ledger with the demo day.
-const key = () => (getDataMode() === 'demo' ? 'annasetu.ledger.demo.v1' : 'annasetu.ledger.v1');
+const storageKey = () => (getDataMode() === 'demo' ? 'annasetu.ledger.demo.v1' : 'annasetu.ledger.v1');
 
 export interface LedgerEntry {
   key: string; // plan_id|load: the same load chosen again replaces its entry
-  at: string; // ISO time
+  at: string; // ISO time, or the replayed day in demo mode (stampFor)
+  crop?: string; // entries saved before October 11 lack crop, outlet and sold
+  outlet?: string | null; // where it went (name)
+  sold?: boolean; // ticked on the loads screen
   kind: 'farm' | 'rescue';
   qty_kg: number;
   prevented_kg: Range | null; // waste avoided; null when the user overrode the recommendation (not computed)
@@ -34,7 +37,7 @@ export interface LedgerTotals {
 
 export async function readLedger(): Promise<LedgerEntry[]> {
   try {
-    const raw = await AsyncStorage.getItem(key());
+    const raw = await AsyncStorage.getItem(storageKey());
     return raw ? (JSON.parse(raw) as LedgerEntry[]) : [];
   } catch {
     return [];
@@ -45,14 +48,26 @@ export async function recordLedger(e: LedgerEntry): Promise<void> {
   const all = (await readLedger()).filter((x) => x.key !== e.key);
   all.push(e);
   try {
-    await AsyncStorage.setItem(key(), JSON.stringify(all));
+    await AsyncStorage.setItem(storageKey(), JSON.stringify(all));
   } catch {}
+}
+
+/** The time a record is saved under: the replayed day in demo mode (so the demo reads as that day), else now. */
+export const stampFor = (replayDate: string | null | undefined) => replayDate ?? new Date().toISOString();
+
+/** Tick or untick "sold" on one saved load. */
+export async function setSold(key: string, sold: boolean): Promise<LedgerEntry[]> {
+  const all = (await readLedger()).map((x) => (x.key === key ? { ...x, sold } : x));
+  try {
+    await AsyncStorage.setItem(storageKey(), JSON.stringify(all));
+  } catch {}
+  return all;
 }
 
 /** Settings, "Clear saved data": forget every confirmed load and unsold lot of the current mode on this phone. */
 export async function clearLedger(): Promise<void> {
   try {
-    await AsyncStorage.removeItem(key());
+    await AsyncStorage.removeItem(storageKey());
   } catch {}
 }
 

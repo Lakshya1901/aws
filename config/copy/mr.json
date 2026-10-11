@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear", "previous_loads", "no_previous", "sold", "not_sold", "all_loads"
     ]
   },
   "new_load": "नवीन लोड",
@@ -223,7 +223,7 @@
   "cached_data": "नेटवर्क नाही. साठवलेला डेटा दाखवत आहोत.",
   "fixture_banner": "FIXTURE DATA - development only, not real",
   "approx": "सुमारे",
-  "todays_plan": "आजची योजना",
+  "todays_plan": "आजचे लोड",
   "impact": "परिणाम",
   "recording": "ऐकत आहोत... पाठवण्यासाठी सोडा",
   "processing": "प्रक्रिया सुरू आहे...",
@@ -391,6 +391,11 @@
   "clear_confirm": "सर्व जतन केलेले लोड आणि परिणामाचे आकडे पुसायचे? हे परत आणता येणार नाही.",
   "cancel": "रद्द करा",
   "clear": "पुसा",
+  "previous_loads": "मागील लोड",
+  "no_previous": "मागील दिवसांचे लोड इथे दिसतील.",
+  "sold": "विकले",
+  "not_sold": "विकले नाही",
+  "all_loads": "सर्व",
   "count_since": "{date} पासून {n} लोड",
   "ledger_empty": "अजून काही नाही. तुमची नोंद सुरू करण्यासाठी सल्ल्यावर \"हेच निवडा\" दाबा.",
   "saved_record": "तुमच्या नोंदीत जतन केले",

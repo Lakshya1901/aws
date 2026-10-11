@@ -15,7 +15,7 @@ import { useOutletLabels } from '../components/RecommendationCard';
 import { Banner, Btn, Chip, DataBanners, ListRow, Loading, Screen, SectionTitle, Surface, T, Tag, s, useErrorText } from '../components/ui';
 import { fmtNum } from '../i18n';
 import { deviceCoords } from '../lib/recommend';
-import { earnFor, fromImpact, recordLedger } from '../lib/ledger';
+import { earnFor, fromImpact, recordLedger, stampFor } from '../lib/ledger';
 import { useSession } from '../lib/session';
 import { C, RADIUS, SIZE, fontFor } from '../lib/theme';
 
@@ -247,8 +247,10 @@ export default function RescueScreen() {
                 // Lifetime record on this phone: kg rescued and recovered for this lot (food banks pay nothing).
                 void recordLedger({
                   key: `${res.plan_id}|rescue|${res.crop}|${res.quantity_kg}`,
-                  at: new Date().toISOString(),
+                  at: stampFor(res.replay_date),
                   kind: 'rescue',
+                  crop: res.crop,
+                  outlet: dest ? L.name(dest) : null,
                   qty_kg: res.quantity_kg,
                   ...fromImpact(res.impact, 'rescue'),
                   extra_rs: dest ? earnFor(dest, res.split.edible_kg) : null, // otherwise dumped: all of it is extra

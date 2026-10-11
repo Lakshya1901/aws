@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear", "previous_loads", "no_previous", "sold", "not_sold", "all_loads"
     ]
   },
   "new_load": "نیا لوڈ",
@@ -223,7 +223,7 @@
   "cached_data": "کنکشن نہیں ہے۔ محفوظ شدہ ڈیٹا دکھایا جا رہا ہے۔",
   "fixture_banner": "FIXTURE DATA - development only, not real",
   "approx": "تقریباً",
-  "todays_plan": "آج کا منصوبہ",
+  "todays_plan": "آج کے لوڈ",
   "impact": "اثر",
   "recording": "سن رہے ہیں... بھیجنے کے لیے چھوڑ دیں",
   "processing": "کام جاری ہے...",
@@ -391,6 +391,11 @@
   "clear_confirm": "تمام محفوظ لوڈ اور اثر کے اعداد مٹائیں؟ یہ واپس نہیں ہو سکتا۔",
   "cancel": "منسوخ کریں",
   "clear": "مٹائیں",
+  "previous_loads": "پچھلے لوڈ",
+  "no_previous": "پچھلے دنوں کے لوڈ یہاں دکھیں گے۔",
+  "sold": "بک گیا",
+  "not_sold": "نہیں بکا",
+  "all_loads": "سب",
   "count_since": "{date} سے {n} لوڈ",
   "ledger_empty": "ابھی کچھ نہیں۔ اپنا ریکارڈ شروع کرنے کے لیے کسی مشورے پر \"یہی چنیں\" دبائیں۔",
   "saved_record": "آپ کے ریکارڈ میں محفوظ ہو گیا",

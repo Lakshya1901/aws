@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear", "previous_loads", "no_previous", "sold", "not_sold", "all_loads"
     ]
   },
   "new_load": "புதிய லோடு",
@@ -223,7 +223,7 @@
   "cached_data": "இணைப்பு இல்லை. சேமித்த தகவலைக் காட்டுகிறோம்.",
   "fixture_banner": "FIXTURE DATA - development only, not real",
   "approx": "சுமார்",
-  "todays_plan": "இன்றைய திட்டம்",
+  "todays_plan": "இன்றைய சுமைகள்",
   "impact": "பலன்",
   "recording": "கேட்கிறோம்... அனுப்ப விடுங்கள்",
   "processing": "பார்த்துக் கொண்டிருக்கிறோம்...",
@@ -391,6 +391,11 @@
   "clear_confirm": "சேமித்த அனைத்து சுமைகளையும் தாக்க மொத்தங்களையும் அழிக்கவா? இதைத் திரும்பப் பெற முடியாது.",
   "cancel": "ரத்து செய்",
   "clear": "அழி",
+  "previous_loads": "முந்தைய சுமைகள்",
+  "no_previous": "முந்தைய நாட்களின் சுமைகள் இங்கே தெரியும்.",
+  "sold": "விற்றது",
+  "not_sold": "விற்கவில்லை",
+  "all_loads": "அனைத்தும்",
   "count_since": "{date} முதல் {n} லோடு",
   "ledger_empty": "இன்னும் எதுவும் இல்லை. உங்கள் பதிவைத் தொடங்க ஒரு ஆலோசனையில் \"இதை எடுத்துக்கொள்\" என்பதை அழுத்துங்கள்.",
   "saved_record": "உங்கள் பதிவில் சேமிக்கப்பட்டது",

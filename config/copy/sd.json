@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear", "previous_loads", "no_previous", "sold", "not_sold", "all_loads"
     ]
   },
   "new_load": "نئون لوڊ",
@@ -223,7 +223,7 @@
   "cached_data": "ڪنيڪشن ناهي. محفوظ ڪيل ڊيٽا ڏيکاري پئي وڃي.",
   "fixture_banner": "FIXTURE DATA - development only, not real",
   "approx": "لڳ ڀڳ",
-  "todays_plan": "اڄ جو منصوبو",
+  "todays_plan": "اڄ جا لوڊ",
   "impact": "اثر",
   "recording": "ٻڌي رهيا آهيون... موڪلڻ لاءِ ڇڏيو",
   "processing": "ڪم جاري آهي...",
@@ -391,6 +391,11 @@
   "clear_confirm": "سڀ محفوظ لوڊ ۽ اثر جا انگ ميٽيو؟ اهو واپس نه ٿيندو.",
   "cancel": "منسوخ ڪريو",
   "clear": "ميٽيو",
+  "previous_loads": "پويان لوڊ",
+  "no_previous": "پوين ڏينهن جا لوڊ هتي ڏسبا.",
+  "sold": "وڪامي ويو",
+  "not_sold": "نه وڪاميو",
+  "all_loads": "سڀ",
   "count_since": "{date} کان {n} لوڊ",
   "ledger_empty": "اڃا ڪجهه ناهي. پنهنجو رڪارڊ شروع ڪرڻ لاءِ صلاح تي \"اهو چونڊيو\" دٻايو.",
   "saved_record": "توهان جي رڪارڊ ۾ محفوظ ٿيو",

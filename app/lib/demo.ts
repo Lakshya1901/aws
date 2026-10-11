@@ -3,7 +3,7 @@
 // Simulated loads, real prices and routes; the app shows "Demo loads". Quantities chosen by the team (October 11).
 import { api, getDataMode } from '../api/client';
 import type { CropId, Lang, Origin, PlanLoad } from '../api/types';
-import { clearLedger, earnFor, fromImpact, recordLedger } from './ledger';
+import { clearLedger, earnFor, fromImpact, recordLedger, stampFor } from './ledger';
 
 // Stop if the user leaves demo mode meanwhile: the ledger in use follows the mode.
 const stillDemo = () => {
@@ -26,7 +26,7 @@ export async function seedDemo(lang: Lang): Promise<{ loads: PlanLoad[]; planId:
   const plan = await api.plan({ loads: draft, language: lang });
   stillDemo();
   await clearLedger();
-  const at = new Date().toISOString();
+  const at = stampFor(plan.replay_date);
   const loads = draft.map((l) => {
     const a = plan.allocations.find((x) => x.load_id === l.load_id)!;
     return { ...l, chosen_outlet_id: a.outlet.outlet_id, override: false };
@@ -34,7 +34,8 @@ export async function seedDemo(lang: Lang): Promise<{ loads: PlanLoad[]; planId:
   for (const a of plan.allocations) {
     stillDemo();
     await recordLedger({
-      key: `${plan.plan_id}|${a.load_id}`, at, kind: 'farm', qty_kg: a.quantity_kg,
+      key: `${plan.plan_id}|${a.load_id}`, at, kind: 'farm', qty_kg: a.quantity_kg, crop: a.crop,
+      outlet: a.outlet.name ?? a.outlet.outlet_id,
       ...fromImpact(a.impact, 'farm'), extra_rs: a.impact.money_saved_rs ?? null,
     });
   }
@@ -47,7 +48,8 @@ export async function seedDemo(lang: Lang): Promise<{ loads: PlanLoad[]; planId:
     const dest = r.top ?? r.recover;
     stillDemo();
     await recordLedger({
-      key: `${r.plan_id}|rescue|${r.crop}|${r.quantity_kg}`, at, kind: 'rescue', qty_kg: r.quantity_kg,
+      key: `${r.plan_id}|rescue|${r.crop}|${r.quantity_kg}`, at, kind: 'rescue', qty_kg: r.quantity_kg, crop: r.crop,
+      outlet: dest ? (dest.name ?? dest.outlet_id) : null,
       ...fromImpact(r.impact, 'rescue'), extra_rs: dest ? earnFor(dest, r.split.edible_kg) : null,
     });
   }

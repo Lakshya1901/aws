@@ -1,16 +1,21 @@
-// Today's plan: POST /plan with every load used this session (records "Use this" and overrides),
-// then shows the allocation per load and the quantity added per market.
-import { router } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
+// Loads (tab "Today's loads"): add a new load on top, then today's loads (POST /plan with every load used this
+// session, plus unsold lots saved in the same plan), then the loads saved on this phone on earlier days
+// (lib/ledger.ts), filterable. Each saved load can be ticked as sold.
+import { router, useFocusEffect } from 'expo-router';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Pressable, View } from 'react-native';
 import { api } from '../api/client';
 import type { PlanResponse } from '../api/types';
+import { Icon } from '../components/Icon';
 import { useOutletLabels } from '../components/RecommendationCard';
-import { Banner, Btn, DataBanners, ListRow, Loading, RiskDot, Screen, SectionTitle, Surface, T, Tag, useErrorText } from '../components/ui';
+import { Banner, Btn, Chip, DataBanners, ListRow, Loading, Screen, SectionTitle, Surface, T, Tag, fmtDate, s, useErrorText } from '../components/ui';
 import { fmtNum } from '../i18n';
+import { readLedger, setSold, type LedgerEntry } from '../lib/ledger';
 import { useSession } from '../lib/session';
 import { C, SIZE } from '../lib/theme';
 import { ImpactRows } from '../components/ImpactRows';
+
+type Status = 'all' | 'not_sold' | 'sold';
 
 export default function PlanScreen() {
   const { t, lang, loads, planId, setPlanId, cropLabel, demoBusy } = useSession();
@@ -19,6 +24,9 @@ export default function PlanScreen() {
   const [data, setData] = useState<PlanResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [entries, setEntries] = useState<LedgerEntry[]>([]);
+  const [status, setStatus] = useState<Status>('all');
+  const [cropFilter, setCropFilter] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     if (loads.length === 0) return;
@@ -41,18 +49,75 @@ export default function PlanScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loads]);
 
-  if (loads.length === 0) {
-    return demoBusy ? (
-      <Screen nav>
-        <Loading />
-      </Screen>
-    ) : (
-      <Screen nav>
-        <T size={SIZE.large}>{t('plan_empty')}</T>
-        <Btn label={t('new_load')} onPress={() => router.push('/new-load')} />
-      </Screen>
+  useFocusEffect(
+    useCallback(() => {
+      void readLedger().then(setEntries);
+    }, [demoBusy, planId]),
+  );
+
+  const toggle = (e: LedgerEntry) => void setSold(e.key, !e.sold).then(setEntries);
+
+  // Today = saved in the current plan; previous = everything else, newest day first.
+  const inPlan = (e: LedgerEntry) => planId !== null && e.key.startsWith(`${planId}|`);
+  const today = entries.filter(inPlan);
+  const earlier = entries.filter((e) => !inPlan(e)).sort((a, b) => b.at.localeCompare(a.at));
+  const crops = useMemo(() => [...new Set(earlier.map((e) => e.crop).filter((c): c is string => !!c))], [earlier]);
+  const shown = earlier.filter(
+    (e) => (status === 'all' || (status === 'sold') === !!e.sold) && (!cropFilter || e.crop === cropFilter),
+  );
+  const days = [...new Set(shown.map((e) => e.at.slice(0, 10)))];
+
+  // Where a farm load of today's plan went, for entries saved before the outlet was stored.
+  const allocOutlet = (e: LedgerEntry) => {
+    const a = data?.allocations.find((x) => `${planId}|${x.load_id}` === e.key);
+    return a ? (a.outlet.type === 'hold' ? t('hold_title') : L.name(a.outlet)) : null;
+  };
+
+  const row = (e: LedgerEntry, i: number) => {
+    const where = e.outlet ?? allocOutlet(e);
+    const money = e.extra_rs && e.extra_rs.mid > 0 ? e.extra_rs.mid : null;
+    const fg = e.sold ? C.muted : C.text;
+    return (
+      <ListRow key={e.key} first={i === 0} style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <Pressable
+          accessibilityRole="checkbox"
+          accessibilityState={{ checked: !!e.sold }}
+          accessibilityLabel={e.sold ? t('sold') : t('not_sold')}
+          onPress={() => toggle(e)}
+          hitSlop={8}
+          style={{
+            width: 32,
+            height: 32,
+            borderRadius: 16,
+            borderWidth: 2,
+            borderColor: e.sold ? C.primary : C.outline,
+            backgroundColor: e.sold ? C.primary : 'transparent',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {e.sold ? <Icon name="check" size={18} color={C.primaryText} strokeWidth={2.8} /> : null}
+        </Pressable>
+        <View style={{ flex: 1, flexShrink: 1, gap: 2 }}>
+          <T bold color={fg}>
+            {`${t('kg_value', { v: fmtNum(e.qty_kg) })}${e.crop ? ` · ${cropLabel(e.crop)}` : ''}`}
+          </T>
+          {where ? (
+            <T size={SIZE.small} color={C.muted}>
+              {t('send_to', { outlet: where })}
+            </T>
+          ) : null}
+          <View style={[s.row, { alignItems: 'center' }]}>
+            {e.kind === 'rescue' ? <Tag text={t('rescued')} /> : null}
+            {e.sold ? <Tag text={t('sold')} /> : null}
+          </View>
+        </View>
+        {money !== null ? (
+          <T bold color={fg}>{`Rs ${fmtNum(Math.round(money))}`}</T>
+        ) : null}
+      </ListRow>
     );
-  }
+  };
 
   const totalKg = data ? data.allocations.reduce((a, x) => a + x.quantity_kg, 0) : 0;
   const addedTotal = data ? data.markets.reduce((a, m) => a + Math.max(0, m.added_kg), 0) : 0;
@@ -61,6 +126,11 @@ export default function PlanScreen() {
 
   return (
     <Screen nav>
+      <Btn icon="plus" label={t('new_load')} onPress={() => router.push('/new-load')} />
+
+      <SectionTitle>{t('todays_plan')}</SectionTitle>
+      {demoBusy && <Loading />}
+      {!demoBusy && loads.length === 0 && today.length === 0 && <T color={C.muted}>{t('plan_empty')}</T>}
       {loading && <Loading />}
       {error && (
         <>
@@ -85,7 +155,11 @@ export default function PlanScreen() {
               {t('plan_spread')}
             </T>
           </View>
-
+        </>
+      )}
+      {!demoBusy && today.length > 0 && <Surface>{today.map(row)}</Surface>}
+      {data && !loading && (
+        <>
           <SectionTitle>{t('added_per_market')}</SectionTitle>
           <Surface style={{ paddingTop: 16 }}>
             {addedTotal > 0 && (
@@ -132,39 +206,37 @@ export default function PlanScreen() {
 
           <SectionTitle>{t('total_impact')}</SectionTitle>
           <ImpactRows impact={data.impact} lines="plan" />
-
-          <SectionTitle>{t('loads')}</SectionTitle>
-          <Surface>
-            {data.allocations.map((a, i) => {
-              const hold = a.outlet.type === 'hold';
-              return (
-                <ListRow key={a.load_id} first={i === 0} style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-                  <View style={{ minWidth: 88 }}>
-                    <T bold>{t('kg_value', { v: fmtNum(a.quantity_kg) })}</T>
-                    <T size={SIZE.small} color={C.muted}>
-                      {cropLabel(a.crop)}
-                    </T>
-                  </View>
-                  <View style={{ flex: 1, flexShrink: 1, gap: 2 }}>
-                    <T bold>{hold ? t('hold_title') : L.name(a.outlet)}</T>
-                    <T size={SIZE.small} color={C.muted}>
-                      {L.earn(a.outlet)}
-                    </T>
-                    {a.outlet.type !== 'mandi' ? <T size={SIZE.label}>{L.typeLabel(a.outlet)}</T> : null}
-                    {a.outlet.partnered === false && (
-                      <View style={{ flexDirection: 'row' }}>
-                        <Tag text={t('not_partnered')} dashed />
-                      </View>
-                    )}
-                  </View>
-                  {a.outlet.type === 'mandi' ? <RiskDot level={a.outlet.risk_level} /> : null}
-                </ListRow>
-              );
-            })}
-          </Surface>
         </>
       )}
-      {!loading && <Btn label={t('new_load')} onPress={() => router.push('/new-load')} />}
+
+      <SectionTitle>{t('previous_loads')}</SectionTitle>
+      {earlier.length === 0 ? (
+        <T color={C.muted}>{t('no_previous')}</T>
+      ) : (
+        <>
+          <View style={s.row}>
+            {(['all', 'not_sold', 'sold'] as const).map((k) => (
+              <Chip key={k} label={t(k === 'all' ? 'all_loads' : k)} selected={status === k} onPress={() => setStatus(k)} />
+            ))}
+          </View>
+          {crops.length > 1 && (
+            <View style={s.row}>
+              <Chip label={t('all_loads')} selected={cropFilter === null} onPress={() => setCropFilter(null)} />
+              {crops.map((c) => (
+                <Chip key={c} label={cropLabel(c)} selected={cropFilter === c} onPress={() => setCropFilter(c)} />
+              ))}
+            </View>
+          )}
+          {days.map((d) => (
+            <View key={d} style={{ gap: 8 }}>
+              <T size={SIZE.label} color={C.muted}>
+                {fmtDate(d)}
+              </T>
+              <Surface>{shown.filter((e) => e.at.slice(0, 10) === d).map(row)}</Surface>
+            </View>
+          ))}
+        </>
+      )}
     </Screen>
   );
 }
