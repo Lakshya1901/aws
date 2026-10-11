@@ -1,6 +1,6 @@
 """Merge simulate_2026.py runs and compute the figures for the 2026 stat report.
 
-Usage: python analysis/sim_summary.py PART.json [PART.json ...]
+Usage: python analysis/sim_summary.py [--prefix sim_2026] PART.json [PART.json ...]
 Writes analysis/out/sim_2026.json (all loads, unsold lots and errors, merged by date) and
 analysis/out/sim_2026_summary.json (the report's figures). Sums use each load's mid estimate; waste avoided is
 given both as the signed sum (loads whose longer trip spoils more count negative) and as the count of loads with
@@ -25,7 +25,7 @@ def rng(rows, key):
     return {k: round(sum((r[key] or {}).get(k) or 0.0 for r in rows)) for k in ("low", "mid", "high")}
 
 
-def main(parts):
+def main(parts, prefix="sim_2026"):
     loads, rescues, errors, window = [], [], [], []
     for p in parts:
         d = json.loads(pathlib.Path(p).read_text())
@@ -37,7 +37,7 @@ def main(parts):
     rescues.sort(key=lambda r: r["date"])
     window = [min(window), max(window)]
     out = ROOT / "analysis" / "out"
-    (out / "sim_2026.json").write_text(json.dumps({"window": window, "loads": loads, "rescues": rescues,
+    (out / f"{prefix}.json").write_text(json.dumps({"window": window, "loads": loads, "rescues": rescues,
                                                    "errors": errors}, sort_keys=True))
 
     def block(rows):
@@ -81,11 +81,15 @@ def main(parts):
         "verification_points": [[r["predicted_gap_rs_kg"], r["realised_gap_rs_kg"], r["region"]]
                                 for r in loads if "realised_gap_rs_kg" in r],
     }
-    (out / "sim_2026_summary.json").write_text(json.dumps(summary, indent=1, sort_keys=True))
+    (out / f"{prefix}_summary.json").write_text(json.dumps(summary, indent=1, sort_keys=True))
     a = summary["all"]
     print(f"{a['loads']} loads, {a['diverted']} diverted, waste avoided {a['waste_avoided_kg']}, "
           f"money {a['money_saved_rs']}, verified {a['verified_hit']}/{a['verified']}, errors {len(errors)}")
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    args = sys.argv[1:]
+    if args[:1] == ["--prefix"]:
+        main(args[2:], args[1])
+    else:
+        main(args)

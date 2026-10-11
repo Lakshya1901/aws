@@ -1,0 +1,320 @@
+<title>Narela Farm Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700&family=Spectral:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; KPI row, then one chart per question, then the ledger of what is real. */
+:root {
+  --bg: #FAF6EE; --surface: #FFFFFF; --sunk: #F2ECE0; --line: #E6DFD1;
+  --fg: #24352A; --muted: #5D6A60; --faint: #8D9A90; --accent: #215C3B; --tonal: #CFE3D4; --on-tonal: #12351F;
+  --kolar: #2F855A; --delhi: #2B6CB0; --c1: #2a78d6; --c2: #eb6834; --c3: #1baf7a; --c4: #eda100;
+  --p-glut: #B94337; --p-watch: #E9A23B; --p-fall: #F3CB8A; --p-cost: #7A4E0E; --p-normal: #CFE3D4; --p-none: #F1EBDF;
+  --pos: #2F855A; --neg: #9A6B4F; --hatch: #C9BFAE;
+  --display: "Spectral", Georgia, "Times New Roman", serif;
+  --body: "Libre Franklin", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #161A17; --surface: #1E2420; --sunk: #232A25; --line: #333C36;
+  --fg: #E8ECE6; --muted: #A9B5AC; --faint: #76837A; --accent: #8CCBA3; --tonal: #2E4A38; --on-tonal: #D6EEDD;
+  --kolar: #3A9A68; --delhi: #4683CE; --c1: #3987e5; --c2: #d95926; --c3: #199e70; --c4: #c98500;
+  --p-glut: #D0605A; --p-watch: #D9952F; --p-fall: #9C7A43; --p-cost: #C8873A; --p-normal: #36513F; --p-none: #262D28;
+  --pos: #3A9A68; --neg: #B08466; --hatch: #4A544D; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #161A17; --surface: #1E2420; --sunk: #232A25; --line: #333C36;
+  --fg: #E8ECE6; --muted: #A9B5AC; --faint: #76837A; --accent: #8CCBA3; --tonal: #2E4A38; --on-tonal: #D6EEDD;
+  --kolar: #3A9A68; --delhi: #4683CE; --c1: #3987e5; --c2: #d95926; --c3: #199e70; --c4: #c98500;
+  --p-glut: #D0605A; --p-watch: #D9952F; --p-fall: #9C7A43; --p-cost: #C8873A; --p-normal: #36513F; --p-none: #262D28;
+  --pos: #3A9A68; --neg: #B08466; --hatch: #4A544D; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 400 15px/1.55 var(--body); }
+.wrap { max-width: 920px; margin: 0 auto; padding-inline: 20px; padding-block: 32px 64px; display: grid; gap: 40px; }
+h1, h2 { font-family: var(--display); font-weight: 600; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.1; }
+h2 { font-size: 22px; line-height: 1.25; }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lede { color: var(--muted); font-size: 16px; }
+header { display: grid; gap: 12px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: 500 12px/1 var(--mono); padding: 6px 10px; border-radius: 999px; background: var(--sunk); color: var(--muted); }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 4px; align-content: start; }
+.kpi.lead { background: var(--tonal); border-color: transparent; color: var(--on-tonal); }
+.kpi .k { font-size: 13px; color: inherit; opacity: 0.85; }
+.kpi .v { font: 600 30px/1.1 var(--display); font-variant-numeric: tabular-nums; }
+.kpi .s { font-size: 12.5px; opacity: 0.8; }
+section { display: grid; gap: 14px; }
+.fig { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 10px; min-width: 0; }
+.fig svg { width: 100%; height: auto; display: block; overflow: visible; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.note { font-size: 13px; color: var(--muted); }
+.axis text, .lbl { font: 400 11px var(--mono); fill: var(--muted); }
+.grid line { stroke: var(--line); stroke-width: 1; }
+.dlbl { font: 500 12px var(--body); fill: var(--fg); }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 11px/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+td.n { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.scroll { overflow-x: auto; }
+.tag { font: 500 11px/1 var(--mono); padding: 4px 8px; border-radius: 6px; white-space: nowrap; }
+.t-obs { background: var(--tonal); color: var(--on-tonal); }
+.t-mod { background: var(--sunk); color: var(--fg); border: 1px solid var(--line); }
+.t-asm { background: transparent; color: var(--muted); border: 1px dashed var(--faint); }
+ul.checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+ul.checks li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; align-items: start; }
+ul.checks b { font-weight: 600; }
+.ok { color: var(--accent); font-weight: 700; }
+.warn { color: var(--p-cost); font-weight: 700; }
+#tip { position: fixed; pointer-events: none; background: var(--fg); color: var(--bg); font: 500 12px/1.4 var(--body); padding: 8px 10px; border-radius: 8px; max-width: 240px; z-index: 5; }
+footer { font-size: 12.5px; color: var(--muted); display: grid; gap: 6px; }
+@media (prefers-reduced-motion: no-preference) { .fig { transition: border-color .2s; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">AnnaSetu · case study · one Delhi farm</div>
+    <h1>Three months of 2026 on an 8-acre farm near Narela</h1>
+    <p class="lede">An 8-acre vegetable farm near Narela, north-west Delhi: tomato on 3 acres, bottle gourd on 2, okra on 2 from mid-April and cauliflower on 1 in March. Every picking went through AnnaSetu on that day's real mandi data. The nearest mandi reporting these crops is Azadpur, 17 km away.</p>
+    <div class="meta" id="chips"></div>
+  </header>
+
+  <div class="kpis" id="kpis"></div>
+
+  <section>
+    <div class="eyebrow">Result</div>
+    <h2>Money AnnaSetu added, day by day</h2>
+    <p class="note" id="cumnote"></p>
+    <div class="fig">
+      <div class="legend" id="clegend"></div>
+      <svg id="cum" viewBox="0 0 860 300" role="img" aria-label="Cumulative money saved by crop"></svg>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Problem classification</div>
+    <h2>What was wrong at the nearest mandi</h2>
+    <p class="note">Each picking day is classed by Azadpur's state that day. Okra met 5 arrival-glut and 4 watch days after mid-April and tomato 10 watch days; the rest were normal or Azadpur had no recent report.</p>
+    <div class="fig">
+      <div class="legend" id="plegend"></div>
+      <svg id="prob" viewBox="0 0 860 300" role="img" aria-label="Share of picking days by problem class, per crop"></svg>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Verification</div>
+    <h2>Did the advised market really pay more?</h2>
+    <p class="note">Out-of-sample check on every load sent away from the nearest mandi: the advised and the nearest market's next real price report (within 7 days after the decision), minus freight. Above the zero line, the advice held. The diagonal is a perfect prediction.</p>
+    <div class="two">
+      <div class="fig">
+        <svg id="ver" viewBox="0 0 420 360" role="img" aria-label="Predicted vs realised price gap per diverted load"></svg>
+      </div>
+      <div class="fig" style="align-content:start">
+        <table id="vtab"></table>
+        <p class="note">The direction held on most loads; the size of the gain was smaller than predicted for okra and bottle gourd. Cauliflower in March is the weak spot.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Result · waste</div>
+    <h2>Waste avoided comes from glut days, not every day</h2>
+    <p class="note">Waste avoided per crop over the season (kg, mid; whiskers show the low to high estimate). On normal days a longer trip adds spoilage, so the net can be negative even when the price is better.</p>
+    <div class="fig">
+      <div class="legend"><span><i class="sw" style="background:var(--pos)"></i>less waste than the nearest mandi</span><span><i class="sw" style="background:var(--neg)"></i>more trip spoilage than saved</span></div>
+      <svg id="waste" viewBox="0 0 860 200" role="img" aria-label="Waste avoided by crop"></svg>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Result · rescue</div>
+    <h2>Unsold stock at Azadpur found a buyer every time</h2>
+    <p class="note">Once a week about 300 kg of tomato came back unsold from Azadpur, a day after picking. The engine proposed the spoiled share from that day's temperature and sent the edible part to the best-paying mandi within 100 km.</p>
+    <div class="fig"><svg id="resc" viewBox="0 0 860 160" role="img" aria-label="Where unsold lots went"></svg><p class="note" id="rnote"></p></div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Classification of every figure</div>
+    <h2>What is observed, modelled or assumed</h2>
+    <div class="fig scroll">
+      <table>
+        <thead><tr><th>Figure</th><th>Status</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>Mandi prices and arrivals, 2021 to May 2026</td><td><span class="tag t-obs">Observed</span></td><td>AGMARKNET market-level files, India Data Portal</td></tr>
+          <tr><td>Realised prices used for verification</td><td><span class="tag t-obs">Observed</span></td><td>Same files, reports after each decision day</td></tr>
+          <tr><td>Hourly temperature in north-west Delhi</td><td><span class="tag t-obs">Observed</span></td><td>NASA POWER (MERRA-2)</td></tr>
+          <tr><td>Road distance and drive time from the farm</td><td><span class="tag t-obs">Observed</span></td><td>Amazon Location Service routes</td></tr>
+          <tr><td>Glut ratio R, risk level, problem class</td><td><span class="tag t-mod">Model</span></td><td>Section 9 Step 1 on observed arrivals and prices</td></tr>
+          <tr><td>Net value per kg, money saved</td><td><span class="tag t-mod">Model</span></td><td>Section 9 Steps 2-4, 6</td></tr>
+          <tr><td>Spoilage on the trip, edible/spoiled split</td><td><span class="tag t-mod">Model</span></td><td>Step 3: shelf life, Q10, temperature, hours</td></tr>
+          <tr><td>Waste avoided, kept out of landfill</td><td><span class="tag t-mod">Model</span></td><td>Step 6, ranges</td></tr>
+          <tr><td>Freight Rs 11/tonne-km, commission, hamali, fees</td><td><span class="tag t-asm">Assumption</span></td><td>Desk research, placeholders until FPO interviews</td></tr>
+          <tr><td>Dump share u(R), price-below-cost dump</td><td><span class="tag t-asm">Assumption</span></td><td>Placeholder table (Section 9)</td></tr>
+          <tr><td>The farm, its crops and picking quantities</td><td><span class="tag t-asm">Simulated</span></td><td>Typical yields for the area, not one grower's records</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Verification of the build</div>
+    <h2>Checks behind these numbers</h2>
+    <div class="fig">
+      <ul class="checks" id="checks"></ul>
+    </div>
+  </section>
+
+  <footer>
+    <p>Simulated farm on real 2026 mandi prices, arrivals, weather and routes; all money and waste figures are estimates. Reproduce: <code>python analysis/simulate_farm_2026.py</code> then <code>python analysis/sim_summary.py --prefix farm_2026</code>.</p>
+  </footer>
+</div>
+<div id="tip" hidden></div>
+
+<script>
+const D = {"crops":[{"id":"tomato","label":"Tomato","color":"--c1"},{"id":"bottle_gourd","label":"Bottle gourd","color":"--c2"},{"id":"bhindi_ladies_finger","label":"Okra","color":"--c3"},{"id":"cauliflower","label":"Cauliflower","color":"--c4"}],"cum":[["2026-03-01",13347,15488,0,2806],["2026-03-02",13347,15488,0,2806],["2026-03-03",20934,15488,0,2806],["2026-03-04",20934,17158,0,4213],["2026-03-05",30400,17158,0,4213],["2026-03-06",30400,17158,0,4213],["2026-03-07",34516,17158,0,7011],["2026-03-08",34516,17158,0,7011],["2026-03-09",34516,17158,0,7011],["2026-03-10",34516,17158,0,7011],["2026-03-11",36184,17158,0,7011],["2026-03-12",36184,17158,0,7011],["2026-03-13",37240,17158,0,12103],["2026-03-14",37240,17158,0,12103],["2026-03-15",41302,17158,0,12103],["2026-03-16",41302,17158,0,14613],["2026-03-17",47996,17158,0,14613],["2026-03-18",47996,17158,0,14613],["2026-03-19",47996,17158,0,14613],["2026-03-20",47996,17158,0,14613],["2026-03-21",47996,17158,0,14613],["2026-03-22",47996,17158,0,14613],["2026-03-23",47996,17158,0,14613],["2026-03-24",47996,17158,0,14613],["2026-03-25",47996,17158,0,14613],["2026-03-26",47996,17158,0,14613],["2026-03-27",47996,17158,0,14613],["2026-03-28",47996,17158,0,14613],["2026-03-29",47996,17158,0,14613],["2026-03-30",47996,17158,0,14613],["2026-03-31",57123,37160,0,14613],["2026-04-01",57123,37160,0,14613],["2026-04-02",65476,37160,0,14613],["2026-04-03",65476,37160,0,14613],["2026-04-04",65476,37160,0,14613],["2026-04-05",65476,37160,0,14613],["2026-04-06",65476,37160,0,14613],["2026-04-07",65476,37160,0,14613],["2026-04-08",73051,37160,0,14613],["2026-04-09",73051,44350,0,14613],["2026-04-10",82645,44350,0,14613],["2026-04-11",82645,44350,0,14613],["2026-04-12",101742,44350,0,14613],["2026-04-13",101742,44350,0,14613],["2026-04-14",109026,44350,0,14613],["2026-04-15",109026,47770,22457,14613],["2026-04-16",116268,47770,22457,14613],["2026-04-17",116268,47770,47534,14613],["2026-04-18",118209,54816,47534,14613],["2026-04-19",118209,54816,60155,14613],["2026-04-20",126090,54816,60155,14613],["2026-04-21",126090,60960,73717,14613],["2026-04-22",134384,60960,73717,14613],["2026-04-23",134384,60960,85974,14613],["2026-04-24",148016,62595,85974,14613],["2026-04-25",148016,62595,95092,14613],["2026-04-26",154619,62595,95092,14613],["2026-04-27",154619,66045,104893,14613],["2026-04-28",158788,66045,104893,14613],["2026-04-29",158788,66045,112939,14613],["2026-04-30",160933,66045,112939,14613],["2026-05-01",160933,66045,125828,14613],["2026-05-02",162047,66045,125828,14613],["2026-05-03",162047,66045,132938,14613],["2026-05-04",164788,66045,132938,14613],["2026-05-05",164788,66045,142130,14613],["2026-05-06",170443,66045,142130,14613],["2026-05-07",170443,66045,146844,14613],["2026-05-08",178280,66045,146844,14613],["2026-05-09",178280,66045,149475,14613],["2026-05-10",186082,66045,149475,14613],["2026-05-11",186082,66045,154959,14613],["2026-05-12",189771,66045,154959,14613],["2026-05-13",189771,66045,162590,14613],["2026-05-14",193190,66045,162590,14613],["2026-05-15",193190,66045,165198,14613],["2026-05-16",193976,66045,165198,14613],["2026-05-17",193976,66045,172905,14613],["2026-05-18",199270,66045,172905,14613],["2026-05-19",199270,66045,176932,14613],["2026-05-20",204562,66045,176932,14613],["2026-05-21",204562,66045,180965,14613],["2026-05-22",209864,66045,180965,14613],["2026-05-23",209864,66045,180965,14613],["2026-05-24",215061,66780,180965,14613],["2026-05-25",215061,66780,180965,14613],["2026-05-26",231838,66780,180965,14613],["2026-05-27",231838,67513,180965,14613],["2026-05-28",242571,67513,180965,14613],["2026-05-29",242571,67513,180965,14613],["2026-05-30",253896,67513,180965,14613],["2026-05-31",253896,67513,180965,14613]],"problems":{"tomato":{"arrival_glut":0,"arrival_watch":10,"below_cost":0,"no_data":9,"normal":26,"price_fall":1},"bottle_gourd":{"arrival_glut":0,"arrival_watch":0,"below_cost":0,"no_data":10,"normal":19,"price_fall":2},"bhindi_ladies_finger":{"arrival_glut":5,"arrival_watch":4,"below_cost":0,"no_data":0,"normal":15,"price_fall":0},"cauliflower":{"arrival_glut":0,"arrival_watch":0,"below_cost":0,"no_data":5,"normal":5,"price_fall":1}},"ver":[[15.49,18.84,"bottle_gourd"],[2.54,-3.23,"cauliflower"],[9.78,10.16,"tomato"],[5.84,7.96,"tomato"],[2.47,2.72,"bottle_gourd"],[1.56,1.72,"cauliflower"],[7.28,5.46,"tomato"],[0.63,1.72,"bottle_gourd"],[2.53,-0.23,"cauliflower"],[3.17,-0.04,"tomato"],[3.49,1.29,"tomato"],[14.03,17.84,"bottle_gourd"],[0.63,-1.28,"cauliflower"],[1.28,0.04,"tomato"],[14.06,17.84,"bottle_gourd"],[3.4,1.72,"cauliflower"],[0.04,-0.16,"tomato"],[2.35,2.61,"tomato"],[15.45,14.84,"bottle_gourd"],[1.67,1.84,"cauliflower"],[4.48,6.45,"tomato"],[13.66,13.84,"bottle_gourd"],[3.41,-0.28,"cauliflower"],[5.9,7.17,"tomato"],[6.55,6.29,"tomato"],[12.72,13.84,"bottle_gourd"],[3.4,3.72,"cauliflower"],[6.54,6.29,"tomato"],[16.35,20.84,"bottle_gourd"],[3.39,-4.28,"cauliflower"],[5.71,7.25,"tomato"],[6.59,7.73,"tomato"],[16.34,18.84,"bottle_gourd"],[-2.13,-1.28,"cauliflower"],[7.0,7.73,"tomato"],[20.0,21.84,"bottle_gourd"],[7.02,6.45,"tomato"],[5.83,6.45,"tomato"],[20.01,5.84,"bottle_gourd"],[2.78,4.98,"tomato"],[3.04,7.84,"bottle_gourd"],[3.36,3.98,"tomato"],[5.83,0.8,"tomato"],[7.19,2.84,"bottle_gourd"],[14.19,0.08,"tomato"],[5.9,4.53,"tomato"],[17.95,13.72,"bhindi_ladies_finger"],[3.42,-0.23,"bottle_gourd"],[5.86,-2.75,"tomato"],[26.85,1.63,"bhindi_ladies_finger"],[7.05,5.77,"bottle_gourd"],[1.49,-4.75,"tomato"],[13.34,14.72,"bhindi_ladies_finger"],[7.3,3.64,"tomato"],[13.36,7.72,"bhindi_ladies_finger"],[6.14,1.77,"bottle_gourd"],[6.38,10.12,"tomato"],[13.3,13.72,"bhindi_ladies_finger"],[1.64,2.84,"bottle_gourd"],[10.49,5.72,"tomato"],[5.08,1.72,"tomato"],[3.45,-0.15,"bottle_gourd"],[3.21,3.69,"tomato"],[10.59,18.72,"bhindi_ladies_finger"],[1.65,1.88,"tomato"],[16.96,5.72,"bhindi_ladies_finger"],[0.86,1.58,"tomato"],[8.89,5.85,"bhindi_ladies_finger"],[1.44,4.78,"tomato"],[11.49,7.63,"bhindi_ladies_finger"],[4.35,5.42,"tomato"],[7.0,4.72,"bhindi_ladies_finger"],[6.03,6.2,"tomato"],[4.26,4.72,"bhindi_ladies_finger"],[6.0,2.2,"tomato"],[6.86,7.63,"bhindi_ladies_finger"],[2.84,2.97,"tomato"],[9.54,4.63,"bhindi_ladies_finger"],[2.63,2.97,"tomato"],[4.23,4.72,"bhindi_ladies_finger"],[0.6,2.8,"tomato"],[9.63,5.72,"bhindi_ladies_finger"],[4.07,4.54,"tomato"],[5.99,6.72,"bhindi_ladies_finger"],[4.07,4.54,"tomato"],[6.0,3.72,"bhindi_ladies_finger"],[4.08,4.46,"tomato"],[0.74,-3.15,"bottle_gourd"],[4.0,11.26,"tomato"],[12.91,7.52,"tomato"],[0.73,0.85,"bottle_gourd"],[8.26,9.66,"tomato"]],"waste":[{"k":"tomato","high":4787,"low":-979,"mid":378,"money":253896,"glut":0},{"k":"bottle_gourd","high":608,"low":-172,"mid":-57,"money":67513,"glut":0},{"k":"bhindi_ladies_finger","high":2270,"low":-50,"mid":750,"money":180965,"glut":5},{"k":"cauliflower","high":148,"low":-227,"mid":-227,"money":14613,"glut":0}],"rescue":{"kg":3900,"lots":13,"recovered_kg":0,"rescued_kg":3576,"to":{"Bahadurgarh":2,"Keshopur":1,"Muradnagar":1,"Sampla":4,"Sonepat(Kharkhoda)":5}},"all":{"advice":{},"days":77,"diverted":96,"diverted_kg":111000,"extra_km":1868,"kg":126500,"loads":112,"loads_waste_positive":26,"money_saved_rs":{"high":772283,"low":365147,"mid":516988},"predicted_gap_median":5.85,"problems":{"arrival_glut":5,"arrival_watch":14,"below_cost":0,"no_data":24,"normal":65,"price_fall":4},"realised_gap_median":4.72,"stale_top":6,"to_second_life":0,"verified":92,"verified_hit":79,"waste_avoided_kg":{"high":7813,"low":-1427,"mid":844}},"by_crop":{"bhindi_ladies_finger":{"advice":{},"days":24,"diverted":19,"diverted_kg":15200,"extra_km":501,"kg":19200,"loads":24,"loads_waste_positive":7,"money_saved_rs":{"high":259193,"low":128350,"mid":180965},"predicted_gap_median":9.63,"problems":{"arrival_glut":5,"arrival_watch":4,"below_cost":0,"no_data":0,"normal":15,"price_fall":0},"realised_gap_median":5.85,"stale_top":3,"to_second_life":0,"verified":17,"verified_hit":17,"waste_avoided_kg":{"high":2270,"low":-50,"mid":750}},"bottle_gourd":{"advice":{},"days":31,"diverted":21,"diverted_kg":21000,"extra_km":348,"kg":31000,"loads":31,"loads_waste_positive":0,"money_saved_rs":{"high":104732,"low":44029,"mid":67513},"predicted_gap_median":7.19,"problems":{"arrival_glut":0,"arrival_watch":0,"below_cost":0,"no_data":10,"normal":19,"price_fall":2},"realised_gap_median":5.84,"stale_top":0,"to_second_life":0,"verified":21,"verified_hit":18,"waste_avoided_kg":{"high":608,"low":-172,"mid":-57}},"cauliflower":{"advice":{},"days":11,"diverted":10,"diverted_kg":15000,"extra_km":237,"kg":16500,"loads":11,"loads_waste_positive":0,"money_saved_rs":{"high":30735,"low":5813,"mid":14613},"predicted_gap_median":2.54,"problems":{"arrival_glut":0,"arrival_watch":0,"below_cost":0,"no_data":5,"normal":5,"price_fall":1},"realised_gap_median":-0.26,"stale_top":0,"to_second_life":0,"verified":10,"verified_hit":4,"waste_avoided_kg":{"high":148,"low":-227,"mid":-227}},"tomato":{"advice":{},"days":46,"diverted":46,"diverted_kg":59800,"extra_km":783,"kg":59800,"loads":46,"loads_waste_positive":19,"money_saved_rs":{"high":377623,"low":186956,"mid":253896},"predicted_gap_median":5.39,"problems":{"arrival_glut":0,"arrival_watch":10,"below_cost":0,"no_data":9,"normal":26,"price_fall":1},"realised_gap_median":4.54,"stale_top":3,"to_second_life":0,"verified":44,"verified_hit":40,"waste_avoided_kg":{"high":4787,"low":-979,"mid":378}}},"errors":0,"checks":[[1,"Same code as production.","The case study calls the advisor's own /plan and /recommend functions on each picking day's data; only the date and the data source change."],[1,"0 failed requests","in 90 (112 loads on 77 picking days, 13 unsold lots)."],[1,"Deterministic.","The same inputs give the same output; the engine has no randomness."],[1,"120 backend tests pass,","including the Section 17.3 cases (normal week, glut day, ten-load split, rescue, recover order)."],[1,"Out of sample:","the advised market's next real price beat Azadpur's after freight on 79 of 92 diverted loads."],[0,"Cauliflower:","the advice held on only 4 of 10 March loads (median realised gap Rs -0.26/kg); late-season cauliflower prices moved more than their history suggested."],[0,"Predicted gaps ran high for okra and bottle gourd","(median Rs 9.63 and 7.19/kg predicted, 5.85 and 5.84 realised); the direction held, the size was smaller."]]};
+const NS = "http://www.w3.org/2000/svg";
+const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+const fmt = (n) => Math.round(n).toLocaleString("en-IN");
+const lakh = (rs) => (rs / 1e5).toFixed(1);
+const pct = (a, b) => Math.round(a / b * 1000) / 10;
+const tip = document.getElementById("tip");
+const showTip = (ev, html) => { tip.innerHTML = html; tip.hidden = false; tip.style.left = Math.min(ev.clientX + 14, innerWidth - 250) + "px"; tip.style.top = (ev.clientY + 14) + "px"; };
+const hideTip = () => { tip.hidden = true; };
+const svgPt = (svg, ev) => { const p = svg.createSVGPoint(); p.x = ev.clientX; p.y = ev.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()); };
+const A = D.all, R = D.rescue, C = D.crops;
+const label = id => C.find(c => c.id === id).label;
+
+document.getElementById("chips").innerHTML = [`92 days`, `${fmt(A.loads)} loads · ${fmt(A.kg / 1000)} t`, `${R.lots} unsold lots · ${fmt(R.kg / 1000)} t`, `${D.errors} failed requests`].map(x => `<span class="chip">${x}</span>`).join("");
+const kept = A.waste_avoided_kg.mid + R.rescued_kg + R.recovered_kg;
+document.getElementById("kpis").innerHTML = [
+  ["lead", "Money saved", "Rs " + lakh(A.money_saved_rs.mid) + " lakh", "likely Rs " + lakh(A.money_saved_rs.low) + "-" + lakh(A.money_saved_rs.high) + " lakh, about Rs " + (A.money_saved_rs.mid / A.kg).toFixed(1) + "/kg"],
+  ["", "Kept out of landfill", fmt(kept) + " kg", fmt(R.rescued_kg) + " kg rescued + " + fmt(A.waste_avoided_kg.mid) + " kg net waste avoided"],
+  ["", "Advice held out of sample", pct(A.verified_hit, A.verified) + "%", A.verified_hit + " of " + A.verified + " diverted loads"],
+  ["", "Sent away from Azadpur", pct(A.diverted, A.loads) + "%", fmt(A.diverted) + " of " + fmt(A.loads) + " loads; +" + fmt(A.extra_km) + " km in all"],
+].map(([c, k, v, s]) => `<div class="kpi ${c}"><span class="k">${k}</span><span class="v">${v}</span><span class="s">${s}</span></div>`).join("");
+
+// Cumulative money by crop
+(() => {
+  document.getElementById("clegend").innerHTML = C.map(c => `<span><i class="sw" style="background:var(${c.color})"></i>${c.label}</span>`).join("");
+  const thousand = Math.max(...D.cum.map(r => Math.max(...r.slice(1)))) < 3e5;
+  const unit = thousand ? 1e3 : 1e5, uname = thousand ? "Rs thousand" : "Rs lakh";
+  document.getElementById("cumnote").textContent = `Cumulative money saved (${uname}), mid estimate: expected earnings at the advised market minus Azadpur, after freight, fees and spoilage.`;
+  const svg = document.getElementById("cum"), W = 860, H = 300, m = { l: 44, r: 130, t: 12, b: 28 };
+  const n = D.cum.length, vals = D.cum.map(r => r.slice(1).map(v => v / unit));
+  const raw = Math.max(...vals.flat()), step = raw > 40 ? 20 : raw > 20 ? 10 : 5, max = Math.ceil(raw / step) * step;
+  const x = i => m.l + i * (W - m.l - m.r) / (n - 1), y = v => H - m.b - v / max * (H - m.t - m.b);
+  const g = el("g", { class: "grid" }, svg), ax = el("g", { class: "axis" }, svg);
+  for (let v = 0; v <= max; v += step) { el("line", { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v) }, g); el("text", { x: m.l - 8, y: y(v) + 4, "text-anchor": "end" }, ax).textContent = v; }
+  D.cum.forEach((r, i) => { if (r[0].endsWith("-01")) el("text", { x: x(i), y: H - 8 }, ax).textContent = new Date(r[0]).toLocaleString("en-IN", { month: "short" }); });
+  const ends = C.map((c, k) => ({ c, k, v: vals[n - 1][k] })).sort((a, b) => b.v - a.v);
+  let lastY = -99;
+  ends.forEach(o => {
+    el("path", { d: vals.map((r, i) => (i ? "L" : "M") + x(i).toFixed(1) + " " + y(r[o.k]).toFixed(1)).join(""), fill: "none", stroke: `var(${o.c.color})`, "stroke-width": 2, "stroke-linejoin": "round" }, svg);
+    el("circle", { cx: x(n - 1), cy: y(o.v), r: 4, fill: `var(${o.c.color})`, stroke: "var(--surface)", "stroke-width": 2 }, svg);
+    const ly = Math.max(y(o.v) + 4, lastY + 15); lastY = ly;
+    el("text", { x: x(n - 1) + 8, y: ly, class: "dlbl" }, svg).textContent = `${o.c.label} ${o.v.toFixed(o.v < 10 ? 1 : 0)}`;
+  });
+  const cross = el("line", { y1: m.t, y2: H - m.b, stroke: "var(--faint)", "stroke-width": 1, visibility: "hidden" }, svg);
+  const hit = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" }, svg);
+  hit.addEventListener("pointermove", ev => {
+    const q = svgPt(svg, ev), i = Math.max(0, Math.min(n - 1, Math.round((q.x - m.l) / (W - m.l - m.r) * (n - 1))));
+    cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
+    showTip(ev, `<b>${new Date(D.cum[i][0]).toLocaleDateString("en-IN", { day: "numeric", month: "short" })} 2026</b><br>` + C.map((c, k) => `${c.label} ${vals[i][k].toFixed(1)}`).join("<br>") + `<br><span style="opacity:.8">${uname}</span>`);
+  });
+  hit.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); hideTip(); });
+})();
+
+// Problem classification per crop
+(() => {
+  const cls = [["arrival_glut", "Arrival glut", "--p-glut"], ["arrival_watch", "Arrival watch", "--p-watch"], ["price_fall", "Price fall", "--p-fall"], ["below_cost", "Below harvest cost", "--p-cost"], ["normal", "Normal", "--p-normal"], ["no_data", "No recent report", "--p-none"]];
+  document.getElementById("plegend").innerHTML = cls.map(([, l, c]) => `<span><i class="sw" style="background:var(${c});${c === "--p-none" ? "outline:1px dashed var(--hatch)" : ""}"></i>${l}</span>`).join("");
+  const svg = document.getElementById("prob"), W = 860, m = { l: 120, r: 10 };
+  svg.setAttribute("viewBox", `0 0 860 ${C.length * 64 + 10}`);
+  const defs = el("defs", {}, svg), pat = el("pattern", { id: "hatch", width: 6, height: 6, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" }, defs);
+  el("rect", { width: 6, height: 6, fill: "var(--p-none)" }, pat); el("line", { x1: 0, y1: 0, x2: 0, y2: 6, stroke: "var(--hatch)", "stroke-width": 2 }, pat);
+  C.forEach((c, ri) => {
+    const p = D.problems[c.id], tot = Object.values(p).reduce((a, b) => a + b, 0), y0 = 6 + ri * 64;
+    el("text", { x: 0, y: y0 + 22, class: "dlbl" }, svg).textContent = c.label;
+    let x0 = m.l; const span = W - m.l - m.r;
+    cls.forEach(([k, l, col]) => {
+      const v = p[k]; if (!v) return; const w = v / tot * span;
+      const r = el("rect", { x: x0, y: y0, width: Math.max(0, w - 2), height: 34, rx: 4, fill: k === "no_data" ? "url(#hatch)" : `var(${col})` }, svg);
+      r.addEventListener("pointermove", ev => showTip(ev, `<b>${c.label}: ${l}</b><br>${v} picking days (${Math.round(v / tot * 100)}%)`)); r.addEventListener("pointerleave", hideTip);
+      if (w > 56) el("text", { x: x0 + 8, y: y0 + 22, class: "dlbl", style: k === "arrival_glut" || k === "below_cost" ? "fill:#fff" : "" }, svg).textContent = Math.round(v / tot * 100) + "%";
+      x0 += w;
+    });
+    el("text", { x: m.l, y: y0 + 50, class: "lbl" }, svg).textContent = tot + " picking days";
+  });
+})();
+
+// Verification scatter (one colour; per-crop figures in the table)
+(() => {
+  const svg = document.getElementById("ver"), W = 420, H = 360, m = { l: 44, r: 10, t: 10, b: 40 };
+  const lo = -10, hi = 30, x = v => m.l + (v - lo) / (hi - lo) * (W - m.l - m.r), y = v => H - m.b - (v - lo) / (hi - lo) * (H - m.t - m.b);
+  const g = el("g", { class: "grid" }, svg), ax = el("g", { class: "axis" }, svg);
+  for (let v = lo; v <= hi; v += 10) { el("line", { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v) }, g); el("text", { x: m.l - 6, y: y(v) + 4, "text-anchor": "end" }, ax).textContent = v; el("text", { x: x(v), y: H - m.b + 16, "text-anchor": "middle" }, ax).textContent = v; }
+  el("line", { x1: m.l, x2: W - m.r, y1: y(0), y2: y(0), stroke: "var(--fg)", "stroke-width": 1 }, svg);
+  el("line", { x1: x(lo), y1: y(lo), x2: x(hi), y2: y(hi), stroke: "var(--faint)", "stroke-width": 1, "stroke-dasharray": "4 4" }, svg);
+  el("text", { x: (m.l + W - m.r) / 2, y: H - 6, "text-anchor": "middle", class: "lbl" }, svg).textContent = "Predicted gap, Rs/kg";
+  el("text", { x: 12, y: (m.t + H - m.b) / 2, "text-anchor": "middle", class: "lbl", transform: `rotate(-90 12 ${(m.t + H - m.b) / 2})` }, svg).textContent = "Realised gap, Rs/kg";
+  const clamp = v => Math.max(lo, Math.min(hi, v));
+  const pts = D.ver.map(([p, r, crop]) => ({ p, r, crop, cx: x(clamp(p)), cy: y(clamp(r)) }));
+  pts.forEach(o => el("circle", { cx: o.cx, cy: o.cy, r: 3.6, fill: "var(--kolar)", "fill-opacity": 0.6 }, svg));
+  const ring = el("circle", { r: 6, fill: "none", stroke: "var(--fg)", "stroke-width": 1.5, visibility: "hidden" }, svg);
+  const hit = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" }, svg);
+  hit.addEventListener("pointermove", ev => {
+    const q = svgPt(svg, ev); let best = null, bd = 400;
+    for (const o of pts) { const d = (o.cx - q.x) ** 2 + (o.cy - q.y) ** 2; if (d < bd) { bd = d; best = o; } }
+    if (!best) { ring.setAttribute("visibility", "hidden"); return hideTip(); }
+    ring.setAttribute("cx", best.cx); ring.setAttribute("cy", best.cy); ring.setAttribute("visibility", "visible");
+    showTip(ev, `<b>${label(best.crop)}</b><br>Predicted Rs ${best.p.toFixed(2)}/kg<br>Realised Rs ${best.r.toFixed(2)}/kg`);
+  });
+  hit.addEventListener("pointerleave", () => { ring.setAttribute("visibility", "hidden"); hideTip(); });
+  document.getElementById("vtab").innerHTML = `<thead><tr><th>Crop</th><th class="n">Held</th><th class="n">Predicted</th><th class="n">Realised</th></tr></thead><tbody>` +
+    C.map(c => { const v = D.by_crop[c.id]; return `<tr><td>${c.label}</td><td class="n">${v.verified ? v.verified_hit + "/" + v.verified : "–"}</td><td class="n">${v.predicted_gap_median == null ? "–" : "Rs " + v.predicted_gap_median}</td><td class="n">${v.realised_gap_median == null ? "–" : "Rs " + v.realised_gap_median}</td></tr>`; }).join("") +
+    `</tbody><caption style="caption-side:bottom;text-align:left;padding-top:8px" class="note">Median gap per kg after freight, advised minus Azadpur.</caption>`;
+})();
+
+// Waste avoided by crop
+(() => {
+  const svg = document.getElementById("waste"), W = 860, m = { l: 130, r: 20, t: 10 }, rowH = 40;
+  const rows = D.waste.slice().sort((a, b) => b.mid - a.mid);
+  svg.setAttribute("viewBox", `0 0 860 ${m.t + rows.length * rowH + 30}`);
+  const span = Math.max(...rows.map(r => Math.max(Math.abs(r.low), Math.abs(r.high))));
+  const stp = span > 8000 ? 4000 : span > 4000 ? 2000 : span > 2000 ? 1000 : 500;
+  const lo = -Math.ceil(Math.max(0, -Math.min(...rows.map(r => r.low))) / stp) * stp, hi = Math.ceil(Math.max(...rows.map(r => r.high)) / stp) * stp;
+  const x = v => m.l + (v - lo) / (hi - lo) * (W - m.l - m.r);
+  const g = el("g", { class: "grid" }, svg), ax = el("g", { class: "axis" }, svg), yb = m.t + rows.length * rowH;
+  for (let v = lo; v <= hi; v += stp) { el("line", { x1: x(v), x2: x(v), y1: m.t, y2: yb }, g); el("text", { x: x(v), y: yb + 16, "text-anchor": "middle" }, ax).textContent = fmt(v) + " kg"; }
+  el("line", { x1: x(0), x2: x(0), y1: m.t, y2: yb, stroke: "var(--fg)", "stroke-width": 1 }, svg);
+  rows.forEach((r, i) => {
+    const cy = m.t + i * rowH + rowH / 2;
+    el("text", { x: m.l - 10, y: cy + 4, "text-anchor": "end", class: "dlbl" }, svg).textContent = label(r.k);
+    el("line", { x1: x(r.low), x2: x(r.high), y1: cy, y2: cy, stroke: "var(--faint)", "stroke-width": 1.5 }, svg);
+    [r.low, r.high].forEach(v => el("line", { x1: x(v), x2: x(v), y1: cy - 5, y2: cy + 5, stroke: "var(--faint)", "stroke-width": 1.5 }, svg));
+    el("rect", { x: x(Math.min(0, r.mid)), y: cy - 10, width: Math.max(2, Math.abs(x(r.mid) - x(0))), height: 20, rx: 4, fill: r.mid >= 0 ? "var(--pos)" : "var(--neg)" }, svg);
+    el("text", { x: r.mid >= 0 ? x(r.mid) + 8 : x(r.mid) - 8, y: cy - 14, "text-anchor": r.mid >= 0 ? "start" : "end", class: "lbl" }, svg).textContent = (r.mid >= 0 ? "+" : "") + fmt(r.mid) + " kg";
+    const hb = el("rect", { x: m.l, y: cy - rowH / 2, width: W - m.l - m.r, height: rowH, fill: "transparent" }, svg);
+    hb.addEventListener("pointermove", ev => showTip(ev, `<b>${label(r.k)}</b><br>Waste avoided ${fmt(r.mid)} kg (likely ${fmt(r.low)} to ${fmt(r.high)})<br>Arrival-glut days at Azadpur: ${r.glut}<br>Money saved Rs ${fmt(r.money)}`));
+    hb.addEventListener("pointerleave", hideTip);
+  });
+})();
+
+// Rescue
+(() => {
+  const svg = document.getElementById("resc"), W = 860, m = { l: 170, r: 60, t: 6 }, rowH = 30;
+  const rows = Object.entries(R.to).sort((a, b) => b[1] - a[1]), max = rows[0][1];
+  svg.setAttribute("viewBox", `0 0 860 ${m.t + rows.length * rowH + 6}`);
+  rows.forEach(([name, n], i) => {
+    const cy = m.t + i * rowH + rowH / 2, w = n / max * (W - m.l - m.r);
+    el("text", { x: m.l - 10, y: cy + 4, "text-anchor": "end", class: "dlbl" }, svg).textContent = name;
+    const b = el("rect", { x: m.l, y: cy - 9, width: w, height: 18, rx: 4, fill: "var(--delhi)" }, svg);
+    el("text", { x: m.l + w + 8, y: cy + 4, class: "lbl" }, svg).textContent = n + (n === 1 ? " lot" : " lots");
+    b.addEventListener("pointermove", ev => showTip(ev, `<b>${name}</b><br>${n} of ${R.lots} unsold lots`)); b.addEventListener("pointerleave", hideTip);
+  });
+  document.getElementById("rnote").textContent = `${fmt(R.rescued_kg)} kg of ${fmt(R.kg)} kg rescued (${pct(R.rescued_kg, R.kg)}%); the rest is the estimated spoiled share. No biogas or compost unit near Azadpur took it.`;
+})();
+
+document.getElementById("checks").innerHTML = D.checks.map(([ok, b, t]) => `<li><span class="${ok ? "ok" : "warn"}">${ok ? "✓" : "!"}</span><span><b>${b}</b> ${t}</span></li>`).join("");
+</script>

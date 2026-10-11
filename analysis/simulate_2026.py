@@ -48,14 +48,14 @@ def km(a_lat, a_lon, b_lat, b_lon):
     return 2 * 6371.0 * math.asin(math.sqrt(h))
 
 
-def build_snapshot(raw, out, start, end):
+def build_snapshot(raw, out, start, end, crops=CROPS):
     """Cut each crop's national file to markets near either origin; cache NASA POWER temperature at both."""
     markets = {m["market_id"]: m for m in json.loads((ROOT / "config/markets.json").read_text())["markets"]
                if m.get("lat") is not None}
     near = {i for i, m in markets.items()
             if min(km(o["lat"], o["lon"], m["lat"], m["lon"]) for o in (KOLAR, AZADPUR)) <= RADIUS_KM}
     out.mkdir(parents=True, exist_ok=True)
-    for crop in CROPS:
+    for crop in crops:
         dst = out / f"sim_{crop}_2021-01-01_{DATA_END}.csv.gz"
         if dst.exists():
             continue
@@ -75,10 +75,10 @@ def build_snapshot(raw, out, start, end):
                                                                     "temperature_c")} for n, p in pts.items()}}))
 
 
-def prices(snapshot):
+def prices(snapshot, crops=CROPS):
     """{(market_id, crop): [(date, modal Rs/kg)]} sorted by date, for the realised-price check."""
     out = {}
-    for crop in CROPS:
+    for crop in crops:
         f = next(snapshot.glob(f"sim_{crop}_*.csv.gz"))
         with gzip.open(f, "rt", newline="") as fh:
             for r in csv.DictReader(fh):

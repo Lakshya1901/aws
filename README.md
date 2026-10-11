@@ -17,6 +17,7 @@ The core question it answers: **"Where should this load go today, and what will 
 - Demo video: TBD
 - Android APK: [annasetu.apk](https://expo.dev/artifacts/eas/zimvjrUv9exYufPVm1UZrpx6QHH-wNO9-IqEBOfqDn8.apk) (EAS preview build, October 10; talks to the live API)
 - Stat report: [docs/stat-report-2026.html](docs/stat-report-2026.html): the deployed engine replayed on March-May 2026 mandi data (Kolar and Delhi): Rs 2.20 crore saved (estimate), 180 t kept out of landfill, advice held out of sample on 1,248 of 1,279 diverted loads (`analysis/simulate_2026.py`, `analysis/sim_summary.py`)
+- Case study: [docs/case-study-narela-2026.html](docs/case-study-narela-2026.html): one simulated 8-acre vegetable farm near Narela, Delhi (tomato, bottle gourd, okra, cauliflower) on the same 2026 data: Rs 5.2 lakh saved (estimate), 4,420 kg kept out of landfill, advice held on 79 of 92 diverted loads (`analysis/simulate_farm_2026.py`)
 
 ## Brand
 
