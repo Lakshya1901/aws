@@ -492,7 +492,7 @@ Example `/recommend` response (illustrative values):
 | Screen | Question | Default | Other states |
 | --- | --- | --- | --- |
 | Language (first launch) | Which language? | Large buttons | - |
-| Settings | Which language, data and crops are mine? | Language row; Data: Live (today's mandi prices, default) or Demo (the saved glut day, 29 Sep 2023; D34); My crops (search every crop with a routing profile, check the ones I sell; kept on the phone) | My crops show first in New load, Unsold stock and Today (D33) |
+| Settings | Which language, data and crops are mine? | Language row; Data: Live (today's mandi prices, default) or Demo (the saved glut day, 29 Sep 2023; D34); My crops (search every crop with a routing profile, check the ones I sell; kept on the phone); Clear saved data (confirm first: lifetime totals and today's plan; language and crops stay) | My crops show first in New load, Unsold stock and Today (D33) |
 | Today (Glut Radar) | Is a glut coming near me? | Nearby markets for the chosen crop, colour + word + icon, ratio, price | Loading, stale, same_day, market not reported |
 | New load | What am I sending? | Big mic button; form below (crop, qty, place, harvest) | Recording, processing, parse failed |
 | Unsold stock (Rescue) | I have unsold stock at the market | Crop, quantity, hours since harvest; proposed edible/spoiled split, editable | Estimate vs trader values, no outlet in radius |

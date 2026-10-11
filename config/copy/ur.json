@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear"
     ]
   },
   "new_load": "نیا لوڈ",
@@ -386,6 +386,11 @@
   "age_days": "{n} دن پہلے",
   "exact_hours": "یا کٹائی کے بعد کے ٹھیک گھنٹے (اختیاری)",
   "my_location": "میری جگہ",
+  "clear_data": "محفوظ ڈیٹا مٹائیں",
+  "clear_data_hint": "اس فون سے آپ کے اثر کے کل اعداد اور آج کا منصوبہ ہٹاتا ہے۔",
+  "clear_confirm": "تمام محفوظ لوڈ اور اثر کے اعداد مٹائیں؟ یہ واپس نہیں ہو سکتا۔",
+  "cancel": "منسوخ کریں",
+  "clear": "مٹائیں",
   "count_since": "{date} سے {n} لوڈ",
   "ledger_empty": "ابھی کچھ نہیں۔ اپنا ریکارڈ شروع کرنے کے لیے کسی مشورے پر \"یہی چنیں\" دبائیں۔",
   "saved_record": "آپ کے ریکارڈ میں محفوظ ہو گیا",

@@ -3,16 +3,24 @@
 // crop with a routing profile can be added (D33).
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, TextInput, View } from 'react-native';
+import { Alert, Pressable, TextInput, View } from 'react-native';
 import { Icon } from '../components/Icon';
-import { ListRow, Loading, Screen, SectionTitle, Surface, T } from '../components/ui';
+import { Btn, ListRow, Loading, Screen, SectionTitle, Surface, T } from '../components/ui';
 import { LANG_INFO } from '../i18n';
+import { clearLedger } from '../lib/ledger';
 import { useSession } from '../lib/session';
 import { C, RADIUS, SIZE } from '../lib/theme';
 
 export default function SettingsScreen() {
   const { t, lang, crops, myCrops, setMyCrops, cropLabel, dataMode, setDataMode } = useSession();
   const [query, setQuery] = useState('');
+
+  // Lifetime totals and today's plan (setDataMode to the same mode starts a new plan); language and crops stay.
+  const clearData = () =>
+    Alert.alert(t('clear_data'), t('clear_confirm'), [
+      { text: t('cancel'), style: 'cancel' },
+      { text: t('clear'), style: 'destructive', onPress: () => void clearLedger().then(() => setDataMode(dataMode)) },
+    ]);
 
   const toggle = (c: string) =>
     setMyCrops(myCrops.includes(c) ? (myCrops.length > 1 ? myCrops.filter((x) => x !== c) : myCrops) : [...myCrops, c]);
@@ -59,6 +67,10 @@ export default function SettingsScreen() {
           </Pressable>
         ))}
       </Surface>
+
+      <SectionTitle>{t('clear_data')}</SectionTitle>
+      <T color={C.muted}>{t('clear_data_hint')}</T>
+      <Btn kind="secondary" label={t('clear_data')} onPress={clearData} />
 
       <SectionTitle>{t('my_crops')}</SectionTitle>
       <T color={C.muted}>{t('my_crops_hint')}</T>

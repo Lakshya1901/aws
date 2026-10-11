@@ -47,6 +47,13 @@ export async function recordLedger(e: LedgerEntry): Promise<void> {
   } catch {}
 }
 
+/** Settings, "Clear saved data": forget every confirmed load and unsold lot on this phone. */
+export async function clearLedger(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(KEY);
+  } catch {}
+}
+
 const add = (a: Range, b: Range): Range => ({ low: a.low + b.low, mid: a.mid + b.mid, high: a.high + b.high });
 const ZERO: Range = { low: 0, mid: 0, high: 0 };
 const pos = (r: Range): Range => ({ low: Math.max(0, r.low), mid: Math.max(0, r.mid), high: Math.max(0, r.high) });

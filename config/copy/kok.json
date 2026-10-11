@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear"
     ]
   },
   "new_load": "नवो लोड",
@@ -386,6 +386,11 @@
   "age_days": "{n} दीस आदीं",
   "exact_hours": "वा कापणी उपरांतचे नेमके वरां (पर्यायी)",
   "my_location": "म्हजी सुवात",
+  "clear_data": "सांबाळिल्लो डेटा पुसात",
+  "clear_data_hint": "ह्या फोनाचेर तुमचे परिणामाचे एकूण आंकडे आनी आयची येवजण काडटा.",
+  "clear_confirm": "सगळे सांबाळिल्ले लोड आनी परिणामाचे आंकडे पुसपाचे? हें परत येवचें ना.",
+  "cancel": "रद्द करात",
+  "clear": "पुसात",
   "count_since": "{date} थावन {n} लोड",
   "ledger_empty": "अजून कांयच ना. तुमचो रेकॉर्ड सुरू करपाक सुचवणेर \"हेंच वेंचात\" दाबात.",
   "saved_record": "तुमच्या रेकॉर्डांत सांबाळ्ळें",

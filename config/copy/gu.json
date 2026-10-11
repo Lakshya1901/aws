@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear"
     ]
   },
   "new_load": "નવો લોડ",
@@ -386,6 +386,11 @@
   "age_days": "{n} દિવસ પહેલાં",
   "exact_hours": "અથવા લણણી પછીના ચોક્કસ કલાક (વૈકલ્પિક)",
   "my_location": "મારું સ્થાન",
+  "clear_data": "સાચવેલો ડેટા ભૂંસો",
+  "clear_data_hint": "આ ફોનમાંથી તમારા અસરના કુલ આંકડા અને આજની યોજના દૂર કરે છે.",
+  "clear_confirm": "બધા સાચવેલા લોડ અને અસરના આંકડા ભૂંસવા છે? આ પાછું લાવી શકાશે નહીં.",
+  "cancel": "રદ કરો",
+  "clear": "ભૂંસો",
   "count_since": "{date} થી {n} લોડ",
   "ledger_empty": "હજી કંઈ નથી. તમારો રેકોર્ડ શરૂ કરવા સૂચન પર \"આ જ પસંદ કરો\" દબાવો.",
   "saved_record": "તમારા રેકોર્ડમાં સાચવ્યું",

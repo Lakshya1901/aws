@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear"
     ]
   },
   "new_load": "ਨਵਾਂ ਲੋਡ",
@@ -386,6 +386,11 @@
   "age_days": "{n} ਦਿਨ ਪਹਿਲਾਂ",
   "exact_hours": "ਜਾਂ ਵਾਢੀ ਤੋਂ ਬਾਅਦ ਦੇ ਠੀਕ ਘੰਟੇ (ਵਿਕਲਪਿਕ)",
   "my_location": "ਮੇਰੀ ਥਾਂ",
+  "clear_data": "ਸੰਭਾਲਿਆ ਡਾਟਾ ਮਿਟਾਓ",
+  "clear_data_hint": "ਇਸ ਫ਼ੋਨ ਤੋਂ ਤੁਹਾਡੇ ਅਸਰ ਦੇ ਕੁੱਲ ਅੰਕੜੇ ਅਤੇ ਅੱਜ ਦੀ ਯੋਜਨਾ ਹਟਾਉਂਦਾ ਹੈ।",
+  "clear_confirm": "ਸਾਰੇ ਸੰਭਾਲੇ ਲੋਡ ਅਤੇ ਅਸਰ ਦੇ ਅੰਕੜੇ ਮਿਟਾਉਣੇ ਹਨ? ਇਹ ਵਾਪਸ ਨਹੀਂ ਹੋਵੇਗਾ।",
+  "cancel": "ਰੱਦ ਕਰੋ",
+  "clear": "ਮਿਟਾਓ",
   "count_since": "{date} ਤੋਂ {n} ਲੋਡ",
   "ledger_empty": "ਹਾਲੇ ਕੁਝ ਨਹੀਂ। ਆਪਣਾ ਰਿਕਾਰਡ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਸਲਾਹ 'ਤੇ \"ਇਹ ਵਰਤੋ\" ਦਬਾਓ।",
   "saved_record": "ਤੁਹਾਡੇ ਰਿਕਾਰਡ ਵਿੱਚ ਸੰਭਾਲਿਆ ਗਿਆ",

@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear"
     ]
   },
   "new_load": "नव लोड",
@@ -386,6 +386,11 @@
   "age_days": "{n} दिन पहिने",
   "exact_hours": "वा कटनीक बादक ठीक घंटा (वैकल्पिक)",
   "my_location": "हमर जगह",
+  "clear_data": "सहेजल डेटा मेटाउ",
+  "clear_data_hint": "एहि फोन सँ अहाँक प्रभावक कुल आँकड़ा आ आजुक योजना हटबैत अछि।",
+  "clear_confirm": "सभ सहेजल लोड आ प्रभावक आँकड़ा मेटाबी? ई वापस नहि होयत।",
+  "cancel": "रद्द करू",
+  "clear": "मेटाउ",
   "count_since": "{date} सँ {n} लोड",
   "ledger_empty": "एखन किछु नहि। अपन रिकॉर्ड शुरू करबा लेल सुझाव पर \"इएह चुनू\" दबाउ।",
   "saved_record": "अहाँक रिकॉर्ड मे सहेजल गेल",

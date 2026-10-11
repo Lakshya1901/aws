@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear"
     ]
   },
   "new_load": "புதிய லோடு",
@@ -386,6 +386,11 @@
   "age_days": "{n} நாட்களுக்கு முன்",
   "exact_hours": "அல்லது அறுவடைக்குப் பின் சரியான மணிநேரம் (விருப்பம்)",
   "my_location": "என் இடம்",
+  "clear_data": "சேமித்த தரவை அழி",
+  "clear_data_hint": "இந்த தொலைபேசியிலிருந்து உங்கள் தாக்க மொத்தங்களையும் இன்றைய திட்டத்தையும் நீக்கும்.",
+  "clear_confirm": "சேமித்த அனைத்து சுமைகளையும் தாக்க மொத்தங்களையும் அழிக்கவா? இதைத் திரும்பப் பெற முடியாது.",
+  "cancel": "ரத்து செய்",
+  "clear": "அழி",
   "count_since": "{date} முதல் {n} லோடு",
   "ledger_empty": "இன்னும் எதுவும் இல்லை. உங்கள் பதிவைத் தொடங்க ஒரு ஆலோசனையில் \"இதை எடுத்துக்கொள்\" என்பதை அழுத்துங்கள்.",
   "saved_record": "உங்கள் பதிவில் சேமிக்கப்பட்டது",

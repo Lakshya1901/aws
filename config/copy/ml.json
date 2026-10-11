@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear"
     ]
   },
   "new_load": "പുതിയ ലോഡ്",
@@ -386,6 +386,11 @@
   "age_days": "{n} ദിവസം മുമ്പ്",
   "exact_hours": "അല്ലെങ്കിൽ വിളവെടുപ്പിന് ശേഷമുള്ള കൃത്യമായ മണിക്കൂർ (ഐച്ഛികം)",
   "my_location": "എന്റെ സ്ഥലം",
+  "clear_data": "സേവ് ചെയ്ത ഡാറ്റ മായ്ക്കുക",
+  "clear_data_hint": "ഈ ഫോണിൽ നിന്ന് നിങ്ങളുടെ ഇംപാക്ട് ആകെത്തുകയും ഇന്നത്തെ പ്ലാനും നീക്കുന്നു.",
+  "clear_confirm": "സേവ് ചെയ്ത എല്ലാ ലോഡുകളും ഇംപാക്ട് ആകെത്തുകയും മായ്ക്കണോ? ഇത് തിരികെ കിട്ടില്ല.",
+  "cancel": "റദ്ദാക്കുക",
+  "clear": "മായ്ക്കുക",
   "count_since": "{date} മുതൽ {n} ലോഡ്",
   "ledger_empty": "ഇതുവരെ ഒന്നുമില്ല. നിങ്ങളുടെ രേഖ തുടങ്ങാൻ ഒരു നിർദേശത്തിൽ \"ഇത് എടുക്കുക\" അമർത്തുക.",
   "saved_record": "നിങ്ങളുടെ രേഖയിൽ സേവ് ചെയ്തു",

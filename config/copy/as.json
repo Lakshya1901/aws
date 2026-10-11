@@ -182,7 +182,7 @@
       "trip_costs",
       "kept_note",
       "redirected_note",
-      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location"
+      "load_one", "since_start", "share_saved", "of_handled", "total_money_saved", "money_note", "count_since", "ledger_empty", "saved_record", "money_range", "est_note", "settings", "more_crops", "my_crops", "my_crops_hint", "data_source", "data_live", "data_demo", "data_hint", "prices_from", "harvested_when", "age_today", "age_yesterday", "age_days", "exact_hours", "my_location", "clear_data", "clear_data_hint", "clear_confirm", "cancel", "clear"
     ]
   },
   "new_load": "নতুন লোড",
@@ -386,6 +386,11 @@
   "age_days": "{n} দিন আগতে",
   "exact_hours": "বা চপোৱাৰ পিছৰ সঠিক ঘণ্টা (ঐচ্ছিক)",
   "my_location": "মোৰ স্থান",
+  "clear_data": "সংৰক্ষিত তথ্য মচক",
+  "clear_data_hint": "এই ফোনৰ পৰা আপোনাৰ প্ৰভাৱৰ মুঠ হিচাপ আৰু আজিৰ পৰিকল্পনা আঁতৰায়।",
+  "clear_confirm": "সকলো সংৰক্ষিত লোড আৰু প্ৰভাৱৰ হিচাপ মচিবনে? ইয়াক ঘূৰাই অনা নাযাব।",
+  "cancel": "বাতিল",
+  "clear": "মচক",
   "count_since": "{date}ৰ পৰা {n}টা লোড",
   "ledger_empty": "এতিয়ালৈ একো নাই। আপোনাৰ ৰেকৰ্ড আৰম্ভ কৰিবলৈ পৰামৰ্শত \"এইটোকে লওক\" টিপক।",
   "saved_record": "আপোনাৰ ৰেকৰ্ডত সংৰক্ষণ কৰা হ'ল",
