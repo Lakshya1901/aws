@@ -24,7 +24,7 @@ function Bar({ parts }: { parts: { key: string; n: number; color: string }[] }) 
 
 export function Lifetime({ totals }: { totals: LedgerTotals }) {
   const { t } = useSession();
-  if (totals.count === 0) {
+  if (totals.count === 0 && totals.handled_kg === 0) {
     return (
       <View style={{ gap: 12 }}>
         <T size={SIZE.large}>{t('ledger_empty')}</T>

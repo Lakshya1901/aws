@@ -51,7 +51,14 @@ const add = (a: Range, b: Range): Range => ({ low: a.low + b.low, mid: a.mid + b
 const ZERO: Range = { low: 0, mid: 0, high: 0 };
 const pos = (r: Range): Range => ({ low: Math.max(0, r.low), mid: Math.max(0, r.mid), high: Math.max(0, r.high) });
 
-export function totals(entries: LedgerEntry[]): LedgerTotals {
+/**
+ * Lifetime totals. With today's plan (GET /impact), its figures replace this plan's confirmed entries for kg, so
+ * unsold lots logged in the plan count too, without counting a load twice; money stays from confirmed entries
+ * (the plan total has none). Unsold lots not confirmed add their routed kg to the kg sent through the app.
+ */
+export function totals(all: LedgerEntry[], plan: { id: string; impact: Impact } | null = null): LedgerTotals {
+  const inPlan = (e: LedgerEntry) => plan !== null && e.key.startsWith(`${plan.id}|`);
+  const entries = all.filter((e) => !inPlan(e));
   let prevented = ZERO;
   let extra_rs: Range | null = null;
   let rescued = 0;
@@ -65,11 +72,22 @@ export function totals(entries: LedgerEntry[]): LedgerTotals {
     rescued += e.rescued_kg;
     recovered += e.recovered_kg;
   }
+  let handled = entries.reduce((s, e) => s + e.qty_kg, 0);
+  if (plan) {
+    const mine = all.filter(inPlan);
+    for (const e of mine) if (e.extra_rs) extra_rs = add(extra_rs ?? ZERO, pos(e.extra_rs));
+    const i = plan.impact;
+    if (i.waste_avoided_kg) prevented = add(prevented, pos(i.waste_avoided_kg));
+    rescued += i.rescued_kg;
+    recovered += i.recovered_kg;
+    const routedMine = mine.filter((e) => e.kind === 'rescue').reduce((s, e) => s + e.rescued_kg + e.recovered_kg, 0);
+    handled += mine.reduce((s, e) => s + e.qty_kg, 0) + Math.max(0, i.rescued_kg + i.recovered_kg - routedMine);
+  }
   const extra = rescued + recovered;
   return {
-    since: entries.length ? entries.map((e) => e.at).sort()[0] : null,
-    count: entries.length,
-    handled_kg: entries.reduce((s, e) => s + e.qty_kg, 0),
+    since: all.length ? all.map((e) => e.at).sort()[0] : null,
+    count: all.length,
+    handled_kg: handled,
     kept_kg: { low: prevented.low + extra, mid: prevented.mid + extra, high: prevented.high + extra },
     prevented_kg: prevented,
     rescued_kg: rescued,
